@@ -25,4 +25,9 @@
       <Filter>gui\login</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\bin\res\login\login.xml">
+      <Filter>gui\login</Filter>
+    </Xml>
+  </ItemGroup>
 </Project>

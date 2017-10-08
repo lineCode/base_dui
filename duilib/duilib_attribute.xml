@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Resources>
+  <Font comment="">
+    <Attribute name="id" default="" type="INT" comment="" />
+    <Attribute name="name" default="" type="STRING" comment="字体名字,如果指定为system,则使用系统默认字体(在xp上为新宋体,高版本系统上为微软雅黑)"/>
+    <Attribute name="size" default="12" type="INT" comment=""/>
+    <Attribute name="bold" default="false" type="BOOL" comment=""/>
+    <Attribute name="underline" default="false" type="BOOL" comment=""/>
+    <Attribute name="italic" default="false" type="BOOL" comment=""/>
+    <Attribute name="default" default="" type="BOOL" comment=""/>
+    <Attribute name="shared" default="" type="BOOL" comment=""/>
+  </Font>
+	<!--<Class comment="��Ҫ��Global��ǩ����Window��ǩ�ڶ���">
+		<Attribute name="Class" default="" type="STRING" comment="�Զ���Ŀؼ���ʽ������,����Ҫʹ����ʽ�ĵط�ֱ��ָ���������,��(btn_default)"/>
+		<Attribute name="Value" default="" type="STRING" comment="���õĿؼ�����,��(text=&quot;����&quot; height=&quot;12&quot;)"/>
+	</Class>
+	<TextColor comment="���ַ�������������ֵ��������ɫ,��Ҫ��Global��ǩ�ڶ���">
+		<Attribute name="name" default="" type="STRING" comment="��ɫ������,��(white)"/>
+		<Attribute name="value" default="0x00000000" type="DWORD" comment="������Ӧ����ɫ,��(0xFFFFFFFF)"/>
+	</TextColor>-->
+	<Language comment="">
+	</Language>
+	<!--<Include comment="����xml�ļ��ĸ��úͽϴ�xml�ļ��ķָ�,ָ���˱�ǩ�ĵط����ڶ�Ӧλ���Զ�չ��ָ����xml�ļ�,��Ҫ�����ڸ���ǩ�ڲ�,���ܶ����ڸ���ǩʹ��">
+		<Attribute name="source" default="" type="STRING" comment="Ҫ�����xml�ļ���·��,��(list_item.xml)"/>
+		<Attribute name="count" default="1" type="INT" comment="�ظ����������"/>
+	</Include>-->  
+</Resources>
+
+<!--<Events>
+	<Event comment="����Ҫ������ĳ���ؼ���ǩ��ʹ�á�������Event��ǩ�Ŀؼ��������յ���Ϣʱ�ᶯ̬���ý����߿ؼ�������,����Ϊapplyattribute�����ֵ">
+		<Attribute name="type" default="" type="STRING" comment="���յ���Ϣ����,�ÿո�ָ�����Ϣ,��(killfocus,��������Ϣ���ͼ�duilib��Define.h�ļ�)"/>
+		<Attribute name="receiver" default="" type="STRING" comment="�����߿ؼ�������,�ÿո�ָ�������,��(btn_test).��������ԡ�./�����ߡ�.\��ͷ��,���������߿ؼ��ǰ���Event��ǩ�Ŀؼ����ӿؼ�,����������������ڵ�ĳ���ؼ�"/>
+		<Attribute name="applyattribute" default="" type="STRING" comment="��̬���õ�����ֵ,�������ö������"/>
+	</Event>
+	<BubbledEvent comment="����Ҫ������ĳ���ؼ���ǩ��ʹ�á�������BubbledEvent��ǩ�Ŀؼ��������ӿؼ��������յ���Ϣʱ�ᶯ̬���ý����߿ؼ�������,����Ϊapplyattribute�����ֵ,�˱�ǩֻ�����������ؼ�">
+		<Attribute name="type" default="" type="STRING" comment="���յ���Ϣ����,�ÿո�ָ�����Ϣ,��(killfocus,��������Ϣ���ͼ�duilib��Define.h�ļ�)"/>
+		<Attribute name="receiver" default="" type="STRING" comment="�����߿ؼ�������,�ÿո�ָ�������,��(btn_test).��������ԡ�./�����ߡ�.\��ͷ��,���������߿ؼ��ǰ���Event��ǩ�Ŀؼ����ӿؼ�,����������������ڵ�ĳ���ؼ�"/>
+		<Attribute name="applyattribute" default="" type="STRING" comment="��̬���õ�����ֵ,�������ö������"/>
+	</BubbledEvent>
+</Events>-->
+
+<Controls>
+	<!--<Window parent="">
+		<Attribute name="size" default="0,0" type="SIZE" comment="���ڵĳ�ʼ����С,��(800,600)"/>
+		<Attribute name="mininfo" default="0,0" type="SIZE" comment="������С��С,��(320,240)"/>
+		<Attribute name="maxinfo" default="0,0" type="SIZE" comment="��������С,��(1600,1200)"/>
+		<Attribute name="heightpercent" default="0.0" type="DOUBLE" comment="���ڵĳ�ʼ�߶�ռ��Ļ�߶ȵİٷֱ�,Ӧ��д��size��mininfo��maxinfo���Ժ���"/>
+		<Attribute name="sizebox" default="0,0,0,0" type="RECT" comment="���ڿ��϶��ı䴰�ڴ�С�ı߾�,��(4,4,6,6)"/>
+		<Attribute name="caption" default="0,0,0,0" type="RECT" comment="���ڿ��϶��ı�������С�ı߾�,���һ��������ָ���ϱ߿�ľ���,��(0,0,0,28)"/>
+		<Attribute name="textid" default="" type="STRING" comment="��������ַ�����ID,ID�ڶ������ļ���ָ��,��(STRID_MIANWINDOW_TITLE)"/>
+		<Attribute name="roundcorner" default="0,0" type="SIZE" comment="����Բ�Ǵ�С,��(4,4)"/>
+		<Attribute name="shadowattached" default="true" type="BOOL" comment="�����Ƿ񸽼���ӰЧ��,��(true)"/>
+		<Attribute name="shadowimage" default="" type="STRING" comment="ʹ���Զ������Ӱ�ز�ȥ����Ĭ�ϵ���ӰЧ�������õ�·��Ҫע�����·���Լ��Ź������ԣ���(file='../public/bk/bk_shadow.png' corner='30,30,30,30')"/>
+		<Attribute name="shadowcorner" default="0,0,0,0" type="RECT" comment="������shadowimage���Ժ����ô�������ָ����Ӱ�زĵľŹ����������������һ��Ҫд��size����ǰ��"/>	
+		<Attribute name="alphafixcorner" default="14,14,14,14" type="RECT" comment="͸��ͨ���޲���Χ�ĵľŹ�������"/>
+		<Attribute name="custom_shadow" default="14,14,14,14" type="RECT" comment="��alphafixcorner��ȫһ����Ϊ�˼����ϰ汾xml����û��ȥ���������"/>
+	</Window>-->
+	<Control parent="" notifies="">
+    <Attribute name="name"      default="" type="" comment=""/>
+    <Attribute name="text"      default="" type="" comment=""/>
+		<Attribute name="pos"       default="" type="" comment=""/>
+		<Attribute name="padding"   default="" type="" comment=""/>
+		<Attribute name="bkcolor"   default="" type="" comment=""/>
+		<Attribute name="bkcolor1"  default="" type="" comment=""/>
+		<Attribute name="bkcolor2"  default="" type="" comment=""/>
+		<Attribute name="bkcolor3"  default="" type="" comment=""/>
+		<Attribute name="bordercolor"       default="" type="" comment=""/>
+		<Attribute name="focusbordercolor"  default="" type="" comment=""/>
+		<Attribute name="bordersize"        default="" type="" comment=""/>
+		<Attribute name="borderstyle"       default="" type="" comment=""/>
+		<Attribute name="borderround"       default="" type="" comment=""/>
+		<Attribute name="colorhsl"  default="" type="" comment=""/>
+		<Attribute name="width"     default="" type="" comment=""/>
+		<Attribute name="height"    default="" type="" comment=""/>
+		<Attribute name="minwidth"  default="" type="" comment=""/>
+		<Attribute name="minheight" default="" type="" comment=""/>
+		<Attribute name="maxwidth"  default="" type="" comment=""/>
+		<Attribute name="maxheight" default="" type="" comment=""/>
+		<Attribute name="bkimage"   default="" type="" comment=""/>
+		<Attribute name="tooltip"   default="" type="" comment=""/>
+		<Attribute name="userdata"  default="" type="" comment=""/>
+    <Attribute name="tag"       default="" type="" comment=""/>
+    <Attribute name="enabled"   default="" type="" comment=""/>
+    <Attribute name="mouse"     default="" type="" comment=""/>
+    <Attribute name="keyboard"  default="true" type="BOOL" comment=""/>
+    <Attribute name="visible"   default="true" type="BOOL" comment=""/>
+    <Attribute name="float"     default="false" type="BOOL" comment=""/>
+    <Attribute name="shortcut"    default="" type="" comment=""/>
+    <Attribute name="menu"        default="" type="" comment=""/>
+    <Attribute name="virtualwnd"  default="" type="" comment=""/>
+    <Attribute name="foreimage"   default="" type="" comment=""/>
+	</Control>
+	
+	<Label parent="Control" notifies="��ʱ��д" >
+    <Attribute name="align"       default="" type="" comment=""/>
+    <Attribute name="valign"      default="" type="" comment=""/>
+    <Attribute name="endellipsis" default="false" type="" comment=""/>
+    <Attribute name="font"        default="" type="" comment=""/>
+    <Attribute name="textcolor"   default="" type="" comment=""/>
+    <Attribute name="disabledtextcolor" default="" type="" comment=""/>
+    <Attribute name="textpadding"       default="" type="" comment=""/>
+    <Attribute name="multiline"         default="" type="" comment=""/>
+    <Attribute name="showhtml"          default="" type="" comment=""/>
+    <Attribute name="enabledeffect"     default="" type="" comment=""/>
+    <Attribute name="enabledluminous"   default="" type="" comment=""/>
+    <Attribute name="luminousfuzzy"     default="" type="" comment=""/>
+    <Attribute name="gradientangle"     default="" type="" comment=""/>
+    <Attribute name="gradientlength"    default="" type="" comment=""/>
+    <Attribute name="enabledstroke"     default="" type="" comment=""/>
+    <Attribute name="enabledshadow"     default="" type="" comment=""/>
+    <Attribute name="shadowoffset"      default="" type="" comment=""/>
+    <Attribute name="textshadowcolora"  default="" type="" comment=""/>
+    <Attribute name="textshadowcolorb"  default="" type="" comment=""/>
+    <Attribute name="strokecolor"       default="" type="" comment=""/>
+	</Label>
+
+	<Button parent="Label" notifies="" comment="">
+    <Attribute name="normalimage"     default="" type="" comment=""/>
+    <Attribute name="hotimage"        default="" type="" comment=""/>
+    <Attribute name="pushedimage"     default="" type="" comment=""/>
+    <Attribute name="focusedimage"    default="" type="" comment=""/>
+    <Attribute name="disabledimage"   default="" type="" comment=""/>
+    <Attribute name="hotforeimage"    default="" type="" comment=""/>
+    <Attribute name="fivestatusimage" default="" type="" comment=""/>
+    <Attribute name="fadedelta"       default="" type="" comment=""/>
+    <Attribute name="hotbkcolor"      default="" type="" comment=""/>
+    <Attribute name="hottextcolor"    default="" type="" comment=""/>
+    <Attribute name="pushedtextcolor" default="" type="" comment=""/>
+    <Attribute name="focusedtextcolor"  default="" type="" comment=""/>
+  </Button>
+
+  <Container parent="Control" notifies="" comment="">
+    <Attribute name="inset"           default="" type="" comment=""/>
+    <Attribute name="mousechild"      default="" type="" comment=""/>
+    <Attribute name="vscrollbar"      default="" type="" comment=""/>
+    <Attribute name="vscrollbarstyle" default="" type="" comment=""/>
+    <Attribute name="hscrollbar"      default="" type="" comment=""/>
+    <Attribute name="hscrollbarstyle" default="" type="" comment=""/>
+    <Attribute name="childpadding"    default="" type="" comment=""/>
+    <Attribute name="childalign"      default="" type="" comment=""/>
+    <Attribute name="childvalign"     default="" type="" comment=""/>
+  </Container>
+
+  <RichEdit parent="Container" notifies="" comment="">
+    <Attribute name="vscrollbar"        default="" type="" comment=""/>
+    <Attribute name="autovscroll"       default="" type="" comment=""/>
+    <Attribute name="hscrollbar"        default="" type="" comment=""/>
+    <Attribute name="autohscroll"       default="" type="" comment=""/>
+    <Attribute name="wanttab"           default="" type="" comment=""/>
+    <Attribute name="wantreturn"        default="" type="" comment=""/>
+    <Attribute name="wantctrlreturn"    default="" type="" comment=""/>
+    <Attribute name="transparent"       default="" type="" comment=""/>
+    <Attribute name="rich"              default="" type="" comment=""/>
+    <Attribute name="multiline"         default="" type="" comment=""/>
+    <Attribute name="readonly"          default="" type="" comment=""/>
+    <Attribute name="password"          default="" type="" comment=""/>
+    <Attribute name="align"             default="" type="" comment=""/>
+    <Attribute name="font"              default="" type="" comment=""/>
+    <Attribute name="textcolor"         default="" type="" comment=""/>
+    <Attribute name="textpadding"       default="" type="" comment=""/>
+  </RichEdit>
+  
+  
+  <!--<CheckBox parent="Button" notifies="��ʱ��д" >
+		<Attribute name="selected" default="false" type="BOOL" comment="�Ƿ�ѡ��"/>
+		<Attribute name="selectednormalimage" default="" type="STRING" comment="ѡ�е���ͨ״̬ͼƬ"/>
+		<Attribute name="selectedhotimage" default="" type="STRING" comment="ѡ�е����������״̬ͼƬ"/>
+		<Attribute name="selectedpushedimage" default="" type="STRING" comment="ѡ�е���갴�µ�״̬ͼƬ"/>
+		<Attribute name="selecteddisabledimage" default="" type="STRING" comment="ѡ�еĽ��õ�״̬ͼƬ"/>
+		<Attribute name="selectedtextcolor" default="" type="STRING" comment="ѡ��״̬������ɫ,��ָ����ʹ��Ĭ����ɫ,��(blue)"/>
+		<Attribute name="selectednormalcolor" default="" type="STRING" comment="ѡ�е���ͨ״̬������ɫ,��ָ����ʹ��Ĭ����ɫ,��(blue)"/>
+		<Attribute name="selectedhotcolor" default="" type="STRING" comment="ѡ�е��������״̬������ɫ,��ָ����ʹ��Ĭ����ɫ,��(blue)"/>
+		<Attribute name="selectedpushedcolor" default="" type="STRING" comment="ѡ�е���갴��״̬������ɫ,��ָ����ʹ��Ĭ����ɫ,��(blue)"/>
+		<Attribute name="selecteddisabledcolor" default="" type="STRING" comment="ѡ�еĽ���״̬������ɫ,��ָ����ʹ��Ĭ����ɫ,��(blue)"/>
+		<Attribute name="selectedforenormalimage" default="" type="STRING" comment="ѡ�е�ǰ��ͼƬ"/>
+		<Attribute name="selectedforehotimage" default="" type="STRING" comment="ѡ�е��������״̬��ͼƬ"/>
+		<Attribute name="selectedforepushedimage" default="" type="STRING" comment="ѡ�е���갴��״̬��ǰ��ͼƬ"/>
+		<Attribute name="selectedforedisabledimage" default="" type="STRING" comment="ѡ�еĽ���״̬��ǰ��ͼƬ"/>	
+	</CheckBox>-->
+
+	<!--<Option parent="CheckBox" notifies="��ʱ��д"  >
+		<Attribute name="group" default="" type="STRING" comment="�����������"/>
+	</Option>-->
+
+	<!--<Progress parent="Label" notifies="��ʱ��д" >
+		<Attribute name="hor" default="true" type="BOOL" comment="ˮƽ��ֱ,��(true)"/>
+		<Attribute name="min" default="0" type="INT" comment="������Сֵ,��(0)"/>
+		<Attribute name="max" default="100" type="INT" comment="�������ֵ,��(100)"/>
+		<Attribute name="value" default="0" type="INT" comment="����ֵ,��(50)"/>
+		<Attribute name="isstretchfore" default="TRUE" type="BOOL" comment="ָ��������ǰ��ͼƬ�Ƿ�������ʾ"/>
+		<Attribute name="progresscolor" default="" type="STRING" comment="������ǰ����ɫ,��ָ����ʹ��Ĭ����ɫ,��(blue)"/>
+		<Attribute name="progressimage" default="" type="STRING" comment="������ǰ��ͼƬ"/>
+	</Progress>-->
+
+	<!--<Slider parent="Progress" notifies="��ʱ��д" >
+		<Attribute name="thumbnormalimage" default="" type="STRING" comment="�϶�������ͨ״̬ͼƬ"/>
+		<Attribute name="thumbhotimage" default="" type="STRING" comment="�϶������������״̬ͼƬ"/>
+		<Attribute name="thumbpushedimage" default="" type="STRING" comment="�϶�������갴��״̬ͼƬ"/>
+		<Attribute name="thumbdisabledimage" default="" type="STRING" comment="�϶�����������״̬ͼƬ"/>
+		<Attribute name="thumbsize" default="10,10" type="SIZE" comment="�϶������С,��(10,10)"/>
+		<Attribute name="step" default="1" type="INT" comment="���Ȳ���,��(1)"/>
+		<Attribute name="progressbarpadding" default="0,0,0,0" type="RECT" comment="����������ʱ��С���ڱ߾�"/>
+	</Slider>-->
+
+	<!--<ScrollBar parent="Control" notifies="��ʱ��д">
+		<Attribute name="button1normalimage" default="" type="STRING" comment="����ϰ�ť��ͨ״̬ͼƬ"/>
+		<Attribute name="button1hotimage" default="" type="STRING" comment="����ϰ�ť�������״̬ͼƬ"/>
+		<Attribute name="button1pushedimage" default="" type="STRING" comment="����ϰ�ť��갴��״̬ͼƬ"/>
+		<Attribute name="button1disabledimage" default="" type="STRING" comment="����ϰ�ť����״̬ͼƬ"/>
+		<Attribute name="button2normalimage" default="" type="STRING" comment="�һ��°�ť��ͨ״̬ͼƬ"/>
+		<Attribute name="button2hotimage" default="" type="STRING" comment="�һ��°�ť�������״̬ͼƬ"/>
+		<Attribute name="button2pushedimage" default="" type="STRING" comment="�һ��°�ť��갴��״̬ͼƬ"/>
+		<Attribute name="button2disabledimage" default="" type="STRING" comment="�һ��°�ť����״̬ͼƬ"/>
+		<Attribute name="thumbnormalimage" default="" type="STRING" comment="������ͨ״̬ͼƬ"/>
+		<Attribute name="thumbhotimage" default="" type="STRING" comment="�����������״̬ͼƬ"/>
+		<Attribute name="thumbpushedimage" default="" type="STRING" comment="������갴��״̬ͼƬ"/>
+		<Attribute name="thumbdisabledimage" default="" type="STRING" comment="�������״̬ͼƬ"/>
+		<Attribute name="railnormalimage" default="" type="STRING" comment="�����м��ʶ��ͨ״̬ͼƬ"/>
+		<Attribute name="railhotimage" default="" type="STRING" comment="�����м��ʶ�������״̬ͼƬ"/>
+		<Attribute name="railpushedimage" default="" type="STRING" comment="�����м��ʶ��갴��״̬ͼƬ"/>
+		<Attribute name="raildisabledimage" default="" type="STRING" comment="�����м��ʶ����״̬ͼƬ"/>
+		<Attribute name="bknormalimage" default="" type="STRING" comment="������ͨ״̬ͼƬ"/>
+		<Attribute name="bkhotimage" default="" type="STRING" comment="�����������״̬ͼƬ"/>
+		<Attribute name="bkpushedimage" default="" type="STRING" comment="������갴��״̬ͼƬ"/>
+		<Attribute name="bkdisabledimage" default="" type="STRING" comment="��������״̬ͼƬ"/>
+		<Attribute name="hor" default="false" type="BOOL" comment="ˮƽ��ֱ,��(true)"/>
+		<Attribute name="linesize" default="8" type="INT" comment="����һ�еĴ�С,��(8)"/>
+		<Attribute name="thumbminlength" default="30" type="INT" comment="�������С����"/>
+		<Attribute name="range" default="100" type="INT" comment="������Χ,��(100)"/>
+		<Attribute name="value" default="0" type="INT" comment="����λ��,��(0)"/>
+		<Attribute name="showbutton1" default="true" type="BOOL" comment="�Ƿ���ʾ����ϰ�ť,��(true)"/>
+		<Attribute name="showbutton2" default="true" type="BOOL" comment="�Ƿ���ʾ�һ��°�ť,��(true)"/>
+		<Attribute name="autohidescroll" default="true" type="BOOL" comment="�Ƿ��Զ����ع�����,��(true)"/>
+	</ScrollBar>-->
+
+	<!--<ChildBox parent="Box" notifies="��ʱ��д" >
+		<Attribute name="xmlfile" default="" type="STRING" comment="ҪǶ���xml�ļ��ĵ�ַ,��(childxml.xml)"/>
+	</ChildBox>
+
+	<TabBox parent="Box" notifies="��ʱ��д" >
+		<Attribute name="fadeswitch" default="false" type="BOOL" comment="���л�ҳ��ʱ�Ƿ�ʹ�ö���Ч��,��(false)"/>
+		<Attribute name="selectedid" default="0" type="INT" comment="Ĭ��ѡ�е�ҳ��id,��(0)"/>
+	</TabBox>
+
+	<TileBox>
+		<Attribute name="columns" default="1" type="INT" comment="����,��(4)"/>
+		<Attribute name="itemsize" default="0,0" type="SIZE" comment="����̶���С,��(128,128)"/>
+	</TileBox>-->
+
+	<!--<ListContainerElement parent="OptionBox" notifies="��ʱ��д" comment="����ͬOptionBox"  >
+	</ListContainerElement>-->
+
+	<!--<Combo parent="Box" notifies="��ʱ��д">
+		<Attribute name="dropbox" default="" type="STRING" comment="���õ��������ʽ,��(padding=&quot;1,1,1,1&quot;)"/>
+		<Attribute name="dropboxsize" default="0,150" type="SIZE" comment="�������С����"/>
+		<Attribute name="vscrollbar" default="false" type="BOOL" comment="�Ƿ�ʹ�����������,��(true)"/>
+	</Combo>-->	
+
+	<!--<ListBox parent="ScrollableBox" notifies="��ʱ��д">
+		<Attribute name="scrollselect" default="false" type="BOOL" comment="�Ƿ�������ı�ѡ����,��(false)"/>
+	</ListBox>-->
+
+	<!--<HListBox parent="ScrollableBox" notifies="��ʱ��д" comment="����ͬListBox">
+	</HListBox>
+
+	<VListBox parent="ScrollableBox" notifies="��ʱ��д" comment="����ͬListBox">
+	</VListBox>
+
+	<TileListBox parent="ScrollableBox" notifies="��ʱ��д" comment="����ͬListBox">
+	</TileListBox>-->
+
+
+	<!--<TreeNode parent="ListContainerElement" notifies="��ʱ��д" comment="����ͬOptionBox">
+	</TreeNode>
+
+	<TreeView parent="ListBox" notifies="��ʱ��д" >
+		<Attribute name="indent" default="0" type="INT" comment="�ӿؼ�������,��(3)"/>
+	</TreeView>-->
+
+	
+</Controls>

@@ -366,6 +366,11 @@
     <ClInclude Include="Utils\WinImplBase.h" />
     <ClInclude Include="Utils\WndShadow.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="duilib_attribute.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

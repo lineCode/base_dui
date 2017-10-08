@@ -16,6 +16,8 @@ public:
 	//virtual std::wstring GetWindowId(void) const override{ return kClassName; };
 
 	virtual void InitWindow() override;
+
+	virtual LRESULT OnClose(UINT u, WPARAM w, LPARAM l, BOOL& bHandled) override;
 	
 public:
 	static const LPCTSTR kClassName;

@@ -51,29 +51,11 @@ UINT LoginForm::GetClassStyle() const
 
 void LoginForm::InitWindow()
 {
-	m_pList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("list")));
-	CListHeaderUI* pListHead = m_pList->GetHeader();
-	CContainerUI* pListBody = m_pList->GetList();
-	TListInfoUI* pListInfo = m_pList->GetListInfo();
-	CListHeaderItemUI *pListHeadItem1 = static_cast<CListHeaderItemUI*>(m_PaintManager.FindControl(_T("list_head_label1")));
-
-	m_pList->SetItemHLineSize(1);
-	m_pList->SetItemHLineColor(0xffdddddd);
-	m_pList->SetItemVLineSize(1);
-	m_pList->SetItemVLineColor(0xffdddddd);
-
-	int sepw = pListHead->GetSepWidth();
-	sepw = pListHeadItem1->GetSepWidth();
-	bool bval = pListHeadItem1->IsDragable();
-
-	/*DWORD color = pListHeadItem1->GetSepColor();
-	color = 0xff222222;
-	pListHeadItem1->SetSepWidth(1);
-	pListHeadItem1->SetSepColor(color);*/
-
-	pListInfo = m_pList->GetListInfo();
-
-	int i = 0;
-	i++;
 	
+}
+
+LRESULT LoginForm::OnClose(UINT u, WPARAM w, LPARAM l, BOOL& bHandled)
+{
+	::PostQuitMessage(0);
+	return 0;
 }

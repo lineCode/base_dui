@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="270,386" caption="0,0,0,49" sizebox="6,6,6,6" showshadow="true" shadowimage="public/bk/bk_shadow.png" shadowsize="14" shadowcorner="14,14,14,14">
-  <Font name="system" size="10"/>
-
-
-  <VLayout width="270" height="386" inset="1,10,1,1" bkimage="login\login_bk.png" bkcolor="ffdddddd">
-    <!--<HLayout height="49" inset="10,1,10,1">
-      <Label name="label_title" width="30" height="auto" padding="30,0,0,0" text="微微" font="0" normaltextcolor="login_text_color"/>
-      <Button name="closebtn" width="25" height="25" padding="30,0,0,0" normalimage="login\full.png" hotimage="login\full.png" pushedimage="login\fullclick.png" cursortype="hand"/>
+  <Font name="system" size="12"/>
+  <Font name="system" size="16"/>
+  <Font name="system" size="20"/>
+  
+  <VLayout width="270" height="386" inset="" bkimage="login\login_bk.png" >
+    
+    <HLayout height="32">
+      <Label width="60" height="32" padding="10" align="" valign="" font="0" text="微微"/>
+      <Control />
+      <!--<Button name="minbtn" />
+      <Button name="maxbtn" />-->
+      <Button name="closebtn" width="20" height="20" normalimage="file='public/button/close.png' source='0,0,20,20'" hotimage="file='public/button/close.png' source='20,0,40,20'"/>
     </HLayout>
-    <List name="list" width="stretch" height="stretch" inset="1,1,1,1" bordersize="1" bordercolor="#ff666666">
-      <ListHeader name="list_head" width="" height="" bkcolor="ffdee0e1"/>
-      <ListHeaderItem name ="list_head_label1" width="60" text="id" sepwidth="1" sepcolor="#ff666666"/>
-      <ListHeaderItem name ="list_head_label2" width="60" text="name" sepwidth="1" sepcolor="#ff666666"/>
-      <ListHeaderItem name ="list_head_label3" width="60" text="score" sepwidth="1" sepcolor="#ff666666"/>
-      <HLayout  height="20">
-        <Label name ="label_1_1" widht="60" text="1"/>
-        <Label name ="label_1_2" width="60" text="dingjunjie1985"/>
-        <Label name ="label_1_3" widht="60" text="15.6"/>
+    
+    
+    <VLayout padding="0,20">
+      <HLayout height="30">
+        <Label text="账号" width="30" padding="20"/>
+        <RichEdit name="re_account" width="200" height="28" padding="5" bkimage="file='public/edit/edit1.png' corner='4,4,4,4'" rich="false" multiline="false" 
+                  textpadding="4,4" font="2"/>
       </HLayout>
-      <HLayout  height="20">
-        <Label name ="label_2_1" widht="60" text="2"/>
-        <Label name ="label_2_2" width="60" text="fwf"/>
-        <Label name ="label_2_3" widht="60" text="25.6"/>
+      <HLayout height="30" padding="0,10">
+        <Label text="密码"/>
+        <RichEdit name="re_pwd" width="200"/>
       </HLayout>
-      <HLayout  height="20">
-        <Label name ="label_3_1" widht="60" text="3"/>
-        <Label name ="label_3_2" width="60" text="rdf"/>
-        <Label name ="label_3_3" widht="60" text="35.6"/>
-      </HLayout>
-    </List>-->
+      <Button name="btn_login" width="150" height="30" padding="60,10" normalimage="file='public/button/blue.png' source='0,0,10,30' corner='3,3,3,3'" 
+              hotimage="file='public/button/blue.png' source='10,0,20,30' corner='3,3,3,3'" 
+              pushedimage="file='public/button/blue.png' source='20,0,30,30' corner='3,3,3,3'" 
+              font="system" textcolor="#FFFFFFFF" text="确定"/>
+    </VLayout>
+    
+    
+    
   </VLayout>
+  
+  
 </Window>
