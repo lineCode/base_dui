@@ -1,0 +1,17 @@
+/************************************************/
+/*                     DUILIB.DLL                    */
+/************************************************/
+
+duilib is an open source project, I modify it for ...
+
+/-----------------------------------------------------------/
+Author:djj 	Data:2017-4-26
+Version:1.01.01.0001
+Content:
+1.Add version info and print log;
+
+/-----------------------------------------------------------/
+Author:djj 	Data:2017-4-26
+Version:1.01.01.0002
+Content:
+1.Move attr foreimage to CControlUI;

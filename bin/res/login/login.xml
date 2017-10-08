@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="270,386" caption="0,0,0,49" sizebox="6,6,6,6" showshadow="true" shadowimage="public/bk/bk_shadow.png" shadowsize="14" shadowcorner="14,14,14,14">
+  <Font name="system" size="10"/>
+
+
+  <VLayout width="270" height="386" inset="1,10,1,1" bkimage="login\login_bk.png" bkcolor="ffdddddd">
+    <!--<HLayout height="49" inset="10,1,10,1">
+      <Label name="label_title" width="30" height="auto" padding="30,0,0,0" text="微微" font="0" normaltextcolor="login_text_color"/>
+      <Button name="closebtn" width="25" height="25" padding="30,0,0,0" normalimage="login\full.png" hotimage="login\full.png" pushedimage="login\fullclick.png" cursortype="hand"/>
+    </HLayout>
+    <List name="list" width="stretch" height="stretch" inset="1,1,1,1" bordersize="1" bordercolor="#ff666666">
+      <ListHeader name="list_head" width="" height="" bkcolor="ffdee0e1"/>
+      <ListHeaderItem name ="list_head_label1" width="60" text="id" sepwidth="1" sepcolor="#ff666666"/>
+      <ListHeaderItem name ="list_head_label2" width="60" text="name" sepwidth="1" sepcolor="#ff666666"/>
+      <ListHeaderItem name ="list_head_label3" width="60" text="score" sepwidth="1" sepcolor="#ff666666"/>
+      <HLayout  height="20">
+        <Label name ="label_1_1" widht="60" text="1"/>
+        <Label name ="label_1_2" width="60" text="dingjunjie1985"/>
+        <Label name ="label_1_3" widht="60" text="15.6"/>
+      </HLayout>
+      <HLayout  height="20">
+        <Label name ="label_2_1" widht="60" text="2"/>
+        <Label name ="label_2_2" width="60" text="fwf"/>
+        <Label name ="label_2_3" widht="60" text="25.6"/>
+      </HLayout>
+      <HLayout  height="20">
+        <Label name ="label_3_1" widht="60" text="3"/>
+        <Label name ="label_3_2" width="60" text="rdf"/>
+        <Label name ="label_3_3" widht="60" text="35.6"/>
+      </HLayout>
+    </List>-->
+  </VLayout>
+</Window>
