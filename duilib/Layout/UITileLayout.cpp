@@ -168,10 +168,10 @@ namespace DuiLib
 				continue;
 			}
 
-			RECT rcPadding = pControl->GetPadding();
+			RECT rcMargin = pControl->GetMargin();
 			SIZE sz = m_szItem;
-			sz.cx -= rcPadding.left + rcPadding.right;
-			sz.cy -= rcPadding.top + rcPadding.bottom;
+			sz.cx -= rcMargin.left + rcMargin.right;
+			sz.cy -= rcMargin.top + rcMargin.bottom;
 			if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
 			if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
 			if( sz.cx < 0) sz.cx = 0;
@@ -191,43 +191,43 @@ namespace DuiLib
 			}
 			if (iChildAlign == DT_CENTER) {
 				if (iChildVAlign == DT_VCENTER) {
-					RECT rcCtrl = { iPosX + (m_szItem.cx-sz.cx)/2+rcPadding.left, iPosY + (m_szItem.cy-sz.cy)/2+rcPadding.top, iPosX + (m_szItem.cx-sz.cx)/2 + sz.cx-rcPadding.right, iPosY + (m_szItem.cy-sz.cy)/2 + sz.cy-rcPadding.bottom };
+					RECT rcCtrl = { iPosX + (m_szItem.cx-sz.cx)/2+rcMargin.left, iPosY + (m_szItem.cy-sz.cy)/2+rcMargin.top, iPosX + (m_szItem.cx-sz.cx)/2 + sz.cx-rcMargin.right, iPosY + (m_szItem.cy-sz.cy)/2 + sz.cy-rcMargin.bottom };
 					pControl->SetPos(rcCtrl, false);
 				}
 				else if (iChildVAlign == DT_BOTTOM) {
-					RECT rcCtrl = { iPosX + (m_szItem.cx-sz.cx)/2+rcPadding.left, iPosY + m_szItem.cy - sz.cy+rcPadding.top, iPosX + (m_szItem.cx-sz.cx)/2 + sz.cx-rcPadding.right, iPosY + m_szItem.cy-rcPadding.bottom };
+					RECT rcCtrl = { iPosX + (m_szItem.cx-sz.cx)/2+rcMargin.left, iPosY + m_szItem.cy - sz.cy+rcMargin.top, iPosX + (m_szItem.cx-sz.cx)/2 + sz.cx-rcMargin.right, iPosY + m_szItem.cy-rcMargin.bottom };
 					pControl->SetPos(rcCtrl, false);
 				}
 				else {
-					RECT rcCtrl = { iPosX + (m_szItem.cx-sz.cx)/2+rcPadding.left, iPosY+rcPadding.top, iPosX + (m_szItem.cx-sz.cx)/2 + sz.cx-rcPadding.right, iPosY + sz.cy-rcPadding.bottom };
+					RECT rcCtrl = { iPosX + (m_szItem.cx-sz.cx)/2+rcMargin.left, iPosY+rcMargin.top, iPosX + (m_szItem.cx-sz.cx)/2 + sz.cx-rcMargin.right, iPosY + sz.cy-rcMargin.bottom };
 					pControl->SetPos(rcCtrl, false);
 				}
 			}
 			else if (iChildAlign == DT_RIGHT) {
 				if (iChildVAlign == DT_VCENTER) {
-					RECT rcCtrl = { iPosX + m_szItem.cx - sz.cx+rcPadding.left, iPosY + (m_szItem.cy-sz.cy)/2+rcPadding.top, iPosX + m_szItem.cx-rcPadding.right, iPosY + (m_szItem.cy-sz.cy)/2 + sz.cy-rcPadding.bottom };
+					RECT rcCtrl = { iPosX + m_szItem.cx - sz.cx+rcMargin.left, iPosY + (m_szItem.cy-sz.cy)/2+rcMargin.top, iPosX + m_szItem.cx-rcMargin.right, iPosY + (m_szItem.cy-sz.cy)/2 + sz.cy-rcMargin.bottom };
 					pControl->SetPos(rcCtrl, false);
 				}
 				else if (iChildVAlign == DT_BOTTOM) {
-					RECT rcCtrl = { iPosX + m_szItem.cx - sz.cx+rcPadding.left, iPosY + m_szItem.cy - sz.cy+rcPadding.top, iPosX + m_szItem.cx-rcPadding.right, iPosY + m_szItem.cy-rcPadding.bottom };
+					RECT rcCtrl = { iPosX + m_szItem.cx - sz.cx+rcMargin.left, iPosY + m_szItem.cy - sz.cy+rcMargin.top, iPosX + m_szItem.cx-rcMargin.right, iPosY + m_szItem.cy-rcMargin.bottom };
 					pControl->SetPos(rcCtrl, false);
 				}
 				else {
-					RECT rcCtrl = { iPosX + m_szItem.cx - sz.cx+rcPadding.left, iPosY+rcPadding.top, iPosX + m_szItem.cx-rcPadding.right, iPosY + sz.cy-rcPadding.bottom };
+					RECT rcCtrl = { iPosX + m_szItem.cx - sz.cx+rcMargin.left, iPosY+rcMargin.top, iPosX + m_szItem.cx-rcMargin.right, iPosY + sz.cy-rcMargin.bottom };
 					pControl->SetPos(rcCtrl, false);
 				}
 			}
 			else {
 				if (iChildVAlign == DT_VCENTER) {
-					RECT rcCtrl = { iPosX+rcPadding.left, iPosY + (m_szItem.cy-sz.cy)/2+rcPadding.top, iPosX + sz.cx-rcPadding.right, iPosY + (m_szItem.cy-sz.cy)/2 + sz.cy-rcPadding.bottom };
+					RECT rcCtrl = { iPosX+rcMargin.left, iPosY + (m_szItem.cy-sz.cy)/2+rcMargin.top, iPosX + sz.cx-rcMargin.right, iPosY + (m_szItem.cy-sz.cy)/2 + sz.cy-rcMargin.bottom };
 					pControl->SetPos(rcCtrl, false);
 				}
 				else if (iChildVAlign == DT_BOTTOM) {
-					RECT rcCtrl = { iPosX+rcPadding.left, iPosY + m_szItem.cy - sz.cy+rcPadding.top, iPosX + sz.cx-rcPadding.right, iPosY + m_szItem.cy-rcPadding.bottom };
+					RECT rcCtrl = { iPosX+rcMargin.left, iPosY + m_szItem.cy - sz.cy+rcMargin.top, iPosX + sz.cx-rcMargin.right, iPosY + m_szItem.cy-rcMargin.bottom };
 					pControl->SetPos(rcCtrl, false);
 				}
 				else {
-					RECT rcCtrl = { iPosX+rcPadding.left, iPosY+rcPadding.top, iPosX + sz.cx-rcPadding.right, iPosY + sz.cy-rcPadding.bottom };
+					RECT rcCtrl = { iPosX+rcMargin.left, iPosY+rcMargin.top, iPosX + sz.cx-rcMargin.right, iPosY + sz.cy-rcMargin.bottom };
 					pControl->SetPos(rcCtrl, false);
 				}
 			}
@@ -281,8 +281,8 @@ namespace DuiLib
 	//				if( !pLineControl->IsVisible() ) continue;
 	//				if( pLineControl->IsFloat() ) continue;
 
-	//				RECT rcPadding = pLineControl->GetPadding();
-	//				SIZE szAvailable = { rcTile.right - rcTile.left - rcPadding.left - rcPadding.right, 9999 };
+	//				RECT rcMargin = pLineControl->GetMargin();
+	//				SIZE szAvailable = { rcTile.right - rcTile.left - rcMargin.left - rcMargin.right, 9999 };
 
 	//				if( szAvailable.cx < pControl->GetMinWidth() ) szAvailable.cx = pControl->GetMinWidth();
 	//				if( szAvailable.cx > pControl->GetMaxWidth() ) szAvailable.cx = pControl->GetMaxWidth();
@@ -295,18 +295,18 @@ namespace DuiLib
 	//				if( szTile.cy < pControl->GetMinHeight() ) szTile.cy = pControl->GetMinHeight();
 	//				if( szTile.cy > pControl->GetMaxHeight() ) szTile.cy = pControl->GetMaxHeight();
 
-	//				cyHeight = MAX(cyHeight, szTile.cy + rcPadding.top + rcPadding.bottom);
+	//				cyHeight = MAX(cyHeight, szTile.cy + rcMargin.top + rcMargin.bottom);
 	//				if( (++iIndex % m_nColumns) == 0) break;
 	//			}
 	//		}
 
-	//		RECT rcPadding = pControl->GetPadding();
+	//		RECT rcMargin = pControl->GetMargin();
 
-	//		rcTile.left += rcPadding.left;
-	//		rcTile.right -= rcPadding.right;
+	//		rcTile.left += rcMargin.left;
+	//		rcTile.right -= rcMargin.right;
 
 	//		// Set position
-	//		rcTile.top = ptTile.y + rcPadding.top;
+	//		rcTile.top = ptTile.y + rcMargin.top;
 	//		rcTile.bottom = ptTile.y + cyHeight;
 
 	//		SIZE szAvailable = { rcTile.right - rcTile.left, rcTile.bottom - rcTile.top };

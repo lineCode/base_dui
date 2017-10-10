@@ -84,9 +84,14 @@
     <ClInclude Include="gui\modal_wnd\modal_wnd_base.h" />
     <ClInclude Include="gui\msgbox\msgbox.h" />
     <ClInclude Include="gui\window\window_ex.h" />
+    <ClInclude Include="kit_define.h" />
     <ClInclude Include="module\init\nim_ui_init_manager.h" />
+    <ClInclude Include="module\login\login_callback.h" />
+    <ClInclude Include="module\login\login_define.h" />
+    <ClInclude Include="module\login\login_manager.h" />
     <ClInclude Include="module\window\windows_manager.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="util\user_path.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\emoji\emoji_info.cpp">
@@ -100,6 +105,8 @@
     <ClCompile Include="module\init\nim_ui_init_manager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="module\login\login_callback.cpp" />
+    <ClCompile Include="module\login\login_manager.cpp" />
     <ClCompile Include="module\window\windows_manager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -107,6 +114,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="util\user_path.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

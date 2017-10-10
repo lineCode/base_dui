@@ -32,11 +32,11 @@ void InitManager::InitUiKit(bool enable_subscribe_event)
 
 	/* 以下注册的回调函数，都是在收到服务器推送的消息或事件时执行的。因此需要在程序开始时就注册好。 */
 	//注册重连、被踢、掉线、多点登录、把移动端踢下线的回调
-	nim::Client::RegReloginCb(&nim_comp::LoginCallback::OnReLoginCallback);
-	nim::Client::RegKickoutCb(&nim_comp::LoginCallback::OnKickoutCallback);
-	nim::Client::RegDisconnectCb(&nim_comp::LoginCallback::OnDisconnectCallback);
-	nim::Client::RegMultispotLoginCb(&nim_comp::LoginCallback::OnMultispotLoginCallback);
-	nim::Client::RegKickOtherClientCb(&nim_comp::LoginCallback::OnKickoutOtherClientCallback);
+	nim::Client::RegReloginCb(&nim_comp::LoginCallbackObject::OnReLoginCallback);
+	nim::Client::RegKickoutCb(&nim_comp::LoginCallbackObject::OnKickoutCallback);
+	nim::Client::RegDisconnectCb(&nim_comp::LoginCallbackObject::OnDisconnectCallback);
+	nim::Client::RegMultispotLoginCb(&nim_comp::LoginCallbackObject::OnMultispotLoginCallback);
+	nim::Client::RegKickOtherClientCb(&nim_comp::LoginCallbackObject::OnKickoutOtherClientCallback);
 	nim::Client::RegSyncMultiportPushConfigCb(&nim_comp::MultiportPushCallback::OnMultiportPushConfigChange);
 
 	//注册返回发送消息结果的回调，和收到消息的回调。

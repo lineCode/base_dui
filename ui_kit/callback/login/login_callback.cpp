@@ -100,7 +100,7 @@ void LoginCallback::DoLogin(std::string user, std::string pass)
 	//2. 用户登录自己的应用是不需要对密码md5加密的，替换app key之后，请记得去掉加密。
 	std::string app_key = GetConfigValueAppKey();
 	auto cb = std::bind(OnLoginCallback, std::placeholders::_1, nullptr);
-	//nim::Client::Login(app_key, LoginManager::GetInstance()->GetAccount(), LoginManager::GetInstance()->GetPassword(), cb);
+	nim::Client::Login(app_key, LoginManager::GetInstance()->GetAccount(), LoginManager::GetInstance()->GetPassword(), cb);
 }
 
 void LoginCallback::OnLoginCallback(const nim::LoginRes& login_res, const void* user_data)

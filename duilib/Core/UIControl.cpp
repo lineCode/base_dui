@@ -34,7 +34,7 @@ m_nTooltipWidth(300)
     m_cxyMax.cx = m_cxyMax.cy = 9999;
     m_cxyBorderRound.cx = m_cxyBorderRound.cy = 0;
 
-    ::ZeroMemory(&m_rcPadding, sizeof(RECT));
+    ::ZeroMemory(&m_rcMargin, sizeof(RECT));
     ::ZeroMemory(&m_rcItem, sizeof(RECT));
     ::ZeroMemory(&m_rcPaint, sizeof(RECT));
 	::ZeroMemory(&m_rcBorderSize,sizeof(RECT));
@@ -425,14 +425,14 @@ int CControlUI::GetY() const
     return m_rcItem.top;
 }
 
-RECT CControlUI::GetPadding() const
+RECT CControlUI::GetMargin() const
 {
-    return m_rcPadding;
+    return m_rcMargin;
 }
 
-void CControlUI::SetPadding(RECT rcPadding)
+void CControlUI::SetMargin(RECT rcMargin)
 {
-    m_rcPadding = rcPadding;
+    m_rcMargin = rcMargin;
     NeedParentUpdate();
 }
 
@@ -922,14 +922,14 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetFixedWidth(rcPos.right - rcPos.left);
         SetFixedHeight(rcPos.bottom - rcPos.top);
     }
-    else if( _tcscmp(pstrName, _T("padding")) == 0 ) {
-        RECT rcPadding = { 0 };
+    else if( _tcscmp(pstrName, _T("margin")) == 0 ) {
+        RECT rcMargin = { 0 };
         LPTSTR pstr = NULL;
-		rcPadding.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-		rcPadding.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
-		rcPadding.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
-		rcPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
-		SetPadding(rcPadding);
+		rcMargin.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
+		rcMargin.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
+		rcMargin.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
+		rcMargin.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
+		SetMargin(rcMargin);
     }
     else if( _tcscmp(pstrName, _T("bkcolor")) == 0 || _tcscmp(pstrName, _T("bkcolor1")) == 0 ) {
         while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);

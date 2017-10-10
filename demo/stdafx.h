@@ -34,4 +34,7 @@
 //third_party
 #include "duilib/UIlib.h"
 
+//shared
+#include "shared/log.h"
+
 

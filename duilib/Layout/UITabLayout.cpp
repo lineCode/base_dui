@@ -155,11 +155,11 @@ namespace DuiLib
 
 			if( it != m_iCurSel ) continue;
 
-			RECT rcPadding = pControl->GetPadding();
-			rc.left += rcPadding.left;
-			rc.top += rcPadding.top;
-			rc.right -= rcPadding.right;
-			rc.bottom -= rcPadding.bottom;
+			RECT rcMargin = pControl->GetMargin();
+			rc.left += rcMargin.left;
+			rc.top += rcMargin.top;
+			rc.right -= rcMargin.right;
+			rc.bottom -= rcMargin.bottom;
 
 			SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
 

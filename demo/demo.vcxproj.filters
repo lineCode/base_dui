@@ -18,6 +18,9 @@
     <ClCompile Include="gui\login\login_form_ui.cpp">
       <Filter>gui\login</Filter>
     </ClCompile>
+    <ClCompile Include="gui\login\login_form.cpp">
+      <Filter>gui\login</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />

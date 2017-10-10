@@ -1201,8 +1201,8 @@ void CListBodyUI::SetPos(RECT rc, bool bNeedInvalidate)
         if( !pControl->IsVisible() ) continue;
         if( pControl->IsFloat() ) continue;
         szControlAvailable = szAvailable;
-        RECT rcPadding = pControl->GetPadding();
-        szControlAvailable.cx -= rcPadding.left + rcPadding.right;
+        RECT rcMargin = pControl->GetMargin();
+        szControlAvailable.cx -= rcMargin.left + rcMargin.right;
         iControlMaxWidth = pControl->GetFixedWidth();
         iControlMaxHeight = pControl->GetFixedHeight();
         if (iControlMaxWidth <= 0) iControlMaxWidth = pControl->GetMaxWidth(); 
@@ -1212,7 +1212,7 @@ void CListBodyUI::SetPos(RECT rc, bool bNeedInvalidate)
         SIZE sz = pControl->EstimateSize(szAvailable);
         if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
         if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
-        cyFixed += sz.cy + pControl->GetPadding().top + pControl->GetPadding().bottom;
+        cyFixed += sz.cy + pControl->GetMargin().top + pControl->GetMargin().bottom;
 
         sz.cx = MAX(sz.cx, 0);
         if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
@@ -1251,10 +1251,10 @@ void CListBodyUI::SetPos(RECT rc, bool bNeedInvalidate)
             continue;
         }
 
-        RECT rcPadding = pControl->GetPadding();
-        szRemaining.cy -= rcPadding.top;
+        RECT rcMargin = pControl->GetMargin();
+        szRemaining.cy -= rcMargin.top;
         szControlAvailable = szRemaining;
-        szControlAvailable.cx -= rcPadding.left + rcPadding.right;
+        szControlAvailable.cx -= rcMargin.left + rcMargin.right;
         iControlMaxWidth = pControl->GetFixedWidth();
         iControlMaxHeight = pControl->GetFixedHeight();
         if (iControlMaxWidth <= 0) iControlMaxWidth = pControl->GetMaxWidth(); 
@@ -1265,17 +1265,17 @@ void CListBodyUI::SetPos(RECT rc, bool bNeedInvalidate)
         if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
         if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
         sz.cx = pControl->GetMaxWidth();
-        if( sz.cx == 0 ) sz.cx = szAvailable.cx - rcPadding.left - rcPadding.right;
+        if( sz.cx == 0 ) sz.cx = szAvailable.cx - rcMargin.left - rcMargin.right;
         if( sz.cx < 0 ) sz.cx = 0;
         if( sz.cx > szControlAvailable.cx ) sz.cx = szControlAvailable.cx;
         if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
 
-        RECT rcCtrl = { iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + rcPadding.left + sz.cx, iPosY + sz.cy + rcPadding.top + rcPadding.bottom };
+        RECT rcCtrl = { iPosX + rcMargin.left, iPosY + rcMargin.top, iPosX + rcMargin.left + sz.cx, iPosY + sz.cy + rcMargin.top + rcMargin.bottom };
         pControl->SetPos(rcCtrl, false);
 
-        iPosY += sz.cy + iChildPadding + rcPadding.top + rcPadding.bottom;
-        cyNeeded += sz.cy + rcPadding.top + rcPadding.bottom;
-        szRemaining.cy -= sz.cy + iChildPadding + rcPadding.bottom;
+        iPosY += sz.cy + iChildPadding + rcMargin.top + rcMargin.bottom;
+        cyNeeded += sz.cy + rcMargin.top + rcMargin.bottom;
+        szRemaining.cy -= sz.cy + iChildPadding + rcMargin.bottom;
     }
     cyNeeded += (nEstimateNum - 1) * iChildPadding;
 
@@ -1363,9 +1363,9 @@ bool CListBodyUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl
                     }
                     if (pListInfo && pListInfo->iHLineSize > 0) {
                         // 因为没有为最后一个预留分割条长度，如果list铺满，最后一条不会显示
-                        RECT rcPadding = pControl->GetPadding();
+                        RECT rcMargin = pControl->GetMargin();
                         const RECT& rcPos = pControl->GetPos();
-                        RECT rcBottomLine = { rcPos.left, rcPos.bottom + rcPadding.bottom, rcPos.right, rcPos.bottom + rcPadding.bottom + pListInfo->iHLineSize };
+                        RECT rcBottomLine = { rcPos.left, rcPos.bottom + rcMargin.bottom, rcPos.right, rcPos.bottom + rcMargin.bottom + pListInfo->iHLineSize };
                         if( ::IntersectRect(&rcTemp, &rcPaint, &rcBottomLine) ) {
                             rcBottomLine.top += pListInfo->iHLineSize / 2;
                             rcBottomLine.bottom = rcBottomLine.top;
@@ -2997,9 +2997,9 @@ void CListHBoxElementUI::SetPos(RECT rc, bool bNeedInvalidate)
             }
             if( iColumnIndex >= pInfo->nColumns ) continue;
 
-            RECT rcPadding = pControl->GetPadding();
-            RECT rcItem = { pInfo->rcColumn[iColumnIndex].left + rcPadding.left, m_rcItem.top + rcPadding.top, 
-                pInfo->rcColumn[iColumnIndex].right - rcPadding.right, m_rcItem.bottom - rcPadding.bottom };
+            RECT rcMargin = pControl->GetMargin();
+            RECT rcItem = { pInfo->rcColumn[iColumnIndex].left + rcMargin.left, m_rcItem.top + rcMargin.top, 
+                pInfo->rcColumn[iColumnIndex].right - rcMargin.right, m_rcItem.bottom - rcMargin.bottom };
             if (pInfo->iVLineSize > 0 && iColumnIndex < pInfo->nColumns - 1) {
                 rcItem.right -= pInfo->iVLineSize;
             }
@@ -3016,9 +3016,9 @@ void CListHBoxElementUI::SetPos(RECT rc, bool bNeedInvalidate)
                 continue;
             }
 
-            RECT rcPadding = pControl->GetPadding();
-            RECT rcItem = { m_rcItem.left + rcPadding.left, m_rcItem.top + rcPadding.top, 
-                m_rcItem.right - rcPadding.right, m_rcItem.bottom - rcPadding.bottom };
+            RECT rcMargin = pControl->GetMargin();
+            RECT rcItem = { m_rcItem.left + rcMargin.left, m_rcItem.top + rcMargin.top, 
+                m_rcItem.right - rcMargin.right, m_rcItem.bottom - rcMargin.bottom };
             pControl->SetPos(rcItem, false);
         }
     }

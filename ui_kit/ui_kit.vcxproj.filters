@@ -32,6 +32,12 @@
     <Filter Include="gui\modal_wnd">
       <UniqueIdentifier>{f1cefad2-e737-4551-9f7d-02fa48ab4c90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="module\login">
+      <UniqueIdentifier>{a28e0891-9849-4459-a646-b06ededa507d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{0c3ee895-196b-4328-a6da-977073c9bd05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gui\msgbox\msgbox.h">
@@ -62,6 +68,19 @@
       <Filter>gui\modal_wnd</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="module\login\login_manager.h">
+      <Filter>module\login</Filter>
+    </ClInclude>
+    <ClInclude Include="module\login\login_define.h">
+      <Filter>module\login</Filter>
+    </ClInclude>
+    <ClInclude Include="module\login\login_callback.h">
+      <Filter>module\login</Filter>
+    </ClInclude>
+    <ClInclude Include="kit_define.h" />
+    <ClInclude Include="util\user_path.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\msgbox\msgbox.cpp">
@@ -89,5 +108,14 @@
       <Filter>gui\modal_wnd</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="module\login\login_manager.cpp">
+      <Filter>module\login</Filter>
+    </ClCompile>
+    <ClCompile Include="module\login\login_callback.cpp">
+      <Filter>module\login</Filter>
+    </ClCompile>
+    <ClCompile Include="util\user_path.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -23,6 +23,8 @@
 #include <WTypes.h>
 #include <shellapi.h>
 
+#include "kit_define.h"
+
 //base header
 #include "base/callback/callback.h"
 #include "base/util/string_util.h"
@@ -40,10 +42,6 @@
 #include "base/time/time.h"
 #include "base/framework/task.h"
 
-//shared project
-//#include "shared/utf8_file_util.h"
-//#include "shared/tool.h"
-
 //third_party
 #include "duilib/UIlib.h"
 
@@ -55,12 +53,12 @@
 
 
 
-//log
-//#include "shared/log.h"
-
-//util
-//#include "shared/util.h"
-
+//shared
+//#include "shared/utf8_file_util.h"
+//#include "shared/tool.h"
+#include "shared/log.h"
+#include "shared/util.h"
+#include "shared/closure.h"
 
 //msg
 //#include "module/session/session_util.h"
@@ -73,8 +71,8 @@
 //#include "module/service/http_service.h"
 //#include "module/service/photo_service.h"
 
-//helper
-//#include "shared/closure.h"
 //
 //#include "gui/window/window_ex.h"
 //#include "module/window/windows_manager.h"
+
+

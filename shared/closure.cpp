@@ -2,17 +2,21 @@
 #include "closure.h"
 #include "threads.h"
 
-void Post2UI(const StdClosure &closure)
+namespace shared
 {
-	nbase::ThreadManager::PostTask(shared::kThreadUI, closure);
-}
+	void Post2UI(const StdClosure &closure)
+	{
+		nbase::ThreadManager::PostTask(shared::kThreadUI, closure);
+	}
 
-void Post2GlobalMisc(const StdClosure &closure)
-{
-	nbase::ThreadManager::PostTask(shared::kThreadGlobalMisc, closure);
-}
+	void Post2GlobalMisc(const StdClosure &closure)
+	{
+		nbase::ThreadManager::PostTask(shared::kThreadGlobalMisc, closure);
+	}
 
-void Post2Database(const StdClosure &closure)
-{
-	nbase::ThreadManager::PostTask(shared::kThreadDatabase, closure);
+	void Post2Database(const StdClosure &closure)
+	{
+		nbase::ThreadManager::PostTask(shared::kThreadDatabase, closure);
+	}
+
 }

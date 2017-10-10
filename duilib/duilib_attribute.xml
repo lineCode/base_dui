@@ -59,7 +59,7 @@
     <Attribute name="name"      default="" type="" comment=""/>
     <Attribute name="text"      default="" type="" comment=""/>
 		<Attribute name="pos"       default="" type="" comment=""/>
-		<Attribute name="padding"   default="" type="" comment=""/>
+		<Attribute name="margin"   default="" type="" comment=""/>
 		<Attribute name="bkcolor"   default="" type="" comment=""/>
 		<Attribute name="bkcolor1"  default="" type="" comment=""/>
 		<Attribute name="bkcolor2"  default="" type="" comment=""/>
@@ -129,6 +129,18 @@
     <Attribute name="focusedtextcolor"  default="" type="" comment=""/>
   </Button>
 
+  <Option parent="Button" notifies="��ʱ��д"  >
+    <Attribute name="group"             default="" type="STRING" comment=""/>
+    <Attribute name="selected"          default="" type="" comment=""/>
+    <Attribute name="selectedimage"     default="" type="" comment=""/>
+    <Attribute name="selectedhotimage"  default="" type="" comment=""/>
+    <Attribute name="selectedbkcolor"   default="" type="" comment=""/>
+    <Attribute name="selectedtextcolor" default="" type="" comment=""/>
+  </Option>
+
+  <CheckBox parent="Option" notifies="同Option" >
+  </CheckBox>
+
   <Container parent="Control" notifies="" comment="">
     <Attribute name="inset"           default="" type="" comment=""/>
     <Attribute name="mousechild"      default="" type="" comment=""/>
@@ -159,28 +171,10 @@
     <Attribute name="textcolor"         default="" type="" comment=""/>
     <Attribute name="textpadding"       default="" type="" comment=""/>
   </RichEdit>
-  
-  
-  <!--<CheckBox parent="Button" notifies="��ʱ��д" >
-		<Attribute name="selected" default="false" type="BOOL" comment="�Ƿ�ѡ��"/>
-		<Attribute name="selectednormalimage" default="" type="STRING" comment="ѡ�е���ͨ״̬ͼƬ"/>
-		<Attribute name="selectedhotimage" default="" type="STRING" comment="ѡ�е����������״̬ͼƬ"/>
-		<Attribute name="selectedpushedimage" default="" type="STRING" comment="ѡ�е���갴�µ�״̬ͼƬ"/>
-		<Attribute name="selecteddisabledimage" default="" type="STRING" comment="ѡ�еĽ��õ�״̬ͼƬ"/>
-		<Attribute name="selectedtextcolor" default="" type="STRING" comment="ѡ��״̬������ɫ,��ָ����ʹ��Ĭ����ɫ,��(blue)"/>
-		<Attribute name="selectednormalcolor" default="" type="STRING" comment="ѡ�е���ͨ״̬������ɫ,��ָ����ʹ��Ĭ����ɫ,��(blue)"/>
-		<Attribute name="selectedhotcolor" default="" type="STRING" comment="ѡ�е��������״̬������ɫ,��ָ����ʹ��Ĭ����ɫ,��(blue)"/>
-		<Attribute name="selectedpushedcolor" default="" type="STRING" comment="ѡ�е���갴��״̬������ɫ,��ָ����ʹ��Ĭ����ɫ,��(blue)"/>
-		<Attribute name="selecteddisabledcolor" default="" type="STRING" comment="ѡ�еĽ���״̬������ɫ,��ָ����ʹ��Ĭ����ɫ,��(blue)"/>
-		<Attribute name="selectedforenormalimage" default="" type="STRING" comment="ѡ�е�ǰ��ͼƬ"/>
-		<Attribute name="selectedforehotimage" default="" type="STRING" comment="ѡ�е��������״̬��ͼƬ"/>
-		<Attribute name="selectedforepushedimage" default="" type="STRING" comment="ѡ�е���갴��״̬��ǰ��ͼƬ"/>
-		<Attribute name="selectedforedisabledimage" default="" type="STRING" comment="ѡ�еĽ���״̬��ǰ��ͼƬ"/>	
-	</CheckBox>-->
 
-	<!--<Option parent="CheckBox" notifies="��ʱ��д"  >
-		<Attribute name="group" default="" type="STRING" comment="�����������"/>
-	</Option>-->
+  
+
+	
 
 	<!--<Progress parent="Label" notifies="��ʱ��д" >
 		<Attribute name="hor" default="true" type="BOOL" comment="ˮƽ��ֱ,��(true)"/>

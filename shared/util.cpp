@@ -26,15 +26,23 @@ std::wstring QPath::GetAppPath()
 {
 	return nbase::win32::GetCurrentModuleDirectory();
 }
-#if 0
+
 std::wstring QPath::GetUserAppDataDir(const std::string& app_account)
 {
+#if 1
+	return L"";
+#else
 	return nbase::UTF8ToUTF16(nim::Tool::GetUserAppdataDir(app_account));
+#endif
 }
 
 std::wstring QPath::GetLocalAppDataDir()
 {
+#if 1
+	return L"";
+#else
 	return nbase::UTF8ToUTF16(nim::Tool::GetLocalAppdataDir());
+#endif
 }
 
 std::wstring QPath::GetNimAppDataDir(const std::wstring& app_data_dir)
@@ -57,7 +65,7 @@ std::wstring QPath::GetNimAppDataDir(const std::wstring& app_data_dir)
 
 	return dir;
 }
-#endif
+
 //
 std::map<std::wstring,std::wstring> QCommand::key_value_;
 

@@ -63,8 +63,8 @@ namespace DuiLib
 			if( !pControl->IsVisible() ) continue;
 			if( pControl->IsFloat() ) continue;
 			szControlAvailable = szAvailable;
-			RECT rcPadding = pControl->GetPadding();
-			szControlAvailable.cy -= rcPadding.top + rcPadding.bottom;
+			RECT rcMargin = pControl->GetMargin();
+			szControlAvailable.cy -= rcMargin.top + rcMargin.bottom;
 			iControlMaxWidth = pControl->GetFixedWidth();
 			iControlMaxHeight = pControl->GetFixedHeight();
 			if (iControlMaxWidth <= 0) iControlMaxWidth = pControl->GetMaxWidth(); 
@@ -87,12 +87,12 @@ namespace DuiLib
 				}
 			}
 
-			cxFixed += sz.cx + pControl->GetPadding().left + pControl->GetPadding().right;
+			cxFixed += sz.cx + pControl->GetMargin().left + pControl->GetMargin().right;
 
 			sz.cy = MAX(sz.cy, 0);
 			if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
 			if( sz.cy > pControl->GetMaxHeight() ) sz.cy = pControl->GetMaxHeight();
-			cyNeeded = MAX(cyNeeded, sz.cy + rcPadding.top + rcPadding.bottom);
+			cyNeeded = MAX(cyNeeded, sz.cy + rcMargin.top + rcMargin.bottom);
 			nEstimateNum++;
 		}
 		cxFixed += (nEstimateNum - 1) * m_iChildPadding;
@@ -119,18 +119,18 @@ namespace DuiLib
 			}
 			
 			iEstimate += 1;
-			RECT rcPadding = pControl->GetPadding();
-			szRemaining.cx -= rcPadding.left;
+			RECT rcMargin = pControl->GetMargin();
+			szRemaining.cx -= rcMargin.left;
 
 			szControlAvailable = szRemaining;
-			szControlAvailable.cy -= rcPadding.top + rcPadding.bottom;
+			szControlAvailable.cy -= rcMargin.top + rcMargin.bottom;
 			iControlMaxWidth = pControl->GetFixedWidth();
 			iControlMaxHeight = pControl->GetFixedHeight();
 			if (iControlMaxWidth <= 0) iControlMaxWidth = pControl->GetMaxWidth(); 
 			if (iControlMaxHeight <= 0) iControlMaxHeight = pControl->GetMaxHeight();
 			if (szControlAvailable.cx > iControlMaxWidth) szControlAvailable.cx = iControlMaxWidth;
 			if (szControlAvailable.cy > iControlMaxHeight) szControlAvailable.cy = iControlMaxHeight;
-      cxFixedRemaining = cxFixedRemaining - (rcPadding.left + rcPadding.right);
+      cxFixedRemaining = cxFixedRemaining - (rcMargin.left + rcMargin.right);
 			if (iEstimate > 1) cxFixedRemaining = cxFixedRemaining - m_iChildPadding;
 			SIZE sz = pControl->EstimateSize(szControlAvailable);
 			if (pControl->GetFixedWidth() == 0 || sz.cx == 0) {
@@ -138,7 +138,7 @@ namespace DuiLib
 				sz.cx = cxExpand;
 				// Distribute remaining to last element (usually round-off left-overs)
 				if( iAdjustable == nAdjustables ) {
-					sz.cx = MAX(0, szRemaining.cx - rcPadding.right - cxFixedRemaining);
+					sz.cx = MAX(0, szRemaining.cx - rcMargin.right - cxFixedRemaining);
 				} 
 				if( sz.cx < pControl->GetMinWidth() ) sz.cx = pControl->GetMinWidth();
 				if( sz.cx > pControl->GetMaxWidth() ) sz.cx = pControl->GetMaxWidth();
@@ -150,7 +150,7 @@ namespace DuiLib
 			}
 
 			sz.cy = pControl->GetMaxHeight();
-			if( sz.cy == 0 ) sz.cy = szAvailable.cy - rcPadding.top - rcPadding.bottom;
+			if( sz.cy == 0 ) sz.cy = szAvailable.cy - rcMargin.top - rcMargin.bottom;
 			if( sz.cy < 0 ) sz.cy = 0;
 			if( sz.cy > szControlAvailable.cy ) sz.cy = szControlAvailable.cy;
 			if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
@@ -162,7 +162,7 @@ namespace DuiLib
 					iPosY += m_pVerticalScrollBar->GetScrollRange() / 2;
 					iPosY -= m_pVerticalScrollBar->GetScrollPos();
 				}
-				RECT rcCtrl = { iPosX + rcPadding.left, iPosY - sz.cy/2, iPosX + sz.cx + rcPadding.left, iPosY + sz.cy - sz.cy/2 };
+				RECT rcCtrl = { iPosX + rcMargin.left, iPosY - sz.cy/2, iPosX + sz.cx + rcMargin.left, iPosY + sz.cy - sz.cy/2 };
 				pControl->SetPos(rcCtrl, false);
 			}
 			else if (iChildAlign == DT_BOTTOM) {
@@ -171,7 +171,7 @@ namespace DuiLib
 					iPosY += m_pVerticalScrollBar->GetScrollRange();
 					iPosY -= m_pVerticalScrollBar->GetScrollPos();
 				}
-				RECT rcCtrl = { iPosX + rcPadding.left, iPosY - rcPadding.bottom - sz.cy, iPosX + sz.cx + rcPadding.left, iPosY - rcPadding.bottom };
+				RECT rcCtrl = { iPosX + rcMargin.left, iPosY - rcMargin.bottom - sz.cy, iPosX + sz.cx + rcMargin.left, iPosY - rcMargin.bottom };
 				pControl->SetPos(rcCtrl, false);
 			}
 			else {
@@ -179,13 +179,13 @@ namespace DuiLib
 				if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) {
 					iPosY -= m_pVerticalScrollBar->GetScrollPos();
 				}
-				RECT rcCtrl = { iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + sz.cx + rcPadding.left, iPosY + sz.cy + rcPadding.top };
+				RECT rcCtrl = { iPosX + rcMargin.left, iPosY + rcMargin.top, iPosX + sz.cx + rcMargin.left, iPosY + sz.cy + rcMargin.top };
 				pControl->SetPos(rcCtrl, false);
 			}
 
-			iPosX += sz.cx + m_iChildPadding + rcPadding.left + rcPadding.right;
-			cxNeeded += sz.cx + rcPadding.left + rcPadding.right;
-			szRemaining.cx -= sz.cx + m_iChildPadding + rcPadding.right;
+			iPosX += sz.cx + m_iChildPadding + rcMargin.left + rcMargin.right;
+			cxNeeded += sz.cx + rcMargin.left + rcMargin.right;
+			szRemaining.cx -= sz.cx + m_iChildPadding + rcMargin.right;
 		}
 		cxNeeded += (nEstimateNum - 1) * m_iChildPadding;
 

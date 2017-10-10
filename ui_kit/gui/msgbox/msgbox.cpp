@@ -194,6 +194,6 @@ void MsgBox::EndMsgBox( MsgBoxRet ret )
 
 	if( msgbox_callback_ )
 	{
-		Post2UI( nbase::Bind(msgbox_callback_, ret) );
+		shared::Post2UI( nbase::Bind(msgbox_callback_, ret) );
 	}
 }
