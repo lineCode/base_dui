@@ -182,41 +182,30 @@ void LoginManager::DoLogout(bool over, NIMLogoutType type )
 
 void LoginManager::DoLogin(std::string user, std::string pass)
 {
-	auto cb = std::bind(&LoginCallbackObject::OnLoginCallback, std::placeholders::_1, nullptr);
-	//LoginRes res;
+	LoginCallback cb = std::bind(&LoginCallbackObject::UILoginCallback, std::placeholders::_1);
+
+	LoginCallback *pcb = new LoginCallback(cb);
+
 	StdClosure task = std::bind([](const void* user_data)
 	{
 		printf("login in thread GlobalMisc\n");
 		if (user_data)
 		{
-			/*LoginCallback* cb_pointer = (LoginCallback*)user_data;
-			if (*cb_pointer)
+			LoginCallback* pcb = (LoginCallback*)user_data;
+			if (*pcb)
 			{
+				LoginRes login_res;
+				login_res.res_code_ = kNIMResSuccess;
+				login_res.login_step_ = kNIMLoginStepLogin;
 
-			}*/
-			LoginRes login_res;
-			login_res.res_code_ = kNIMResSuccess;
-			login_res.login_step_ = kNIMLoginStepLogin;
-			LoginCallback login_cb = *(LoginCallback*)user_data;
-			login_cb(login_res);
-			//shared::Post2UI()
+				shared::Post2UI(std::bind(*pcb, login_res));
+			}
+			delete pcb;
 		}
 		return;
-	}, &cb);
-	shared::Post2GlobalMisc(task);
+	}, pcb);
 
-	//if (user_data)
-	//{
-	//	Friend::GetFriendsListCallback* cb_pointer = (Friend::GetFriendsListCallback*)user_data;
-	//	if (*cb_pointer)
-	//	{
-	//		std::list<FriendProfile> friends_profile;
-	//		ParseFriendsProfile(PCharToString(result_json), friends_profile);
-	//		PostTaskToUIThread(std::bind((*cb_pointer), (NIMResCode)res_code, friends_profile));
-	//		//(*cb_pointer)((NIMResCode)res_code, friends_profile);
-	//	}
-	//	delete cb_pointer;
-	//}
+	shared::Post2GlobalMisc(task);
 }
 
 void LoginManager::CancelLogin()

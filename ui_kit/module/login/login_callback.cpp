@@ -147,6 +147,7 @@ void LoginCallbackObject::OnLoginCallback(LoginRes& login_res, const void* user_
 void LoginCallbackObject::UILoginCallback(const LoginRes& login_res)
 {
 #if 1
+	LoginManager::GetInstance()->SetErrorCode(login_res.res_code_);
 #else
 	LoginManager::GetInstance()->SetErrorCode(login_res.res_code_);
 	if (login_res.relogin_)
