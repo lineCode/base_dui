@@ -6,14 +6,18 @@ namespace nim_comp
 {
 static const std::wstring kResImage = L"image\\";
 static const std::wstring kResAudio = L"audio\\";
-static const std::wstring kResOther = L"res\\";
+static const std::wstring kResOther = L"other\\";
 
 std::wstring GetUserDataPath()
 {
+#if 1
+	return QPath::GetAppPath();
+#else
 	std::string account = LoginManager::GetInstance()->GetAccount();
 	assert( !account.empty() );
 	std::wstring user_app_data_dir = QPath::GetUserAppDataDir( account );
 	return user_app_data_dir;
+#endif
 }
 
 std::wstring GetUserImagePath()

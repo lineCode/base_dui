@@ -41,7 +41,8 @@ public:
 	void OnCancelLogin();
 
 protected:
-	void StartLogin(std::string account, std::string pwd);
+	void StartLogin();
+	void CancelLogin();
 public:
 	static const LPCTSTR kClassName;
 
@@ -50,5 +51,7 @@ private:
 	DuiLib::CRichEditUI*	re_account_;
 	DuiLib::CRichEditUI*	re_pwd_;
 
+	DuiLib::CLabelUI*		label_info_;
 	DuiLib::CButtonUI*		btn_login_;
+	DuiLib::CButtonUI*		btn_cancel_login_;
 };

@@ -4,6 +4,7 @@
 
 namespace nim_comp
 {
+	typedef std::function<void()> OnStartLogin;
 	typedef std::function<void(int error)> OnLoginError;
 	typedef std::function<void()> OnCancelLogin;
 	typedef std::function<void()> OnHideWindow;

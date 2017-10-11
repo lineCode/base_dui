@@ -2,6 +2,8 @@
 #include "login_manager.h"
 //#include "shared/xml_util.h"
 #include "login_callback.h"
+#include "util/user_path.h"
+#include "module/db/user_db.h"
 
 namespace nim_comp
 {
@@ -130,8 +132,34 @@ void LoginManager::ReadDemoLogLevel()
 #endif
 }
 
-void LoginManager::RegLoginManagerCallback(const OnLoginError& cb_result, const OnCancelLogin& cb_cancel, const OnHideWindow& cb_hide, const OnDestroyWindow& cb_destroy, const OnShowMainWindow& cb_show_main)
+void LoginManager::DoAfterLogin()
 {
+	QLOG_APP(L"-----{0} account login-----") << LoginManager::GetInstance()->GetAccount();
+#if 1
+	/*bool ret = AudioManager::GetInstance()->InitAudio(GetUserDataPath());
+	assert(ret);*/
+
+	LoginManager::GetInstance()->CreateSingletonRunMutex();
+	//TeamService::GetInstance()->QueryAllTeamInfo();
+
+	//ForcePushManager::GetInstance()->Load();
+#endif
+
+	/*auto _LogRobot = []{
+		const long m2 = 2 * 1024 * 1024, m1 = 1024 * 1024;
+		QLogImpl::GetInstance()->HalfTo(m2, m1);
+
+		StdClosure task = nbase::Bind(&_LogRobot);
+		nbase::ThreadManager::PostDelayedTask(shared::kThreadGlobalMisc, task, nbase::TimeDelta::FromMinutes(10));
+	};
+
+	StdClosure task = nbase::Bind(&_LogRobot);
+	nbase::ThreadManager::PostDelayedTask(shared::kThreadGlobalMisc, task, nbase::TimeDelta::FromMinutes(1));*/
+}
+
+void LoginManager::RegLoginManagerCallback(const OnStartLogin& cb_start, const OnLoginError& cb_result, const OnCancelLogin& cb_cancel, const OnHideWindow& cb_hide, const OnDestroyWindow& cb_destroy, const OnShowMainWindow& cb_show_main)
+{
+	cb_start_login_ = cb_start;
 	cb_login_error_ = cb_result;
 	cb_cancel_login_ = cb_cancel;
 	cb_hide_window_ = cb_hide;
@@ -171,7 +199,7 @@ void LoginManager::InvokeShowMainForm()
 
 bool LoginManager::IsLoginFormValid()
 {
-	bool is_valid = cb_cancel_login_ && cb_destroy_window_ && cb_hide_window_ && cb_login_error_ && cb_show_main_window_;
+	bool is_valid = cb_start_login_ && cb_cancel_login_ && cb_destroy_window_ && cb_hide_window_ && cb_login_error_ && cb_show_main_window_;
 	return is_valid;
 }
 
@@ -182,6 +210,43 @@ void LoginManager::DoLogout(bool over, NIMLogoutType type )
 
 void LoginManager::DoLogin(std::string user, std::string pass)
 {
+	assert(GetLoginStatus() == LoginStatus_NONE);
+	SetLoginStatus(LoginStatus_LOGIN);
+
+	SetAccount(user);
+	//std::string pass_md5 = QString::GetMd5(pass); //密码MD5加密（用户自己的应用请去掉加密）
+	SetPassword(pass);
+
+	auto _InitUserFolder = [](){
+		nbase::CreateDirectory(GetUserDataPath());
+		nbase::CreateDirectory(GetUserImagePath());
+		nbase::CreateDirectory(GetUserAudioPath());
+		nbase::CreateDirectory(GetUserOtherResPath());
+	};
+	_InitUserFolder();
+
+	auto _InitLog = [](){
+#ifdef _DEBUG
+		QLogImpl::GetInstance()->SetLogLevel(LV_PRO);
+#else
+		QLogImpl::GetInstance()->SetLogLevel(LoginManager::GetInstance()->GetDemoLogLevel());
+#endif
+		std::wstring dir = GetUserDataPath();
+		QLogImpl::GetInstance()->SetLogFile(dir + kLogFile);
+	};
+	_InitLog();
+	{
+		int ver = 0;
+		//std::wstring vf;
+		//LocalHelper::GetAppLocalVersion(ver, vf);
+		QLOG_APP(L"App Version {0}") << ver;
+		QLOG_APP(L"Account {0}") << LoginManager::GetInstance()->GetAccount();
+		QLOG_APP(L"UI ThreadId {0}") << GetCurrentThreadId();
+		QLOG_APP(L"-----login begin-----");
+	}
+
+
+	//----------------------------------------------------------------
 	LoginCallback cb = std::bind(&LoginCallbackObject::UILoginCallback, std::placeholders::_1);
 
 	LoginCallback *pcb = new LoginCallback(cb);
@@ -189,6 +254,12 @@ void LoginManager::DoLogin(std::string user, std::string pass)
 	StdClosure task = std::bind([](const void* user_data)
 	{
 		printf("login in thread GlobalMisc\n");
+
+		Sleep(3000);
+
+		UserDB db;
+		db.Load();
+
 		if (user_data)
 		{
 			LoginCallback* pcb = (LoginCallback*)user_data;
@@ -206,11 +277,18 @@ void LoginManager::DoLogin(std::string user, std::string pass)
 	}, pcb);
 
 	shared::Post2GlobalMisc(task);
+
+	if (cb_start_login_)
+	{
+		cb_start_login_();
+	}
 }
 
 void LoginManager::CancelLogin()
 {
-	//LoginCallbackObject::CacelLogin();
+	assert(GetLoginStatus() == LoginStatus_LOGIN);
+	SetLoginStatus(LoginStatus_CANCEL);
+	QLOG_APP(L"-----login cancel begin-----");
 }
 
 }

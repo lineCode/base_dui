@@ -38,6 +38,9 @@
     <Filter Include="util">
       <UniqueIdentifier>{0c3ee895-196b-4328-a6da-977073c9bd05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="module\db">
+      <UniqueIdentifier>{a3c1eb8a-2bcb-4231-b6e7-12dca7c59cbf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gui\msgbox\msgbox.h">
@@ -81,6 +84,9 @@
     <ClInclude Include="util\user_path.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="module\db\user_db.h">
+      <Filter>module\db</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\msgbox\msgbox.cpp">
@@ -116,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="util\user_path.cpp">
       <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="module\db\user_db.cpp">
+      <Filter>module\db</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

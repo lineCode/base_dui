@@ -17,50 +17,6 @@
 
 namespace nim_comp
 {
-//void _InitUserFolder()
-//{
-//	nbase::CreateDirectory(GetUserDataPath());
-//	nbase::CreateDirectory(GetUserImagePath());
-//	nbase::CreateDirectory(GetUserAudioPath());
-//	nbase::CreateDirectory(GetUserOtherResPath());
-//}
-//
-//void _InitLog()
-//{
-//#ifdef _DEBUG
-//	QLogImpl::GetInstance()->SetLogLevel(LV_PRO);
-//#else
-//	QLogImpl::GetInstance()->SetLogLevel(LoginManager::GetInstance()->GetDemoLogLevel());
-//#endif
-//	std::wstring dir = GetUserDataPath();
-//	QLogImpl::GetInstance()->SetLogFile(dir + kLogFile);
-//}
-//
-//void _LogRobot()
-//{
-//	const long m2 = 2*1024*1024, m1 = 1024*1024;
-//	QLogImpl::GetInstance()->HalfTo(m2, m1);
-//
-//	StdClosure task = nbase::Bind(&_LogRobot);
-//	nbase::ThreadManager::PostDelayedTask(shared::kThreadGlobalMisc, task, nbase::TimeDelta::FromMinutes(10));
-//}
-//
-////登录之后的处理：比如读取数据
-//void _DoAfterLogin()
-//{
-//	QLOG_APP(L"-----{0} account login-----") << LoginManager::GetInstance()->GetAccount();
-//#if 0
-//	bool ret = AudioManager::GetInstance()->InitAudio(GetUserDataPath());
-//	assert(ret);
-//
-//	LoginManager::GetInstance()->CreateSingletonRunMutex();
-//	TeamService::GetInstance()->QueryAllTeamInfo();
-//
-//	ForcePushManager::GetInstance()->Load();
-//#endif
-//	StdClosure task = nbase::Bind(&_LogRobot);
-//	nbase::ThreadManager::PostDelayedTask(shared::kThreadGlobalMisc, task, nbase::TimeDelta::FromMinutes(1));
-//}
 //
 ////退出程序前的处理：比如保存数据
 //void _DoBeforeAppExit()
@@ -76,51 +32,6 @@ namespace nim_comp
 //{
 //	QLOG_APP(L"-----logout begin {0}-----") << type;
 //	//nim::Client::Logout( type, &LoginCallbackObject::OnLogoutCallback );
-//}
-
-//void LoginCallbackObject::DoLogin(std::string user, std::string pass)
-//{
-//#if 1
-//	auto cb = std::bind(OnLoginCallback, std::placeholders::_1, nullptr);
-//	//void *p = &cb;
-//	StdClosure task = std::bind([](void *user_date)
-//	{
-//		printf("login in thread GlobalMisc\n");
-//		if (user_date)
-//		{
-//
-//		}
-//		
-//		return;
-//	}, &cb);
-//	shared::Post2GlobalMisc(task);
-//#else
-//	assert(LoginManager::GetInstance()->GetLoginStatus() == LoginStatus_NONE);
-//	LoginManager::GetInstance()->SetLoginStatus(LoginStatus_LOGIN);
-//
-//	LoginManager::GetInstance()->SetAccount(user);
-//	std::string pass_md5 = QString::GetMd5(pass); //密码MD5加密（用户自己的应用请去掉加密）
-//	LoginManager::GetInstance()->SetPassword(pass_md5);
-//
-//	_InitUserFolder();
-//	_InitLog();
-//	{
-//		int ver = 0;
-//		std::wstring vf;
-//		LocalHelper::GetAppLocalVersion(ver, vf);
-//		QLOG_APP(L"App Version {0}") << ver;
-//		QLOG_APP(L"Account {0}") << LoginManager::GetInstance()->GetAccount();
-//		QLOG_APP(L"UI ThreadId {0}") << GetCurrentThreadId();
-//		QLOG_APP(L"-----login begin-----");
-//	}
-//
-//	//注意：
-//	//1. app key是应用的标识，不同应用之间的数据（用户、消息、群组等）是完全隔离的。开发自己的应用时，请替换为自己的app key。
-//	//2. 用户登录自己的应用是不需要对密码md5加密的，替换app key之后，请记得去掉加密。
-//	std::string app_key = GetConfigValueAppKey();
-//	auto cb = std::bind(OnLoginCallback, std::placeholders::_1, nullptr);
-//	nim::Client::Login(app_key, LoginManager::GetInstance()->GetAccount(), LoginManager::GetInstance()->GetPassword(), cb);
-//#endif
 //}
 
 void LoginCallbackObject::OnLoginCallback(LoginRes& login_res, const void* user_data)
@@ -148,6 +59,46 @@ void LoginCallbackObject::UILoginCallback(const LoginRes& login_res)
 {
 #if 1
 	LoginManager::GetInstance()->SetErrorCode(login_res.res_code_);
+
+	QLOG_APP(L"-----login end {0}-----") << login_res.res_code_;
+
+	if (LoginManager::GetInstance()->IsLoginFormValid())
+	{
+		if (LoginManager::GetInstance()->GetLoginStatus() == LoginStatus_CANCEL)
+		{
+			QLOG_APP(L"-----login cancel end-----");
+#if 0
+			if (login_res.res_code_ == kNIMResSuccess)
+				NimLogout(kNIMLogoutChangeAccout);
+			else
+				UILogoutCallback();
+#else
+			UILogoutCallback();
+#endif
+			return;
+		}
+		else
+			LoginManager::GetInstance()->SetLoginStatus(login_res.res_code_ == kNIMResSuccess ? LoginStatus_SUCCESS : LoginStatus_NONE);
+
+		if (login_res.res_code_ == kNIMResSuccess)
+		{
+			LoginManager::GetInstance()->InvokeHideWindow();
+			LoginManager::GetInstance()->DoAfterLogin();
+			// 登录成功，显示主界面
+			LoginManager::GetInstance()->InvokeShowMainForm();
+			LoginManager::GetInstance()->InvokeDestroyWindow();
+		}
+		else
+		{
+			LoginManager::GetInstance()->InvokeLoginError(login_res.res_code_);
+		}
+	}
+	else
+	{
+		QLOG_APP(L"login form has been closed");
+		//LoginManager::GetInstance()->SetLoginStatus(login_res.res_code_ == kNIMResSuccess ? LoginStatus_SUCCESS : LoginStatus_NONE);
+		//LoginCallbackObject::DoLogout(false);
+	}
 #else
 	LoginManager::GetInstance()->SetErrorCode(login_res.res_code_);
 	if (login_res.relogin_)
@@ -274,19 +225,21 @@ void LoginCallbackObject::OnLogoutCallback(NIMResCode res_code)
 
 void LoginCallbackObject::UILogoutCallback()
 {
-#if 1
-#else
+#if 0
 	if (LoginManager::GetInstance()->GetLoginStatus() == LoginStatus_CANCEL)
 	{
 		LoginManager::GetInstance()->SetLoginStatus(LoginStatus_NONE);
 
-		nim_ui::LoginManager::GetInstance()->InvokeCancelLogin();
+		LoginManager::GetInstance()->InvokeCancelLogin();
 	}
 	else
 	{
 		nim_cef::CefManager::GetInstance()->PostQuitMessage(0);
 		_DoBeforeAppExit();
 	}
+#else
+	LoginManager::GetInstance()->SetLoginStatus(LoginStatus_NONE);
+	LoginManager::GetInstance()->InvokeCancelLogin();
 #endif
 }
 

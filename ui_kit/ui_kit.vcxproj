@@ -46,7 +46,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -85,6 +85,7 @@
     <ClInclude Include="gui\msgbox\msgbox.h" />
     <ClInclude Include="gui\window\window_ex.h" />
     <ClInclude Include="kit_define.h" />
+    <ClInclude Include="module\db\user_db.h" />
     <ClInclude Include="module\init\nim_ui_init_manager.h" />
     <ClInclude Include="module\login\login_callback.h" />
     <ClInclude Include="module\login\login_define.h" />
@@ -102,6 +103,9 @@
     <ClCompile Include="gui\modal_wnd\file_dialog_ex.cpp" />
     <ClCompile Include="gui\msgbox\msgbox.cpp" />
     <ClCompile Include="gui\window\window_ex.cpp" />
+    <ClCompile Include="module\db\user_db.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="module\init\nim_ui_init_manager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>

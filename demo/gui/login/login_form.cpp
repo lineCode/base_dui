@@ -2,21 +2,48 @@
 #include "login_form.h"
 //#include "kit_define.h"
 #include "module/login/login_manager.h"
+#include "gui/msgbox/msgbox.h"
 
 
-void LoginForm::StartLogin(std::string account, std::string pwd)
+void LoginForm::StartLogin()
 {
-	/*if (!nim_comp::LoginManager::GetInstance()->CheckSingletonRun(nbase::UTF8ToUTF16(account)))
+	if (re_account_->GetText().empty())
+	{
+		label_info_->SetText(L"用户名空");
+		return;
+	}
+	if (re_pwd_->GetText().empty())
+	{
+		label_info_->SetText(L"密码空");
+		return;
+	}
+	if (!nim_comp::LoginManager::GetInstance()->CheckSingletonRun(re_account_->GetText()))
 	{
 		ShowMsgBox(this->GetHWND(), MsgboxCallback(), L"STRID_CHECK_SINGLETON_RUN", true);
 		return;
-	}*/
+	}
+
+	std::string account = nbase::UTF16ToUTF8(re_account_->GetText());
+	std::string pwd = nbase::UTF16ToUTF8(re_pwd_->GetText());
 
 	nim_comp::LoginManager::GetInstance()->DoLogin(account, pwd);
 }
 
+void LoginForm::CancelLogin()
+{
+	btn_cancel_login_->SetEnabled(false);
+	btn_cancel_login_->SetText(L"正在取消...");
+	nim_comp::LoginManager::GetInstance()->CancelLogin();
+}
+
 void LoginForm::RegLoginManagerCallback()
 {
+	nim_comp::OnStartLogin cb_start = [this](){
+		//re_account_->SetEnabled();
+		btn_login_->SetVisible(false);
+		btn_cancel_login_->SetVisible(true);
+	};
+
 	nim_comp::OnLoginError cb_result = [this](int error){
 		this->OnLoginError(error);
 	};
@@ -38,7 +65,8 @@ void LoginForm::RegLoginManagerCallback()
 		//nim_comp::WindowsManager::SingletonShow<MainForm>(MainForm::kClassName);
 	};
 
-	nim_comp::LoginManager::GetInstance()->RegLoginManagerCallback(/*ToWeakCallback*/(cb_result),
+	nim_comp::LoginManager::GetInstance()->RegLoginManagerCallback(/*ToWeakCallback*/(cb_start),
+		/*ToWeakCallback*/(cb_result),
 		/*ToWeakCallback*/(cb_cancel),
 		/*ToWeakCallback*/(cb_hide),
 		/*ToWeakCallback*/(cb_destroy),
@@ -74,18 +102,15 @@ void LoginForm::OnLoginError(int error)
 
 void LoginForm::OnCancelLogin()
 {
-#if 0
-	usericon_->SetEnabled(true);
-	passwordicon_->SetEnabled(true);
+#if 1
+	re_account_->SetEnabled(true);
+	re_pwd_->SetEnabled(true);
 
-	user_name_edit_->SetEnabled(true);
-	password_edit_->SetEnabled(true);
-
-	login_ing_tip_->SetVisible(false);
-	login_error_tip_->SetVisible(false);
+	label_info_->SetText(L"已取消登录");
 
 	btn_login_->SetVisible(true);
-	btn_cancel_->SetVisible(false);
-	btn_cancel_->SetEnabled(true);
+	btn_cancel_login_->SetVisible(false);
+	btn_cancel_login_->SetText(L"取消登录");
+	btn_cancel_login_->SetEnabled(true);
 #endif
 }

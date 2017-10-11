@@ -17,11 +17,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "duilib", "duilib\duilib.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "base", "base\base.vcxproj", "{8D9A6595-717A-41C8-B468-0011A72BE3D1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo", "Demo\Demo.vcxproj", "{A01B66BD-F357-4F47-92C9-2CD58F78A5E9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo", "demo\Demo.vcxproj", "{A01B66BD-F357-4F47-92C9-2CD58F78A5E9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shared", "shared\shared.vcxproj", "{D5A1F965-EFE2-4C75-908A-ADC01F4BEF36}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ui_kit", "ui_kit\ui_kit.vcxproj", "{199D635E-6BB8-4E95-94CA-8A7A3DACE1B5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "db", "db\db.vcxproj", "{745E6452-9FE1-435B-833A-767617EEE1DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,22 @@ Global
 		{199D635E-6BB8-4E95-94CA-8A7A3DACE1B5}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
 		{199D635E-6BB8-4E95-94CA-8A7A3DACE1B5}.UnicodeRelease|Win32.Build.0 = Release|Win32
 		{199D635E-6BB8-4E95-94CA-8A7A3DACE1B5}.UnicodeRelease|x64.ActiveCfg = Release|Win32
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.Debug|Win32.Build.0 = Debug|Win32
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.Debug|x64.ActiveCfg = Debug|x64
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.Debug|x64.Build.0 = Debug|x64
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.Release|Win32.ActiveCfg = Release|Win32
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.Release|Win32.Build.0 = Release|Win32
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.Release|x64.ActiveCfg = Release|x64
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.Release|x64.Build.0 = Release|x64
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.UnicodeDebug|Win32.Build.0 = Debug|Win32
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.UnicodeDebug|x64.ActiveCfg = Debug|x64
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.UnicodeDebug|x64.Build.0 = Debug|x64
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.UnicodeRelease|Win32.Build.0 = Release|Win32
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.UnicodeRelease|x64.ActiveCfg = Release|x64
+		{745E6452-9FE1-435B-833A-767617EEE1DA}.UnicodeRelease|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

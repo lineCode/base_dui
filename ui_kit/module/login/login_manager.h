@@ -102,6 +102,10 @@ public:
 	*/
 	void CancelLogin();
 
+
+
+	void DoAfterLogin();
+
 	/**
 	* 注册登录窗体的回调函数，用来让UI组件控制登录窗体行为，登陆之前应该调用此函数注册相关回调
 	* @param[in] cb_result		通知登录错误并返回错误原因的回调函数
@@ -111,7 +115,8 @@ public:
 	* @param[in] cb_show_main	通知显示主窗体的回调函数
 	* @return void 无返回值
 	*/
-	void RegLoginManagerCallback(const OnLoginError& cb_result,
+	void RegLoginManagerCallback(const OnStartLogin& cb_start,
+		const OnLoginError& cb_result,
 		const OnCancelLogin& cb_cancel,
 		const OnHideWindow& cb_hide,
 		const OnDestroyWindow& cb_destroy,
@@ -161,6 +166,8 @@ private:
 	*/
 	void ReadDemoLogLevel();
 
+	
+
 private:
 	std::string account_;
 	std::string password_;
@@ -172,6 +179,7 @@ private:
 
 	int error_code_ = 200;
 
+	OnStartLogin cb_start_login_;
 	OnLoginError cb_login_error_;
 	OnCancelLogin cb_cancel_login_;
 	OnHideWindow cb_hide_window_;

@@ -55,11 +55,16 @@ void LoginForm::InitWindow()
 	
 	re_account_ = (CRichEditUI*)m_PaintManager.FindControl(L"re_account");
 	re_pwd_ = (CRichEditUI*)m_PaintManager.FindControl(L"re_pwd");
+	label_info_ = (CLabelUI*)m_PaintManager.FindControl(L"label_info");
 	/*re_account_->SetSelAllOnFocus(true);
 	re_pwd_->SetSelAllOnFocus(true);*/
 	btn_login_ = (CButtonUI*)m_PaintManager.FindControl(L"btn_login");
+	btn_cancel_login_ = (CButtonUI*)m_PaintManager.FindControl(L"btn_cancel_login");
 
 	this->RegLoginManagerCallback();
+
+	re_account_->SetText(L"djj");
+	re_pwd_->SetText(L"123");
 }
 
 void LoginForm::OnClick(DuiLib::TNotifyUI& msg)
@@ -67,7 +72,11 @@ void LoginForm::OnClick(DuiLib::TNotifyUI& msg)
 	//std::wstring name = msg.pSender->GetName();
 	if (msg.pSender == btn_login_)
 	{
-		StartLogin("djj", "123");
+		StartLogin();
+	}
+	else if (msg.pSender == btn_cancel_login_)
+	{
+		CancelLogin();
 	}
 	else if (msg.pSender->GetName() == _T("closebtn"))
 	{

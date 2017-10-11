@@ -30,7 +30,7 @@ std::wstring QPath::GetAppPath()
 std::wstring QPath::GetUserAppDataDir(const std::string& app_account)
 {
 #if 1
-	return L"";
+	return GetAppPath();
 #else
 	return nbase::UTF8ToUTF16(nim::Tool::GetUserAppdataDir(app_account));
 #endif
