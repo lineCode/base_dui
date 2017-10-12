@@ -1,10 +1,12 @@
 ﻿#include "stdafx.h"
 #include "user_db.h"
 #include "module/login/login_manager.h"
+#include "util/user_path.h"
 
 namespace nim_comp
 {
 #define MSG_EX_FILE		"msg_extend.db"
+#define APP_DB			"app.db"
 static std::vector<UTF8String> kCreateDBSQLs;
 
 UserDB::UserDB()
@@ -12,7 +14,11 @@ UserDB::UserDB()
 	static bool sqls_created = false;
 	if (!sqls_created)
 	{
-		kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS msg_local_file(msg_id TEXT PRIMARY KEY, path TEXT, extend TEXT)");
+		kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS account_info(iid INTEGER, account_id TEXT PRIMARY KEY, account_name TEXT, password TEXT, last_login_time TEXT)");
+
+		kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS config_info(account_id TEXT, key TEXT, value TEXT)");
+
+		/*kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS msg_local_file(msg_id TEXT PRIMARY KEY, path TEXT, extend TEXT)");
 
 		kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS custom_msglog(serial INTEGER PRIMARY KEY, "
 							  "to_account TEXT, from_account TEXT, msg_type INTEGER, msg_time INTEGER, msg_id INTEGER, save_flag INTEGER, "
@@ -20,7 +26,7 @@ UserDB::UserDB()
 
 		kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS force_push_data(session_id TEXT PRIMARY KEY, data TEXT)");
 
-		kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS user_timetag(type TEXT PRIMARY KEY, timetag INTEGER, longex INTERGER, textex TEXT)");
+		kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS user_timetag(type TEXT PRIMARY KEY, timetag INTEGER, longex INTERGER, textex TEXT)");*/
 
 		sqls_created = true;
 	}
@@ -47,8 +53,8 @@ bool UserDB::CreateDBFile()
 {
 	bool result = false;
 	std::string acc = LoginManager::GetInstance()->GetAccount();
-	std::wstring dirctory = QPath::GetUserAppDataDir(acc);
-	UTF8String dbfile = nbase::UTF16ToUTF8(dirctory) + MSG_EX_FILE;
+	std::wstring dirctory = GetUserOtherResPath();
+	UTF8String dbfile = nbase::UTF16ToUTF8(dirctory) + APP_DB;
 	db_filepath_ = dbfile;
 	std::string key =/* nim::Tool::GetMd5*/(LoginManager::GetInstance()->GetAccount());
 	result = db_.Open(dbfile.c_str(),
@@ -67,7 +73,34 @@ bool UserDB::CreateDBFile()
 
 	return result;
 }
+#if 1
 
+bool UserDB::QueryAccountInfo(std::string account_id, account_info &info)
+{
+	nbase::NAutoLock auto_lock(&lock_);
+
+	ndb::SQLiteStatement stmt;
+	db_.Query(stmt, "SELECT * FROM account_info WHERE account_id=?");
+	stmt.BindText(1, account_id.c_str(), account_id.size());
+	int32_t result = stmt.NextRow();
+	bool find = false;
+	if (result == SQLITE_ROW)
+	{
+		//info.iid = stmt.GetTextField(1);
+		info.account_id = stmt.GetTextField(2);
+		info.account_name = stmt.GetTextField(3);
+		info.password = stmt.GetTextField(4);
+		info.last_login_time = stmt.GetTextField(5);
+		find = true;
+	}
+	bool no_error = (result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE);
+	if (!no_error)
+	{
+		QLOG_ERR(L"error: QueryDataWithMsgId for id: {0}, reason: {1}") << account_id << result;
+	}
+	return find;
+}
+#else
 bool UserDB::InsertData(const std::string& msg_id, const std::string& path, const std::string& extend)
 {
 	nbase::NAutoLock auto_lock(&lock_);
@@ -111,7 +144,7 @@ bool UserDB::QueryDataWithMsgId(const std::string& msg_id, std::string& path, st
 	}
 	return find;
 }
-
+#endif
 //用于保存一些自定义通知消息
 //bool UserDB::InsertMsgData(const nim::SysMessage& msg)
 //{
@@ -179,65 +212,65 @@ bool UserDB::QueryDataWithMsgId(const std::string& msg_id, std::string& path, st
 //	return ret_msgs;
 //}
 
-bool UserDB::InsertForcePushData(std::map<std::string, std::string> &data)
-{
-	nbase::NAutoLock auto_lock(&lock_);
-	ndb::SQLiteAutoTransaction transaction(&db_);
-	transaction.Begin();
-
-	ndb::SQLiteStatement stmt;
-	db_.Query(stmt, "INSERT OR REPLACE into force_push_data (session_id, data) values (?, ?);");
-
-	bool no_error = true;
-	for (auto &i : data)
-	{
-		stmt.BindText(1, i.first.c_str(), i.first.size());
-		stmt.BindText(2, i.second.c_str(), i.second.size());
-		int32_t result = stmt.NextRow();
-		no_error = result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE;
-		if (!no_error)
-		{
-		 	QLOG_ERR(L"error: InsertForcePushData for session_id: {0}, reason: {1}") << i.first << result;
-		 	break;
-		}
-		stmt.Rewind();
-	}
-	stmt.Finalize();
-
-	if (no_error)
-		return transaction.Commit();
-	else
-		return transaction.Rollback();
-}
-
-void UserDB::QueryAllForcePushData(std::map<std::string, std::string> &data)
-{
-	nbase::NAutoLock auto_lock(&lock_);
-	ndb::SQLiteStatement stmt;
-
-	db_.Query(stmt, "SELECT * FROM force_push_data");
-	int32_t result = stmt.NextRow();
-
-	std::string session_id;
-	std::string session_data;
-	while (result == SQLITE_ROW)
-	{
-		session_id = stmt.GetTextField(0);
-		session_data = stmt.GetTextField(1);
-	
-		data[session_id] = session_data;
-		result = stmt.NextRow();
-	}
-}
-
-void UserDB::ClearForcePushData()
-{
-	nbase::NAutoLock auto_lock(&lock_);
-
-	ndb::SQLiteStatement stmt;
-	db_.Query(stmt, "delete from force_push_data;");
-	stmt.NextRow();
-}
+//bool UserDB::InsertForcePushData(std::map<std::string, std::string> &data)
+//{
+//	nbase::NAutoLock auto_lock(&lock_);
+//	ndb::SQLiteAutoTransaction transaction(&db_);
+//	transaction.Begin();
+//
+//	ndb::SQLiteStatement stmt;
+//	db_.Query(stmt, "INSERT OR REPLACE into force_push_data (session_id, data) values (?, ?);");
+//
+//	bool no_error = true;
+//	for (auto &i : data)
+//	{
+//		stmt.BindText(1, i.first.c_str(), i.first.size());
+//		stmt.BindText(2, i.second.c_str(), i.second.size());
+//		int32_t result = stmt.NextRow();
+//		no_error = result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE;
+//		if (!no_error)
+//		{
+//		 	QLOG_ERR(L"error: InsertForcePushData for session_id: {0}, reason: {1}") << i.first << result;
+//		 	break;
+//		}
+//		stmt.Rewind();
+//	}
+//	stmt.Finalize();
+//
+//	if (no_error)
+//		return transaction.Commit();
+//	else
+//		return transaction.Rollback();
+//}
+//
+//void UserDB::QueryAllForcePushData(std::map<std::string, std::string> &data)
+//{
+//	nbase::NAutoLock auto_lock(&lock_);
+//	ndb::SQLiteStatement stmt;
+//
+//	db_.Query(stmt, "SELECT * FROM force_push_data");
+//	int32_t result = stmt.NextRow();
+//
+//	std::string session_id;
+//	std::string session_data;
+//	while (result == SQLITE_ROW)
+//	{
+//		session_id = stmt.GetTextField(0);
+//		session_data = stmt.GetTextField(1);
+//	
+//		data[session_id] = session_data;
+//		result = stmt.NextRow();
+//	}
+//}
+//
+//void UserDB::ClearForcePushData()
+//{
+//	nbase::NAutoLock auto_lock(&lock_);
+//
+//	ndb::SQLiteStatement stmt;
+//	db_.Query(stmt, "delete from force_push_data;");
+//	stmt.NextRow();
+//}
 
 bool UserDB::InsertTimetag(TimeTagType type, uint64_t timetag)
 {

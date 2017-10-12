@@ -75,27 +75,25 @@ void LoginForm::RegLoginManagerCallback()
 
 void LoginForm::OnLoginError(int error)
 {
-	OnCancelLogin();
-#if 0
-	MutiLanSupport* mls = MutiLanSupport::GetInstance();
-	if (error == nim::kNIMResUidPassError)
+	//OnCancelLogin();
+#if 1
+	//MutiLanSupport* mls = MutiLanSupport::GetInstance();
+	if (error == nim_comp::kNIMResUidNotExist)
 	{
-		usericon_->SetEnabled(false);
-		passwordicon_->SetEnabled(false);
-		ShowLoginTip(mls->GetStringViaID(L"STRID_LOGIN_FORM_TIP_PASSWORD_ERROR"));
+		label_info_->SetText(L"ÕËºÅÎ´×¢²á");
 	}
-	else if (error == nim::kNIMResConnectionError)
+	else if (error == nim_comp::kNIMResUidPassError)
 	{
-		ShowLoginTip(mls->GetStringViaID(L"STRID_LOGIN_FORM_TIP_NETWORK_ERROR"));
+		label_info_->SetText(L"ÓÃ»§Ãû»òÃÜÂë´í");
 	}
-	else if (error == nim::kNIMResExist)
+	else if (error == nim_comp::kNIMResExist)
 	{
-		ShowLoginTip(mls->GetStringViaID(L"STRID_LOGIN_FORM_TIP_LOCATION_CHANGED"));
+		label_info_->SetText(L"ÕËºÅÒÑµÇÂ¼");
 	}
 	else
 	{
-		std::wstring tip = nbase::StringPrintf(mls->GetStringViaID(L"STRID_LOGIN_FORM_TIP_ERROR_CODE").c_str(), error);
-		ShowLoginTip(tip);
+		std::wstring tip = nbase::StringPrintf(L"ÆäËû´íÎó", error);
+		label_info_->SetText(tip.c_str());
 	}
 #endif
 }

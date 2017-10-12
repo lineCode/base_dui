@@ -86,7 +86,7 @@
     <ClInclude Include="gui\window\window_ex.h" />
     <ClInclude Include="kit_define.h" />
     <ClInclude Include="module\db\user_db.h" />
-    <ClInclude Include="module\init\nim_ui_init_manager.h" />
+    <ClInclude Include="module\init\init_manager.h" />
     <ClInclude Include="module\login\login_callback.h" />
     <ClInclude Include="module\login\login_define.h" />
     <ClInclude Include="module\login\login_manager.h" />
@@ -106,8 +106,8 @@
     <ClCompile Include="module\db\user_db.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="module\init\nim_ui_init_manager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    <ClCompile Include="module\init\init_manager.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="module\login\login_callback.cpp" />
     <ClCompile Include="module\login\login_manager.cpp" />

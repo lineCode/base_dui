@@ -4,12 +4,15 @@
 #include "stdafx.h"
 #include "shared/threads.h"
 #include "gui/login/login_form.h"
+#include "module/init/init_manager.h"
 
 using namespace DuiLib;
 using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	nim_comp::InitManager::GetInstance()->Init();
+
 	CPaintManagerUI::SetInstance(GetModuleHandle(NULL));
 	CPaintManagerUI::SetResourcePath((DuiLib::CPaintManagerUI::GetInstancePath() + _T("res\\")).c_str());
 

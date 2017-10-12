@@ -52,9 +52,6 @@
     <ClInclude Include="module\window\windows_manager.h">
       <Filter>module\window</Filter>
     </ClInclude>
-    <ClInclude Include="module\init\nim_ui_init_manager.h">
-      <Filter>module\init</Filter>
-    </ClInclude>
     <ClInclude Include="gui\emoji\emoji_info.h">
       <Filter>gui\emoji</Filter>
     </ClInclude>
@@ -87,6 +84,9 @@
     <ClInclude Include="module\db\user_db.h">
       <Filter>module\db</Filter>
     </ClInclude>
+    <ClInclude Include="module\init\init_manager.h">
+      <Filter>module\init</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\msgbox\msgbox.cpp">
@@ -97,9 +97,6 @@
     </ClCompile>
     <ClCompile Include="module\window\windows_manager.cpp">
       <Filter>module\window</Filter>
-    </ClCompile>
-    <ClCompile Include="module\init\nim_ui_init_manager.cpp">
-      <Filter>module\init</Filter>
     </ClCompile>
     <ClCompile Include="gui\emoji\emoji_info.cpp">
       <Filter>gui\emoji</Filter>
@@ -125,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="module\db\user_db.cpp">
       <Filter>module\db</Filter>
+    </ClCompile>
+    <ClCompile Include="module\init\init_manager.cpp">
+      <Filter>module\init</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

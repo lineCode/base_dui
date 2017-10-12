@@ -9,6 +9,7 @@ namespace nim_comp
 		//通用错误码
 		kNIMResSuccess = 200,		/**< 没有错误，一切正常 */
 		kNIMResVersionError = 201,		/**< 客户端版本不正确 */
+		kNIMResUidNotExist = 301,		//未注册 add by djj
 		kNIMResUidPassError = 302,		/**< 用户名或密码错误 */
 		kNIMResForbidden = 403,		/**< 禁止操作 */
 		kNIMResNotExist = 404,		/**< 请求的目标（用户或对象）不存在 */

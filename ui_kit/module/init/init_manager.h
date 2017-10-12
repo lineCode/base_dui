@@ -3,7 +3,7 @@
 //#include "nim_ui_dll.h"
 
 
-namespace nim_ui
+namespace nim_comp
 {
 
 /** @class InitManager
@@ -23,13 +23,13 @@ public:
 	* @param[in] enable_subscribe_event	是否启用事件订阅模块
 	* @return void	无返回值
 	*/
-	void InitUiKit(bool enable_subscribe_event);
+	void Init(bool enable_subscribe_event = false);
 
 	/**
 	* 清理UI组件
 	* @return void	无返回值
 	*/
-	void CleanupUiKit();
+	void Clean();
 
 private:
 	InitManager(){};

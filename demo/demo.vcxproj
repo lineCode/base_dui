@@ -62,7 +62,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../libs/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../libs/;../libs/thread_part_libs;</AdditionalLibraryDirectories>
       <AdditionalDependencies>base_d.lib;shared_d.lib;duilib_d.lib;db_d.lib;wxsqlite3_d.lib;ui_kit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

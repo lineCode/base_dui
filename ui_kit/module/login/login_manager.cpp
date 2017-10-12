@@ -251,24 +251,37 @@ void LoginManager::DoLogin(std::string user, std::string pass)
 
 	LoginCallback *pcb = new LoginCallback(cb);
 
-	StdClosure task = std::bind([](const void* user_data)
+	StdClosure task = std::bind([this](const void* user_data)
 	{
 		printf("login in thread GlobalMisc\n");
 
-		Sleep(3000);
+		Sleep(1000);
 
-		UserDB db;
-		db.Load();
+		LoginRes login_res;
+		login_res.login_step_ = kNIMLoginStepLogin;
+
+		UserDB::account_info info;
+		if (!UserDB::GetInstance()->QueryAccountInfo(GetAccount(), info))
+		{
+			login_res.res_code_ = kNIMResUidNotExist;
+		}
+		else
+		{
+			if (info.password == GetPassword())
+			{
+				login_res.res_code_ = kNIMResSuccess;
+			}
+			else
+			{
+				login_res.res_code_ = kNIMResUidPassError;
+			}
+		}
 
 		if (user_data)
 		{
 			LoginCallback* pcb = (LoginCallback*)user_data;
 			if (*pcb)
 			{
-				LoginRes login_res;
-				login_res.res_code_ = kNIMResSuccess;
-				login_res.login_step_ = kNIMLoginStepLogin;
-
 				shared::Post2UI(std::bind(*pcb, login_res));
 			}
 			delete pcb;

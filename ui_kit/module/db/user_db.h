@@ -15,6 +15,18 @@ public:
 	SINGLETON_DEFINE(UserDB);
 	UserDB();
 	virtual ~UserDB();
+public:
+	typedef struct account_info
+	{
+		int iid;
+		std::string account_id;
+		std::string account_name;
+		std::string password;
+		std::string last_login_time;
+		account_info(){
+			iid = -1; 
+		}
+	}ACCOUNT_INFO;
 
 public:
 	/**
@@ -37,7 +49,8 @@ public:
 	* @param[in] extend 扩展信息
 	* @return bool true 成功，false 失败
 	*/
-	bool InsertData(const std::string& msg_id, const std::string& path, const std::string& extend);
+	//bool InsertData(const std::string& msg_id, const std::string& path, const std::string& extend);
+	bool InsertAccountInfo(account_info &info);
 
 	/**
 	* 获取文件传输中的文件保存路径
@@ -46,7 +59,8 @@ public:
 	* @param[out] extend 扩展信息
 	* @return bool true 成功，false 失败
 	*/
-	bool QueryDataWithMsgId(const std::string& msg_id, std::string& path, std::string& extend);
+	//bool QueryDataWithMsgId(const std::string& msg_id, std::string& path, std::string& extend);
+	bool QueryAccountInfo(std::string account_id, account_info &info);
 
 public:
 	/**
@@ -70,20 +84,20 @@ public:
 	* @param[in] data 强推信息
 	* @return bool true 成功，false 失败
 	*/
-	bool InsertForcePushData(std::map<std::string, std::string> &data);
+	//bool InsertForcePushData(std::map<std::string, std::string> &data);
 
 	/**
 	* 获取所有本地保存的强推信息
 	* @param[out] data 强推信息
 	* @return void 无返回值
 	*/
-	void QueryAllForcePushData(std::map<std::string, std::string> &data);
+	//void QueryAllForcePushData(std::map<std::string, std::string> &data);
 
 	/**
 	* 清除所有本地保存的强推信息
 	* @return void 无返回值
 	*/
-	void ClearForcePushData();
+	//void ClearForcePushData();
 
 public:
 	enum TimeTagType
