@@ -32,5 +32,9 @@
     <Xml Include="..\bin\res\login\login.xml">
       <Filter>gui\login</Filter>
     </Xml>
+    <Xml Include="..\duilib\duilib_attribute.xml" />
+    <Xml Include="..\bin\res\login\menu.xml">
+      <Filter>gui\login</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

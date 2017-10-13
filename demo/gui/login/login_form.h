@@ -1,7 +1,7 @@
 #pragma once
+#include "gui/window/window_ex.h"
 
-
-class LoginForm : public DuiLib::WindowImplBase
+class LoginForm : public nim_comp::WindowEx
 {
 public:
 	LoginForm();
@@ -10,10 +10,8 @@ public:
 	virtual CDuiString GetSkinFolder() override;
 	virtual CDuiString GetSkinFile() override;
 	virtual LPCTSTR GetWindowClassName() const override;
+	virtual LPCTSTR GetWindowId() const override;
 	virtual UINT GetClassStyle() const override;
-
-	//window_ex
-	//virtual std::wstring GetWindowId(void) const override{ return kClassName; };
 
 	virtual void InitWindow() override;
 
@@ -43,6 +41,7 @@ public:
 protected:
 	void StartLogin();
 	void CancelLogin();
+	void ShowMenu(bool show);
 public:
 	static const LPCTSTR kClassName;
 
@@ -54,4 +53,5 @@ private:
 	DuiLib::CLabelUI*		label_info_;
 	DuiLib::CButtonUI*		btn_login_;
 	DuiLib::CButtonUI*		btn_cancel_login_;
+	DuiLib::CCheckBoxUI*	chk_arrow_down_;
 };

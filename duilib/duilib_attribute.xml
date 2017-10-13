@@ -172,11 +172,52 @@
     <Attribute name="textpadding"       default="" type="" comment=""/>
   </RichEdit>
 
+  <VLayout parent="Container" notifies="" comment="">
+    <Attribute name="sepheight"     default="" type="" comment=""/>
+    <Attribute name="sepimm"        default="" type="" comment=""/>
+  </VLayout>
+
+  <List parent="VLayout" notifies="" comment="">
+    <Attribute name="header"            default="" type="" comment=""/>
+    <Attribute name="headerbkimage"     default="" type="" comment=""/>
+    <Attribute name="scrollselect"      default="" type="" comment=""/>
+    <Attribute name="multiexpanding"    default="" type="" comment=""/>
+    <Attribute name="itemheight"        default="" type="" comment=""/>
+    <Attribute name="itemfont"          default="" type="" comment=""/>
+    <Attribute name="itemalign"         default="" type="" comment=""/>
+    <Attribute name="left"              default="" type="" comment=""/>
+    <Attribute name="itemvalign"        default="" type="" comment=""/>
+    <Attribute name="itemendellipsis"   default="" type="" comment=""/>
+    <Attribute name="itemmultiline"     default="" type="" comment=""/>
+    <Attribute name="itemtextpadding"   default="" type="" comment=""/>
+    <Attribute name="itemtextcolor"     default="" type="" comment=""/>
+    <Attribute name="itembkcolor"       default="" type="" comment=""/>
+    <Attribute name="itembkimage"       default="" type="" comment=""/>
+    <Attribute name="itemaltbk"         default="" type="" comment=""/>
+    <Attribute name="itemselectedtextcolor"     default="" type="" comment=""/>
+    <Attribute name="itemselectedbkcolor"       default="" type="" comment=""/>
+    <Attribute name="itemselectedimage"         default="" type="" comment=""/>
+    <Attribute name="itemhottextcolor"          default="" type="" comment=""/>
+    <Attribute name="itemhotbkcolor"            default="" type="" comment=""/>
+    <Attribute name="itemhotimage"              default="" type="" comment=""/>
+    <Attribute name="itemdisabledtextcolor"     default="" type="" comment=""/>
+    <Attribute name="itemdisabledbkcolor"       default="" type="" comment=""/>
+    <Attribute name="itemdisabledimage"         default="" type="" comment=""/>
+    <Attribute name="itemvlinesize"             default="" type="" comment=""/>
+    <Attribute name="itemvlinecolor"            default="" type="" comment=""/>
+    <Attribute name="itemhlinesize"             default="" type="" comment=""/>
+    <Attribute name="itemhlinecolor"            default="" type="" comment=""/>
+    <Attribute name="itemshowhtml"              default="" type="" comment=""/>
+  </List>
+
+  <Menu parent="List" notifies="" comment="同List">
+  </Menu>
   
 
-	
 
-	<!--<Progress parent="Label" notifies="��ʱ��д" >
+
+
+  <!--<Progress parent="Label" notifies="��ʱ��д" >
 		<Attribute name="hor" default="true" type="BOOL" comment="ˮƽ��ֱ,��(true)"/>
 		<Attribute name="min" default="0" type="INT" comment="������Сֵ,��(0)"/>
 		<Attribute name="max" default="100" type="INT" comment="�������ֵ,��(100)"/>

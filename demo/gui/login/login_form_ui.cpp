@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "login_form.h"
 
+
 using namespace DuiLib;
 
 const LPCTSTR LoginForm::kClassName	= L"LoginForm";
@@ -39,10 +40,10 @@ LPCTSTR LoginForm::GetWindowClassName() const
 	return kClassName;
 }
 
-//std::wstring LoginForm::GetWindowId() const
-//{
-//	return kClassName;
-//}
+LPCTSTR LoginForm::GetWindowId() const
+{
+	return kClassName;
+}
 
 UINT LoginForm::GetClassStyle() const 
 {
@@ -60,43 +61,38 @@ void LoginForm::InitWindow()
 	re_pwd_->SetSelAllOnFocus(true);*/
 	btn_login_ = (CButtonUI*)m_PaintManager.FindControl(L"btn_login");
 	btn_cancel_login_ = (CButtonUI*)m_PaintManager.FindControl(L"btn_cancel_login");
+	chk_arrow_down_ = (CCheckBoxUI*)m_PaintManager.FindControl(L"chk_arrow_down");
 
 	this->RegLoginManagerCallback();
 
-	re_account_->SetText(L"djj");
-	re_pwd_->SetText(L"123");
+	re_account_->SetText(L"13777073806");
+	re_pwd_->SetText(L"dingjunjie");
 }
 
-void LoginForm::OnClick(DuiLib::TNotifyUI& msg)
+void LoginForm::OnClick(TNotifyUI& msg)
 {
+	bool bHandle = false;
 	//std::wstring name = msg.pSender->GetName();
 	if (msg.pSender == btn_login_)
 	{
+		bHandle = true;
 		StartLogin();
 	}
 	else if (msg.pSender == btn_cancel_login_)
 	{
+		bHandle = true;
 		CancelLogin();
 	}
-	else if (msg.pSender->GetName() == _T("closebtn"))
+	else if (msg.pSender == chk_arrow_down_)
 	{
-		Close();
+		bHandle = true;
+		ShowMenu(chk_arrow_down_->GetCheck());
 		return;
 	}
-	else if (msg.pSender->GetName() == _T("minbtn"))
+	
+	if (!bHandle)
 	{
-		SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
-		return;
-	}
-	else if (msg.pSender->GetName() == _T("maxbtn"))
-	{
-		SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE, 0);
-		return;
-	}
-	else if (msg.pSender->GetName() == _T("restorebtn"))
-	{
-		SendMessage(WM_SYSCOMMAND, SC_RESTORE, 0);
-		return;
+		return __super::OnClick(msg);
 	}
 }
 
@@ -104,4 +100,11 @@ LRESULT LoginForm::OnClose(UINT u, WPARAM w, LPARAM l, BOOL& bHandled)
 {
 	::PostQuitMessage(0);
 	return 0;
+}
+
+void LoginForm::ShowMenu(bool show)
+{
+	CMenuWnd *menu_wnd = new CMenuWnd;
+	menu_wnd->Init(NULL, _T("login/menu.xml"), { 200, 10 }, &m_PaintManager);
+	
 }

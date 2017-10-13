@@ -24,12 +24,8 @@ public:
 	* @param[in] rc 窗口位置
 	* @return HWND 窗口句柄
 	*/
-#if 1
-	//HWND Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, bool isLayeredWindow = true, const DuiLib::CDuiRect& rc = DuiLib::CDuiRect(0, 0, 0, 0))
-#else
-	virtual HWND Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, 
-		bool isLayeredWindow = true, const DuiLib::CDuiRect& rc = DuiLib::CDuiRect(0, 0, 0, 0)) override;
-#endif
+	HWND Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, bool isLayeredWindow = true, const DuiLib::CDuiRect& rc = DuiLib::CDuiRect(0, 0, 0, 0));
+
 	/**
 	* 处理窗口被销毁的消息
 	* @param[in] uMsg 消息
@@ -57,7 +53,7 @@ public:
 	* 获取窗口id的接口
 	* @return wstring 窗口id
 	*/
-	virtual std::wstring GetWindowId(void) const = 0;
+	virtual LPCTSTR GetWindowId(void) const = 0;
 
 	/**
 	* 处理窗口消息
@@ -81,6 +77,20 @@ public:
 	*/
 	virtual void SetTaskbarTitle(const std::wstring &title);
 
+	/**
+	* 获取弹出窗口可以显示在右下角位置的坐标
+	* @return POINT 窗口坐标
+	*/
+	POINT GetPopupWindowPos();
+
+	/**
+	* 置顶某个窗口
+	* @param[in] hwnd 窗口句柄
+	* @param[in] forever 是否一直置顶
+	* @return void 无返回值
+	*/
+	void ToTopMost(bool forever);
+
 
 private:
 	/**
@@ -96,17 +106,5 @@ private:
 	void UnRegisterWnd();
 };
  
-/**
-* 获取弹出窗口可以显示在右下角位置的坐标
-* @return POINT 窗口坐标
-*/
-POINT GetPopupWindowPos(WindowEx* window);
 
-/**
-* 置顶某个窗口
-* @param[in] hwnd 窗口句柄
-* @param[in] forever 是否一直置顶
-* @return void 无返回值
-*/
-void ToTopMost(HWND hwnd, bool forever);
 }

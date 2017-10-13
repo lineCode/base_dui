@@ -100,6 +100,10 @@
     <Xml Include="..\bin\res\login\login.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\bin\res\login\menu.xml" />
+    <Xml Include="..\duilib\duilib_attribute.xml">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

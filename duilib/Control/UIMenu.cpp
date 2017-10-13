@@ -159,7 +159,6 @@ void CMenuWnd::Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
 					CPaintManagerUI* pMainPaintManager, std::map<CDuiString,bool>* pMenuCheckInfo/* = NULL*/,
 					DWORD dwAlignment/* = eMenuAlignment_Left | eMenuAlignment_Top*/)
 {
-
 	m_BasedPoint = point;
     m_pOwner = pOwner;
     m_pLayout = NULL;

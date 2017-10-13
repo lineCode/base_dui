@@ -11,20 +11,26 @@ WindowEx::WindowEx()
 WindowEx::~WindowEx()
 {
 }
-#if 1
-#else
-HWND WindowEx::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, bool isLayeredWindow, const ui::UiRect& rc)
+
+HWND WindowEx::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, bool isLayeredWindow, const DuiLib::CDuiRect& rc)
 {
 	if (!RegisterWnd())
 	{
 		return NULL;
 	}
 
-	HWND hwnd = __super::Create(hwndParent, pstrName, dwStyle, dwExStyle, isLayeredWindow, rc);
+	if (isLayeredWindow)
+	{
+		m_PaintManager.GetShadow()->ShowShadow(true);
+		m_PaintManager.GetShadow()->SetImage(_T("public/bk/bk_shadow.png"));
+		m_PaintManager.GetShadow()->SetSize(14);
+		m_PaintManager.GetShadow()->SetShadowCorner({14,14,14,14});
+	}
+	HWND hwnd = __super::Create(hwndParent, pstrName, dwStyle, dwExStyle, rc);
 	ASSERT(hwnd);
 	return hwnd;
 }
-#endif
+
 LRESULT WindowEx::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	UnRegisterWnd();
@@ -66,8 +72,8 @@ LRESULT WindowEx::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	else if(uMsg == WM_KILLFOCUS)
 	{
-#if 0
-		KillFocus();
+#if 1
+		//OnKillFocus(uMsg, wParam, lParam);
 #endif
 	}
 	else if(uMsg == WM_KEYDOWN)
@@ -99,16 +105,16 @@ void WindowEx::SetTaskbarTitle( const std::wstring &title )
 	::SetWindowTextW(m_hWnd, title.c_str());
 }
 
-POINT GetPopupWindowPos( WindowEx* window )
+POINT  WindowEx::GetPopupWindowPos()
 {
-	ASSERT( window && IsWindow( window->GetHWND() ) );
+	ASSERT(IsWindow(m_hWnd));
 
 	//ÆÁÄ»´óÐ¡
 	MONITORINFO oMonitor = { sizeof(oMonitor) };
-	::GetMonitorInfo( ::MonitorFromWindow( window->GetHWND(), MONITOR_DEFAULTTONEAREST ), &oMonitor );
+	::GetMonitorInfo(::MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST), &oMonitor);
 	RECT screen = oMonitor.rcWork;
 
-	DuiLib::CDuiRect rect = window->GetPos(true);
+	DuiLib::CDuiRect rect = GetPos(true);
 
 	POINT pt = { 0, 0 };
 	pt.x = screen.right - rect.GetWidth();
@@ -117,13 +123,13 @@ POINT GetPopupWindowPos( WindowEx* window )
 	return pt;
 }
 
-void ToTopMost(HWND hwnd, bool forever)
+void  WindowEx::ToTopMost(bool forever)
 {
-	ASSERT(::IsWindow(hwnd));
-	::SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+	ASSERT(::IsWindow(m_hWnd));
+	::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 	if( !forever )
 	{
-		::SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		::SetWindowPos(m_hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 	}
 }
 }

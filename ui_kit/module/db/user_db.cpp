@@ -14,7 +14,11 @@ UserDB::UserDB()
 	static bool sqls_created = false;
 	if (!sqls_created)
 	{
-		kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS account_info(iid INTEGER, account_id TEXT PRIMARY KEY, account_name TEXT, password TEXT, last_login_time TEXT)");
+		kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS account_info(iid INTEGER, account_id TEXT PRIMARY KEY, account_name TEXT, password TEXT)");
+
+		kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS account_status_info(iid INTEGER, account_id TEXT PRIMARY KEY, status INTEGER, last_login_time INTEGER, last_login_dvc_type INTEGER, last_login_dvc_name TEXT, last_login_addr TEXT)");
+
+		//kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS account_login_info(iid INTEGER, account_id TEXT, login_time INTEGER, login_dvc_type INTEGER, login_dvc_name TEXT, login_addr TEXT)");
 
 		kCreateDBSQLs.push_back("CREATE TABLE IF NOT EXISTS config_info(account_id TEXT, key TEXT, value TEXT)");
 

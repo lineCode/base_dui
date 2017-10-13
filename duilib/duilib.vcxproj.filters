@@ -276,7 +276,4 @@
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="UIlib.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Xml Include="duilib_attribute.xml" />
-  </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="270,386" caption="0,0,0,49" sizebox="6,6,6,6" showshadow="true" shadowimage="public/bk/bk_shadow.png" shadowsize="14" shadowcorner="14,14,14,14">
+<Window size="270,386" caption="0,0,75,49" sizebox="6,6,6,6">
   <!--0-->
   <Font name="微软雅黑" size="10"/>
   <!--1-->
@@ -20,10 +20,12 @@
   <Font name="微软雅黑" size="16" bold="true"/>
   <!--9-->
   <Font name="微软雅黑" size="18" bold="true"/> 
-  <VLayout width="270" height="386" inset="" bkimage="login\login_bk.png" > 
+  <VLayout inset="" bkimage="login\login_bk.png" > 
     <HLayout height="50" margin="0,6,5,9">
       <Label width="60" height="32" margin="10" align="" valign="" font="2" text="微微"/>
       <Control />
+      <CheckBox name="chk_arrow_down" width="20" height="20" margin="0,2,2" normalimage="file='login/btn_arrow_down.png' source='0,0,20,20'" hotimage="file='login/btn_arrow_down.png' source='20,0,40,20'" 
+                selectedimage="file='login/btn_arrow_down.png' source='40,0,60,20'" selectedhotimage="file='login/btn_arrow_down.png' source='60,0,80,20'"/>
       <Button name="minbtn" width="25" height="25" normalimage="file='login/btn_min.png'" pushedimage="file='login/btn_min_pushed.png'"/>
       <!--<Button name="maxbtn" />-->
       <!--<Button name="closebtn" width="20" height="20" normalimage="file='public/button/close.png' source='0,0,20,20'" hotimage="file='public/button/close.png' source='20,0,40,20'"/>-->
