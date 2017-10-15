@@ -75,7 +75,6 @@ void LoginForm::RegLoginManagerCallback()
 
 void LoginForm::OnLoginError(int error)
 {
-	//OnCancelLogin();
 #if 1
 	//MutiLanSupport* mls = MutiLanSupport::GetInstance();
 	if (error == nim_comp::kNIMResUidNotExist)
@@ -95,6 +94,8 @@ void LoginForm::OnLoginError(int error)
 		std::wstring tip = nbase::StringPrintf(L"ÆäËû´íÎó", error);
 		label_info_->SetText(tip.c_str());
 	}
+	btn_login_->SetVisible(true);
+	btn_cancel_login_->SetVisible(false);
 #endif
 }
 

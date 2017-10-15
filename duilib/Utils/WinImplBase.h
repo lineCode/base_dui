@@ -34,12 +34,6 @@ namespace DuiLib
 		virtual CDuiString GetSkinFile() = 0;
 		virtual LPCTSTR GetWindowClassName(void) const = 0 ;
 		virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam);
-
-		CPaintManagerUI m_PaintManager;
-		static LPBYTE m_lpResourceZIPBuffer;
-
-		
-
 	public:
 		virtual UINT GetClassStyle() const;
 		virtual UILIB_RESOURCETYPE GetResourceType() const;
@@ -47,7 +41,6 @@ namespace DuiLib
 		virtual LPCTSTR GetResourceID() const;
 
 		virtual CDuiRect GetPos(bool layed){ return CDuiRect(0, 0, 600, 400); };		//add by djj
-
 
 		virtual CControlUI* CreateControl(LPCTSTR pstrClass);
 		virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/);
@@ -76,6 +69,10 @@ namespace DuiLib
 		virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 		virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 		virtual LONG GetStyle();
+
+	protected:
+		CPaintManagerUI m_PaintManager;
+		static LPBYTE m_lpResourceZIPBuffer;
 	};
 }
 

@@ -289,7 +289,7 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
 		ResizeMenu();
 	}
-#if 1		
+#if 0		
 	m_pm.GetShadow()->ShowShadow(true);
 	m_pm.GetShadow()->Create(&m_pm);
 #endif
@@ -536,6 +536,9 @@ LRESULT CMenuWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		bHandled = FALSE;
 		break;
 	}
+
+	if (bHandled) return lRes;
+
     if( m_pm.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
     return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }

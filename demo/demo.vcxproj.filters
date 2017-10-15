@@ -36,5 +36,8 @@
     <Xml Include="..\bin\res\login\menu.xml">
       <Filter>gui\login</Filter>
     </Xml>
+    <Xml Include="..\bin\res\global.xml">
+      <Filter>gui</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

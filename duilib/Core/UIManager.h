@@ -256,6 +256,7 @@ public:
     static void SetResourcePath(LPCTSTR pStrPath);
 	static void SetResourceZip(LPVOID pVoid, unsigned int len);
     static void SetResourceZip(LPCTSTR pstrZip, bool bCachedResourceZip = false);
+	static bool LoadGlobalResource();				//add by djj
     static bool GetHSL(short* H, short* S, short* L);
     static void SetHSL(bool bUseHSL, short H, short S, short L); // H:0~360, S:0~200, L:0~200 
     static void ReloadSkin();
@@ -291,6 +292,7 @@ public:
     void RemoveAllFonts(bool bShared = false);
     TFontInfo* GetFontInfo(int id);
     TFontInfo* GetFontInfo(HFONT hFont);
+	static HFONT AddSharedFont(int id, LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic);
 
     const TImageInfo* GetImage(LPCTSTR bitmap);
     const TImageInfo* GetImageEx(LPCTSTR bitmap, LPCTSTR type = NULL, DWORD mask = 0, bool bUseHSL = false);
@@ -478,6 +480,7 @@ private:
     CDuiPtrArray m_aAsyncNotify;
     CDuiPtrArray m_aFoundControls;
     CDuiPtrArray m_aNeedMouseLeaveNeeded;
+	CDuiPtrArray m_aTranslateAccelerator;
     CDuiStringPtrMap m_mNameHash;			//(key:name, value:pControl)
 	CDuiStringPtrMap m_mWindowAttrHash;		//
     CDuiStringPtrMap m_mOptionGroup;		//
@@ -503,7 +506,7 @@ private:
     static CDuiPtrArray m_aPlugins;
 
 public:
-	CDuiPtrArray m_aTranslateAccelerator;
+	//CDuiPtrArray m_aTranslateAccelerator;
 };
 
 } // namespace DuiLib

@@ -301,6 +301,8 @@ void CPaintManagerUI::SetResourcePath(LPCTSTR pStrPath)
     if( m_pStrResourcePath.empty() ) return;
     TCHAR cEnd = m_pStrResourcePath.at(m_pStrResourcePath.length() - 1);
     if( cEnd != _T('\\') && cEnd != _T('/') ) m_pStrResourcePath += _T('\\');
+
+	LoadGlobalResource();
 }
 
 void CPaintManagerUI::SetResourceZip(LPVOID pVoid, unsigned int len)
@@ -329,6 +331,66 @@ void CPaintManagerUI::SetResourceZip(LPCTSTR pStrPath, bool bCachedResourceZip)
         sFile += CPaintManagerUI::GetResourceZip();
         m_hResourceZip = (HANDLE)OpenZip((void*)sFile.c_str(), 0, 2);
     }
+}
+
+bool CPaintManagerUI::LoadGlobalResource()
+{
+	CDuiString file = _T("global.xml");
+
+	CMarkup xml;
+	if (HIWORD(file.c_str()) != NULL) {
+		if (*(file.c_str()) == _T('<')) {
+			if (!xml.Load(file.c_str())) return false;
+		}
+		else {
+			if (!xml.LoadFromFile(file.c_str())) return false;
+		}
+	}
+	//-----------------------------------------
+	CMarkupNode root = xml.GetRoot();
+	if (!root.IsValid()) return false;
+	LPCTSTR pstrClass = NULL;
+	int nAttributes = 0;
+	LPCTSTR pstrName = NULL;
+	LPCTSTR pstrValue = NULL;
+	LPTSTR pstr = NULL;
+	for (CMarkupNode node = root.GetChild(); node.IsValid(); node = node.GetSibling()) {
+		pstrClass = node.GetName();
+		if (_tcsicmp(pstrClass, _T("Font")) == 0) {
+			nAttributes = node.GetAttributeCount();
+			int id = m_SharedResInfo.m_CustomFonts.GetSize();
+			LPCTSTR pFontName = NULL;
+			int size = 12;
+			bool bold = false;
+			bool underline = false;
+			bool italic = false;
+			bool defaultfont = false;
+			bool shared = false;
+			for (int i = 0; i < nAttributes; i++) {
+				pstrName = node.GetAttributeName(i);
+				pstrValue = node.GetAttributeValue(i);
+				if (_tcsicmp(pstrName, _T("name")) == 0) {
+					pFontName = pstrValue;
+				}
+				else if (_tcsicmp(pstrName, _T("size")) == 0) {
+					size = _tcstol(pstrValue, &pstr, 10);
+				}
+				else if (_tcsicmp(pstrName, _T("bold")) == 0) {
+					bold = (_tcsicmp(pstrValue, _T("true")) == 0);
+				}
+				else if (_tcsicmp(pstrName, _T("underline")) == 0) {
+					underline = (_tcsicmp(pstrValue, _T("true")) == 0);
+				}
+				else if (_tcsicmp(pstrName, _T("italic")) == 0) {
+					italic = (_tcsicmp(pstrValue, _T("true")) == 0);
+				}
+			}
+			if (id >= 0 && pFontName) {
+				AddSharedFont(id, pFontName, size, bold, underline, italic);
+			}
+		}
+	}
+	return true;
 }
 
 bool CPaintManagerUI::GetHSL(short* H, short* S, short* L)
@@ -2441,6 +2503,58 @@ HFONT CPaintManagerUI::AddFont(int id, LPCTSTR pStrFontName, int nSize, bool bBo
 	}
 
     return hFont;
+}
+
+HFONT CPaintManagerUI::AddSharedFont(int id, LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic)
+{
+	LOGFONT lf = { 0 };
+	::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
+	_tcsncpy(lf.lfFaceName, pStrFontName, LF_FACESIZE);
+	lf.lfCharSet = DEFAULT_CHARSET;
+	lf.lfHeight = -nSize;
+	if (bBold) lf.lfWeight += FW_BOLD;
+	if (bUnderline) lf.lfUnderline = TRUE;
+	if (bItalic) lf.lfItalic = TRUE;
+	HFONT hFont = ::CreateFontIndirect(&lf);
+	if (hFont == NULL) return NULL;
+
+	TFontInfo* pFontInfo = new TFontInfo;
+	if (!pFontInfo) return false;
+	::ZeroMemory(pFontInfo, sizeof(TFontInfo));
+	pFontInfo->hFont = hFont;
+	pFontInfo->sFontName = pStrFontName;
+	pFontInfo->iSize = nSize;
+	pFontInfo->bBold = bBold;
+	pFontInfo->bUnderline = bUnderline;
+	pFontInfo->bItalic = bItalic;
+	if (HDC hdc = ::GetDC(NULL)) {
+		HFONT hOldFont = (HFONT) ::SelectObject(hdc, hFont);
+		::GetTextMetrics(hdc, &pFontInfo->tm);
+		::SelectObject(hdc, hOldFont);
+		::ReleaseDC(NULL, hdc);
+	}
+	TCHAR idBuffer[16];
+	::ZeroMemory(idBuffer, sizeof(idBuffer));
+	_itot(id, idBuffer, 10);
+	//if (bShared || m_bForceUseSharedRes)
+	{
+		TFontInfo* pOldFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(idBuffer));
+		if (pOldFontInfo)
+		{
+			::DeleteObject(pOldFontInfo->hFont);
+			delete pOldFontInfo;
+			m_SharedResInfo.m_CustomFonts.Remove(idBuffer);
+		}
+
+		if (!m_SharedResInfo.m_CustomFonts.Insert(idBuffer, pFontInfo))
+		{
+			::DeleteObject(hFont);
+			delete pFontInfo;
+			return NULL;
+		}
+	}
+
+	return hFont;
 }
 
 HFONT CPaintManagerUI::GetFont(int id)

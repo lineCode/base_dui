@@ -97,6 +97,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\bin\res\global.xml" />
     <Xml Include="..\bin\res\login\login.xml">
       <SubType>Designer</SubType>
     </Xml>

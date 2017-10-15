@@ -7,15 +7,11 @@
 #include "module/init/init_manager.h"
 #include "module/window/windows_manager.h"
 
-using namespace DuiLib;
 using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	nim_comp::InitManager::GetInstance()->Init();
-
-	CPaintManagerUI::SetInstance(GetModuleHandle(NULL));
-	CPaintManagerUI::SetResourcePath((DuiLib::CPaintManagerUI::GetInstancePath() + _T("res\\")).c_str());
 
 	shared::MainThreadEventCallBack init_event_cb = [](){
 		nim_comp::WindowsManager::GetInstance()->SingletonShow<LoginForm>(LoginForm::kClassName);
