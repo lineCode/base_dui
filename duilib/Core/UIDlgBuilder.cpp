@@ -113,9 +113,6 @@ CControlUI* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, CPaintMana
                     else if( _tcsicmp(pstrName, _T("default")) == 0 ) {
                         defaultfont = (_tcsicmp(pstrValue, _T("true")) == 0);
                     }
-					else if( _tcsicmp(pstrName, _T("shared")) == 0 ) {
-						shared = (_tcsicmp(pstrValue, _T("true")) == 0);
-					}
                 }
                 if( id >= 0 && pFontName ) {
                     pManager->AddFont(id, pFontName, size, bold, underline, italic, shared);

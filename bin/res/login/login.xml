@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="270,386" caption="0,0,75,49" sizebox="6,6,6,6">
+  <Default name="HScrollBar" value="button1normalimage=&quot;file='scrollbar.bmp' source='0,0,16,16' mask='#FFFF00FF'&quot; button1hotimage=&quot;file='scrollbar.bmp' source='18,0,34,16' mask='#FFFF00FF'&quot; button1pushedimage=&quot;file='scrollbar.bmp' source='36,0,52,16' mask='#FFFF00FF'&quot; button1disabledimage=&quot;file='scrollbar.bmp' source='54,0,70,16' mask='#FFFF00FF'&quot; button2normalimage=&quot;file='scrollbar.bmp' source='0,18,16,34' mask='#FFFF00FF'&quot; button2hotimage=&quot;file='scrollbar.bmp' source='18,18,34,34' mask='#FFFF00FF'&quot; button2pushedimage=&quot;file='scrollbar.bmp' source='36,18,52,34' mask='#FFFF00FF'&quot; button2disabledimage=&quot;file='scrollbar.bmp' source='54,18,70,34' mask='#FFFF00FF'&quot; thumbnormalimage=&quot;file='scrollbar.bmp' source='0,36,16,52' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbhotimage=&quot;file='scrollbar.bmp' source='18,36,34,52' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbpushedimage=&quot;file='scrollbar.bmp' source='36,36,52,52' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbdisabledimage=&quot;file='scrollbar.bmp' source='54,36,70,52' corner='2,2,2,2' mask='#FFFF00FF'&quot; railnormalimage=&quot;file='scrollbar.bmp' source='0,54,16,70' corner='2,2,2,2' mask='#FFFF00FF'&quot; railhotimage=&quot;file='scrollbar.bmp' source='18,54,34,70' corner='2,2,2,2' mask='#FFFF00FF'&quot; railpushedimage=&quot;file='scrollbar.bmp' source='36,54,52,70' corner='2,2,2,2' mask='#FFFF00FF'&quot; raildisabledimage=&quot;file='scrollbar.bmp' source='54,54,70,70' corner='2,2,2,2' mask='#FFFF00FF'&quot; bknormalimage=&quot;file='scrollbar.bmp' source='0,72,16,88' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkhotimage=&quot;file='scrollbar.bmp' source='18,72,34,88' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkpushedimage=&quot;file='scrollbar.bmp' source='36,72,52,88' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkdisabledimage=&quot;file='scrollbar.bmp' source='54,72,70,88' corner='2,2,2,2' mask='#FFFF00FF'&quot; " />
   <VLayout inset="" bkimage="login\login_bk.png" > 
     <HLayout height="50" margin="0,6,5,9">
       <Label width="60" height="32" margin="10" align="" valign="" font="3" text="微微"/>
@@ -25,13 +26,13 @@
         <Label width="30" margin="30" font="2" text="密码"/>
         <RichEdit name="re_pwd" width="170" height="28" margin="5" bkimage="file='login/rich_bk.png' corner='1,1,1,1'" rich="false" multiline="false" textpadding="4,6" font="2" password="true"/>
       </HLayout>
-      <Label name="label_info" height="20" margin="40, 5" textcolor="#ffdd0000"/>
+      <Label name="label_info" height="20" margin="40, 5" textcolor="gray"/>
       <Button name="btn_login" width="190" height="35" margin="40,5" normalimage="file='public/button/blue.png' source='0,0,10,30' corner='3,3,3,3'" 
               hotimage="file='public/button/blue.png' source='10,0,20,30' corner='3,3,3,3'" pushedimage="file='public/button/blue.png' source='20,0,30,30' corner='3,3,3,3'" 
-              font="8" textcolor="#FFFFFFFF" text="登  录"/>
+              font="8" textcolor="white" text="登  录"/>
       <Button name="btn_cancel_login" width="190" height="35" margin="40,5" normalimage="file='public/button/gray.png' source='0,0,10,30' corner='3,3,3,3'"
               hotimage="file='public/button/gray.png' source='10,0,20,30' corner='3,3,3,3'" pushedimage="file='public/button/gray.png' source='20,0,30,30' corner='3,3,3,3'"
-              font="8" textcolor="#FFFFFFFF" disabledtextcolor="#FFFFFFFF" text="取消登录" visible="false"/>
+              font="8" textcolor="white" disabledtextcolor="white" text="取消登录" visible="false"/>
       <HLayout height="30" margin="0,10">
         <CheckBox name="login_pw_chb" width="60" height="20" margin="40,5,0,0"  textpadding="14,2,0,0" normalimage="file='login/check.png' dest='0,5,11,16'"  selectedimage="file='login/check_sel.png' dest='0,5,11,16'" font="1" text="记住密码" />
         <CheckBox name="login_zd_chb" width="60" height="20" margin="68,5,0,0"  textpadding="14,2,0,0" normalimage="file='login/check.png' dest='0,5,11,16'"  selectedimage="file='login/check_sel.png' dest='0,5,11,16'" font="1" text="自动登录" />

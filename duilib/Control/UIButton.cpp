@@ -364,30 +364,46 @@ namespace DuiLib
 		else if( _tcscmp(pstrName, _T("fadedelta")) == 0 ) SetFadeAlphaDelta((BYTE)_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("hotbkcolor")) == 0 )
 		{
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetHotBkColor(clrColor);
 		}
 		else if( _tcscmp(pstrName, _T("hottextcolor")) == 0 )
 		{
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetHotTextColor(clrColor);
 		}
 		else if( _tcscmp(pstrName, _T("pushedtextcolor")) == 0 )
 		{
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetPushedTextColor(clrColor);
 		}
 		else if( _tcscmp(pstrName, _T("focusedtextcolor")) == 0 )
 		{
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetFocusedTextColor(clrColor);
 		}
 		else CLabelUI::SetAttribute(pstrName, pstrValue);

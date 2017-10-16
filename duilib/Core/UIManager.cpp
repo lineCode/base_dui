@@ -389,6 +389,28 @@ bool CPaintManagerUI::LoadGlobalResource()
 				AddSharedFont(id, pFontName, size, bold, underline, italic);
 			}
 		}
+		else if (_tcsicmp(pstrClass, _T("Color")) == 0)
+		{
+			nAttributes = node.GetAttributeCount();
+			LPCTSTR pColorName = NULL;
+			DWORD dwValue = 0;
+			for (int i = 0; i < nAttributes; i++) {
+				pstrName = node.GetAttributeName(i);
+				pstrValue = node.GetAttributeValue(i);
+				if (_tcsicmp(pstrName, _T("name")) == 0) {
+					pColorName = pstrValue;
+				}
+				else if (_tcsicmp(pstrName, _T("value")) == 0) {
+					if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+					LPTSTR pstr = NULL;
+					dwValue = _tcstoul(pstrValue, &pstr, 16);
+				}
+			}
+			if (pColorName)
+			{
+				AddSharedColor(pColorName, dwValue);
+			}	
+		}
 	}
 	return true;
 }
@@ -2793,7 +2815,55 @@ TFontInfo* CPaintManagerUI::GetFontInfo(HFONT hFont)
 	}
 	return pFontInfo;
 }
+//--------------------------Color---------------------------
+void CPaintManagerUI::AddColor(LPCTSTR pStrFontName, DWORD dwValue)
+{
+	LPVOID pData = static_cast<LPVOID>(m_ResInfo.m_ColorHash.Find(pStrFontName));
+	if (pData)
+	{
+		m_ResInfo.m_CustomFonts.Remove(pStrFontName);
+	}
 
+	if (!m_ResInfo.m_CustomFonts.Insert(pStrFontName, (LPVOID)dwValue))
+	{
+		return ;
+	}
+}
+
+DWORD CPaintManagerUI::GetColor(LPCTSTR pStrFontName)
+{
+	if (!pStrFontName)
+		return 0;
+
+	LPVOID pData = static_cast<LPVOID>(m_ResInfo.m_ColorHash.Find(pStrFontName));
+	if (!pData) pData = static_cast<LPVOID>(m_SharedResInfo.m_ColorHash.Find(pStrFontName));
+	if (!pData) return 0;
+	return (DWORD)pData;
+}
+
+void CPaintManagerUI::RemoveColor(LPCTSTR pStrFontName, bool bShared /*= false*/)
+{
+}
+
+void CPaintManagerUI::RemoveAllColors(bool bShared/* = false*/)
+{
+}
+
+/*static*/ 
+void CPaintManagerUI::AddSharedColor(LPCTSTR pStrFontName, DWORD dwValue)
+{
+	LPVOID pData = static_cast<LPVOID>(m_SharedResInfo.m_ColorHash.Find(pStrFontName));
+	if (pData)
+	{
+		m_SharedResInfo.m_ColorHash.Remove(pStrFontName);
+	}
+
+	if (!m_SharedResInfo.m_ColorHash.Insert(pStrFontName, (LPVOID)dwValue))
+	{
+		return;
+	}
+}
+//--------------------------Image---------------------------
 const TImageInfo* CPaintManagerUI::GetImage(LPCTSTR bitmap)
 {
     TImageInfo* data = static_cast<TImageInfo*>(m_ResInfo.m_ImageHash.Find(bitmap));
@@ -3271,6 +3341,7 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetLayered(true);
         SetLayeredImage(pstrValue);
     } 
+#if 0
     else if( _tcsicmp(pstrName, _T("disabledfontcolor")) == 0 ) {
         if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
         LPTSTR pstr = NULL;
@@ -3301,6 +3372,7 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetDefaultSelectedBkColor(clrColor);
     } 
+#endif
 #if 1	//UIShadow
 	else if( _tcscmp(pstrName, _T("shadowsize")) == 0 ) {
 		GetShadow()->SetSize(_ttoi(pstrValue));
@@ -3318,9 +3390,13 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		GetShadow()->SetPosition(cx, cy);
 	}
 	else if( _tcscmp(pstrName, _T("shadowcolor")) == 0 ) {
-		if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-		LPTSTR pstr = NULL;
-		DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+		DWORD clrColor = GetColor(pstrName);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
 		GetShadow()->SetColor(clrColor);
 	}
 	else if( _tcscmp(pstrName, _T("shadowcorner")) == 0 ) {

@@ -608,9 +608,13 @@ namespace DuiLib
 		else if( _tcscmp(pstrName, _T("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("nativebkcolor")) == 0 ) {
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetNativeEditBkColor(clrColor);
 		}
 		else CLabelUI::SetAttribute(pstrName, pstrValue);

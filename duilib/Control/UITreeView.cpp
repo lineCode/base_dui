@@ -458,27 +458,43 @@ namespace DuiLib
 		else if(_tcscmp(pstrName, _T("itemattr")) == 0 )
 			pItemButton->SetAttributeList(pstrValue);
 		else if(_tcscmp(pstrName, _T("itemtextcolor")) == 0 ){
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetItemTextColor(clrColor);
 		}
 		else if(_tcscmp(pstrName, _T("itemhottextcolor")) == 0 ){
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetItemHotTextColor(clrColor);
 		}
 		else if(_tcscmp(pstrName, _T("selitemtextcolor")) == 0 ){
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetSelItemTextColor(clrColor);
 		}
 		else if(_tcscmp(pstrName, _T("selitemhottextcolor")) == 0 ){
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetSelItemHotTextColor(clrColor);
 		}
 		else CListContainerElementUI::SetAttribute(pstrName,pstrValue);
@@ -1203,27 +1219,43 @@ namespace DuiLib
 		else if(_tcscmp(pstrName,_T("itemminwidth")) == 0)
 			SetItemMinWidth(_ttoi(pstrValue));
 		else if(_tcscmp(pstrName, _T("itemtextcolor")) == 0 ){
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetItemTextColor(clrColor);
 		}
 		else if(_tcscmp(pstrName, _T("itemhottextcolor")) == 0 ){
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetItemHotTextColor(clrColor);
 		}
 		else if(_tcscmp(pstrName, _T("selitemtextcolor")) == 0 ){
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetSelItemTextColor(clrColor);
 		}
 		else if(_tcscmp(pstrName, _T("selitemhottextcolor")) == 0 ){
-			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+			DWORD clrColor = m_pManager->GetColor(pstrValue);
+			if (clrColor == 0)
+			{
+				if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+				LPTSTR pstr = NULL;
+				clrColor = _tcstoul(pstrValue, &pstr, 16);
+			}
 			SetSelItemHotTextColor(clrColor);
 		}
 		else CListUI::SetAttribute(pstrName,pstrValue);

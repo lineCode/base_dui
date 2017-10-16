@@ -1138,55 +1138,87 @@ void CComboUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetItemTextPadding(rcTextPadding);
     }
     else if( _tcscmp(pstrName, _T("itemtextcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
         SetItemTextColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itembkcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
         SetItemBkColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itembkimage")) == 0 ) SetItemBkImage(pstrValue);
     else if( _tcscmp(pstrName, _T("itemaltbk")) == 0 ) SetAlternateBk(_tcscmp(pstrValue, _T("true")) == 0);
     else if( _tcscmp(pstrName, _T("itemselectedtextcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
         SetSelectedItemTextColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itemselectedbkcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
         SetSelectedItemBkColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itemselectedimage")) == 0 ) SetSelectedItemImage(pstrValue);
     else if( _tcscmp(pstrName, _T("itemhottextcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
         SetHotItemTextColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itemhotbkcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
         SetHotItemBkColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itemhotimage")) == 0 ) SetHotItemImage(pstrValue);
     else if( _tcscmp(pstrName, _T("itemdisabledtextcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
         SetDisabledItemTextColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itemdisabledbkcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
         SetDisabledItemBkColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itemdisabledimage")) == 0 ) SetDisabledItemImage(pstrValue);
@@ -1194,18 +1226,26 @@ void CComboUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetItemVLineSize(_ttoi(pstrValue));
     }
     else if( _tcscmp(pstrName, _T("itemvlinecolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
         SetItemVLineColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itemhlinesize")) == 0 ) {
         SetItemHLineSize(_ttoi(pstrValue));
     }
     else if( _tcscmp(pstrName, _T("itemhlinecolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
         SetItemHLineColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itemshowhtml")) == 0 ) SetItemShowHtml(_tcscmp(pstrValue, _T("true")) == 0);

@@ -51,9 +51,6 @@
     <ClCompile Include="Control\UIList.cpp">
       <Filter>Control</Filter>
     </ClCompile>
-    <ClCompile Include="Control\UIList_buckup.cpp">
-      <Filter>Control</Filter>
-    </ClCompile>
     <ClCompile Include="Control\UIMenu.cpp">
       <Filter>Control</Filter>
     </ClCompile>
@@ -171,9 +168,6 @@
       <Filter>Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIList.h">
-      <Filter>Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIList_buckup.h">
       <Filter>Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIMenu.h">

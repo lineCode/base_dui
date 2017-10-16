@@ -142,6 +142,7 @@ typedef struct DUILIB_API tagTResInfo
 	DWORD m_dwDefaultSelectedBkColor;
 	TFontInfo m_DefaultFontInfo;
 	CDuiStringPtrMap m_CustomFonts;
+	CDuiStringPtrMap m_ColorHash;
 	CDuiStringPtrMap m_ImageHash;
 	CDuiStringPtrMap m_AttrHash;
 	CDuiStringPtrMap m_MultiLanguageHash;
@@ -278,7 +279,7 @@ public:
     void SetDefaultLinkHoverFontColor(DWORD dwColor, bool bShared = false);
     DWORD GetDefaultSelectedBkColor() const;
     void SetDefaultSelectedBkColor(DWORD dwColor, bool bShared = false);
-
+	//------------Font--------------
     TFontInfo* GetDefaultFontInfo();
     void SetDefaultFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic, bool bShared = false);
     DWORD GetCustomFontCount(bool bShared = false) const;
@@ -293,7 +294,13 @@ public:
     TFontInfo* GetFontInfo(int id);
     TFontInfo* GetFontInfo(HFONT hFont);
 	static HFONT AddSharedFont(int id, LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic);
-
+	//------------Color--------------
+	void AddColor(LPCTSTR pStrFontName, DWORD dwValue);
+	DWORD GetColor(LPCTSTR pStrFontName);
+	void RemoveColor(LPCTSTR pStrFontName, bool bShared = false);
+	void RemoveAllColors(bool bShared = false);
+	static void AddSharedColor(LPCTSTR pStrFontName, DWORD dwValue);
+	//------------Image--------------
     const TImageInfo* GetImage(LPCTSTR bitmap);
     const TImageInfo* GetImageEx(LPCTSTR bitmap, LPCTSTR type = NULL, DWORD mask = 0, bool bUseHSL = false);
     const TImageInfo* AddImage(LPCTSTR bitmap, LPCTSTR type = NULL, DWORD mask = 0, bool bUseHSL = false, bool bShared = false);

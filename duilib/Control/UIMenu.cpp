@@ -1001,9 +1001,14 @@ void CMenuElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		SetShowExplandIcon(_tcscmp(pstrValue, _T("true")) == 0 ? true : false);
 	}
 	else if( _tcscmp(pstrName, _T("linecolor")) == 0){
-		if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-		LPTSTR pstr = NULL;
-		SetLineColor(_tcstoul(pstrValue, &pstr, 16));
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
+		SetLineColor(clrColor);
 	}
 	else if( _tcscmp(pstrName, _T("linepadding")) == 0 ) {
 		RECT rcInset = { 0 };
