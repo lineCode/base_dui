@@ -22,7 +22,7 @@ HWND WindowEx::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dw
 	if (isLayeredWindow)
 	{
 		m_PaintManager.GetShadow()->ShowShadow(true);
-		m_PaintManager.GetShadow()->SetImage(_T("public/bk/bk_shadow.png"));
+		m_PaintManager.GetShadow()->SetImage(_T("../public/bk/bk_shadow.png"));
 		m_PaintManager.GetShadow()->SetSize(14);
 		m_PaintManager.GetShadow()->SetShadowCorner({14,14,14,14});
 	}

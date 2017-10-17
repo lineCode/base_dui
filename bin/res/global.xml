@@ -24,125 +24,125 @@
   <Font name="arial" size="18" bold="true"/>
 
   <!--文字色值，不带透明层-->
-  <TextColor name="textdefaultcolor" value="#ff333333"/>
-  <TextColor name="textdefaultdisablecolor" value="#ffa1aebc"/>
-  <TextColor name="darkcolor" value="#ff333333"/>
-  <TextColor name="dark2color" value="#ff555555"/>
-  <TextColor name="lightcolor" value="#ff888888"/>
-  <TextColor name="white" value="#ffffffff"/>
-  <TextColor name="btn_global_white" value="#ff72797f"/>
-  <TextColor name="obvious_tip" value="#ffeb6965"/>
-  <TextColor name="edit_tip" value="#ffa8a8a8"/>
-  <TextColor name="gray" value="#ff8e99a6"/>
-  <TextColor name="green" value="#ff00bb96"/>
-  <TextColor name="link_green" value="#ff21c7a6"/>
-  <TextColor name="link_blue" value="#ff006DD9"/>
-  <TextColor name="link_red" value="#ffC63535"/>
-  <TextColor name="group_name" value="#ff737980"/>
-  <TextColor name="message_tip" value="#ff999999"/>
-  <TextColor name="search_prompt" value="#9affffff"/>
-  <TextColor name="profile_nickname" value="#ff3a4a59"/>
-  <TextColor name="profile_account" value="#ff6b8299"/>
-  <TextColor name="headimage_bk_color" value="#ffececec"/>
-  <TextColor name="icongray" value="#ffa0a0a0"/>
-  <TextColor name="iconfadegray" value="#88a0a0a0"/>
+  <Color name="textdefaultcolor" value="#ff333333"/>
+  <Color name="textdefaultdisablecolor" value="#ffa1aebc"/>
+  <Color name="darkcolor" value="#ff333333"/>
+  <Color name="dark2color" value="#ff555555"/>
+  <Color name="lightcolor" value="#ff888888"/>
+  <Color name="white" value="#ffffffff"/>
+  <Color name="btn_global_white" value="#ff72797f"/>
+  <Color name="obvious_tip" value="#ffeb6965"/>
+  <Color name="edit_tip" value="#ffa8a8a8"/>
+  <Color name="gray" value="#ff8e99a6"/>
+  <Color name="green" value="#ff00bb96"/>
+  <Color name="link_green" value="#ff21c7a6"/>
+  <Color name="link_blue" value="#ff006DD9"/>
+  <Color name="link_red" value="#ffC63535"/>
+  <Color name="group_name" value="#ff737980"/>
+  <Color name="message_tip" value="#ff999999"/>
+  <Color name="search_prompt" value="#9affffff"/>
+  <Color name="profile_nickname" value="#ff3a4a59"/>
+  <Color name="profile_account" value="#ff6b8299"/>
+  <Color name="headimage_bk_color" value="#ffececec"/>
+  <Color name="icongray" value="#ffa0a0a0"/>
+  <Color name="iconfadegray" value="#88a0a0a0"/>
   <!--会话窗口连接断开提示文字颜色-->
-  <TextColor name="link_tip" value="#ff999999"/>
+  <Color name="link_tip" value="#ff999999"/>
 
   <!--背景色值，完全不透明-->
   <!--窗口主要的两种背景色-->
-  <TextColor name="bk_main_wnd_title" value="#ff238efa"/>
-  <TextColor name="bk_main_wnd_search" value="#ff1e7ad7"/>
-  <TextColor name="bk_wnd_darkcolor" value="#fff0f2f5"/>
-  <TextColor name="bk_wnd_lightcolor" value="#ffffffff"/>
-  <TextColor name="bk_wnd_logincolor" value="#fffafbfc"/>
-  <TextColor name="bk_menuitem_hovered" value="#ffe1e6eb"/>
-  <TextColor name="bk_menuitem_selected" value="#ffced4db"/>
-  <TextColor name="bk_listitem_hovered" value="#fff0f2f5"/>
-  <TextColor name="bk_listitem_selected" value="#ffe4e7eb"/>
-  <TextColor name="bk_gray1" value="#fff0f3f5"/>
-  <TextColor name="bk_lightblue" value="#ff00aeff"/>
-  <TextColor name="bk_lightyellow" value="#fffff8d1"/>
-  <TextColor name="bk_media" value="#ff5e6266"/>
-  <TextColor name="bk_mainwnd_bottom" value="fff5f7fa"/>
-  <TextColor name="bk_change_bg_form" value="ffe6e8eb"/>
-  <TextColor name="bk_blacklist_tip" value="#ffdedede"/>
+  <Color name="bk_main_wnd_title" value="#ff238efa"/>
+  <Color name="bk_main_wnd_search" value="#ff1e7ad7"/>
+  <Color name="bk_wnd_darkcolor" value="#fff0f2f5"/>
+  <Color name="bk_wnd_lightcolor" value="#ffffffff"/>
+  <Color name="bk_wnd_logincolor" value="#fffafbfc"/>
+  <Color name="bk_menuitem_hovered" value="#ffe1e6eb"/>
+  <Color name="bk_menuitem_selected" value="#ffced4db"/>
+  <Color name="bk_listitem_hovered" value="#fff0f2f5"/>
+  <Color name="bk_listitem_selected" value="#ffe4e7eb"/>
+  <Color name="bk_gray1" value="#fff0f3f5"/>
+  <Color name="bk_lightblue" value="#ff00aeff"/>
+  <Color name="bk_lightyellow" value="#fffff8d1"/>
+  <Color name="bk_media" value="#ff5e6266"/>
+  <Color name="bk_mainwnd_bottom" value="fff5f7fa"/>
+  <Color name="bk_change_bg_form" value="ffe6e8eb"/>
+  <Color name="bk_blacklist_tip" value="#ffdedede"/>
   <!--会话列表中置顶项的背景颜色-->
-  <TextColor name="bk_topitem_normal" value="#ffffffe0"/>
-  <TextColor name="bk_topitem_hovered" value="#ffffffeb"/>
-  <TextColor name="bk_topitem_selected" value="#fffafacd"/>
+  <Color name="bk_topitem_normal" value="#ffffffe0"/>
+  <Color name="bk_topitem_hovered" value="#ffffffeb"/>
+  <Color name="bk_topitem_selected" value="#fffafacd"/>
   <!--好友详细资料下边按钮的背景颜色-->
-  <TextColor name="bk_btn1_hovered" value="#fff0f2f5"/>
-  <TextColor name="bk_btn1_pushed" value="#ffe1e3e5"/>
+  <Color name="bk_btn1_hovered" value="#fff0f2f5"/>
+  <Color name="bk_btn1_pushed" value="#ffe1e3e5"/>
   <!--音视频专用-->
-  <TextColor name="bk_video" value="#ff222222"/>
-  <TextColor name="bk_video_title" value="#ff2b2f33"/>
-  <TextColor name="bk_video_content" value="#ff3c4147"/>
-  <TextColor name="bk_video_tip" value="#ff1b1d1f"/>
+  <Color name="bk_video" value="#ff222222"/>
+  <Color name="bk_video_title" value="#ff2b2f33"/>
+  <Color name="bk_video_content" value="#ff3c4147"/>
+  <Color name="bk_video_tip" value="#ff1b1d1f"/>
   <!--会话窗口连接断开提示背景颜色-->
-  <TextColor name="bk_link_tip" value="#fffbfcbe"/>
+  <Color name="bk_link_tip" value="#fffbfcbe"/>
   <!--进度条专用-->
-  <TextColor name="bk_progress_bk" value="#ffe3ecf5"/>
-  <TextColor name="bk_progress_progress" value="#ff2aceae"/>
+  <Color name="bk_progress_bk" value="#ffe3ecf5"/>
+  <Color name="bk_progress_progress" value="#ff2aceae"/>
 
   <!--背景色值，半透明-->
-  <TextColor name="transbkblack1" value="#80000000"/>
+  <Color name="transbkblack1" value="#80000000"/>
 
   <!--分割线色值-->
   <!--第一级分割线，较深-->
-  <TextColor name="splitline_level1" value="#ffd2d4d6"/>
+  <Color name="splitline_level1" value="#ffd2d4d6"/>
   <!--第二级分割线，较浅-->
-  <TextColor name="splitline_level2" value="#ffebedf0"/>
+  <Color name="splitline_level2" value="#ffebedf0"/>
 
   <!--截图工具条分割线-->
-  <TextColor name="splitline_hor_level4" value="#ff222529"/>
+  <Color name="splitline_hor_level4" value="#ff222529"/>
   <!--朋友圈内容item和输入框边框线-->
-  <TextColor name="splitline_hor_level5" value="#ffd3d7db"/>
+  <Color name="splitline_hor_level5" value="#ffd3d7db"/>
   <!--朋友圈内容内部分割线-->
-  <TextColor name="splitline_hor_level6" value="#ffe1e3e5"/>
+  <Color name="splitline_hor_level6" value="#ffe1e3e5"/>
   <!--动态消息列表分割线-->
-  <TextColor name="splitline_hor_level7" value="#fff0f2f5"/>
+  <Color name="splitline_hor_level7" value="#fff0f2f5"/>
 
   <!--combobox边框色值-->
-  <TextColor name="combobox_border" value="#ff8da1b8"/>
-  <TextColor name="list_border" value="#ffcad9e0"/>
+  <Color name="combobox_border" value="#ff8da1b8"/>
+  <Color name="list_border" value="#ffcad9e0"/>
 
   <!--视频边框颜色-->
-  <TextColor name="border_alpha_white" value="#c8ffffff"/>
-  <TextColor name="border_alpha_blue" value="#ff007ffe"/>
+  <Color name="border_alpha_white" value="#c8ffffff"/>
+  <Color name="border_alpha_blue" value="#ff007ffe"/>
 
   <!--截屏窗口相关颜色-->
-  <TextColor name="font_size_bknormal" value="#ff3b3f43"/>
-  <TextColor name="font_size_bkhot" value="#ff4b4f53"/>
-  <TextColor name="font_size_bkselected" value="#ff2b2f33"/>
+  <Color name="font_size_bknormal" value="#ff3b3f43"/>
+  <Color name="font_size_bkhot" value="#ff4b4f53"/>
+  <Color name="font_size_bkselected" value="#ff2b2f33"/>
 
   <!--调色板色值-->
-  <TextColor name="color_palette1" value="#ffff2600"/>
-  <TextColor name="color_palette2" value="#ffffeb00"/>
-  <TextColor name="color_palette3" value="#ff61ed00"/>
-  <TextColor name="color_palette4" value="#ff00b4ff"/>
-  <TextColor name="color_palette5" value="#ffa100ff"/>
-  <TextColor name="color_palette6" value="#ff000000"/>
-  <TextColor name="color_palette7" value="#ff545454"/>
-  <TextColor name="color_palette8" value="#ffa8a8a8"/>
-  <TextColor name="color_palette9" value="#ffffffff"/>
+  <Color name="color_palette1" value="#ffff2600"/>
+  <Color name="color_palette2" value="#ffffeb00"/>
+  <Color name="color_palette3" value="#ff61ed00"/>
+  <Color name="color_palette4" value="#ff00b4ff"/>
+  <Color name="color_palette5" value="#ffa100ff"/>
+  <Color name="color_palette6" value="#ff000000"/>
+  <Color name="color_palette7" value="#ff545454"/>
+  <Color name="color_palette8" value="#ffa8a8a8"/>
+  <Color name="color_palette9" value="#ffffffff"/>
 
   <!--会话窗口tip底色-->
-  <TextColor name="tip_blue" value="#fffafdff"/>
-  <TextColor name="tip_yellow" value="#ffffffe6"/>
-  <TextColor name="btn_green" value="#ff00ba8f"/>
+  <Color name="tip_blue" value="#fffafdff"/>
+  <Color name="tip_yellow" value="#ffffffe6"/>
+  <Color name="btn_green" value="#ff00ba8f"/>
 
   <!-- 直播间 -->
-  <TextColor name="close_cast" value="#ffd5dbde"/>
-  <TextColor name="tab_text_selected" value="#ff3686f5"/>
-  <TextColor name="tab_bk_unselected" value="#ffebeaed"/>
-  <TextColor name="exit_tip_bk" value="#ffdce9f3"/>
-  <TextColor name="exit_room_name_color" value="#ff909ead"/>
+  <Color name="close_cast" value="#ffd5dbde"/>
+  <Color name="tab_text_selected" value="#ff3686f5"/>
+  <Color name="tab_bk_unselected" value="#ffebeaed"/>
+  <Color name="exit_tip_bk" value="#ffdce9f3"/>
+  <Color name="exit_room_name_color" value="#ff909ead"/>
 
-  <!--字体大小-->
-  <Class name="font_title" value="font=&quot;2&quot;" />
+  <!--Window-->
+  <Class name="shadow_window" value="showshadow=&quot;true&quot; shadowimage=&quot;../public/bk/bk_shadow.png&quot; shadowsize=&quot;14,14,14,14&quot;" />
 
-  <!--字体大小-->
+  <!--标题栏-->
   <Class name="caption" value="height=&quot;34&quot; bkimage=&quot;file='../public/caption/caption_public.png' corner='0,0,0,1'&quot; padding=&quot;10,0,5,0&quot;"/>
 
   <!--滚动条-->
@@ -156,7 +156,7 @@
   <Class name="circle_option_2" value="height=&quot;18&quot; textpadding=&quot;25,0,0,0&quot; font=&quot;1&quot; normaltextcolor=&quot;darkcolor&quot; normalimage=&quot;file='../public/option/circle_unselected.png' dest='0,0,18,18'&quot; selectednormalimage=&quot;file='../public/option/circle_selected.png' dest='0,0,18,18'&quot;"/>
 
   <!--checkbox-->
-  <Class name="checkbox_font12" value="height=&quot;16&quot; textpadding=&quot;20,0,0,0&quot; font=&quot;1&quot; normaltextcolor=&quot;darkcolor&quot; normalimage=&quot;file='../public/CheckBox/check_no.png' dest='0,0,16,16'&quot; disabledimage=&quot;file='../public/CheckBox/check_no.png' dest='0,0,16,16' fade='80'&quot; selectednormalimage=&quot;file='../public/CheckBox/check_yes.png' dest='0,0,16,16'&quot; selecteddisabledimage=&quot;file='../public/CheckBox/check_yes.png' dest='0,0,16,16' fade='80'&quot;"/>
+  <Class name="checkbox16" value="height=&quot;16&quot; textpadding=&quot;20,0,0,0&quot; font=&quot;1&quot; normaltextcolor=&quot;darkcolor&quot; normalimage=&quot;file='public/checkbox/check_no.png' dest='0,0,16,16'&quot; disabledimage=&quot;file='../public/checkbox/check_no.png' dest='0,0,16,16' fade='80'&quot; selectednormalimage=&quot;file='../public/checkbox/check_yes.png' dest='0,0,16,16'&quot; selecteddisabledimage=&quot;file='../public/checkbox/check_yes.png' dest='0,0,16,16' fade='80'&quot;"/>
 
   <Class name="checkbox_font14" value="height=&quot;20&quot; textpadding=&quot;20,0,0,0&quot; font=&quot;2&quot; normaltextcolor=&quot;darkcolor&quot; normalimage=&quot;file='../public/CheckBox/check_no.png' dest='0,2,16,18'&quot; disabledimage=&quot;file='../public/CheckBox/check_no.png' dest='0,2,16,18' fade='80'&quot; selectednormalimage=&quot;file='../public/CheckBox/check_yes.png' dest='0,2,16,18'&quot; selecteddisabledimage=&quot;file='../public/CheckBox/check_yes.png' dest='0,2,16,18' fade='80'&quot;"/>
 

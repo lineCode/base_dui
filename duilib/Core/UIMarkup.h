@@ -14,7 +14,7 @@ enum
 
 class CMarkup;
 class CMarkupNode;
-
+class CPaintManagerUI;
 
 class DUILIB_API CMarkup
 {
@@ -25,7 +25,7 @@ public:
 
     bool Load(LPCTSTR pstrXML);
     bool LoadFromMem(BYTE* pByte, DWORD dwSize, int encoding = XMLFILE_ENCODING_UTF8);
-    bool LoadFromFile(LPCTSTR pstrFilename, int encoding = XMLFILE_ENCODING_UTF8);
+	bool LoadFromFile(LPCTSTR pstrFilename, CPaintManagerUI *pManager, int encoding = XMLFILE_ENCODING_UTF8);
     void Release();
     bool IsValid() const;
 

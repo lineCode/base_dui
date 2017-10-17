@@ -610,7 +610,7 @@ void CWndShadow::MakeShadow(UINT32 *pShadBits, HWND hParent, RECT *rcParent)
 
 bool CWndShadow::SetImage(LPCTSTR image, RECT rcCorner, RECT rcHoleOffset)
 {
-	TImageInfo* pImageInfo = CRenderEngine::LoadImage(image); 
+	TImageInfo* pImageInfo = CRenderEngine::LoadImage(image, nullptr); 
 	if (pImageInfo == NULL) return false;
 
 	if (m_pImageInfo) CRenderEngine::FreeImage(m_pImageInfo);

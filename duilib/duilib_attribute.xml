@@ -40,6 +40,7 @@
 </Events>-->
 
   <Window parent="" notifies="">
+    <Attribute name="class"         default="" type="" comment=""/>
     <Attribute name="size"          default="" type="" comment=""/>
     <Attribute name="sizebox"       default="" type="" comment=""/>
     <Attribute name="caption"       default="" type="" comment=""/>
@@ -63,10 +64,11 @@
   
   <Controls>
     <Control parent="" notifies="">
+      <Attribute name="class"     default="" type="" comment=""/>
       <Attribute name="name"      default="" type="" comment=""/>
       <Attribute name="text"      default="" type="" comment=""/>
       <Attribute name="pos"       default="" type="" comment=""/>
-      <Attribute name="margin"   default="" type="" comment=""/>
+      <Attribute name="margin"    default="" type="" comment=""/>
       <Attribute name="bkcolor"   default="" type="" comment=""/>
       <Attribute name="bkcolor1"  default="" type="" comment=""/>
       <Attribute name="bkcolor2"  default="" type="" comment=""/>

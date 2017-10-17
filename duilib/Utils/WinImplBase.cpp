@@ -274,17 +274,18 @@ LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	m_PaintManager.Init(m_hWnd);
 	m_PaintManager.AddPreMessageFilter(this);
 
-	CDialogBuilder builder;
-	CDuiString strResourcePath=m_PaintManager.GetResourcePath();
-	if (strResourcePath.empty())
-	{
-		strResourcePath=m_PaintManager.GetInstancePath();
-		strResourcePath+=GetSkinFolder().c_str();
-		m_PaintManager.SetResourcePath(strResourcePath.c_str());
+	CDuiString strResourcePath = m_PaintManager.GetResourcePath();
+	ASSERT(!strResourcePath.empty());
+	if (!strResourcePath.empty()){
+		CDuiString folder = GetSkinFolder();
+		if (folder.back() != _T('\\') && folder.back() != _T('/')){
+			folder += _T('\\');
+		}
+		strResourcePath += folder;
+		m_PaintManager.SetThisResPath(strResourcePath.c_str());
 	}
-	
-	//strResourcePath += GetSkinFolder().c_str();
 
+	CDialogBuilder builder;
 	switch(GetResourceType())
 	{
 	case UILIB_ZIP:

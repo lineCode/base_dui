@@ -374,10 +374,16 @@ bool CMarkup::LoadFromMem(BYTE* pByte, DWORD dwSize, int encoding)
     return bRes;
 }
 
-bool CMarkup::LoadFromFile(LPCTSTR pstrFilename, int encoding)
+bool CMarkup::LoadFromFile(LPCTSTR pstrFilename, CPaintManagerUI *pManager, int encoding)
 {
     Release();
-    CDuiString sFile = CPaintManagerUI::GetResourcePath();
+	CDuiString sFile;
+	if (pManager){
+		sFile = pManager->GetThisResPath();
+	}else{
+		sFile = CPaintManagerUI::GetResourcePath();
+	}
+ 
     if( CPaintManagerUI::GetResourceZip().empty() ) {
         sFile += pstrFilename;
 		HANDLE hFile = ::CreateFile(sFile.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);

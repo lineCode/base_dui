@@ -17,12 +17,12 @@ LoginForm::~LoginForm()
 
 CDuiString LoginForm::GetSkinFolder()
 {
-	return L"";
+	return L"login";
 }
 
 CDuiString LoginForm::GetSkinFile()
 {
-	return L"login\\login.xml";
+	return L"login.xml";
 }
 
 //ui::UILIB_RESOURCETYPE LoginForm::GetResourceType() const

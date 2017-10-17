@@ -141,10 +141,10 @@ typedef struct DUILIB_API tagTResInfo
 	DWORD m_dwDefaultLinkHoverFontColor;
 	DWORD m_dwDefaultSelectedBkColor;
 	TFontInfo m_DefaultFontInfo;
-	CDuiStringPtrMap m_CustomFonts;
-	CDuiStringPtrMap m_ColorHash;
+	CDuiStringPtrMap m_CustomFonts;			//"Font"
+	CDuiStringPtrMap m_ColorHash;			//"Color"
 	CDuiStringPtrMap m_ImageHash;
-	CDuiStringPtrMap m_AttrHash;
+	CDuiStringPtrMap m_AttrHash;			//"Default" + "Class"
 	CDuiStringPtrMap m_MultiLanguageHash;
 } TResInfo;
 
@@ -201,6 +201,8 @@ public:
 	void Invalidate();
     void Invalidate(RECT& rcItem);
 
+	LPCTSTR GetThisResPath() const;
+	void SetThisResPath(const LPCTSTR path);
 	LPCTSTR GetName() const;
     HDC GetPaintDC() const;
 	HBITMAP GetPaintOffscreenBitmap();
@@ -307,14 +309,15 @@ public:
     const TImageInfo* AddImage(LPCTSTR bitmap, HBITMAP hBitmap, int iWidth, int iHeight, bool bAlpha, bool bShared = false);
     void RemoveImage(LPCTSTR bitmap, bool bShared = false);
     void RemoveAllImages(bool bShared = false);
-	static void ReloadSharedImages();
 	void ReloadImages();
-
+	static void ReloadSharedImages();
+	//------------Class--------------
     void AddDefaultAttributeList(LPCTSTR pStrControlName, LPCTSTR pStrControlAttrList, bool bShared = false);
     LPCTSTR GetDefaultAttributeList(LPCTSTR pStrControlName) const;
     bool RemoveDefaultAttributeList(LPCTSTR pStrControlName, bool bShared = false);
     void RemoveAllDefaultAttributeList(bool bShared = false);
-
+	static void AddSharedDefaultAttributeList(LPCTSTR pStrControlName, LPCTSTR pStrControlAttrList);
+	//-------------------------------
     void AddWindowCustomAttribute(LPCTSTR pstrName, LPCTSTR pstrAttr);
     LPCTSTR GetWindowCustomAttribute(LPCTSTR pstrName) const;
     bool RemoveWindowCustomAttribute(LPCTSTR pstrName);
@@ -425,6 +428,7 @@ private:
 
 private:
 	CDuiString m_sName;
+	CDuiString m_pThisResPath;
     HWND m_hWndPaint;
     HDC m_hDcPaint;
     HDC m_hDcOffscreen;

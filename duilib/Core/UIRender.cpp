@@ -334,7 +334,7 @@ void CRenderEngine::AdjustImage(bool bUseHSL, TImageInfo* imageInfo, short H, sh
 	}
 }
 
-TImageInfo* CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask)
+TImageInfo* CRenderEngine::LoadImage(STRINGorID bitmap, CPaintManagerUI* pManager, LPCTSTR type, DWORD mask)
 {
     LPBYTE pData = NULL;
     DWORD dwSize = 0;
@@ -342,7 +342,10 @@ TImageInfo* CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask
 	do 
 	{
 		if( type == NULL ) {
-			CDuiString sFile = CPaintManagerUI::GetResourcePath();
+			CDuiString sFile;
+			if (pManager) sFile = pManager->GetThisResPath();
+			else  sFile = CPaintManagerUI::GetResourcePath();
+
 			if( CPaintManagerUI::GetResourceZip().empty() ) {
 				sFile += bitmap.m_lpstr;
 				HANDLE hFile = ::CreateFile(sFile.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, \

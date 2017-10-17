@@ -908,7 +908,13 @@ CDuiString CControlUI::GetAttribute(LPCTSTR pstrName)
 
 void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if( _tcscmp(pstrName, _T("pos")) == 0 ) {
+	if (_tcscmp(pstrName, _T("class")) == 0){
+		LPCTSTR pValue = m_pManager->GetDefaultAttributeList(pstrValue);
+		if (pValue){
+			SetAttributeList(pValue);
+		}
+	}
+    else if( _tcscmp(pstrName, _T("pos")) == 0 ) {
         RECT rcPos = { 0 };
         LPTSTR pstr = NULL;
         rcPos.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    

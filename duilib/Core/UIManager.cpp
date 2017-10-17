@@ -343,7 +343,7 @@ bool CPaintManagerUI::LoadGlobalResource()
 			if (!xml.Load(file.c_str())) return false;
 		}
 		else {
-			if (!xml.LoadFromFile(file.c_str())) return false;
+			if (!xml.LoadFromFile(file.c_str(), nullptr)) return false;
 		}
 	}
 	//-----------------------------------------
@@ -365,7 +365,7 @@ bool CPaintManagerUI::LoadGlobalResource()
 			bool underline = false;
 			bool italic = false;
 			bool defaultfont = false;
-			bool shared = false;
+			/*bool shared = false;*/
 			for (int i = 0; i < nAttributes; i++) {
 				pstrName = node.GetAttributeName(i);
 				pstrValue = node.GetAttributeValue(i);
@@ -410,6 +410,25 @@ bool CPaintManagerUI::LoadGlobalResource()
 			{
 				AddSharedColor(pColorName, dwValue);
 			}	
+		}
+		else if (_tcsicmp(pstrClass, _T("Class")) == 0) {
+			nAttributes = node.GetAttributeCount();
+			LPCTSTR pName = NULL;
+			LPCTSTR pValue = NULL;
+			/*bool shared = false;*/
+			for (int i = 0; i < nAttributes; i++) {
+				pstrName = node.GetAttributeName(i);
+				pstrValue = node.GetAttributeValue(i);
+				if (_tcsicmp(pstrName, _T("name")) == 0) {
+					pName = pstrValue;
+				}
+				else if (_tcsicmp(pstrName, _T("value")) == 0) {
+					pValue = pstrValue;
+				}
+			}
+			if (pName) {
+				AddSharedDefaultAttributeList(pName, pValue);
+			}
 		}
 	}
 	return true;
@@ -519,6 +538,16 @@ int CPaintManagerUI::GetHoverTime() const
 void CPaintManagerUI::SetHoverTime(int iTime)
 {
 	m_iHoverTime = iTime;
+}
+
+LPCTSTR CPaintManagerUI::GetThisResPath() const
+{
+	return m_pThisResPath.c_str();
+}
+
+void CPaintManagerUI::SetThisResPath(const LPCTSTR path)
+{
+	m_pThisResPath = path;
 }
 
 LPCTSTR CPaintManagerUI::GetName() const
@@ -2893,14 +2922,14 @@ const TImageInfo* CPaintManagerUI::AddImage(LPCTSTR bitmap, LPCTSTR type, DWORD 
         if( isdigit(*bitmap) ) {
             LPTSTR pstr = NULL;
             int iIndex = _tcstol(bitmap, &pstr, 10);
-            data = CRenderEngine::LoadImage(iIndex, type, mask);
+            data = CRenderEngine::LoadImage(iIndex, this, type, mask);
         }
         else {
-            data = CRenderEngine::LoadImage(bitmap, type, mask);
+			data = CRenderEngine::LoadImage(bitmap, this, type, mask);
         }
     }
     else {
-        data = CRenderEngine::LoadImage(bitmap, NULL, mask);
+		data = CRenderEngine::LoadImage(bitmap, this, NULL, mask);
     }
 
 	if( data == NULL ) return NULL;
@@ -3083,14 +3112,14 @@ void CPaintManagerUI::ReloadSharedImages()
 					if( isdigit(*bitmap) ) {
 						LPTSTR pstr = NULL;
 						int iIndex = _tcstol(bitmap, &pstr, 10);
-						pNewData = CRenderEngine::LoadImage(iIndex, data->sResType.c_str(), data->dwMask);
+						pNewData = CRenderEngine::LoadImage(iIndex, NULL, data->sResType.c_str(), data->dwMask);
 					}
 					else {
-						pNewData = CRenderEngine::LoadImage(bitmap, data->sResType.c_str(), data->dwMask);
+						pNewData = CRenderEngine::LoadImage(bitmap, NULL, data->sResType.c_str(), data->dwMask);
 					}
 				}
 				else {
-					pNewData = CRenderEngine::LoadImage(bitmap, NULL, data->dwMask);
+					pNewData = CRenderEngine::LoadImage(bitmap, NULL, NULL, data->dwMask);
 				}
 				if( pNewData == NULL ) continue;
 
@@ -3126,14 +3155,14 @@ void CPaintManagerUI::ReloadImages()
 					if( isdigit(*bitmap) ) {
 						LPTSTR pstr = NULL;
 						int iIndex = _tcstol(bitmap, &pstr, 10);
-						pNewData = CRenderEngine::LoadImage(iIndex, data->sResType.c_str(), data->dwMask);
+						pNewData = CRenderEngine::LoadImage(iIndex, this, data->sResType.c_str(), data->dwMask);
 					}
 					else {
-						pNewData = CRenderEngine::LoadImage(bitmap, data->sResType.c_str(), data->dwMask);
+						pNewData = CRenderEngine::LoadImage(bitmap, this, data->sResType.c_str(), data->dwMask);
 					}
 				}
 				else {
-					pNewData = CRenderEngine::LoadImage(bitmap, NULL, data->dwMask);
+					pNewData = CRenderEngine::LoadImage(bitmap, this, NULL, data->dwMask);
 				}
 				if( pNewData == NULL ) continue;
 
@@ -3177,6 +3206,17 @@ void CPaintManagerUI::AddDefaultAttributeList(LPCTSTR pStrControlName, LPCTSTR p
 			CDuiString* pOldDefaultAttr = static_cast<CDuiString*>(m_ResInfo.m_AttrHash.Set(pStrControlName, (LPVOID)pDefaultAttr));
 			if (pOldDefaultAttr) delete pOldDefaultAttr;
 		}
+	}
+}
+
+//static
+void CPaintManagerUI::AddSharedDefaultAttributeList(LPCTSTR pStrControlName, LPCTSTR pStrControlAttrList)
+{
+	CDuiString* pDefaultAttr = new CDuiString(pStrControlAttrList);
+	if (pDefaultAttr != NULL)
+	{
+		CDuiString* pOldDefaultAttr = static_cast<CDuiString*>(m_SharedResInfo.m_AttrHash.Set(pStrControlName, (LPVOID)pDefaultAttr));
+		if (pOldDefaultAttr) delete pOldDefaultAttr;
 	}
 }
 
@@ -3283,7 +3323,13 @@ CDuiString CPaintManagerUI::GetWindowAttribute(LPCTSTR pstrName)
 
 void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if( _tcsicmp(pstrName, _T("size")) == 0 ) {
+	if (_tcsicmp(pstrName, _T("class")) == 0) {
+		LPCTSTR pValue = GetDefaultAttributeList(pstrValue);
+		if (pValue){
+			SetWindowAttributeList(pValue);
+		}
+	}
+    else if( _tcsicmp(pstrName, _T("size")) == 0 ) {
         LPTSTR pstr = NULL;
         int cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
         int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr); 

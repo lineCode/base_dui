@@ -18,7 +18,7 @@ CControlUI* CDialogBuilder::Create(STRINGorID xml, LPCTSTR type, IDialogBuilderC
             if( !m_xml.Load(xml.m_lpstr) ) return NULL;
         }
         else {
-            if( !m_xml.LoadFromFile(xml.m_lpstr) ) return NULL;
+			if (!m_xml.LoadFromFile(xml.m_lpstr, pManager)) return NULL;
         }
     }
     else {
@@ -255,6 +255,7 @@ CControlUI* CDialogBuilder::_Parse(CMarkupNode* pRoot, CControlUI* pParent, CPai
 				// Set ordinary attributes
 				int nAttributes = node.GetAttributeCount();
 				for( int i = 0; i < nAttributes; i++ ) {
+					ASSERT(i == 0 || _tcscmp(node.GetAttributeName(i), _T("class")) != 0);
 					pNode->SetAttribute(node.GetAttributeName(i), node.GetAttributeValue(i));
 				}
 			}
@@ -419,6 +420,7 @@ CControlUI* CDialogBuilder::_Parse(CMarkupNode* pRoot, CControlUI* pParent, CPai
             // Set ordinary attributes
             int nAttributes = node.GetAttributeCount();
             for( int i = 0; i < nAttributes; i++ ) {
+				ASSERT(i == 0 || _tcscmp(node.GetAttributeName(i), _T("class")) != 0);
                 pControl->SetAttribute(node.GetAttributeName(i), node.GetAttributeValue(i));
             }
         }
