@@ -105,6 +105,6 @@ LRESULT LoginForm::OnClose(UINT u, WPARAM w, LPARAM l, BOOL& bHandled)
 void LoginForm::ShowMenu(bool show)
 {
 	CMenuWnd *menu_wnd = new CMenuWnd;
-	menu_wnd->Init(NULL, _T("login/menu.xml"), { 200, 10 }, &m_PaintManager);
+	menu_wnd->Init(NULL, _T("menu.xml"), _T("login"), { 200, 10 }, &m_PaintManager);
 	
 }

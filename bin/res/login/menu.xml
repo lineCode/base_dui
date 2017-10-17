@@ -1,29 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="120,60" >
-  <!--0--><!--
-  <Font name="微软雅黑" size="10"/>
-  --><!--1--><!--
-  <Font name="微软雅黑" size="12"/>
-  --><!--2--><!--
-  <Font name="微软雅黑" size="14"/>
-  --><!--3--><!--
-  <Font name="微软雅黑" size="16"/>
-  --><!--4--><!--
-  <Font name="微软雅黑" size="18"/>
-  --><!--5--><!--
-  <Font name="微软雅黑" size="10" bold="true"/>
-  --><!--6--><!--
-  <Font name="微软雅黑" size="12" bold="true"/>
-  --><!--7--><!--
-  <Font name="微软雅黑" size="14" bold="true"/>
-  --><!--8--><!--
-  <Font name="微软雅黑" size="16" bold="true"/>
-  --><!--9--><!--
-  <Font name="微软雅黑" size="18" bold="true"/>--> 
-  <VLayout >
-    <Menu width="120" height="40" bkcolor="#ffffffff">
-      <MenuElement inset="20,0,20,0" width="120" height="40" bkcolor="#ffffffff" hotcolor="" pushedcolor="" selectednormalcolor="">
-        
+<Window size="120,160" >
+  <VLayout width="120" height="160">
+    <Menu width="120" height="160" bkcolor="white">
+      <MenuElement inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
+
+      </MenuElement>
+      <MenuElement inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
+
+      </MenuElement>
+      <MenuElement inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
+
+      </MenuElement>
+      <MenuElement inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
+
       </MenuElement>
     </Menu>
   </VLayout>

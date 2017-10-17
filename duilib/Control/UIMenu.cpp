@@ -155,7 +155,7 @@ BOOL CMenuWnd::Receive(ContextMenuParam param)
 	return TRUE;
 }
 
-void CMenuWnd::Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
+void CMenuWnd::Init(CMenuElementUI* pOwner, STRINGorID xml, CDuiString folder, POINT point,
 					CPaintManagerUI* pMainPaintManager, std::map<CDuiString,bool>* pMenuCheckInfo/* = NULL*/,
 					DWORD dwAlignment/* = eMenuAlignment_Left | eMenuAlignment_Top*/)
 {
@@ -164,6 +164,16 @@ void CMenuWnd::Init(CMenuElementUI* pOwner, STRINGorID xml, POINT point,
     m_pLayout = NULL;
 	m_xml = xml;
 	m_dwAlignment = dwAlignment;
+
+	CDuiString strResourcePath = m_pm.GetResourcePath();
+	ASSERT(!strResourcePath.empty());
+	if (!strResourcePath.empty() && !folder.empty()){
+		if (folder.back() != _T('\\') && folder.back() != _T('/')){
+			folder += _T('\\');
+		}
+		strResourcePath += folder;
+		m_pm.SetThisResPath(strResourcePath.c_str());
+	}
 
 	// 如果是一级菜单的创建
 	if (pOwner == NULL)
@@ -885,7 +895,7 @@ void CMenuElementUI::CreateMenuWnd()
 	param.wParam = 2;
 	CMenuWnd::GetGlobalContextMenuObserver().RBroadcast(param);
 
-	m_pWindow->Init(static_cast<CMenuElementUI*>(this), _T(""), CDuiPoint(), NULL);
+	m_pWindow->Init(static_cast<CMenuElementUI*>(this), _T(""), _T(""), CDuiPoint(), NULL);
 }
 
 void CMenuElementUI::SetLineType()
