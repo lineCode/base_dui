@@ -3420,8 +3420,33 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     } 
 #endif
 #if 1	//UIShadow
-	else if( _tcscmp(pstrName, _T("shadowsize")) == 0 ) {
+	else if (_tcscmp(pstrName, _T("showshadow")) == 0) {
+		GetShadow()->ShowShadow(_tcscmp(pstrValue, _T("true")) == 0);
+	}
+	else if (_tcscmp(pstrName, _T("shadowimage")) == 0) {
+		GetShadow()->SetImage(pstrValue);
+	}
+	else if (_tcscmp(pstrName, _T("shadowcolor")) == 0) {
+		DWORD clrColor = GetColor(pstrName);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
+		GetShadow()->SetColor(clrColor);
+	}
+	else if (_tcscmp(pstrName, _T("shadowsize")) == 0) {
 		GetShadow()->SetSize(_ttoi(pstrValue));
+	}
+	else if (_tcscmp(pstrName, _T("shadowcorner")) == 0) {
+		RECT rcCorner = { 0 };
+		LPTSTR pstr = NULL;
+		rcCorner.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
+		rcCorner.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
+		rcCorner.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
+		rcCorner.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+		GetShadow()->SetShadowCorner(rcCorner);
 	}
 	else if( _tcscmp(pstrName, _T("shadowsharpness")) == 0 ) {
 		GetShadow()->SetSharpness(_ttoi(pstrValue));
@@ -3435,31 +3460,6 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr); 
 		GetShadow()->SetPosition(cx, cy);
 	}
-	else if( _tcscmp(pstrName, _T("shadowcolor")) == 0 ) {
-		DWORD clrColor = GetColor(pstrName);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-		GetShadow()->SetColor(clrColor);
-	}
-	else if( _tcscmp(pstrName, _T("shadowcorner")) == 0 ) {
-		RECT rcCorner = { 0 };
-		LPTSTR pstr = NULL;
-		rcCorner.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-		rcCorner.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
-		rcCorner.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
-		rcCorner.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
-		GetShadow()->SetShadowCorner(rcCorner);
-	}
-	else if( _tcscmp(pstrName, _T("shadowimage")) == 0 ) {
-		GetShadow()->SetImage(pstrValue);
-	}
-	else if( _tcscmp(pstrName, _T("showshadow")) == 0 ) {
-		GetShadow()->ShowShadow(_tcscmp(pstrValue, _T("true")) == 0);
-	} 
 #endif
     else 
         AddWindowCustomAttribute(pstrName, pstrValue);

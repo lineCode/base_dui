@@ -293,7 +293,7 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 		CDialogBuilder builder;
 
 		CControlUI* pRoot = builder.Create(m_xml,UINT(0), this, &m_pm);
-		m_pm.GetShadow()->ShowShadow(false);
+		//m_pm.GetShadow()->ShowShadow(false);
 		m_pm.AttachDialog(pRoot);
 		m_pm.AddNotifier(this);
 
@@ -535,6 +535,7 @@ LRESULT CMenuWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			m_pOwner->SetPos(m_pOwner->GetPos());
 			m_pOwner->SetFocus();
 		}
+		bHandled = FALSE;
 		break;
 	case WM_RBUTTONDOWN:
 	case WM_CONTEXTMENU:
@@ -1003,12 +1004,12 @@ void CMenuElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 			SetChecked(_tcscmp(pstrValue, _T("true")) == 0 ? true : false);
 		}	
 	}	
+	else if (_tcscmp(pstrName, _T("expland")) == 0) {
+		SetShowExplandIcon(_tcscmp(pstrValue, _T("true")) == 0 ? true : false);
+	}
 	else if( _tcscmp(pstrName, _T("linetype")) == 0){
 		if (_tcscmp(pstrValue, _T("true")) == 0)
 			SetLineType();
-	}
-	else if( _tcscmp(pstrName, _T("expland")) == 0 ) {
-		SetShowExplandIcon(_tcscmp(pstrValue, _T("true")) == 0 ? true : false);
 	}
 	else if( _tcscmp(pstrName, _T("linecolor")) == 0){
 		DWORD clrColor = m_pManager->GetColor(pstrValue);
@@ -1029,9 +1030,9 @@ void CMenuElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		rcInset.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
 		SetLinePadding(rcInset);
 	}
-	else if	( _tcscmp(pstrName, _T("height")) == 0){
+	/*else if	( _tcscmp(pstrName, _T("height")) == 0){
 		SetFixedHeight(_ttoi(pstrValue));
-	}
+	}*/
 	else
 		CListContainerElementUI::SetAttribute(pstrName, pstrValue);
 }

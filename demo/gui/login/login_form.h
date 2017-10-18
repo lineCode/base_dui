@@ -41,7 +41,7 @@ public:
 protected:
 	void StartLogin();
 	void CancelLogin();
-	void ShowMenu(bool show);
+	void ShowMenu(bool show, POINT pt);
 public:
 	static const LPCTSTR kClassName;
 

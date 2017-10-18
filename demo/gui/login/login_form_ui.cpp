@@ -86,7 +86,9 @@ void LoginForm::OnClick(TNotifyUI& msg)
 	else if (msg.pSender == chk_arrow_down_)
 	{
 		bHandle = true;
-		ShowMenu(chk_arrow_down_->GetCheck());
+		POINT pt = msg.ptMouse;
+		::ClientToScreen(GetHWND(), &pt);
+		ShowMenu(chk_arrow_down_->GetCheck(), pt);
 		return;
 	}
 	
@@ -102,9 +104,9 @@ LRESULT LoginForm::OnClose(UINT u, WPARAM w, LPARAM l, BOOL& bHandled)
 	return 0;
 }
 
-void LoginForm::ShowMenu(bool show)
+void LoginForm::ShowMenu(bool show, POINT pt)
 {
 	CMenuWnd *menu_wnd = new CMenuWnd;
-	menu_wnd->Init(NULL, _T("menu.xml"), _T("login"), { 200, 10 }, &m_PaintManager);
+	menu_wnd->Init(NULL, _T("menu.xml"), _T("menu"), pt, &m_PaintManager);
 	
 }

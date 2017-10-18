@@ -61,7 +61,7 @@
     <Attribute name="shadowsharpness" default="" type="" comment=""/>
     <Attribute name="shadowdarkness"  default="" type="" comment=""/>
   </Window>
-  
+
   <Controls>
     <Control parent="" notifies="">
       <Attribute name="class"     default="" type="" comment=""/>
@@ -149,7 +149,8 @@
 
     <CheckBox parent="Option" notifies="同Option" >
     </CheckBox>
-
+    
+    <!--Container begin-->
     <Container parent="Control" notifies="" comment="">
       <Attribute name="inset"           default="" type="" comment=""/>
       <Attribute name="mousechild"      default="" type="" comment=""/>
@@ -161,6 +162,22 @@
       <Attribute name="childalign"      default="" type="" comment=""/>
       <Attribute name="childvalign"     default="" type="" comment=""/>
     </Container>
+
+    <ListContainerElement parent="Container" notifies="" comment="">
+      <Attribute name="selected"        default="" type="" comment=""/>
+      <Attribute name="expandable"       default="" type="" comment=""/>
+    </ListContainerElement>
+
+    <MenuElement parent="ListContainerElement" notifies="" comment="">
+      <Attribute name="icon"        default="" type="" comment=""/>
+      <Attribute name="iconsize"       default="" type="" comment=""/>
+      <Attribute name="checkitem"       default="" type="" comment=""/>
+      <Attribute name="ischeck"       default="" type="" comment=""/>
+      <Attribute name="expland"       default="" type="" comment=""/>
+      <Attribute name="linetype"       default="" type="" comment=""/>
+      <Attribute name="linecolor"       default="" type="" comment=""/>
+      <Attribute name="linepadding"       default="" type="" comment=""/>
+    </MenuElement>
 
     <RichEdit parent="Container" notifies="" comment="">
       <Attribute name="vscrollbar"        default="" type="" comment=""/>
@@ -290,9 +307,6 @@
 		<Attribute name="columns" default="1" type="INT" comment="����,��(4)"/>
 		<Attribute name="itemsize" default="0,0" type="SIZE" comment="����̶���С,��(128,128)"/>
 	</TileBox>-->
-
-    <!--<ListContainerElement parent="OptionBox" notifies="��ʱ��д" comment="����ͬOptionBox"  >
-	</ListContainerElement>-->
 
     <!--<Combo parent="Box" notifies="��ʱ��д">
 		<Attribute name="dropbox" default="" type="STRING" comment="���õ��������ʽ,��(padding=&quot;1,1,1,1&quot;)"/>
