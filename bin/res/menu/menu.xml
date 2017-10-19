@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window class="shadow_window" size="120,160" >
-  <VLayout width="120" height="160">
-    <Menu width="120" height="160" bkcolor="white">
-      <MenuElement class="MenuElement" name="look_log" width="180" >
-        <Button margin="2,0,0,0" normalimage="icon_watch_out.png" valign="center" mouse="false" />
-        <Label class="menu_text" text="查看log" margin="27,0,0,0"/>
+<Window class="shadow_window" size="180,160" >
+  <VLayout width="120" height="80">
+    <Menu width="120" height="80" bkcolor="white">
+      <MenuElement class="MenuElement" name="export_db" width="120" >
+        <!--<Button margin="2,0,0,0" width="16" height="16" normalimage="icon_watch_out.png" mouse="false" />-->
+        <Label class="menu_text" text="导入数据" margin="54,0,0,0"/>
       </MenuElement>
-      <MenuElement inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
+      <MenuElement class="MenuElement" name="lookup_db" inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
+        <Label class="menu_text" text="查看数据库" margin="54,0,0,0"/>
+      </MenuElement>
+      <!--<MenuElement inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
 
       </MenuElement>
       <MenuElement inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
 
-      </MenuElement>
-      <MenuElement inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
-
-      </MenuElement>
+      </MenuElement>-->
     </Menu>
   </VLayout>
 </Window>

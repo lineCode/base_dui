@@ -5,7 +5,7 @@
 
 #include "../Utils/observer_impl_base.hpp"
 
-
+#define MENUWND_OBSERVER	0
 namespace DuiLib {
 
 struct ContextMenuParam
@@ -53,7 +53,7 @@ enum MenuItemDefaultInfo
 
 #define WM_MENUCLICK WM_USER + 121  //用来接收按钮单击的消息
 
-
+#if MENUWND_OBSERVER
 ///////////////////////////////////////////////
 class MenuMenuReceiverImplBase;
 class MenuMenuObserverImplBase
@@ -234,7 +234,7 @@ protected:
 	typedef std::vector<MenuMenuObserverImplBase*> ObserversVector;
 	ObserversVector* pObservers_;
 };
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
@@ -267,16 +267,19 @@ public:
 //
 
 class CMenuElementUI;
+#if MENUWND_OBSERVER
 class DUILIB_API CMenuWnd : public CWindowWnd, public MenuReceiverImpl, public INotifyUI, public IDialogBuilderCallback
 {
 public:
-
 	static MenuObserverImpl& GetGlobalContextMenuObserver()
 	{
 		static MenuObserverImpl s_context_menu_observer;
 		return s_context_menu_observer;
 	}
-
+#else
+class DUILIB_API CMenuWnd : public CWindowWnd, public INotifyUI, public IDialogBuilderCallback
+{
+#endif
 public:
 	CMenuWnd();
 	~CMenuWnd();
@@ -313,14 +316,16 @@ public:
 	// 重新调整子菜单的大小
 	void ResizeSubMenu();
 
-public:
-
+private:
 	POINT			m_BasedPoint;
 	STRINGorID		m_xml;
-    CPaintManagerUI m_pm;
     CMenuElementUI* m_pOwner;
     CMenuUI*	m_pLayout;
 	DWORD		m_dwAlignment;	//菜单对齐方式
+
+	CPaintManagerUI* m_pParentManager;
+	CPaintManagerUI m_pm;
+	
 };
 
 class CListContainerElementUI;
