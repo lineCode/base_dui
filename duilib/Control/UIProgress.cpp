@@ -1,31 +1,31 @@
 #include "stdafx.h"
 #include "UIProgress.h"
 
-namespace DuiLib
+namespace dui
 {
-	CProgressUI::CProgressUI() : m_bHorizontal(true), m_nMin(0), m_nMax(100), m_nValue(0)
+	Progress::Progress() : m_bHorizontal(true), m_nMin(0), m_nMax(100), m_nValue(0)
 	{
 		m_uTextStyle = DT_SINGLELINE | DT_CENTER;
 		SetFixedHeight(12);
 	}
 
-	LPCTSTR CProgressUI::GetClass() const
+	LPCTSTR Progress::GetClass() const
 	{
 		return DUI_CTR_PROGRESS;
 	}
 
-	LPVOID CProgressUI::GetInterface(LPCTSTR pstrName)
+	LPVOID Progress::GetInterface(LPCTSTR pstrName)
 	{
-		if( _tcscmp(pstrName, DUI_CTR_PROGRESS) == 0 ) return static_cast<CProgressUI*>(this);
-		return CLabelUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_PROGRESS) == 0 ) return static_cast<Progress*>(this);
+		return Label::GetInterface(pstrName);
 	}
 
-	bool CProgressUI::IsHorizontal()
+	bool Progress::IsHorizontal()
 	{
 		return m_bHorizontal;
 	}
 
-	void CProgressUI::SetHorizontal(bool bHorizontal)
+	void Progress::SetHorizontal(bool bHorizontal)
 	{
 		if( m_bHorizontal == bHorizontal ) return;
 
@@ -33,34 +33,34 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	int CProgressUI::GetMinValue() const
+	int Progress::GetMinValue() const
 	{
 		return m_nMin;
 	}
 
-	void CProgressUI::SetMinValue(int nMin)
+	void Progress::SetMinValue(int nMin)
 	{
 		m_nMin = nMin;
 		Invalidate();
 	}
 
-	int CProgressUI::GetMaxValue() const
+	int Progress::GetMaxValue() const
 	{
 		return m_nMax;
 	}
 
-	void CProgressUI::SetMaxValue(int nMax)
+	void Progress::SetMaxValue(int nMax)
 	{
 		m_nMax = nMax;
 		Invalidate();
 	}
 
-	int CProgressUI::GetValue() const
+	int Progress::GetValue() const
 	{
 		return m_nValue;
 	}
 
-	void CProgressUI::SetValue(int nValue)
+	void Progress::SetValue(int nValue)
 	{
 		m_nValue = nValue;
 		if (m_nValue > m_nMax) m_nValue = m_nMax;
@@ -68,16 +68,16 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	void CProgressUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+	void Progress::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
 		if( _tcscmp(pstrName, _T("hor")) == 0 ) SetHorizontal(_tcscmp(pstrValue, _T("true")) == 0);
 		else if( _tcscmp(pstrName, _T("min")) == 0 ) SetMinValue(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("max")) == 0 ) SetMaxValue(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("value")) == 0 ) SetValue(_ttoi(pstrValue));
-		else CLabelUI::SetAttribute(pstrName, pstrValue);
+		else Label::SetAttribute(pstrName, pstrValue);
 	}
 
-	void CProgressUI::PaintStatusImage(HDC hDC)
+	void Progress::PaintStatusImage(HDC hDC)
 	{
 		if( m_nMax <= m_nMin ) m_nMax = m_nMin + 1;
 		if( m_nValue > m_nMax ) m_nValue = m_nMax;

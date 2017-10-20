@@ -3,18 +3,18 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API CScrollBarUI : public CControlUI
+	class DUILIB_API ScrollBar : public Control
 	{
 	public:
-		CScrollBarUI();
+		ScrollBar();
 
 		LPCTSTR GetClass() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
 
-		CContainerUI* GetOwner() const;
-		void SetOwner(CContainerUI* pOwner);
+		Container* GetOwner() const;
+		void SetOwner(Container* pOwner);
 
 		void SetVisible(bool bVisible = true);
 		void SetEnabled(bool bEnable = true);
@@ -87,10 +87,10 @@ namespace DuiLib
 		void SetBkDisabledImage(LPCTSTR pStrImage);
 
 		void SetPos(RECT rc, bool bNeedInvalidate = true);
-		void DoEvent(TEventUI& event);
+		void DoEvent(TEvent& event);
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
-		bool DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl);
+		bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
 
 		void PaintBk(HDC hDC);
 		void PaintButton1(HDC hDC);
@@ -111,7 +111,7 @@ namespace DuiLib
 		int m_nScrollPos;
 		int m_nLineSize;
         int m_nScrollUnit;
-		CContainerUI* m_pOwner;
+		Container* m_pOwner;
 		POINT ptLastMouse;
 		int m_nLastScrollPos;
 		int m_nLastScrollOffset;

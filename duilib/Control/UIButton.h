@@ -3,12 +3,12 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API CButtonUI : public CLabelUI
+	class DUILIB_API Button : public Label
 	{
 	public:
-		CButtonUI();
+		Button();
 
 		LPCTSTR GetClass() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
@@ -16,7 +16,7 @@ namespace DuiLib
 
 		bool Activate();
 		void SetEnabled(bool bEnable = true);
-		void DoEvent(TEventUI& event);
+		void DoEvent(TEvent& event);
 
 		LPCTSTR GetNormalImage();
 		void SetNormalImage(LPCTSTR pStrImage);
@@ -75,6 +75,6 @@ namespace DuiLib
 		TDrawInfo m_diDisabled;
 	};
 
-}	// namespace DuiLib
+}	// namespace dui
 
 #endif // __UIBUTTON_H__

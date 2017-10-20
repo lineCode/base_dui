@@ -1,14 +1,14 @@
 #include "StdAfx.h"
 
-namespace DuiLib {
+namespace dui {
 
 CDialogBuilder::CDialogBuilder() : m_pCallback(NULL), m_pstrtype(NULL)
 {
 
 }
 
-CControlUI* CDialogBuilder::Create(STRINGorID xml, LPCTSTR type, IDialogBuilderCallback* pCallback, 
-                                   CPaintManagerUI* pManager, CControlUI* pParent)
+Control* CDialogBuilder::Create(STRINGorID xml, LPCTSTR type, IDialogBuilderCallback* pCallback, 
+                                   CPaintManager* pManager, Control* pParent)
 {
 	//资源ID为0-65535，两个字节；字符串指针为4个字节
 	//字符串以<开头认为是XML字符串，否则认为是XML文件
@@ -22,16 +22,16 @@ CControlUI* CDialogBuilder::Create(STRINGorID xml, LPCTSTR type, IDialogBuilderC
         }
     }
     else {
-        HRSRC hResource = ::FindResource(CPaintManagerUI::GetResourceDll(), xml.m_lpstr, type);
+        HRSRC hResource = ::FindResource(CPaintManager::GetResourceDll(), xml.m_lpstr, type);
         if( hResource == NULL ) return NULL;
-        HGLOBAL hGlobal = ::LoadResource(CPaintManagerUI::GetResourceDll(), hResource);
+        HGLOBAL hGlobal = ::LoadResource(CPaintManager::GetResourceDll(), hResource);
         if( hGlobal == NULL ) {
             FreeResource(hResource);
             return NULL;
         }
 
         m_pCallback = pCallback;
-        if( !m_xml.LoadFromMem((BYTE*)::LockResource(hGlobal), ::SizeofResource(CPaintManagerUI::GetResourceDll(), hResource) )) return NULL;
+        if( !m_xml.LoadFromMem((BYTE*)::LockResource(hGlobal), ::SizeofResource(CPaintManager::GetResourceDll(), hResource) )) return NULL;
         ::FreeResource(hResource);
         m_pstrtype = type;
     }
@@ -39,7 +39,7 @@ CControlUI* CDialogBuilder::Create(STRINGorID xml, LPCTSTR type, IDialogBuilderC
     return Create(pCallback, pManager, pParent);
 }
 
-CControlUI* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, CPaintManagerUI* pManager, CControlUI* pParent)
+Control* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, CPaintManager* pManager, Control* pParent)
 {
 	m_pCallback = pCallback;
 	CMarkupNode root = m_xml.GetRoot();
@@ -191,17 +191,17 @@ void CDialogBuilder::GetLastErrorLocation(LPTSTR pstrSource, SIZE_T cchMax) cons
     return m_xml.GetLastErrorLocation(pstrSource, cchMax);
 }
 
-CControlUI* CDialogBuilder::_Parse(CMarkupNode* pRoot, CControlUI* pParent, CPaintManagerUI* pManager)
+Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintManager* pManager)
 {
-    IContainerUI* pContainer = NULL;
-    CControlUI* pReturn = NULL;
+    IContainer* pContainer = NULL;
+    Control* pReturn = NULL;
     for( CMarkupNode node = pRoot->GetChild() ; node.IsValid(); node = node.GetSibling() ) {
         LPCTSTR pstrClass = node.GetName();
         if( _tcsicmp(pstrClass, _T("Image")) == 0 || _tcsicmp(pstrClass, _T("Font")) == 0 \
             || _tcsicmp(pstrClass, _T("Default")) == 0 
 			|| _tcsicmp(pstrClass, _T("MultiLanguage")) == 0 ) continue;
 
-        CControlUI* pControl = NULL;
+        Control* pControl = NULL;
         if( _tcsicmp(pstrClass, _T("Include")) == 0 ) {
             if( !node.HasAttributes() ) continue;
             int count = 1;
@@ -230,8 +230,8 @@ CControlUI* CDialogBuilder::_Parse(CMarkupNode* pRoot, CControlUI* pParent, CPai
         }
 		//树控件XML解析
 		else if( _tcsicmp(pstrClass, _T("TreeNode")) == 0 ) {
-			CTreeNodeUI* pParentNode	= static_cast<CTreeNodeUI*>(pParent->GetInterface(_T("TreeNode")));
-			CTreeNodeUI* pNode			= new CTreeNodeUI();
+			TreeNode* pParentNode	= static_cast<TreeNode*>(pParent->GetInterface(_T("TreeNode")));
+			TreeNode* pNode			= new TreeNode();
 			if(pParentNode){
 				if(!pParentNode->Add(pNode)){
 					delete pNode;
@@ -262,18 +262,18 @@ CControlUI* CDialogBuilder::_Parse(CMarkupNode* pRoot, CControlUI* pParent, CPai
 
 			//检索子节点及附加控件
 			if(node.HasChildren()){
-				CControlUI* pSubControl = _Parse(&node,pNode,pManager);
+				Control* pSubControl = _Parse(&node,pNode,pManager);
 				if(pSubControl && _tcsicmp(pSubControl->GetClass(),_T("TreeNodeUI")) != 0)
 				{
 					// 					pSubControl->SetFixedWidth(30);
-					// 					CHorizontalLayoutUI* pHorz = pNode->GetTreeNodeHoriznotal();
-					// 					pHorz->Add(new CEditUI());
+					// 					HorizontalLayout* pHorz = pNode->GetTreeNodeHoriznotal();
+					// 					pHorz->Add(new Edit());
 					// 					continue;
 				}
 			}
 
 			if(!pParentNode){
-				CTreeViewUI* pTreeView = static_cast<CTreeViewUI*>(pParent->GetInterface(_T("TreeView")));
+				TreeView* pTreeView = static_cast<TreeView*>(pParent->GetInterface(_T("TreeView")));
 				ASSERT(pTreeView);
 				if( pTreeView == NULL ) return NULL;
 				if( !pTreeView->Add(pNode) ) {
@@ -290,69 +290,69 @@ CControlUI* CDialogBuilder::_Parse(CMarkupNode* pRoot, CControlUI* pParent, CPai
             SIZE_T cchLen = _tcslen(pstrClass);
             switch( cchLen ) {
             case 4:
-                if( _tcsicmp(pstrClass, DUI_CTR_EDIT) == 0 )                  pControl = new CEditUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_LIST) == 0 )             pControl = new CListUI;
+                if( _tcsicmp(pstrClass, DUI_CTR_EDIT) == 0 )                  pControl = new Edit;
+                else if( _tcsicmp(pstrClass, DUI_CTR_LIST) == 0 )             pControl = new List;
                 else if( _tcsicmp(pstrClass, DUI_CTR_TEXT) == 0 )             pControl = new CTextUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_TREE) == 0 )             pControl = new CTreeViewUI;
+                else if( _tcsicmp(pstrClass, DUI_CTR_TREE) == 0 )             pControl = new TreeView;
                 break;
             case 5:
-                if( _tcsicmp(pstrClass, DUI_CTR_COMBO) == 0 )                 pControl = new CComboUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_LABEL) == 0 )            pControl = new CLabelUI;
-				//else if( _tcsicmp(pstrClass, DUI_CTR_FLASH) == 0 )           pControl = new CFlashUI;
+                if( _tcsicmp(pstrClass, DUI_CTR_COMBO) == 0 )                 pControl = new Combo;
+                else if( _tcsicmp(pstrClass, DUI_CTR_LABEL) == 0 )            pControl = new Label;
+				//else if( _tcsicmp(pstrClass, DUI_CTR_FLASH) == 0 )           pControl = new Flash;
                 break;
             case 6:
-                if( _tcsicmp(pstrClass, DUI_CTR_BUTTON) == 0 )                pControl = new CButtonUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_OPTION) == 0 )           pControl = new COptionUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_SLIDER) == 0 )           pControl = new CSliderUI;
+                if( _tcsicmp(pstrClass, DUI_CTR_BUTTON) == 0 )                pControl = new Button;
+                else if( _tcsicmp(pstrClass, DUI_CTR_OPTION) == 0 )           pControl = new OptionBtn;
+                else if( _tcsicmp(pstrClass, DUI_CTR_SLIDER) == 0 )           pControl = new Slider;
                 break;
             case 7:
-                if( _tcsicmp(pstrClass, DUI_CTR_CONTROL) == 0 )               pControl = new CControlUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_ACTIVEX) == 0 )          pControl = new CActiveXUI;
-				else if (_tcscmp(pstrClass, DUI_CTR_GIFANIM) == 0)            pControl = new CGifAnimUI;
-				else if (_tcsicmp(pstrClass, DUI_CTR_HLAYOUT) == 0)           pControl = new CHorizontalLayoutUI;
-				else if (_tcsicmp(pstrClass, DUI_CTR_VLAYOUT) == 0)           pControl = new CVerticalLayoutUI;
+                if( _tcsicmp(pstrClass, DUI_CTR_CONTROL) == 0 )               pControl = new Control;
+                else if( _tcsicmp(pstrClass, DUI_CTR_ACTIVEX) == 0 )          pControl = new ActiveX;
+				else if (_tcscmp(pstrClass, DUI_CTR_GIFANIM) == 0)            pControl = new GifAnim;
+				else if (_tcsicmp(pstrClass, DUI_CTR_HLAYOUT) == 0)           pControl = new HorizontalLayout;
+				else if (_tcsicmp(pstrClass, DUI_CTR_VLAYOUT) == 0)           pControl = new VerticalLayout;
                 break;
             case 8:
-                if( _tcsicmp(pstrClass, DUI_CTR_PROGRESS) == 0 )              pControl = new CProgressUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_RICHEDIT) == 0 )         pControl = new CRichEditUI;
-				else if( _tcsicmp(pstrClass, DUI_CTR_CHECKBOX) == 0 )		  pControl = new CCheckBoxUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_COMBOBOX) == 0 )		  pControl = new CComboUI;
-				else if( _tcsicmp(pstrClass, DUI_CTR_DATETIME) == 0 )		  pControl = new CDateTimeUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_TREEVIEW) == 0 )         pControl = new CTreeViewUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_TREENODE) == 0 )		  pControl = new CTreeNodeUI;
+                if( _tcsicmp(pstrClass, DUI_CTR_PROGRESS) == 0 )              pControl = new Progress;
+                else if( _tcsicmp(pstrClass, DUI_CTR_RICHEDIT) == 0 )         pControl = new RichEdit;
+				else if( _tcsicmp(pstrClass, DUI_CTR_CHECKBOX) == 0 )		  pControl = new CheckBtn;
+                else if( _tcsicmp(pstrClass, DUI_CTR_COMBOBOX) == 0 )		  pControl = new Combo;
+				else if( _tcsicmp(pstrClass, DUI_CTR_DATETIME) == 0 )		  pControl = new DateTime;
+                else if( _tcsicmp(pstrClass, DUI_CTR_TREEVIEW) == 0 )         pControl = new TreeView;
+                else if( _tcsicmp(pstrClass, DUI_CTR_TREENODE) == 0 )		  pControl = new TreeNode;
                 break;
             case 9:
-                if( _tcsicmp(pstrClass, DUI_CTR_CONTAINER) == 0 )             pControl = new CContainerUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_TABLAYOUT) == 0 )        pControl = new CTabLayoutUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_SCROLLBAR) == 0 )        pControl = new CScrollBarUI; 
+                if( _tcsicmp(pstrClass, DUI_CTR_CONTAINER) == 0 )             pControl = new Container;
+                else if( _tcsicmp(pstrClass, DUI_CTR_TABLAYOUT) == 0 )        pControl = new TabLayout;
+                else if( _tcsicmp(pstrClass, DUI_CTR_SCROLLBAR) == 0 )        pControl = new ScrollBar; 
                 break;
             case 10:
-                if( _tcsicmp(pstrClass, DUI_CTR_LISTHEADER) == 0 )            pControl = new CListHeaderUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_TILELAYOUT) == 0 )       pControl = new CTileLayoutUI;
-				else if( _tcsicmp(pstrClass, DUI_CTR_WEBBROWSER) == 0 )       pControl = new CWebBrowserUI;
+                if( _tcsicmp(pstrClass, DUI_CTR_LISTHEADER) == 0 )            pControl = new ListHeader;
+                else if( _tcsicmp(pstrClass, DUI_CTR_TILELAYOUT) == 0 )       pControl = new TileLayout;
+				else if( _tcsicmp(pstrClass, DUI_CTR_WEBBROWSER) == 0 )       pControl = new WebBrowser;
                 break;
 			case 11:
-				if (_tcsicmp(pstrClass, DUI_CTR_CHILDLAYOUT) == 0)			  pControl = new CChildLayoutUI;
+				if (_tcsicmp(pstrClass, DUI_CTR_CHILDLAYOUT) == 0)			  pControl = new ChildLayout;
 				break;
             case 14:
-                if( _tcsicmp(pstrClass, DUI_CTR_VLAYOUT) == 0 )        pControl = new CVerticalLayoutUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_LISTHEADERITEM) == 0 )   pControl = new CListHeaderItemUI;
+                if( _tcsicmp(pstrClass, DUI_CTR_VLAYOUT) == 0 )        pControl = new VerticalLayout;
+                else if( _tcsicmp(pstrClass, DUI_CTR_LISTHEADERITEM) == 0 )   pControl = new ListHeaderItem;
                 break;
             case 15:
-                if( _tcsicmp(pstrClass, DUI_CTR_LISTTEXTELEMENT) == 0 )       pControl = new CListTextElementUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_LISTHBOXELEMENT) == 0 )  pControl = new CListHBoxElementUI;
+                if( _tcsicmp(pstrClass, DUI_CTR_LISTTEXTELEMENT) == 0 )       pControl = new ListTextElement;
+                else if( _tcsicmp(pstrClass, DUI_CTR_LISTHBOXELEMENT) == 0 )  pControl = new ListHBoxElement;
                 break;
             case 16:
-                if( _tcsicmp(pstrClass, DUI_CTR_HLAYOUT) == 0 )      pControl = new CHorizontalLayoutUI;
-                else if( _tcsicmp(pstrClass, DUI_CTR_LISTLABELELEMENT) == 0 ) pControl = new CListLabelElementUI;
+                if( _tcsicmp(pstrClass, DUI_CTR_HLAYOUT) == 0 )      pControl = new HorizontalLayout;
+                else if( _tcsicmp(pstrClass, DUI_CTR_LISTLABELELEMENT) == 0 ) pControl = new ListLabelElement;
                 break;
             case 20:
-                if( _tcsicmp(pstrClass, DUI_CTR_LISTCONTAINERELEMENT) == 0 )  pControl = new CListContainerElementUI;
+                if( _tcsicmp(pstrClass, DUI_CTR_LISTCONTAINERELEMENT) == 0 )  pControl = new ListContainerElement;
                 break;
             }
             // User-supplied control factory
             if( pControl == NULL ) {
-                CDuiPtrArray* pPlugins = CPaintManagerUI::GetPlugins();
+                PtrArray* pPlugins = CPaintManager::GetPlugins();
                 LPCREATECONTROL lpCreateControl = NULL;
                 for( int i = 0; i < pPlugins->GetSize(); ++i ) {
                     lpCreateControl = (LPCREATECONTROL)pPlugins->GetAt(i);
@@ -392,12 +392,12 @@ CControlUI* CDialogBuilder::_Parse(CMarkupNode* pRoot, CControlUI* pParent, CPai
                 pParent->SetCover(pControl);
             }
             else {
-                CTreeNodeUI* pContainerNode = static_cast<CTreeNodeUI*>(pParent->GetInterface(DUI_CTR_TREENODE));
+                TreeNode* pContainerNode = static_cast<TreeNode*>(pParent->GetInterface(DUI_CTR_TREENODE));
                 if(pContainerNode)
                     pContainerNode->GetTreeNodeHoriznotal()->Add(pControl);
                 else
                 {
-                    if( pContainer == NULL ) pContainer = static_cast<IContainerUI*>(pParent->GetInterface(DUI_CTR_ICONTAINER));
+                    if( pContainer == NULL ) pContainer = static_cast<IContainer*>(pParent->GetInterface(DUI_CTR_ICONTAINER));
                     ASSERT(pContainer);
                     if( pContainer == NULL ) return NULL;
                     if( !pContainer->Add(pControl) ) {
@@ -433,4 +433,4 @@ CControlUI* CDialogBuilder::_Parse(CMarkupNode* pRoot, CControlUI* pParent, CPai
     return pReturn;
 }
 
-} // namespace DuiLib
+} // namespace dui

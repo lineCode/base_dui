@@ -14,4 +14,4 @@ Content:
 Author:djj 	Data:2017-4-26
 Version:1.01.01.0002
 Content:
-1.Move attr foreimage to CControlUI;
+1.Move attr foreimage to Control;

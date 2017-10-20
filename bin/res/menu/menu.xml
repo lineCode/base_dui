@@ -6,13 +6,13 @@
         <!--<Button margin="2,0,0,0" width="16" height="16" normalimage="icon_watch_out.png" mouse="false" />-->
         <Label class="menu_text" text="导入数据" margin="54,0,0,0"/>
       </MenuElement>
-      <MenuElement class="MenuElement" name="lookup_db" inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
+      <MenuElement class="MenuElement" name="lookup_db" padding="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
         <Label class="menu_text" text="查看数据库" margin="54,0,0,0"/>
       </MenuElement>
-      <!--<MenuElement inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
+      <!--<MenuElement padding="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
 
       </MenuElement>
-      <MenuElement inset="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
+      <MenuElement padding="20,0,20,0" width="120" height="40" bkcolor="white" hotcolor="" pushedcolor="" selectednormalcolor="">
 
       </MenuElement>-->
     </Menu>

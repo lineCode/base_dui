@@ -53,7 +53,7 @@
 #define ULW_ALPHA 0x00000002
 #endif
 
-using namespace DuiLib;
+using namespace dui;
 CWndShadow::pfnUpdateLayeredWindow CWndShadow::s_UpdateLayeredWindow = NULL;
 
 const TCHAR *strWndClassName = _T("DuiShadowWnd");
@@ -66,7 +66,7 @@ typedef struct HWNDSHADOW
     CWndShadow *pWndShadow;
 } HwndShadow;
 
-DuiLib::CDuiValArray CWndShadow::s_ShadowArray(sizeof(HwndShadow), 10);
+dui::ValArray CWndShadow::s_ShadowArray(sizeof(HwndShadow), 10);
 
 CWndShadow::CWndShadow(void)
 : m_hWnd((HWND)INVALID_HANDLE_VALUE)

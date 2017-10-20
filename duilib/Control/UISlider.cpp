@@ -1,55 +1,55 @@
 #include "StdAfx.h"
 #include "UISlider.h"
 
-namespace DuiLib
+namespace dui
 {
-	CSliderUI::CSliderUI() : m_uButtonState(0), m_nStep(1), m_bImmMode(false)
+	Slider::Slider() : m_uButtonState(0), m_nStep(1), m_bImmMode(false)
 	{
 		m_uTextStyle = DT_SINGLELINE | DT_CENTER;
 		m_szThumb.cx = m_szThumb.cy = 10;
 	}
 
-	LPCTSTR CSliderUI::GetClass() const
+	LPCTSTR Slider::GetClass() const
 	{
 		return DUI_CTR_SLIDER;
 	}
 
-	UINT CSliderUI::GetControlFlags() const
+	UINT Slider::GetControlFlags() const
 	{
 		if( IsEnabled() ) return UIFLAG_SETCURSOR | UIFLAG_TABSTOP;
 		else return 0;
 	}
 
-	LPVOID CSliderUI::GetInterface(LPCTSTR pstrName)
+	LPVOID Slider::GetInterface(LPCTSTR pstrName)
 	{
-		if( _tcscmp(pstrName, DUI_CTR_SLIDER) == 0 ) return static_cast<CSliderUI*>(this);
-		return CProgressUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_SLIDER) == 0 ) return static_cast<Slider*>(this);
+		return Progress::GetInterface(pstrName);
 	}
 
-	void CSliderUI::SetEnabled(bool bEnable)
+	void Slider::SetEnabled(bool bEnable)
 	{
-		CControlUI::SetEnabled(bEnable);
+		Control::SetEnabled(bEnable);
 		if( !IsEnabled() ) {
 			m_uButtonState = 0;
 		}
 	}
 
-	int CSliderUI::GetChangeStep()
+	int Slider::GetChangeStep()
 	{
 		return m_nStep;
 	}
 
-	void CSliderUI::SetChangeStep(int step)
+	void Slider::SetChangeStep(int step)
 	{
 		m_nStep = step;
 	}
 
-	void CSliderUI::SetThumbSize(SIZE szXY)
+	void Slider::SetThumbSize(SIZE szXY)
 	{
 		m_szThumb = szXY;
 	}
 
-	RECT CSliderUI::GetThumbRect() const
+	RECT Slider::GetThumbRect() const
 	{
 		if( m_bHorizontal ) {
 			int left = m_rcItem.left + (m_rcItem.right - m_rcItem.left - m_szThumb.cx) * (m_nValue - m_nMin) / (m_nMax - m_nMin);
@@ -63,22 +63,22 @@ namespace DuiLib
 		}
 	}
 
-	bool CSliderUI::IsImmMode() const
+	bool Slider::IsImmMode() const
 	{
 		return m_bImmMode;
 	}
 
-	void CSliderUI::SetImmMode(bool bImmMode)
+	void Slider::SetImmMode(bool bImmMode)
 	{
 		m_bImmMode = bImmMode;
 	}
 
-	LPCTSTR CSliderUI::GetThumbImage() const
+	LPCTSTR Slider::GetThumbImage() const
 	{
 		return m_diThumb.sDrawString.c_str();
 	}
 
-	void CSliderUI::SetThumbImage(LPCTSTR pStrImage)
+	void Slider::SetThumbImage(LPCTSTR pStrImage)
 	{
 		if( m_diThumb.sDrawString == pStrImage && m_diThumb.pImageInfo != NULL ) return;
 		m_diThumb.Clear();
@@ -86,12 +86,12 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	LPCTSTR CSliderUI::GetThumbHotImage() const
+	LPCTSTR Slider::GetThumbHotImage() const
 	{
 		return m_diThumbHot.sDrawString.c_str();
 	}
 
-	void CSliderUI::SetThumbHotImage(LPCTSTR pStrImage)
+	void Slider::SetThumbHotImage(LPCTSTR pStrImage)
 	{
 		if( m_diThumbHot.sDrawString == pStrImage && m_diThumbHot.pImageInfo != NULL ) return;
 		m_diThumbHot.Clear();
@@ -99,12 +99,12 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	LPCTSTR CSliderUI::GetThumbPushedImage() const
+	LPCTSTR Slider::GetThumbPushedImage() const
 	{
 		return m_diThumbPushed.sDrawString.c_str();
 	}
 
-	void CSliderUI::SetThumbPushedImage(LPCTSTR pStrImage)
+	void Slider::SetThumbPushedImage(LPCTSTR pStrImage)
 	{
 		if( m_diThumbPushed.sDrawString == pStrImage && m_diThumbPushed.pImageInfo != NULL ) return;
 		m_diThumbPushed.Clear();
@@ -112,11 +112,11 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	void CSliderUI::DoEvent(TEventUI& event)
+	void Slider::DoEvent(TEvent& event)
 	{
 		if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
 			if( m_pParent != NULL ) m_pParent->DoEvent(event);
-			else CProgressUI::DoEvent(event);
+			else Progress::DoEvent(event);
 			return;
 		}
 
@@ -240,11 +240,11 @@ namespace DuiLib
                 return;
             }
         }
-		CControlUI::DoEvent(event);
+		Control::DoEvent(event);
 	}
 
 
-	void CSliderUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+	void Slider::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
 		if( _tcscmp(pstrName, _T("thumbimage")) == 0 ) SetThumbImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("thumbhotimage")) == 0 ) SetThumbHotImage(pstrValue);
@@ -260,12 +260,12 @@ namespace DuiLib
 			SetChangeStep(_ttoi(pstrValue));
 		}
 		else if( _tcscmp(pstrName, _T("imm")) == 0 ) SetImmMode(_tcscmp(pstrValue, _T("true")) == 0);
-		else CProgressUI::SetAttribute(pstrName, pstrValue);
+		else Progress::SetAttribute(pstrName, pstrValue);
 	}
 
-	void CSliderUI::PaintStatusImage(HDC hDC)
+	void Slider::PaintStatusImage(HDC hDC)
 	{
-		CProgressUI::PaintStatusImage(hDC);
+		Progress::PaintStatusImage(hDC);
 
 		RECT rcThumb = GetThumbRect();
 		rcThumb.left -= m_rcItem.left;

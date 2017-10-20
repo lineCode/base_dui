@@ -1,14 +1,14 @@
 #include "StdAfx.h"
 #include "UILabel.h"
 
-namespace DuiLib
+namespace dui
 {
 	Color ARGB2Color(DWORD dwColor)
 	{
 		return Color(HIBYTE((dwColor)>>16), GetBValue(dwColor), GetGValue(dwColor), GetRValue(dwColor));
 	}
 
-	CLabelUI::CLabelUI() : 
+	Label::Label() : 
 		m_pWideText(0),
 		m_uTextStyle(DT_VCENTER|DT_SINGLELINE), 
 		m_dwTextColor(0), 
@@ -43,7 +43,7 @@ namespace DuiLib
 #endif
 	}
 
-	CLabelUI::~CLabelUI()
+	Label::~Label()
 	{
 #ifdef _UNICODE
 		if( m_pWideText && m_pWideText != m_sText.c_str()) delete[] m_pWideText;
@@ -56,32 +56,32 @@ namespace DuiLib
 #endif
 	}
 
-	LPCTSTR CLabelUI::GetClass() const
+	LPCTSTR Label::GetClass() const
 	{
 		return DUI_CTR_LABEL;
 	}
 
-	LPVOID CLabelUI::GetInterface(LPCTSTR pstrName)
+	LPVOID Label::GetInterface(LPCTSTR pstrName)
 	{
-		if( _tcscmp(pstrName, DUI_CTR_LABEL) == 0 ) return static_cast<CLabelUI*>(this);
-		return CControlUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_LABEL) == 0 ) return static_cast<Label*>(this);
+		return Control::GetInterface(pstrName);
 	}
 
-    void CLabelUI::SetFixedWidth(int cx)
+    void Label::SetFixedWidth(int cx)
     {
         m_bNeedEstimateSize = true;
-        CControlUI::SetFixedWidth(cx);
+        Control::SetFixedWidth(cx);
     }
 
-    void CLabelUI::SetFixedHeight(int cy)
+    void Label::SetFixedHeight(int cy)
     {
         m_bNeedEstimateSize = true;
-        CControlUI::SetFixedHeight(cy);
+        Control::SetFixedHeight(cy);
     }
 
-	void CLabelUI::SetText(LPCTSTR pstrText)
+	void Label::SetText(LPCTSTR pstrText)
 	{
-		CControlUI::SetText(pstrText);
+		Control::SetText(pstrText);
         m_bNeedEstimateSize = true;
 		if( m_EnableEffect) {
 #ifdef _UNICODE
@@ -96,24 +96,24 @@ namespace DuiLib
 		}
 	}
 
-	void CLabelUI::SetTextStyle(UINT uStyle)
+	void Label::SetTextStyle(UINT uStyle)
 	{
 		m_uTextStyle = uStyle;
         m_bNeedEstimateSize = true;
 		Invalidate();
 	}
 
-	UINT CLabelUI::GetTextStyle() const
+	UINT Label::GetTextStyle() const
 	{
 		return m_uTextStyle;
 	}
 
-	bool CLabelUI::IsMultiLine()
+	bool Label::IsMultiLine()
 	{
 		return (m_uTextStyle & DT_SINGLELINE) == 0;
 	}
 
-	void CLabelUI::SetMultiLine(bool bMultiLine)
+	void Label::SetMultiLine(bool bMultiLine)
 	{
 		if (bMultiLine)	{
             m_uTextStyle  &= ~DT_SINGLELINE;
@@ -123,58 +123,58 @@ namespace DuiLib
         m_bNeedEstimateSize = true;
 	}
 
-	void CLabelUI::SetTextColor(DWORD dwTextColor)
+	void Label::SetTextColor(DWORD dwTextColor)
 	{
 		m_dwTextColor = dwTextColor;
 		Invalidate();
 	}
 
-	DWORD CLabelUI::GetTextColor() const
+	DWORD Label::GetTextColor() const
 	{
 		return m_dwTextColor;
 	}
 
-	void CLabelUI::SetDisabledTextColor(DWORD dwTextColor)
+	void Label::SetDisabledTextColor(DWORD dwTextColor)
 	{
 		m_dwDisabledTextColor = dwTextColor;
 		Invalidate();
 	}
 
-	DWORD CLabelUI::GetDisabledTextColor() const
+	DWORD Label::GetDisabledTextColor() const
 	{
 		return m_dwDisabledTextColor;
 	}
 
-	void CLabelUI::SetFont(int index)
+	void Label::SetFont(int index)
 	{
 		m_iFont = index;
         m_bNeedEstimateSize = true;
 		Invalidate();
 	}
 
-	int CLabelUI::GetFont() const
+	int Label::GetFont() const
 	{
 		return m_iFont;
 	}
 
-	RECT CLabelUI::GetTextPadding() const
+	RECT Label::GetTextPadding() const
 	{
 		return m_rcTextPadding;
 	}
 
-	void CLabelUI::SetTextPadding(RECT rc)
+	void Label::SetTextPadding(RECT rc)
 	{
 		m_rcTextPadding = rc;
         m_bNeedEstimateSize = true;
 		Invalidate();
 	}
 
-	bool CLabelUI::IsShowHtml()
+	bool Label::IsShowHtml()
 	{
 		return m_bShowHtml;
 	}
 
-	void CLabelUI::SetShowHtml(bool bShowHtml)
+	void Label::SetShowHtml(bool bShowHtml)
 	{
 		if( m_bShowHtml == bShowHtml ) return;
 
@@ -183,7 +183,7 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	SIZE CLabelUI::EstimateSize(SIZE szAvailable)
+	SIZE Label::EstimateSize(SIZE szAvailable)
 	{
         if (m_cxyFixed.cx > 0 && m_cxyFixed.cy > 0) return m_cxyFixed;
 
@@ -233,7 +233,7 @@ namespace DuiLib
         return m_cxyFixedLast;
 	}
 
-	void CLabelUI::DoEvent(TEventUI& event)
+	void Label::DoEvent(TEvent& event)
 	{
 		if( event.Type == UIEVENT_SETFOCUS ) 
 		{
@@ -245,10 +245,10 @@ namespace DuiLib
 			m_bFocused = false;
 			return;
 		}
-		CControlUI::DoEvent(event);
+		Control::DoEvent(event);
 	}
 
-	void CLabelUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+	void Label::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
 		if( _tcscmp(pstrName, _T("align")) == 0 ) {
 			if( _tcsstr(pstrValue, _T("left")) != NULL ) {
@@ -368,10 +368,10 @@ namespace DuiLib
 			}
 			SetStrokeColor(clrColor);
 		}
-		else CControlUI::SetAttribute(pstrName, pstrValue);
+		else Control::SetAttribute(pstrName, pstrValue);
 	}
 
-	void CLabelUI::PaintText(HDC hDC)
+	void Label::PaintText(HDC hDC)
 	{
 		if( m_dwTextColor == 0 ) m_dwTextColor = m_pManager->GetDefaultFontColor();
 		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
@@ -507,7 +507,7 @@ namespace DuiLib
 		}
 	}
 
-	void CLabelUI::SetShadowOffset( int _offset,int _angle )
+	void Label::SetShadowOffset( int _offset,int _angle )
 	{
 		if(_angle > 180 || _angle < -180) return;
 
@@ -523,12 +523,12 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	RectF CLabelUI::GetShadowOffset()
+	RectF Label::GetShadowOffset()
 	{
 		return m_ShadowOffset;
 	}
 
-	void CLabelUI::SetEnabledEffect( bool _EnabledEffect )
+	void Label::SetEnabledEffect( bool _EnabledEffect )
 	{
 		m_EnableEffect = _EnabledEffect;
 		if (m_EnableEffect) {
@@ -545,118 +545,118 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	bool CLabelUI::GetEnabledEffect()
+	bool Label::GetEnabledEffect()
 	{
 		return m_EnableEffect;
 	}
 
-	void CLabelUI::SetEnabledLuminous(bool bEnableLuminous)
+	void Label::SetEnabledLuminous(bool bEnableLuminous)
 	{
 		m_bEnableLuminous = bEnableLuminous;
 		Invalidate();
 	}
 
-	bool CLabelUI::GetEnabledLuminous()
+	bool Label::GetEnabledLuminous()
 	{
 		return m_bEnableLuminous;
 	}
 
-	void CLabelUI::SetLuminousFuzzy(float fFuzzy)
+	void Label::SetLuminousFuzzy(float fFuzzy)
 	{
 		if (fFuzzy < 0.0001f) return;
 		m_fLuminousFuzzy = fFuzzy;
 		Invalidate();
 	}
 
-	float CLabelUI::GetLuminousFuzzy()
+	float Label::GetLuminousFuzzy()
 	{
 		return m_fLuminousFuzzy;
 	}
 
-	void CLabelUI::SetTextColor1( DWORD _TextColor1 )
+	void Label::SetTextColor1( DWORD _TextColor1 )
 	{
 		m_dwTextColor1 = _TextColor1;
 		Invalidate();
 	}
 
-	DWORD CLabelUI::GetTextColor1()
+	DWORD Label::GetTextColor1()
 	{
 		return m_dwTextColor1;
 	}
 
-	void CLabelUI::SetTextShadowColorA( DWORD _TextShadowColorA )
+	void Label::SetTextShadowColorA( DWORD _TextShadowColorA )
 	{
 		m_dwTextShadowColorA = _TextShadowColorA;
 		Invalidate();
 	}
 
-	DWORD CLabelUI::GetTextShadowColorA()
+	DWORD Label::GetTextShadowColorA()
 	{
 		return m_dwTextShadowColorA;
 	}
 
-	void CLabelUI::SetTextShadowColorB( DWORD _TextShadowColorB )
+	void Label::SetTextShadowColorB( DWORD _TextShadowColorB )
 	{
 		m_dwTextShadowColorB	= _TextShadowColorB;
 		Invalidate();
 	}
 
-	DWORD CLabelUI::GetTextShadowColorB()
+	DWORD Label::GetTextShadowColorB()
 	{
 		return m_dwTextShadowColorB;
 	}
 
-	void CLabelUI::SetGradientAngle( int _SetGradientAngle )
+	void Label::SetGradientAngle( int _SetGradientAngle )
 	{
 		m_GradientAngle	= _SetGradientAngle;
 		Invalidate();
 	}
 
-	int CLabelUI::GetGradientAngle()
+	int Label::GetGradientAngle()
 	{
 		return m_GradientAngle;
 	}
 
-	void CLabelUI::SetEnabledStroke( bool _EnabledStroke )
+	void Label::SetEnabledStroke( bool _EnabledStroke )
 	{
 		m_EnabledStroke = _EnabledStroke;
 		Invalidate();
 	}
 
-	bool CLabelUI::GetEnabledStroke()
+	bool Label::GetEnabledStroke()
 	{
 		return m_EnabledStroke;
 	}
 
-	void CLabelUI::SetStrokeColor( DWORD _StrokeColor )
+	void Label::SetStrokeColor( DWORD _StrokeColor )
 	{
 		m_dwStrokeColor = _StrokeColor;
 		Invalidate();
 	}
 
-	DWORD CLabelUI::GetStrokeColor()
+	DWORD Label::GetStrokeColor()
 	{
 		return m_dwStrokeColor;
 	}
 
-	void CLabelUI::SetEnabledShadow( bool _EnabledShadowe )
+	void Label::SetEnabledShadow( bool _EnabledShadowe )
 	{
 		m_EnabledShadow = _EnabledShadowe;
 		Invalidate();
 	}
 
-	bool CLabelUI::GetEnabledShadow()
+	bool Label::GetEnabledShadow()
 	{
 		return m_EnabledShadow;
 	}
 
-	void CLabelUI::SetGradientLength( int _GradientLength )
+	void Label::SetGradientLength( int _GradientLength )
 	{
 		m_GradientLength	= _GradientLength;
 		Invalidate();
 	}
 
-	int CLabelUI::GetGradientLength()
+	int Label::GetGradientLength()
 	{
 		return m_GradientLength;
 	}

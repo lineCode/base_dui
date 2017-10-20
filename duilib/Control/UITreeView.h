@@ -6,45 +6,45 @@ using namespace std;
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
-	class CTreeViewUI;
-	class CCheckBoxUI;
-	class CLabelUI;
-	class COptionUI;
+	class TreeView;
+	class CheckBtn;
+	class Label;
+	class OptionBtn;
 
-	class DUILIB_API CTreeNodeUI : public CListContainerElementUI
+	class DUILIB_API TreeNode : public ListContainerElement
 	{
 	public:
-		CTreeNodeUI(CTreeNodeUI* _ParentNode = NULL);
-		~CTreeNodeUI(void);
+		TreeNode(TreeNode* _ParentNode = NULL);
+		~TreeNode(void);
 
 	public:
 		LPCTSTR GetClass() const;
 		LPVOID	GetInterface(LPCTSTR pstrName);
-		void	DoEvent(TEventUI& event);
+		void	DoEvent(TEvent& event);
 		void	Invalidate();
 		bool	Select(bool bSelect = true, bool bTriggerEvent=true);
 
-		bool	Add(CControlUI* _pTreeNodeUI);
-		bool	AddAt(CControlUI* pControl, int iIndex);
+		bool	Add(Control* _pTreeNodeUI);
+		bool	AddAt(Control* pControl, int iIndex);
 
 		void	SetVisibleTag(bool _IsVisible);
 		bool	GetVisibleTag();
 		void	SetItemText(LPCTSTR pstrValue);
-		CDuiString	GetItemText();
+		String	GetItemText();
 		void	CheckBoxSelected(bool _Selected);
 		bool	IsCheckBoxSelected() const;
 		bool	IsHasChild() const;
 		long	GetTreeLevel() const;
-		bool	AddChildNode(CTreeNodeUI* _pTreeNodeUI);
-		bool	RemoveAt(CTreeNodeUI* _pTreeNodeUI);
-		void	SetParentNode(CTreeNodeUI* _pParentTreeNode);
-		CTreeNodeUI* GetParentNode();
+		bool	AddChildNode(TreeNode* _pTreeNodeUI);
+		bool	RemoveAt(TreeNode* _pTreeNodeUI);
+		void	SetParentNode(TreeNode* _pParentTreeNode);
+		TreeNode* GetParentNode();
 		long	GetCountChild();
-		void	SetTreeView(CTreeViewUI* _CTreeViewUI);
-		CTreeViewUI* GetTreeView();
-		CTreeNodeUI* GetChildNode(int _nIndex);
+		void	SetTreeView(TreeView* _CTreeViewUI);
+		TreeView* GetTreeView();
+		TreeNode* GetChildNode(int _nIndex);
 		void	SetVisibleFolderBtn(bool _IsVisibled);
 		bool	GetVisibleFolderBtn();
 		void	SetVisibleCheckBtn(bool _IsVisibled);
@@ -60,20 +60,20 @@ namespace DuiLib
 
 		void	SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
-		CDuiPtrArray GetTreeNodes();
+		PtrArray GetTreeNodes();
 
 		int			 GetTreeIndex();
 		int			 GetNodeIndex();
 
 	private:
-		CTreeNodeUI* GetLastNode();
-		CTreeNodeUI* CalLocation(CTreeNodeUI* _pTreeNodeUI);
+		TreeNode* GetLastNode();
+		TreeNode* CalLocation(TreeNode* _pTreeNodeUI);
 	public:
-		CHorizontalLayoutUI*	GetTreeNodeHoriznotal() const {return pHoriz;};
-		CCheckBoxUI*			GetFolderButton() const {return pFolderButton;};
-		CLabelUI*				GetDottedLine() const {return pDottedLine;};
-		CCheckBoxUI*			GetCheckBox() const {return pCheckBox;};
-		COptionUI*				GetItemButton() const {return pItemButton;};
+		HorizontalLayout*	GetTreeNodeHoriznotal() const {return pHoriz;};
+		CheckBtn*			GetFolderButton() const {return pFolderButton;};
+		Label*				GetDottedLine() const {return pDottedLine;};
+		CheckBtn*			GetCheckBox() const {return pCheckBox;};
+		OptionBtn*				GetItemButton() const {return pItemButton;};
 
 	private:
 		long	m_iTreeLavel;
@@ -84,42 +84,42 @@ namespace DuiLib
 		DWORD	m_dwSelItemTextColor;
 		DWORD	m_dwSelItemHotTextColor;
 
-		CTreeViewUI*			pTreeView;
-		CHorizontalLayoutUI*	pHoriz;
-		CCheckBoxUI*			pFolderButton;
-		CLabelUI*				pDottedLine;
-		CCheckBoxUI*			pCheckBox;
-		COptionUI*				pItemButton;
+		TreeView*			pTreeView;
+		HorizontalLayout*	pHoriz;
+		CheckBtn*			pFolderButton;
+		Label*				pDottedLine;
+		CheckBtn*			pCheckBox;
+		OptionBtn*				pItemButton;
 
-		CTreeNodeUI*			pParentTreeNode;
+		TreeNode*			pParentTreeNode;
 
-		CDuiPtrArray			mTreeNodes;
+		PtrArray			mTreeNodes;
 	};
 
-	class DUILIB_API CTreeViewUI : public CListUI,public INotifyUI
+	class DUILIB_API TreeView : public List,public INotify
 	{
 	public:
-		CTreeViewUI(void);
-		~CTreeViewUI(void);
+		TreeView(void);
+		~TreeView(void);
 
 	public:
 		virtual LPCTSTR GetClass() const;
 		virtual LPVOID	GetInterface(LPCTSTR pstrName);
-        virtual bool Add(CControlUI* pControl);
-        virtual bool AddAt(CControlUI* pControl, int iIndex);
-        virtual bool Remove(CControlUI* pControl, bool bDoNotDestroy=false);
+        virtual bool Add(Control* pControl);
+        virtual bool AddAt(Control* pControl, int iIndex);
+        virtual bool Remove(Control* pControl, bool bDoNotDestroy=false);
         virtual bool RemoveAt(int iIndex, bool bDoNotDestroy=false);
         virtual void RemoveAll();
 
-        long AddAt(CTreeNodeUI* pControl, int iIndex);
-        bool AddAt(CTreeNodeUI* pControl,CTreeNodeUI* _IndexNode);
+        long AddAt(TreeNode* pControl, int iIndex);
+        bool AddAt(TreeNode* pControl,TreeNode* _IndexNode);
 
 		virtual bool OnCheckBoxChanged(void* param);
 		virtual bool OnFolderChanged(void* param);
 		virtual bool OnDBClickItem(void* param);
-		virtual bool SetItemCheckBox(bool _Selected,CTreeNodeUI* _TreeNode = NULL);
-		virtual void SetItemExpand(bool _Expanded,CTreeNodeUI* _TreeNode = NULL);
-		virtual void Notify(TNotifyUI& msg);
+		virtual bool SetItemCheckBox(bool _Selected,TreeNode* _TreeNode = NULL);
+		virtual void SetItemExpand(bool _Expanded,TreeNode* _TreeNode = NULL);
+		virtual void Notify(TNotify& msg);
 		virtual void SetVisibleFolderBtn(bool _IsVisibled);
 		virtual bool GetVisibleFolderBtn();
 		virtual void SetVisibleCheckBtn(bool _IsVisibled);

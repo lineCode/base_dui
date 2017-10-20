@@ -3,15 +3,15 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
 	class CEditWnd;
 
-	class DUILIB_API CEditUI : public CLabelUI
+	class DUILIB_API Edit : public Label
 	{
 		friend class CEditWnd;
 	public:
-		CEditUI();
+		Edit();
 
 		LPCTSTR GetClass() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
@@ -55,7 +55,7 @@ namespace DuiLib
 		void SetVisible(bool bVisible = true);
 		void SetInternVisible(bool bVisible = true);
 		SIZE EstimateSize(SIZE szAvailable);
-		void DoEvent(TEventUI& event);
+		void DoEvent(TEvent& event);
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
 		void PaintStatusImage(HDC hDC);

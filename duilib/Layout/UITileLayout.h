@@ -3,12 +3,12 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API CTileLayoutUI : public CContainerUI
+	class DUILIB_API TileLayout : public Container
 	{
 	public:
-		CTileLayoutUI();
+		TileLayout();
 
 		LPCTSTR GetClass() const;
 		LPVOID GetInterface(LPCTSTR pstrName);

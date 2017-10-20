@@ -3,7 +3,7 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -27,7 +27,7 @@ namespace DuiLib
 		CDuiPoint(long x, long y);
 		CDuiPoint(LPARAM lParam);
         CDuiPoint(LPCTSTR pstrValue);
-        CDuiString ToString();
+        String ToString();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@ namespace DuiLib
 		CDuiSize(const RECT rc);
 		CDuiSize(long cx, long cy);
         CDuiSize(LPCTSTR pstrValue);
-        CDuiString ToString();
+        String ToString();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ namespace DuiLib
 		CDuiRect(const RECT& src);
 		CDuiRect(long iLeft, long iTop, long iRight, long iBottom);
         CDuiRect(LPCTSTR pstrValue);
-        CDuiString ToString();
+        String ToString();
 
 		int GetWidth() const;
 		int GetHeight() const;
@@ -72,17 +72,17 @@ namespace DuiLib
     /////////////////////////////////////////////////////////////////////////////////////
     //
 #if 0
-    class DUILIB_API CDuiString
+    class DUILIB_API String		//CDuiString
     {
     public:
         enum { MAX_LOCAL_STRING_LEN = 63 };
 
-        CDuiString();
-        CDuiString(const TCHAR ch);
-        CDuiString(const CDuiString& src);
-        CDuiString(LPCTSTR lpsz, int nLen = -1);
-        ~CDuiString();
-        CDuiString ToString();
+        String();
+        String(const TCHAR ch);
+        String(const String& src);
+        String(LPCTSTR lpsz, int nLen = -1);
+        ~String();
+        String ToString();
 
         void Empty();
         int GetLength() const;
@@ -97,21 +97,21 @@ namespace DuiLib
 		operator std::wstring() const;
 
         TCHAR operator[] (int nIndex) const;
-        const CDuiString& operator=(const CDuiString& src);
-        const CDuiString& operator=(const TCHAR ch);
-        const CDuiString& operator=(LPCTSTR pstr);
+        const String& operator=(const String& src);
+        const String& operator=(const TCHAR ch);
+        const String& operator=(LPCTSTR pstr);
 #ifdef _UNICODE
-        const CDuiString& CDuiString::operator=(LPCSTR lpStr);
-        const CDuiString& CDuiString::operator+=(LPCSTR lpStr);
+        const String& String::operator=(LPCSTR lpStr);
+        const String& String::operator+=(LPCSTR lpStr);
 #else
-        const CDuiString& CDuiString::operator=(LPCWSTR lpwStr);
-        const CDuiString& CDuiString::operator+=(LPCWSTR lpwStr);
+        const String& String::operator=(LPCWSTR lpwStr);
+        const String& String::operator+=(LPCWSTR lpwStr);
 #endif
-        CDuiString operator+(const CDuiString& src) const;
-        CDuiString operator+(LPCTSTR pstr) const;
-        const CDuiString& operator+=(const CDuiString& src);
-        const CDuiString& operator+=(LPCTSTR pstr);
-        const CDuiString& operator+=(const TCHAR ch);
+        String operator+(const String& src) const;
+        String operator+(LPCTSTR pstr) const;
+        const String& operator+=(const String& src);
+        const String& operator+=(LPCTSTR pstr);
+        const String& operator+=(const TCHAR ch);
 
         bool operator == (LPCTSTR str) const;
         bool operator != (LPCTSTR str) const;
@@ -126,9 +126,9 @@ namespace DuiLib
         void MakeUpper();
         void MakeLower();
 
-        CDuiString Left(int nLength) const;
-        CDuiString Mid(int iPos, int nLength = -1) const;
-        CDuiString Right(int nLength) const;
+        String Left(int nLength) const;
+        String Mid(int iPos, int nLength = -1) const;
+        String Right(int nLength) const;
 
         int Find(TCHAR ch, int iPos = 0) const;
         int Find(LPCTSTR pstr, int iPos = 0) const;
@@ -146,12 +146,12 @@ namespace DuiLib
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 
-	class DUILIB_API CDuiPtrArray
+	class DUILIB_API PtrArray
 	{
 	public:
-		CDuiPtrArray(int iPreallocSize = 0);
-		CDuiPtrArray(const CDuiPtrArray& src);
-		~CDuiPtrArray();
+		PtrArray(int iPreallocSize = 0);
+		PtrArray(const PtrArray& src);
+		~PtrArray();
 
 		void Empty();
 		void Resize(int iSize);
@@ -177,11 +177,11 @@ namespace DuiLib
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 
-	class DUILIB_API CDuiValArray
+	class DUILIB_API ValArray
 	{
 	public:
-		CDuiValArray(int iElementSize, int iPreallocSize = 0);
-		~CDuiValArray();
+		ValArray(int iElementSize, int iPreallocSize = 0);
+		~ValArray();
 
 		void Empty();
 		bool IsEmpty() const;
@@ -204,11 +204,11 @@ namespace DuiLib
 	//
 
     struct TITEM;
-	class DUILIB_API CDuiStringPtrMap
+	class DUILIB_API StringPtrMap
 	{
 	public:
-		CDuiStringPtrMap(int nSize = 83);
-		~CDuiStringPtrMap();
+		StringPtrMap(int nSize = 83);
+		~StringPtrMap();
 
 		void Resize(int nSize = 83);
 		LPVOID Find(LPCTSTR key, bool optimize = true) const;
@@ -280,6 +280,6 @@ namespace DuiLib
 		}
 	};
 #endif
-}// namespace DuiLib
+}// namespace dui
 
 #endif // __UTILS_H__

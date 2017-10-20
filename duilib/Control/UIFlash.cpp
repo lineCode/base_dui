@@ -6,16 +6,16 @@
 #define DISPID_FLASHEVENT_FSCOMMAND	 ( 0x0096 )
 #define DISPID_FLASHEVENT_ONPROGRESS	( 0x07A6 )
 
-namespace DuiLib
+namespace dui
 {
 
-	CFlashUI::CFlashUI(void)
+	Flash::Flash(void)
 		: m_dwRef(0)
 		, m_dwCookie(0)
 		, m_pFlash(NULL)
 		, m_pFlashEventHandler(NULL)
 	{
-		CDuiString strFlashCLSID=_T("{D27CDB6E-AE6D-11CF-96B8-444553540000}");
+		String strFlashCLSID=_T("{D27CDB6E-AE6D-11CF-96B8-444553540000}");
 		OLECHAR szCLSID[100] = { 0 };
 #ifndef _UNICODE
 		::MultiByteToWideChar(::GetACP(), 0, strFlashCLSID, -1, szCLSID, lengthof(szCLSID) - 1);
@@ -25,7 +25,7 @@ namespace DuiLib
 		::CLSIDFromString(szCLSID, &m_clsid);
 	}
 
-	CFlashUI::~CFlashUI(void)
+	Flash::~Flash(void)
 	{
 		if (m_pFlashEventHandler)
 		{
@@ -35,33 +35,33 @@ namespace DuiLib
 		ReleaseControl();
 	}
 
-	LPCTSTR CFlashUI::GetClass() const
+	LPCTSTR Flash::GetClass() const
 	{
 		return DUI_CTR_FLASH;
 	}
 
-	LPVOID CFlashUI::GetInterface( LPCTSTR pstrName )
+	LPVOID Flash::GetInterface( LPCTSTR pstrName )
 	{
-		if( _tcscmp(pstrName, DUI_CTR_FLASH) == 0 ) return static_cast<CFlashUI*>(this);
-		return CActiveXUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_FLASH) == 0 ) return static_cast<Flash*>(this);
+		return ActiveX::GetInterface(pstrName);
 	}
 
-	HRESULT STDMETHODCALLTYPE CFlashUI::GetTypeInfoCount( __RPC__out UINT *pctinfo )
-	{
-		return E_NOTIMPL;
-	}
-
-	HRESULT STDMETHODCALLTYPE CFlashUI::GetTypeInfo( UINT iTInfo, LCID lcid, __RPC__deref_out_opt ITypeInfo **ppTInfo )
+	HRESULT STDMETHODCALLTYPE Flash::GetTypeInfoCount( __RPC__out UINT *pctinfo )
 	{
 		return E_NOTIMPL;
 	}
 
-	HRESULT STDMETHODCALLTYPE CFlashUI::GetIDsOfNames( __RPC__in REFIID riid, __RPC__in_ecount_full(cNames ) LPOLESTR *rgszNames, UINT cNames, LCID lcid, __RPC__out_ecount_full(cNames) DISPID *rgDispId )
+	HRESULT STDMETHODCALLTYPE Flash::GetTypeInfo( UINT iTInfo, LCID lcid, __RPC__deref_out_opt ITypeInfo **ppTInfo )
 	{
 		return E_NOTIMPL;
 	}
 
-	HRESULT STDMETHODCALLTYPE CFlashUI::Invoke( DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr )
+	HRESULT STDMETHODCALLTYPE Flash::GetIDsOfNames( __RPC__in REFIID riid, __RPC__in_ecount_full(cNames ) LPOLESTR *rgszNames, UINT cNames, LCID lcid, __RPC__out_ecount_full(cNames) DISPID *rgDispId )
+	{
+		return E_NOTIMPL;
+	}
+
+	HRESULT STDMETHODCALLTYPE Flash::Invoke( DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr )
 	{
 		switch(dispIdMember)
 		{
@@ -103,7 +103,7 @@ namespace DuiLib
 		return S_OK;
 	}
 
-	HRESULT STDMETHODCALLTYPE CFlashUI::QueryInterface( REFIID riid, void **ppvObject )
+	HRESULT STDMETHODCALLTYPE Flash::QueryInterface( REFIID riid, void **ppvObject )
 	{
 		*ppvObject = NULL;
 
@@ -119,19 +119,19 @@ namespace DuiLib
 		return *ppvObject == NULL ? E_NOINTERFACE : S_OK;
 	}
 
-	ULONG STDMETHODCALLTYPE CFlashUI::AddRef( void )
+	ULONG STDMETHODCALLTYPE Flash::AddRef( void )
 	{
 		::InterlockedIncrement(&m_dwRef); 
 		return m_dwRef;
 	}
 
-	ULONG STDMETHODCALLTYPE CFlashUI::Release( void )
+	ULONG STDMETHODCALLTYPE Flash::Release( void )
 	{
 		::InterlockedDecrement(&m_dwRef);
 		return m_dwRef;
 	}
 
-	HRESULT CFlashUI::OnReadyStateChange (long newState)
+	HRESULT Flash::OnReadyStateChange (long newState)
 	{
 		if (m_pFlashEventHandler)
 		{
@@ -140,7 +140,7 @@ namespace DuiLib
 		return S_OK;
 	}
 
-	HRESULT CFlashUI::OnProgress(long percentDone )
+	HRESULT Flash::OnProgress(long percentDone )
 	{
 		if (m_pFlashEventHandler)
 		{
@@ -149,7 +149,7 @@ namespace DuiLib
 		return S_OK;
 	}
 
-	HRESULT CFlashUI::FSCommand (_bstr_t command, _bstr_t args)
+	HRESULT Flash::FSCommand (_bstr_t command, _bstr_t args)
 	{
 		if (m_pFlashEventHandler)
 		{
@@ -158,7 +158,7 @@ namespace DuiLib
 		return S_OK;
 	}
 
-	HRESULT CFlashUI::FlashCall( _bstr_t request )
+	HRESULT Flash::FlashCall( _bstr_t request )
 	{
 		if (m_pFlashEventHandler)
 		{
@@ -167,7 +167,7 @@ namespace DuiLib
 		return S_OK;
 	}
 
-	void CFlashUI::ReleaseControl()
+	void Flash::ReleaseControl()
 	{
 		//GetManager()->RemoveTranslateAccelerator(this);
 		RegisterEventHandler(FALSE);
@@ -178,9 +178,9 @@ namespace DuiLib
 		}
 	}
 
-	bool CFlashUI::DoCreateControl()
+	bool Flash::DoCreateControl()
 	{
-		if (!CActiveXUI::DoCreateControl())
+		if (!ActiveX::DoCreateControl())
 			return false;
 		//GetManager()->AddTranslateAccelerator(this);
 		GetControl(__uuidof(IShockwaveFlash),(LPVOID*)&m_pFlash);
@@ -188,7 +188,7 @@ namespace DuiLib
 		return true;
 	}
 
-	void CFlashUI::SetFlashEventHandler( CFlashEventHandler* pHandler )
+	void Flash::SetFlashEventHandler( CFlashEventHandler* pHandler )
 	{
 		if (m_pFlashEventHandler!=NULL)
 		{
@@ -203,7 +203,7 @@ namespace DuiLib
 		m_pFlashEventHandler->AddRef();
 	}
 
-	LRESULT CFlashUI::TranslateAccelerator( MSG *pMsg )
+	LRESULT Flash::TranslateAccelerator( MSG *pMsg )
 	{
 		if(pMsg->message < WM_KEYFIRST || pMsg->message > WM_KEYLAST)
 			return S_FALSE;
@@ -237,7 +237,7 @@ namespace DuiLib
 		return hResult;
 	}
 
-	HRESULT CFlashUI::RegisterEventHandler( BOOL inAdvise )
+	HRESULT Flash::RegisterEventHandler( BOOL inAdvise )
 	{
 		if (m_pFlash==NULL)
 			return S_FALSE;
@@ -264,7 +264,7 @@ namespace DuiLib
 		return hr; 
 	}
 
-	void CFlashUI::SetAttribute( LPCTSTR pstrName, LPCTSTR pstrValue )
+	void Flash::SetAttribute( LPCTSTR pstrName, LPCTSTR pstrValue )
 	{
 		if (_tcscmp(pstrName, _T("homepage")) == 0)
 		{
@@ -273,6 +273,6 @@ namespace DuiLib
 		{
 		}
 		else
-			CActiveXUI::SetAttribute(pstrName, pstrValue);
+			ActiveX::SetAttribute(pstrName, pstrValue);
 	}
 };

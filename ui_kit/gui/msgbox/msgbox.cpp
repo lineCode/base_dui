@@ -3,7 +3,7 @@
 #include "msgbox.h"
 
 
-using namespace DuiLib;
+using namespace dui;
 
 void ShowMsgBox(HWND hwnd, MsgboxCallback cb,
 	const std::wstring &content, bool content_is_id,
@@ -49,9 +49,9 @@ std::wstring MsgBox::GetSkinFile()
 	return L"msgbox.xml";
 }
 
-DuiLib::UILIB_RESOURCETYPE MsgBox::GetResourceType() const
+dui::UILIB_RESOURCETYPE MsgBox::GetResourceType() const
 {
-	return DuiLib::UILIB_FILE;
+	return dui::UILIB_FILE;
 }
 
 std::wstring MsgBox::GetZIPFileName() const
@@ -110,15 +110,15 @@ void MsgBox::Close(UINT nRet)
 void MsgBox::InitWindow()
 {
 #if 0
-	m_pRoot->AttachBubbledEvent(DuiLib::kEventClick, nbase::Bind(&MsgBox::OnClicked, this, std::placeholders::_1));
+	m_pRoot->AttachBubbledEvent(dui::kEventClick, nbase::Bind(&MsgBox::OnClicked, this, std::placeholders::_1));
 #endif
-	title_ = (CLabelUI*)m_PaintManager.FindControl(L"title");
-	content_ = (CRichEditUI*)m_PaintManager.FindControl(L"content");
-	btn_yes_ = (CButtonUI*)m_PaintManager.FindControl(L"btn_yes");
-	btn_no_ = (CButtonUI*)m_PaintManager.FindControl(L"btn_no");
+	title_ = (Label*)m_PaintManager.FindControl(L"title");
+	content_ = (RichEdit*)m_PaintManager.FindControl(L"content");
+	btn_yes_ = (Button*)m_PaintManager.FindControl(L"btn_yes");
+	btn_no_ = (Button*)m_PaintManager.FindControl(L"btn_no");
 }
 
-bool MsgBox::OnClicked(DuiLib::TEventUI* msg)
+bool MsgBox::OnClicked(dui::TEvent* msg)
 {
 	std::wstring name = msg->pSender->GetName();
 	if(name == L"btn_yes")

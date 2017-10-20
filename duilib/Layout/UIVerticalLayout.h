@@ -3,12 +3,12 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API CVerticalLayoutUI : public CContainerUI
+	class DUILIB_API VerticalLayout : public Container
 	{
 	public:
-		CVerticalLayoutUI();
+		VerticalLayout();
 
 		LPCTSTR GetClass() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
@@ -19,7 +19,7 @@ namespace DuiLib
 		void SetSepImmMode(bool bImmediately);
 		bool IsSepImmMode() const;
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-		void DoEvent(TEventUI& event);
+		void DoEvent(TEvent& event);
 
 		void SetPos(RECT rc, bool bNeedInvalidate = true);
 		void DoPostPaint(HDC hDC, const RECT& rcPaint);

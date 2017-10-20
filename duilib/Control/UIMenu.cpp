@@ -2,39 +2,39 @@
 
 #include "UIMenu.h"
 
-namespace DuiLib {
+namespace dui {
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-CMenuUI::CMenuUI()
+Menu::Menu()
 {
 	if (GetHeader() != NULL)
 		GetHeader()->SetVisible(false);
 }
 
-CMenuUI::~CMenuUI()
+Menu::~Menu()
 {}
 
-LPCTSTR CMenuUI::GetClass() const
+LPCTSTR Menu::GetClass() const
 {
     return _T("MenuUI");
 }
 
-LPVOID CMenuUI::GetInterface(LPCTSTR pstrName)
+LPVOID Menu::GetInterface(LPCTSTR pstrName)
 {
-    if( _tcsicmp(pstrName, _T("Menu")) == 0 ) return static_cast<CMenuUI*>(this);
-    return CListUI::GetInterface(pstrName);
+    if( _tcsicmp(pstrName, _T("Menu")) == 0 ) return static_cast<Menu*>(this);
+    return List::GetInterface(pstrName);
 }
 
-void CMenuUI::DoEvent(TEventUI& event)
+void Menu::DoEvent(TEvent& event)
 {
 	return __super::DoEvent(event);
 }
 
-bool CMenuUI::Add(CControlUI* pControl)
+bool Menu::Add(Control* pControl)
 {
-	CMenuElementUI* pMenuItem = static_cast<CMenuElementUI*>(pControl->GetInterface(_T("MenuElement")));
+	MenuElement* pMenuItem = static_cast<MenuElement*>(pControl->GetInterface(_T("MenuElement")));
 	if (pMenuItem == NULL)
 		return false;
 
@@ -42,15 +42,15 @@ bool CMenuUI::Add(CControlUI* pControl)
 	{
 		if (pMenuItem->GetItemAt(i)->GetInterface(_T("MenuElement")) != NULL)
 		{
-			(static_cast<CMenuElementUI*>(pMenuItem->GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(false);
+			(static_cast<MenuElement*>(pMenuItem->GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(false);
 		}
 	}
-	return CListUI::Add(pControl);
+	return List::Add(pControl);
 }
 
-bool CMenuUI::AddAt(CControlUI* pControl, int iIndex)
+bool Menu::AddAt(Control* pControl, int iIndex)
 {
-	CMenuElementUI* pMenuItem = static_cast<CMenuElementUI*>(pControl->GetInterface(_T("MenuElement")));
+	MenuElement* pMenuItem = static_cast<MenuElement*>(pControl->GetInterface(_T("MenuElement")));
 	if (pMenuItem == NULL)
 		return false;
 
@@ -58,45 +58,45 @@ bool CMenuUI::AddAt(CControlUI* pControl, int iIndex)
 	{
 		if (pMenuItem->GetItemAt(i)->GetInterface(_T("MenuElement")) != NULL)
 		{
-			(static_cast<CMenuElementUI*>(pMenuItem->GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(false);
+			(static_cast<MenuElement*>(pMenuItem->GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(false);
 		}
 	}
-	return CListUI::AddAt(pControl, iIndex);
+	return List::AddAt(pControl, iIndex);
 }
 
-int CMenuUI::GetItemIndex(CControlUI* pControl) const
+int Menu::GetItemIndex(Control* pControl) const
 {
-	CMenuElementUI* pMenuItem = static_cast<CMenuElementUI*>(pControl->GetInterface(_T("MenuElement")));
+	MenuElement* pMenuItem = static_cast<MenuElement*>(pControl->GetInterface(_T("MenuElement")));
 	if (pMenuItem == NULL)
 		return -1;
 
 	return __super::GetItemIndex(pControl);
 }
 
-bool CMenuUI::SetItemIndex(CControlUI* pControl, int iIndex)
+bool Menu::SetItemIndex(Control* pControl, int iIndex)
 {
-	CMenuElementUI* pMenuItem = static_cast<CMenuElementUI*>(pControl->GetInterface(_T("MenuElement")));
+	MenuElement* pMenuItem = static_cast<MenuElement*>(pControl->GetInterface(_T("MenuElement")));
 	if (pMenuItem == NULL)
 		return false;
 
 	return __super::SetItemIndex(pControl, iIndex);
 }
 
-bool CMenuUI::Remove(CControlUI* pControl)
+bool Menu::Remove(Control* pControl)
 {
-	CMenuElementUI* pMenuItem = static_cast<CMenuElementUI*>(pControl->GetInterface(_T("MenuElement")));
+	MenuElement* pMenuItem = static_cast<MenuElement*>(pControl->GetInterface(_T("MenuElement")));
 	if (pMenuItem == NULL)
 		return false;
 
 	return __super::Remove(pControl);
 }
 
-SIZE CMenuUI::EstimateSize(SIZE szAvailable)
+SIZE Menu::EstimateSize(SIZE szAvailable)
 {
 	int cxFixed = 0;
     int cyFixed = 0;
     for( int it = 0; it < GetCount(); it++ ) {
-        CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
+        Control* pControl = static_cast<Control*>(GetItemAt(it));
         if( !pControl->IsVisible() ) continue;
         SIZE sz = pControl->EstimateSize(szAvailable);
         cyFixed += sz.cy;
@@ -106,9 +106,9 @@ SIZE CMenuUI::EstimateSize(SIZE szAvailable)
     return CDuiSize(cxFixed, cyFixed);
 }
 
-void CMenuUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+void Menu::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-	CListUI::SetAttribute(pstrName, pstrValue);
+	List::SetAttribute(pstrName, pstrValue);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ CMenuWnd::~CMenuWnd()
 {
 
 }
-
+#if MENUWND_OBSERVER
 BOOL CMenuWnd::Receive(ContextMenuParam param)
 {
 	switch (param.wParam)
@@ -155,9 +155,9 @@ BOOL CMenuWnd::Receive(ContextMenuParam param)
 
 	return TRUE;
 }
-
-void CMenuWnd::Init(CMenuElementUI* pOwner, STRINGorID xml, CDuiString folder, POINT point,
-					CPaintManagerUI* pMainPaintManager, std::map<CDuiString,bool>* pMenuCheckInfo/* = NULL*/,
+#endif
+void CMenuWnd::Init(MenuElement* pOwner, STRINGorID xml, String folder, POINT point,
+					CPaintManager* pMainPaintManager, std::map<String,bool>* pMenuCheckInfo/* = NULL*/,
 					DWORD dwAlignment/* = eMenuAlignment_Left | eMenuAlignment_Top*/)
 {
 	m_BasedPoint = point;
@@ -167,7 +167,7 @@ void CMenuWnd::Init(CMenuElementUI* pOwner, STRINGorID xml, CDuiString folder, P
 	m_dwAlignment = dwAlignment;
 	m_pParentManager = pMainPaintManager;
 
-	CDuiString strResourcePath = m_pm.GetResourcePath();
+	String strResourcePath = m_pm.GetGlobalResDir();
 	ASSERT(!strResourcePath.empty());
 	if (!strResourcePath.empty() && !folder.empty()){
 		if (folder.back() != _T('\\') && folder.back() != _T('/')){
@@ -204,7 +204,7 @@ LPCTSTR CMenuWnd::GetWindowClassName() const
 }
 
 
-void CMenuWnd::Notify(TNotifyUI& msg)
+void CMenuWnd::Notify(TNotify& msg)
 {
 #if MENUWND_OBSERVER
 	if( CMenuWnd::GetGlobalContextMenuObserver().GetManager() != NULL) 
@@ -215,25 +215,26 @@ void CMenuWnd::Notify(TNotifyUI& msg)
 		}
 	}
 #else
-	if (m_pParentManager != NULL)
+	if (msg.sType == DUI_MSGTYPE_ITEMCLICK)
 	{
-		if (msg.sType == DUI_MSGTYPE_CLICK || msg.sType == DUI_MSGTYPE_ITEMCLICK/* || msg.sType == _T("valuechanged")*/)
+		if (m_pParentManager)
 		{
 			m_pParentManager->SendNotify(msg, false);
 		}
+		Close();
 	}
 #endif
 }
 
-CControlUI* CMenuWnd::CreateControl( LPCTSTR pstrClassName )
+Control* CMenuWnd::CreateControl( LPCTSTR pstrClassName )
 {
 		if (_tcsicmp(pstrClassName, _T("Menu")) == 0)
 		{
-			return new CMenuUI();
+			return new Menu();
 		}
 		else if (_tcsicmp(pstrClassName, _T("MenuElement")) == 0)
 		{
-			return new CMenuElementUI();
+			return new MenuElement();
 		}
 		return NULL;
 }
@@ -246,10 +247,10 @@ void CMenuWnd::OnFinalMessage(HWND hWnd)
 #endif
 	if( m_pOwner != NULL ) {
 		for( int i = 0; i < m_pOwner->GetCount(); i++ ) {
-			if( static_cast<CMenuElementUI*>(m_pOwner->GetItemAt(i)->GetInterface(_T("MenuElement"))) != NULL ) {
-				(static_cast<CMenuElementUI*>(m_pOwner->GetItemAt(i)))->SetOwner(m_pOwner->GetParent());
-				(static_cast<CMenuElementUI*>(m_pOwner->GetItemAt(i)))->SetVisible(false);
-				(static_cast<CMenuElementUI*>(m_pOwner->GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(false);
+			if( static_cast<MenuElement*>(m_pOwner->GetItemAt(i)->GetInterface(_T("MenuElement"))) != NULL ) {
+				(static_cast<MenuElement*>(m_pOwner->GetItemAt(i)))->SetOwner(m_pOwner->GetParent());
+				(static_cast<MenuElement*>(m_pOwner->GetItemAt(i)))->SetVisible(false);
+				(static_cast<MenuElement*>(m_pOwner->GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(false);
 			}
 		}
 		m_pOwner->m_pWindow = NULL;
@@ -274,7 +275,7 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 		// The trick is to add the items to the new container. Their owner gets
 		// reassigned by this operation - which is why it is important to reassign
 		// the items back to the righfull owner/manager when the window closes.
-		m_pLayout = new CMenuUI();
+		m_pLayout = new Menu();
 		//m_pm.UseParentResource(m_pOwner->GetManager());	//djj[20170425] : not defined.
 		m_pLayout->SetManager(&m_pm, NULL, true);
 		LPCTSTR pDefaultAttributes = m_pOwner->GetManager()->GetDefaultAttributeList(_T("Menu"));
@@ -285,8 +286,8 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
 		for( int i = 0; i < m_pOwner->GetCount(); i++ ) {
 			if(m_pOwner->GetItemAt(i)->GetInterface(_T("MenuElement")) != NULL ){
-				(static_cast<CMenuElementUI*>(m_pOwner->GetItemAt(i)))->SetOwner(m_pLayout);
-				m_pLayout->Add(static_cast<CControlUI*>(m_pOwner->GetItemAt(i)));
+				(static_cast<MenuElement*>(m_pOwner->GetItemAt(i)))->SetOwner(m_pLayout);
+				m_pLayout->Add(static_cast<Control*>(m_pOwner->GetItemAt(i)));
 			}
 		}
 
@@ -305,7 +306,7 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
 		CDialogBuilder builder;
 
-		CControlUI* pRoot = builder.Create(m_xml,UINT(0), this, &m_pm);
+		Control* pRoot = builder.Create(m_xml,UINT(0), this, &m_pm);
 		//m_pm.GetShadow()->ShowShadow(false);
 		m_pm.AttachDialog(pRoot);
 		m_pm.AddNotifier(this);
@@ -319,14 +320,14 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 	return 0;
 }
 
-CMenuUI* CMenuWnd::GetMenuUI()
+Menu* CMenuWnd::GetMenuUI()
 {
-	return static_cast<CMenuUI*>(m_pm.GetRoot());
+	return static_cast<Menu*>(m_pm.GetRoot());
 }
 
 void CMenuWnd::ResizeMenu()
 {
-	CControlUI* pRoot = m_pm.GetRoot();
+	Control* pRoot = m_pm.GetRoot();
 
 #if defined(WIN32) && !defined(UNDER_CE)
 	MONITORINFO oMonitor = {}; 
@@ -342,7 +343,7 @@ void CMenuWnd::ResizeMenu()
 	m_pm.SetInitSize(szAvailable.cx, szAvailable.cy);
 
 	//必须是Menu标签作为xml的根节点
-	CMenuUI *pMenuRoot = static_cast<CMenuUI*>(pRoot);
+	Menu *pMenuRoot = static_cast<Menu*>(pRoot);
 	ASSERT(pMenuRoot);
 
 	SIZE szInit = m_pm.GetInitSize();
@@ -371,7 +372,7 @@ void CMenuWnd::ResizeMenu()
 	SetForegroundWindow(m_hWnd);
 	MoveWindow(m_hWnd, rc.left, rc.top, rc.GetWidth(), rc.GetHeight(), FALSE);
 	SetWindowPos(m_hWnd, HWND_TOPMOST, rc.left, rc.top,
-		rc.GetWidth(), rc.GetHeight() + pMenuRoot->GetInset().bottom + pMenuRoot->GetInset().top,
+		rc.GetWidth(), rc.GetHeight() + pMenuRoot->GetPadding().bottom + pMenuRoot->GetPadding().top,
 		SWP_SHOWWINDOW);
 }
 
@@ -397,7 +398,7 @@ void CMenuWnd::ResizeSubMenu()
 
 	for( int it = 0; it < m_pOwner->GetCount(); it++ ) {
 		if(m_pOwner->GetItemAt(it)->GetInterface(_T("MenuElement")) != NULL ){
-			CControlUI* pControl = static_cast<CControlUI*>(m_pOwner->GetItemAt(it));
+			Control* pControl = static_cast<Control*>(m_pOwner->GetItemAt(it));
 			SIZE sz = pControl->EstimateSize(szAvailable);
 			cyFixed += sz.cy;
 
@@ -475,7 +476,7 @@ void CMenuWnd::ResizeSubMenu()
 		rc.right = rc.left + cxFixed;
 	}
 
-	MoveWindow(m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top + m_pLayout->GetInset().top + m_pLayout->GetInset().bottom, FALSE);
+	MoveWindow(m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top + m_pLayout->GetPadding().top + m_pLayout->GetPadding().bottom, FALSE);
 
 }
 
@@ -574,7 +575,7 @@ LRESULT CMenuWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-CMenuElementUI::CMenuElementUI():
+MenuElement::MenuElement():
 m_pWindow(NULL),
 m_bDrawLine(false),
 m_dwLineColor(DEFAULT_LINE_COLOR),
@@ -587,25 +588,25 @@ m_bShowExplandIcon(false)
 	m_szIconSize.cx = ITEM_DEFAULT_ICON_SIZE;
 
 	m_rcLinePadding.top = m_rcLinePadding.bottom = 0;
-	m_rcLinePadding.left = DEFAULT_LINE_LEFT_INSET;
-	m_rcLinePadding.right = DEFAULT_LINE_RIGHT_INSET;
+	m_rcLinePadding.left = DEFAULT_LINE_LEFT_PADDING;
+	m_rcLinePadding.right = DEFAULT_LINE_RIGHT_PADDING;
 }
 
-CMenuElementUI::~CMenuElementUI()
+MenuElement::~MenuElement()
 {}
 
-LPCTSTR CMenuElementUI::GetClass() const
+LPCTSTR MenuElement::GetClass() const
 {
 	return _T("MenuElementUI");
 }
 
-LPVOID CMenuElementUI::GetInterface(LPCTSTR pstrName)
+LPVOID MenuElement::GetInterface(LPCTSTR pstrName)
 {
-    if( _tcsicmp(pstrName, _T("MenuElement")) == 0 ) return static_cast<CMenuElementUI*>(this);    
-    return CListContainerElementUI::GetInterface(pstrName);
+    if( _tcsicmp(pstrName, _T("MenuElement")) == 0 ) return static_cast<MenuElement*>(this);    
+    return ListContainerElement::GetInterface(pstrName);
 }
 
-bool CMenuElementUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl)
+bool MenuElement::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 {
     if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return true;
 
@@ -616,7 +617,7 @@ bool CMenuElementUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopCont
 	}
 	else
 	{
-		CMenuElementUI::DrawItemBk(hDC, m_rcItem);
+		MenuElement::DrawItemBk(hDC, m_rcItem);
 		DrawItemText(hDC, m_rcItem);
 		DrawItemIcon(hDC, m_rcItem);
 		DrawItemExpland(hDC, m_rcItem);
@@ -629,7 +630,7 @@ bool CMenuElementUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopCont
 	return true;
 }
 
-void CMenuElementUI::DrawItemIcon(HDC hDC, const RECT& rcItem)
+void MenuElement::DrawItemIcon(HDC hDC, const RECT& rcItem)
 {
 	if ( m_strIcon != _T("") )
 	{
@@ -646,7 +647,7 @@ void CMenuElementUI::DrawItemIcon(HDC hDC, const RECT& rcItem)
 			drawinfo.sDrawString = cImage;
 			drawinfo.rcDestOffset = rcItem;
 #else
-			CDuiString pStrImage;
+			String pStrImage;
 			pStrImage.Format(_T("file='%s' dest='%d,%d,%d,%d'"), m_strIcon.c_str(), 
 				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx)/2,
 				(m_cxyFixed.cy - m_szIconSize.cy)/2,
@@ -661,11 +662,11 @@ void CMenuElementUI::DrawItemIcon(HDC hDC, const RECT& rcItem)
 	}
 }
 
-void CMenuElementUI::DrawItemExpland(HDC hDC, const RECT& rcItem)
+void MenuElement::DrawItemExpland(HDC hDC, const RECT& rcItem)
 {
 	if (m_bShowExplandIcon)
 	{
-		CDuiString strExplandIcon;
+		String strExplandIcon;
 		strExplandIcon = GetManager()->GetDefaultAttributeList(_T("ExplandIcon"));
 #if 1
 		TCHAR cImage[526] = {};
@@ -678,7 +679,7 @@ void CMenuElementUI::DrawItemExpland(HDC hDC, const RECT& rcItem)
 		drawinfo.sDrawString = cImage;
 		drawinfo.rcDestOffset = rcItem;
 #else
-		CDuiString strBkImage;
+		String strBkImage;
 		strBkImage.Format(_T("file='%s' dest='%d,%d,%d,%d'"), strExplandIcon.c_str(), 
 			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2,
 			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2,
@@ -693,12 +694,12 @@ void CMenuElementUI::DrawItemExpland(HDC hDC, const RECT& rcItem)
 }
 
 
-void CMenuElementUI::DrawItemText(HDC hDC, const RECT& rcItem)
+void MenuElement::DrawItemText(HDC hDC, const RECT& rcItem)
 {
 	if (m_sText.empty()) return;
 
     if( m_pOwner == NULL ) return;
-    TListInfoUI* pInfo = m_pOwner->GetListInfo();
+    TListInfo* pInfo = m_pOwner->GetListInfo();
     DWORD iTextColor = pInfo->dwTextColor;
     if( (m_uButtonState & UISTATE_HOT) != 0 ) {
         iTextColor = pInfo->dwHotTextColor;
@@ -725,11 +726,11 @@ void CMenuElementUI::DrawItemText(HDC hDC, const RECT& rcItem)
 }
 
 
-SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
+SIZE MenuElement::EstimateSize(SIZE szAvailable)
 {
 	SIZE cXY = {0};
 	for( int it = 0; it < GetCount(); it++ ) {
-		CControlUI* pControl = static_cast<CControlUI*>(GetItemAt(it));
+		Control* pControl = static_cast<Control*>(GetItemAt(it));
 		if( !pControl->IsVisible() ) continue;
 		SIZE sz = pControl->EstimateSize(szAvailable);
 		cXY.cy += sz.cy;
@@ -737,7 +738,7 @@ SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
 			cXY.cx = sz.cx;
 	}
 	if(cXY.cy == 0) {
-		TListInfoUI* pInfo = m_pOwner->GetListInfo();
+		TListInfo* pInfo = m_pOwner->GetListInfo();
 
 		DWORD iTextColor = pInfo->dwTextColor;
 		if( (m_uButtonState & UISTATE_HOT) != 0 ) {
@@ -773,19 +774,19 @@ SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
 	return cXY;
 }
 
-void CMenuElementUI::DoEvent(TEventUI& event)
+void MenuElement::DoEvent(TEvent& event)
 {
 	if( event.Type == UIEVENT_MOUSEENTER )
 	{
-		CListContainerElementUI::DoEvent(event);
+		ListContainerElement::DoEvent(event);
 		if( m_pWindow ) return;
 		bool hasSubMenu = false;
 		for( int i = 0; i < GetCount(); ++i )
 		{
 			if( GetItemAt(i)->GetInterface(_T("MenuElement")) != NULL )
 			{
-				(static_cast<CMenuElementUI*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetVisible(true);
-				(static_cast<CMenuElementUI*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(true);
+				(static_cast<MenuElement*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetVisible(true);
+				(static_cast<MenuElement*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(true);
 
 				hasSubMenu = true;
 			}
@@ -811,15 +812,15 @@ void CMenuElementUI::DoEvent(TEventUI& event)
 	if( event.Type == UIEVENT_BUTTONUP )
 	{
 		if( IsEnabled() ){
-			CListContainerElementUI::DoEvent(event);
+			ListContainerElement::DoEvent(event);
 
 			if( m_pWindow ) return;
 
 			bool hasSubMenu = false;
 			for( int i = 0; i < GetCount(); ++i ) {
 				if( GetItemAt(i)->GetInterface(_T("MenuElement")) != NULL ) {
-					(static_cast<CMenuElementUI*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetVisible(true);
-					(static_cast<CMenuElementUI*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(true);
+					(static_cast<MenuElement*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetVisible(true);
+					(static_cast<MenuElement*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(true);
 
 					hasSubMenu = true;
 				}
@@ -874,8 +875,8 @@ void CMenuElementUI::DoEvent(TEventUI& event)
 		{
 			if( GetItemAt(i)->GetInterface(_T("MenuElement")) != NULL )
 			{
-				(static_cast<CMenuElementUI*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetVisible(true);
-				(static_cast<CMenuElementUI*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(true);
+				(static_cast<MenuElement*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetVisible(true);
+				(static_cast<MenuElement*>(GetItemAt(i)->GetInterface(_T("MenuElement"))))->SetInternVisible(true);
 
 				hasSubMenu = true;
 			}
@@ -899,15 +900,15 @@ void CMenuElementUI::DoEvent(TEventUI& event)
 		return;
 	}
 
-    CListContainerElementUI::DoEvent(event);
+    ListContainerElement::DoEvent(event);
 }
 
-CMenuWnd* CMenuElementUI::GetMenuWnd()
+CMenuWnd* MenuElement::GetMenuWnd()
 {
 	return m_pWindow;
 }
 
-void CMenuElementUI::CreateMenuWnd()
+void MenuElement::CreateMenuWnd()
 {
 	if( m_pWindow ) return;
 
@@ -919,10 +920,10 @@ void CMenuElementUI::CreateMenuWnd()
 	param.wParam = 2;
 	CMenuWnd::GetGlobalContextMenuObserver().RBroadcast(param);
 #endif
-	m_pWindow->Init(static_cast<CMenuElementUI*>(this), _T(""), _T(""), CDuiPoint(), NULL);
+	m_pWindow->Init(static_cast<MenuElement*>(this), _T(""), _T(""), CDuiPoint(), NULL);
 }
 
-void CMenuElementUI::SetLineType()
+void MenuElement::SetLineType()
 {
 	m_bDrawLine = true;
 	if (GetFixedHeight() == 0 || GetFixedHeight() == ITEM_DEFAULT_HEIGHT )
@@ -933,57 +934,57 @@ void CMenuElementUI::SetLineType()
 	SetEnabled(false);
 }
 
-void CMenuElementUI::SetLineColor(DWORD color)
+void MenuElement::SetLineColor(DWORD color)
 {
 	m_dwLineColor = color;
 }
 
-DWORD CMenuElementUI::GetLineColor() const
+DWORD MenuElement::GetLineColor() const
 {
 	return m_dwLineColor;
 }
-void CMenuElementUI::SetLinePadding(RECT rcInset)
+void MenuElement::SetLinePadding(RECT rcPadding)
 {
-	m_rcLinePadding = rcInset;
+	m_rcLinePadding = rcPadding;
 }
 
-RECT CMenuElementUI::GetLinePadding() const
+RECT MenuElement::GetLinePadding() const
 {
 	return m_rcLinePadding;
 }
 
-void CMenuElementUI::SetIcon(LPCTSTR strIcon)
+void MenuElement::SetIcon(LPCTSTR strIcon)
 {
 	if ( strIcon != _T("") )
 		m_strIcon = strIcon;
 }
 
-void CMenuElementUI::SetIconSize(LONG cx, LONG cy)
+void MenuElement::SetIconSize(LONG cx, LONG cy)
 {
 	m_szIconSize.cx = cx;
 	m_szIconSize.cy = cy;
 }
 
-void CMenuElementUI::SetChecked(bool bCheck/* = true*/)
+void MenuElement::SetChecked(bool bCheck/* = true*/)
 {
 #if MENUWND_OBSERVER
 	if (!m_bCheckItem || CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo() == NULL )
 		return;
-	std::map<CDuiString,bool>::iterator it = CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->find(GetName());
+	std::map<String,bool>::iterator it = CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->find(GetName());
 	if (it == CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->end())
-		CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->insert(std::map<CDuiString,bool>::value_type(GetName(),bCheck));
+		CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->insert(std::map<String,bool>::value_type(GetName(),bCheck));
 	else
 		it->second = bCheck;
 #endif
 }
 
-bool CMenuElementUI::GetChecked() const
+bool MenuElement::GetChecked() const
 {
 #if MENUWND_OBSERVER
 	if (!m_bCheckItem || CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo() == NULL || CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->size() == 0)
 		return false;
 
-	std::map<CDuiString,bool>::iterator it = CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->find(GetName());
+	std::map<String,bool>::iterator it = CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->find(GetName());
 	if (it != CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->end())
 	{
 		return it->second;
@@ -993,22 +994,22 @@ bool CMenuElementUI::GetChecked() const
 
 }
 
-void CMenuElementUI::SetCheckItem(bool bCheckItem/* = false*/)
+void MenuElement::SetCheckItem(bool bCheckItem/* = false*/)
 {
 	m_bCheckItem = bCheckItem;
 }
 
-bool CMenuElementUI::GetCheckItem() const
+bool MenuElement::GetCheckItem() const
 {
 	return m_bCheckItem;
 }
 
-void CMenuElementUI::SetShowExplandIcon(bool bShow)
+void MenuElement::SetShowExplandIcon(bool bShow)
 {
 	m_bShowExplandIcon = bShow;
 }
 
-void CMenuElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+void MenuElement::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
 	if( _tcscmp(pstrName, _T("icon")) == 0){
 		SetIcon(pstrValue);
@@ -1049,19 +1050,19 @@ void CMenuElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		SetLineColor(clrColor);
 	}
 	else if( _tcscmp(pstrName, _T("linepadding")) == 0 ) {
-		RECT rcInset = { 0 };
+		RECT rcPadding = { 0 };
 		LPTSTR pstr = NULL;
-		rcInset.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-		rcInset.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
-		rcInset.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
-		rcInset.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
-		SetLinePadding(rcInset);
+		rcPadding.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
+		rcPadding.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
+		rcPadding.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
+		rcPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
+		SetLinePadding(rcPadding);
 	}
 	/*else if	( _tcscmp(pstrName, _T("height")) == 0){
 		SetFixedHeight(_ttoi(pstrValue));
 	}*/
 	else
-		CListContainerElementUI::SetAttribute(pstrName, pstrValue);
+		ListContainerElement::SetAttribute(pstrName, pstrValue);
 }
 
-} // namespace DuiLib
+} // namespace dui

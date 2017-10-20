@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-namespace DuiLib
+namespace dui
 {
 
 //////////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ UILIB_RESOURCETYPE WindowImplBase::GetResourceType() const
 	return UILIB_FILE;
 }
 
-CDuiString WindowImplBase::GetZIPFileName() const
+String WindowImplBase::GetZIPFileName() const
 {
 	return _T("");
 }
@@ -53,7 +53,7 @@ LPCTSTR WindowImplBase::GetResourceID() const
 	return _T("");
 }
 
-CControlUI* WindowImplBase::CreateControl(LPCTSTR pstrClass)
+Control* WindowImplBase::CreateControl(LPCTSTR pstrClass)
 {
 	return NULL;
 }
@@ -160,7 +160,7 @@ LRESULT WindowImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	RECT rcCaption = m_PaintManager.GetCaptionRect();
 	if( pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right \
 		&& pt.y >= rcCaption.top && pt.y < rcCaption.bottom ) {
-			CControlUI* pControl = static_cast<CControlUI*>(m_PaintManager.FindControl(pt));
+			Control* pControl = static_cast<Control*>(m_PaintManager.FindControl(pt));
 			if( pControl && _tcsicmp(pControl->GetClass(), DUI_CTR_BUTTON) != 0 && 
 				_tcsicmp(pControl->GetClass(), DUI_CTR_OPTION) != 0 &&
 				_tcsicmp(pControl->GetClass(), DUI_CTR_TEXT) != 0 )
@@ -245,8 +245,8 @@ LRESULT WindowImplBase::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	LRESULT lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 	if( ::IsZoomed(*this) != bZoomed )
 	{
-        CControlUI* pbtnMax = static_cast<CControlUI*>(m_PaintManager.FindControl(_T("maxbtn")));         // max button
-        CControlUI* pbtnRestore = static_cast<CControlUI*>(m_PaintManager.FindControl(_T("restorebtn"))); // restore button
+        Control* pbtnMax = static_cast<Control*>(m_PaintManager.FindControl(_T("maxbtn")));         // max button
+        Control* pbtnRestore = static_cast<Control*>(m_PaintManager.FindControl(_T("restorebtn"))); // restore button
 
         // toggle status of max and restore button
         if (pbtnMax && pbtnRestore)
@@ -274,10 +274,10 @@ LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	m_PaintManager.Init(m_hWnd);
 	m_PaintManager.AddPreMessageFilter(this);
 
-	CDuiString strResourcePath = m_PaintManager.GetResourcePath();
+	String strResourcePath = m_PaintManager.GetGlobalResDir();
 	ASSERT(!strResourcePath.empty());
 	if (!strResourcePath.empty()){
-		CDuiString folder = GetSkinFolder();
+		String folder = GetSkinFolder();
 		if (folder.back() != _T('\\') && folder.back() != _T('/')){
 			folder += _T('\\');
 		}
@@ -321,7 +321,7 @@ LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		break;
 	}
 
-	CControlUI* pRoot=NULL;
+	Control* pRoot=NULL;
 	if (GetResourceType()==UILIB_RESOURCE)
 	{
 		STRINGorID xml(_ttoi(GetSkinFile().c_str()));
@@ -432,9 +432,9 @@ LONG WindowImplBase::GetStyle()
 	return styleValue;
 }
 
-void WindowImplBase::OnClick(TNotifyUI& msg)
+void WindowImplBase::OnClick(TNotify& msg)
 {
-	CDuiString sCtrlName = msg.pSender->GetName();
+	String sCtrlName = msg.pSender->GetName();
 	if( sCtrlName == _T("closebtn") )
 	{
 		Close();
@@ -458,7 +458,7 @@ void WindowImplBase::OnClick(TNotifyUI& msg)
 	return;
 }
 
-void WindowImplBase::Notify(TNotifyUI& msg)
+void WindowImplBase::Notify(TNotify& msg)
 {
 	return CNotifyPump::NotifyPump(msg);
 }

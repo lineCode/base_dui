@@ -3,22 +3,22 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API CChildLayoutUI : public CContainerUI
+	class DUILIB_API ChildLayout : public Container
 	{
 	public:
-		CChildLayoutUI();
+		ChildLayout();
 
 		void Init();
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-		void SetChildLayoutXML(CDuiString pXML);
-		CDuiString GetChildLayoutXML();
+		void SetChildLayoutXML(String pXML);
+		String GetChildLayoutXML();
 		virtual LPVOID GetInterface(LPCTSTR pstrName);
 		virtual LPCTSTR GetClass() const;
 
 	private:
-		CDuiString m_pstrXMLFile;
+		String m_pstrXMLFile;
 	};
-} // namespace DuiLib
+} // namespace dui
 #endif // __UICHILDLAYOUT_H__

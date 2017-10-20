@@ -1,55 +1,55 @@
 #include "stdafx.h"
 #include "UITileLayout.h"
 
-namespace DuiLib
+namespace dui
 {
-	CTileLayoutUI::CTileLayoutUI() : m_nColumns(1), m_nRows(0), m_nColumnsFixed(0), m_iChildVPadding(0),
+	TileLayout::TileLayout() : m_nColumns(1), m_nRows(0), m_nColumnsFixed(0), m_iChildVPadding(0),
 		m_bIgnoreItemPadding(true)
 	{
 		m_szItem.cx = m_szItem.cy = 80;
 	}
 
-	LPCTSTR CTileLayoutUI::GetClass() const
+	LPCTSTR TileLayout::GetClass() const
 	{
 		return DUI_CTR_TILELAYOUT;
 	}
 
-	LPVOID CTileLayoutUI::GetInterface(LPCTSTR pstrName)
+	LPVOID TileLayout::GetInterface(LPCTSTR pstrName)
 	{
-		if( _tcscmp(pstrName, DUI_CTR_TILELAYOUT) == 0 ) return static_cast<CTileLayoutUI*>(this);
-		return CContainerUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_TILELAYOUT) == 0 ) return static_cast<TileLayout*>(this);
+		return Container::GetInterface(pstrName);
 	}
 
-	int CTileLayoutUI::GetFixedColumns() const
+	int TileLayout::GetFixedColumns() const
 	{
 		return m_nColumnsFixed;
 	}
 
-	void CTileLayoutUI::SetFixedColumns(int iColums)
+	void TileLayout::SetFixedColumns(int iColums)
 	{
 		if( iColums < 0 ) return;
 		m_nColumnsFixed = iColums;
 		NeedUpdate();
 	}
 
-	int CTileLayoutUI::GetChildVPadding() const
+	int TileLayout::GetChildVPadding() const
 	{
 		return m_iChildVPadding;
 	}
 
-	void CTileLayoutUI::SetChildVPadding(int iPadding)
+	void TileLayout::SetChildVPadding(int iPadding)
 	{
 		m_iChildVPadding = iPadding;
 		if (m_iChildVPadding < 0) m_iChildVPadding = 0;
 		NeedUpdate();
 	}
 
-	SIZE CTileLayoutUI::GetItemSize() const
+	SIZE TileLayout::GetItemSize() const
 	{
 		return m_szItem;
 	}
 
-	void CTileLayoutUI::SetItemSize(SIZE szSize)
+	void TileLayout::SetItemSize(SIZE szSize)
 	{
 		if( m_szItem.cx != szSize.cx || m_szItem.cy != szSize.cy ) {
 			m_szItem = szSize;
@@ -57,17 +57,17 @@ namespace DuiLib
 		}
 	}
 
-	int CTileLayoutUI::GetColumns() const
+	int TileLayout::GetColumns() const
 	{
 		return m_nColumns;
 	}
 
-	int CTileLayoutUI::GetRows() const
+	int TileLayout::GetRows() const
 	{
 		return m_nRows;
 	}
 
-	void CTileLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+	void TileLayout::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
 		if( _tcscmp(pstrName, _T("itemsize")) == 0 ) {
 			SIZE szItem = { 0 };
@@ -78,19 +78,19 @@ namespace DuiLib
 		}
 		else if( _tcscmp(pstrName, _T("columns")) == 0 ) SetFixedColumns(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("childvpadding")) == 0 ) SetChildVPadding(_ttoi(pstrValue));
-		else CContainerUI::SetAttribute(pstrName, pstrValue);
+		else Container::SetAttribute(pstrName, pstrValue);
 	}
 
-	void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void TileLayout::SetPos(RECT rc, bool bNeedInvalidate)
 	{
-		CControlUI::SetPos(rc, bNeedInvalidate);
+		Control::SetPos(rc, bNeedInvalidate);
 		rc = m_rcItem;
 
-		// Adjust for inset
-		rc.left += m_rcInset.left;
-		rc.top += m_rcInset.top;
-		rc.right -= m_rcInset.right;
-		rc.bottom -= m_rcInset.bottom;
+		// Adjust for padding
+		rc.left += m_rcPadding.left;
+		rc.top += m_rcPadding.top;
+		rc.right -= m_rcPadding.right;
+		rc.bottom -= m_rcPadding.bottom;
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
 		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 
@@ -108,7 +108,7 @@ namespace DuiLib
 
 		int nEstimateNum = 0;
 		for( int it = 0; it < m_items.GetSize(); it++ ) {
-			CControlUI* pControl = static_cast<CControlUI*>(m_items[it]);
+			Control* pControl = static_cast<Control*>(m_items[it]);
 			if( !pControl->IsVisible() ) continue;
 			if( pControl->IsFloat() ) continue;
 			nEstimateNum++;
@@ -161,7 +161,7 @@ namespace DuiLib
 		}
 
 		for( int it1 = 0; it1 < m_items.GetSize(); it1++ ) {
-			CControlUI* pControl = static_cast<CControlUI*>(m_items[it1]);
+			Control* pControl = static_cast<Control*>(m_items[it1]);
 			if( !pControl->IsVisible() ) continue;
 			if( pControl->IsFloat() ) {
 				SetFloatPos(it1);
@@ -264,7 +264,7 @@ namespace DuiLib
 	//		ptTile.x = iPosX;
 	//	}
 	//	for( int it1 = 0; it1 < m_items.GetSize(); it1++ ) {
-	//		CControlUI* pControl = static_cast<CControlUI*>(m_items[it1]);
+	//		Control* pControl = static_cast<Control*>(m_items[it1]);
 	//		if( !pControl->IsVisible() ) continue;
 	//		if( pControl->IsFloat() ) {
 	//			SetFloatPos(it1);
@@ -277,7 +277,7 @@ namespace DuiLib
 	//		{
 	//			int iIndex = iCount;
 	//			for( int it2 = it1; it2 < m_items.GetSize(); it2++ ) {
-	//				CControlUI* pLineControl = static_cast<CControlUI*>(m_items[it2]);
+	//				Control* pLineControl = static_cast<Control*>(m_items[it2]);
 	//				if( !pLineControl->IsVisible() ) continue;
 	//				if( pLineControl->IsFloat() ) continue;
 

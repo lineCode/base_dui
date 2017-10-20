@@ -3,9 +3,9 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API CTextUI : public CLabelUI
+	class DUILIB_API CTextUI : public Label
 	{
 	public:
 		CTextUI();
@@ -15,9 +15,9 @@ namespace DuiLib
 		UINT GetControlFlags() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
 
-		CDuiString* GetLinkContent(int iIndex);
+		String* GetLinkContent(int iIndex);
 
-		void DoEvent(TEventUI& event);
+		void DoEvent(TEvent& event);
 
 		void PaintText(HDC hDC);
 
@@ -25,10 +25,10 @@ namespace DuiLib
 		enum { MAX_LINK = 8 };
 		int m_nLinks;
 		RECT m_rcLinks[MAX_LINK];
-		CDuiString m_sLinks[MAX_LINK];
+		String m_sLinks[MAX_LINK];
 		int m_nHoverLink;
 	};
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif //__UITEXT_H__

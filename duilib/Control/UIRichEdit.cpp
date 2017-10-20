@@ -6,7 +6,7 @@
 // These constants are for backward compatibility. They are the 
 // sizes used for initialization and reset in RichEdit 1.0
 
-namespace DuiLib {
+namespace dui {
 
 const LONG cInitTextMax = (32 * 1024) - 1;
 
@@ -38,7 +38,7 @@ class CTxtWinHost : public ITextHost
 {
 public:
     CTxtWinHost();
-    BOOL Init(CRichEditUI *re , const CREATESTRUCT *pcs);
+    BOOL Init(RichEdit *re , const CREATESTRUCT *pcs);
     virtual ~CTxtWinHost();
 
     ITextServices* GetTextServices(void) { return pserv; }
@@ -135,7 +135,7 @@ public:
     virtual HRESULT TxGetSelectionBarWidth (LONG *lSelBarWidth);
 
 private:
-    CRichEditUI *m_re;
+    RichEdit *m_re;
     ULONG	cRefs;					// Reference Count
     ITextServices	*pserv;		    // pointer to Text Services object
     // Properties
@@ -183,7 +183,7 @@ LONG DYtoHimetricY(LONG dy, LONG yPerInch)
     return (LONG) MulDiv(dy, HIMETRIC_PER_INCH, yPerInch);
 }
 
-HRESULT InitDefaultCharFormat(CRichEditUI* re, CHARFORMAT2W* pcf, HFONT hfont) 
+HRESULT InitDefaultCharFormat(RichEdit* re, CHARFORMAT2W* pcf, HFONT hfont) 
 {
     memset(pcf, 0, sizeof(CHARFORMAT2W));
     LOGFONT lf;
@@ -217,7 +217,7 @@ HRESULT InitDefaultCharFormat(CRichEditUI* re, CHARFORMAT2W* pcf, HFONT hfont)
     return S_OK;
 }
 
-HRESULT InitDefaultParaFormat(CRichEditUI* re, PARAFORMAT2* ppf) 
+HRESULT InitDefaultParaFormat(RichEdit* re, PARAFORMAT2* ppf) 
 {	
     memset(ppf, 0, sizeof(PARAFORMAT2));
     ppf->cbSize = sizeof(PARAFORMAT2);
@@ -229,7 +229,7 @@ HRESULT InitDefaultParaFormat(CRichEditUI* re, PARAFORMAT2* ppf)
     return S_OK;
 }
 
-HRESULT CreateHost(CRichEditUI *re, const CREATESTRUCT *pcs, CTxtWinHost **pptec)
+HRESULT CreateHost(RichEdit *re, const CREATESTRUCT *pcs, CTxtWinHost **pptec)
 {
     HRESULT hr = E_FAIL;
     //GdiSetBatchLimit(1);
@@ -267,7 +267,7 @@ CTxtWinHost::~CTxtWinHost()
 
 ////////////////////// Create/Init/Destruct Commands ///////////////////////
 
-BOOL CTxtWinHost::Init(CRichEditUI *re, const CREATESTRUCT *pcs)
+BOOL CTxtWinHost::Init(RichEdit *re, const CREATESTRUCT *pcs)
 {
 	IUnknown *pUnk = NULL;
     HRESULT hr;
@@ -427,8 +427,8 @@ int CTxtWinHost::TxReleaseDC(HDC hdc)
 
 BOOL CTxtWinHost::TxShowScrollBar(INT fnBar, BOOL fShow)
 {
-    CScrollBarUI* pVerticalScrollBar = m_re->GetVerticalScrollBar();
-    CScrollBarUI* pHorizontalScrollBar = m_re->GetHorizontalScrollBar();
+    ScrollBar* pVerticalScrollBar = m_re->GetVerticalScrollBar();
+    ScrollBar* pHorizontalScrollBar = m_re->GetHorizontalScrollBar();
     if( fnBar == SB_VERT && pVerticalScrollBar ) {
         pVerticalScrollBar->SetVisible(fShow == TRUE);
     }
@@ -462,8 +462,8 @@ BOOL CTxtWinHost::TxEnableScrollBar (INT fuSBFlags, INT fuArrowflags)
 
 BOOL CTxtWinHost::TxSetScrollRange(INT fnBar, LONG nMinPos, INT nMaxPos, BOOL fRedraw)
 {
-    CScrollBarUI* pVerticalScrollBar = m_re->GetVerticalScrollBar();
-    CScrollBarUI* pHorizontalScrollBar = m_re->GetHorizontalScrollBar();
+    ScrollBar* pVerticalScrollBar = m_re->GetVerticalScrollBar();
+    ScrollBar* pHorizontalScrollBar = m_re->GetHorizontalScrollBar();
     if( fnBar == SB_VERT && pVerticalScrollBar ) {
         if( nMaxPos - nMinPos - rcClient.bottom + rcClient.top <= 0 ) {
             pVerticalScrollBar->SetVisible(false);
@@ -487,8 +487,8 @@ BOOL CTxtWinHost::TxSetScrollRange(INT fnBar, LONG nMinPos, INT nMaxPos, BOOL fR
 
 BOOL CTxtWinHost::TxSetScrollPos (INT fnBar, INT nPos, BOOL fRedraw)
 {
-    CScrollBarUI* pVerticalScrollBar = m_re->GetVerticalScrollBar();
-    CScrollBarUI* pHorizontalScrollBar = m_re->GetHorizontalScrollBar();
+    ScrollBar* pVerticalScrollBar = m_re->GetVerticalScrollBar();
+    ScrollBar* pHorizontalScrollBar = m_re->GetHorizontalScrollBar();
     if( fnBar == SB_VERT && pVerticalScrollBar ) {
         pVerticalScrollBar->SetScrollPos(nPos);
     }
@@ -610,7 +610,7 @@ HRESULT CTxtWinHost::TxGetClientRect(LPRECT prc)
     return NOERROR;
 }
 
-HRESULT CTxtWinHost::TxGetViewInset(LPRECT prc) 
+HRESULT CTxtWinHost::TxGetViewInset(LPRECT prc)
 {
     prc->left = prc->right = prc->top = prc->bottom = 0;
     return NOERROR;	
@@ -1075,14 +1075,14 @@ void CTxtWinHost::SetParaFormat(PARAFORMAT2 &p)
 //
 //
 
-CRichEditUI::CRichEditUI() : m_pTwh(NULL), m_bVScrollBarFixing(false), m_bWantTab(true), m_bWantReturn(true), 
+RichEdit::RichEdit() : m_pTwh(NULL), m_bVScrollBarFixing(false), m_bWantTab(true), m_bWantReturn(true), 
     m_bWantCtrlReturn(true), m_bTransparent(true), m_bRich(true), m_bReadOnly(false), m_bWordWrap(false), m_dwTextColor(0), m_iFont(-1), 
 	m_iLimitText(cInitTextMax), m_lTwhStyle(ES_MULTILINE), m_bDrawCaret(true), m_bInited(false)
 {
 	::ZeroMemory(&m_rcTextPadding, sizeof(m_rcTextPadding));
 }
 
-CRichEditUI::~CRichEditUI()
+RichEdit::~RichEdit()
 {
     if( m_pTwh ) {
         m_pTwh->Release();
@@ -1090,104 +1090,104 @@ CRichEditUI::~CRichEditUI()
     }
 }
 
-LPCTSTR CRichEditUI::GetClass() const
+LPCTSTR RichEdit::GetClass() const
 {
     return DUI_CTR_RICHEDIT;
 }
 
-LPVOID CRichEditUI::GetInterface(LPCTSTR pstrName)
+LPVOID RichEdit::GetInterface(LPCTSTR pstrName)
 {
-    if( _tcscmp(pstrName, DUI_CTR_RICHEDIT) == 0 ) return static_cast<CRichEditUI*>(this);
-    return CContainerUI::GetInterface(pstrName);
+    if( _tcscmp(pstrName, DUI_CTR_RICHEDIT) == 0 ) return static_cast<RichEdit*>(this);
+    return Container::GetInterface(pstrName);
 }
 
-UINT CRichEditUI::GetControlFlags() const
+UINT RichEdit::GetControlFlags() const
 {
-    if( !IsEnabled() ) return CControlUI::GetControlFlags();
+    if( !IsEnabled() ) return Control::GetControlFlags();
 
     return UIFLAG_SETCURSOR | UIFLAG_TABSTOP;
 }
 
-bool CRichEditUI::IsWantTab()
+bool RichEdit::IsWantTab()
 {
     return m_bWantTab;
 }
 
-void CRichEditUI::SetWantTab(bool bWantTab)
+void RichEdit::SetWantTab(bool bWantTab)
 {
     m_bWantTab = bWantTab;
 }
 
-bool CRichEditUI::IsWantReturn()
+bool RichEdit::IsWantReturn()
 {
     return m_bWantReturn;
 }
 
-void CRichEditUI::SetWantReturn(bool bWantReturn)
+void RichEdit::SetWantReturn(bool bWantReturn)
 {
     m_bWantReturn = bWantReturn;
 }
 
-bool CRichEditUI::IsWantCtrlReturn()
+bool RichEdit::IsWantCtrlReturn()
 {
     return m_bWantCtrlReturn;
 }
 
-void CRichEditUI::SetWantCtrlReturn(bool bWantCtrlReturn)
+void RichEdit::SetWantCtrlReturn(bool bWantCtrlReturn)
 {
     m_bWantCtrlReturn = bWantCtrlReturn;
 }
 
-bool CRichEditUI::IsTransparent()
+bool RichEdit::IsTransparent()
 {
     return m_bTransparent;
 }
 
-void CRichEditUI::SetTransparent(bool bTransparent)
+void RichEdit::SetTransparent(bool bTransparent)
 {
     m_bTransparent = bTransparent;
     if( m_pTwh ) m_pTwh->SetTransparent(bTransparent);
 }
 
-bool CRichEditUI::IsRich()
+bool RichEdit::IsRich()
 {
     return m_bRich;
 }
 
-void CRichEditUI::SetRich(bool bRich)
+void RichEdit::SetRich(bool bRich)
 {
     m_bRich = bRich;
     if( m_pTwh ) m_pTwh->SetRichTextFlag(bRich);
 }
 
-bool CRichEditUI::IsReadOnly()
+bool RichEdit::IsReadOnly()
 {
     return m_bReadOnly;
 }
 
-void CRichEditUI::SetReadOnly(bool bReadOnly)
+void RichEdit::SetReadOnly(bool bReadOnly)
 {
     m_bReadOnly = bReadOnly;
     if( m_pTwh ) m_pTwh->SetReadOnly(bReadOnly);
 }
 
-bool CRichEditUI::IsWordWrap()
+bool RichEdit::IsWordWrap()
 {
     return m_bWordWrap;
 }
 
-void CRichEditUI::SetWordWrap(bool bWordWrap)
+void RichEdit::SetWordWrap(bool bWordWrap)
 {
     m_bWordWrap = bWordWrap;
     if( m_pTwh ) m_pTwh->SetWordWrap(bWordWrap);
 }
 
-int CRichEditUI::GetFont()
+int RichEdit::GetFont()
 {
     return m_iFont;
 }
 
-void CRichEditUI::SetFont(int index)
+void RichEdit::SetFont(int index)
 {
     m_iFont = index;
     if( m_pTwh ) {
@@ -1195,7 +1195,7 @@ void CRichEditUI::SetFont(int index)
     }
 }
 
-void CRichEditUI::SetFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic)
+void RichEdit::SetFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic)
 {
     if( m_pTwh ) {
         LOGFONT lf = { 0 };
@@ -1213,22 +1213,22 @@ void CRichEditUI::SetFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnd
     }
 }
 
-LONG CRichEditUI::GetWinStyle()
+LONG RichEdit::GetWinStyle()
 {
     return m_lTwhStyle;
 }
 
-void CRichEditUI::SetWinStyle(LONG lStyle)
+void RichEdit::SetWinStyle(LONG lStyle)
 {
     m_lTwhStyle = lStyle;
 }
 
-DWORD CRichEditUI::GetTextColor()
+DWORD RichEdit::GetTextColor()
 {
     return m_dwTextColor;
 }
 
-void CRichEditUI::SetTextColor(DWORD dwTextColor)
+void RichEdit::SetTextColor(DWORD dwTextColor)
 {
     m_dwTextColor = dwTextColor;
     if( m_pTwh ) {
@@ -1236,12 +1236,12 @@ void CRichEditUI::SetTextColor(DWORD dwTextColor)
     }
 }
 
-int CRichEditUI::GetLimitText()
+int RichEdit::GetLimitText()
 {
     return m_iLimitText;
 }
 
-void CRichEditUI::SetLimitText(int iChars)
+void RichEdit::SetLimitText(int iChars)
 {
     m_iLimitText = iChars;
     if( m_pTwh ) {
@@ -1249,7 +1249,7 @@ void CRichEditUI::SetLimitText(int iChars)
     }
 }
 
-long CRichEditUI::GetTextLength(DWORD dwFlags) const
+long RichEdit::GetTextLength(DWORD dwFlags) const
 {
     GETTEXTLENGTHEX textLenEx;
     textLenEx.flags = dwFlags;
@@ -1263,7 +1263,7 @@ long CRichEditUI::GetTextLength(DWORD dwFlags) const
     return (long)lResult;
 }
 
-CDuiString CRichEditUI::GetText() const
+String RichEdit::GetText() const
 {
     long lLen = GetTextLength(GTL_DEFAULT);
     LPTSTR lpText = NULL;
@@ -1283,12 +1283,12 @@ CDuiString CRichEditUI::GetText() const
     gt.lpDefaultChar = NULL;
     gt.lpUsedDefChar = NULL;
     TxSendMessage(EM_GETTEXTEX, (WPARAM)&gt, (LPARAM)lpText, 0);
-    CDuiString sText(lpText);
+    String sText(lpText);
     delete[] lpText;
     return sText;
 }
 
-void CRichEditUI::SetText(LPCTSTR pstrText)
+void RichEdit::SetText(LPCTSTR pstrText)
 {
     m_sText = pstrText;
     if( !m_pTwh ) return;
@@ -1296,7 +1296,7 @@ void CRichEditUI::SetText(LPCTSTR pstrText)
     ReplaceSel(pstrText, FALSE);
 }
 
-bool CRichEditUI::IsModify() const
+bool RichEdit::IsModify() const
 { 
     if( !m_pTwh ) return false;
     LRESULT lResult;
@@ -1304,17 +1304,17 @@ bool CRichEditUI::IsModify() const
     return (BOOL)lResult == TRUE;
 }
 
-void CRichEditUI::SetModify(bool bModified) const
+void RichEdit::SetModify(bool bModified) const
 { 
     TxSendMessage(EM_SETMODIFY, bModified, 0, 0);
 }
 
-void CRichEditUI::GetSel(CHARRANGE &cr) const
+void RichEdit::GetSel(CHARRANGE &cr) const
 { 
     TxSendMessage(EM_EXGETSEL, 0, (LPARAM)&cr, 0); 
 }
 
-void CRichEditUI::GetSel(long& nStartChar, long& nEndChar) const
+void RichEdit::GetSel(long& nStartChar, long& nEndChar) const
 {
     CHARRANGE cr;
     TxSendMessage(EM_EXGETSEL, 0, (LPARAM)&cr, 0); 
@@ -1322,14 +1322,14 @@ void CRichEditUI::GetSel(long& nStartChar, long& nEndChar) const
     nEndChar = cr.cpMax;
 }
 
-int CRichEditUI::SetSel(CHARRANGE &cr)
+int RichEdit::SetSel(CHARRANGE &cr)
 { 
     LRESULT lResult;
     TxSendMessage(EM_EXSETSEL, 0, (LPARAM)&cr, &lResult); 
     return (int)lResult;
 }
 
-int CRichEditUI::SetSel(long nStartChar, long nEndChar)
+int RichEdit::SetSel(long nStartChar, long nEndChar)
 {
     CHARRANGE cr;
     cr.cpMin = nStartChar;
@@ -1339,7 +1339,7 @@ int CRichEditUI::SetSel(long nStartChar, long nEndChar)
     return (int)lResult;
 }
 
-void CRichEditUI::ReplaceSel(LPCTSTR lpszNewText, bool bCanUndo)
+void RichEdit::ReplaceSel(LPCTSTR lpszNewText, bool bCanUndo)
 {
 #ifdef _UNICODE		
     TxSendMessage(EM_REPLACESEL, (WPARAM) bCanUndo, (LPARAM)lpszNewText, 0); 
@@ -1353,14 +1353,14 @@ void CRichEditUI::ReplaceSel(LPCTSTR lpszNewText, bool bCanUndo)
 #endif
 }
 
-void CRichEditUI::ReplaceSelW(LPCWSTR lpszNewText, bool bCanUndo)
+void RichEdit::ReplaceSelW(LPCWSTR lpszNewText, bool bCanUndo)
 {
     TxSendMessage(EM_REPLACESEL, (WPARAM) bCanUndo, (LPARAM)lpszNewText, 0); 
 }
 
-CDuiString CRichEditUI::GetSelText() const
+String RichEdit::GetSelText() const
 {
-    if( !m_pTwh ) return CDuiString();
+    if( !m_pTwh ) return String();
     CHARRANGE cr;
     cr.cpMin = cr.cpMax = 0;
     TxSendMessage(EM_EXGETSEL, 0, (LPARAM)&cr, 0);
@@ -1368,30 +1368,30 @@ CDuiString CRichEditUI::GetSelText() const
     lpText = new WCHAR[cr.cpMax - cr.cpMin + 1];
     ::ZeroMemory(lpText, (cr.cpMax - cr.cpMin + 1) * sizeof(WCHAR));
     TxSendMessage(EM_GETSELTEXT, 0, (LPARAM)lpText, 0);
-    CDuiString sText;
+    String sText;
     sText = (LPCWSTR)lpText;
     delete[] lpText;
     return sText;
 }
 
-int CRichEditUI::SetSelAll()
+int RichEdit::SetSelAll()
 {
     return SetSel(0, -1);
 }
 
-int CRichEditUI::SetSelNone()
+int RichEdit::SetSelNone()
 {
     return SetSel(-1, 0);
 }
 
-bool CRichEditUI::GetZoom(int& nNum, int& nDen) const
+bool RichEdit::GetZoom(int& nNum, int& nDen) const
 {
     LRESULT lResult;
     TxSendMessage(EM_GETZOOM, (WPARAM)&nNum, (LPARAM)&nDen, &lResult);
     return (BOOL)lResult == TRUE;
 }
 
-bool CRichEditUI::SetZoom(int nNum, int nDen)
+bool RichEdit::SetZoom(int nNum, int nDen)
 {
     if (nNum < 0 || nNum > 64) return false;
     if (nDen < 0 || nDen > 64) return false;
@@ -1400,49 +1400,49 @@ bool CRichEditUI::SetZoom(int nNum, int nDen)
     return (BOOL)lResult == TRUE;
 }
 
-bool CRichEditUI::SetZoomOff()
+bool RichEdit::SetZoomOff()
 {
     LRESULT lResult;
     TxSendMessage(EM_SETZOOM, 0, 0, &lResult);
     return (BOOL)lResult == TRUE;
 }
 
-WORD CRichEditUI::GetSelectionType() const
+WORD RichEdit::GetSelectionType() const
 {
     LRESULT lResult;
     TxSendMessage(EM_SELECTIONTYPE, 0, 0, &lResult);
     return (WORD)lResult;
 }
 
-bool CRichEditUI::GetAutoURLDetect() const
+bool RichEdit::GetAutoURLDetect() const
 {
     LRESULT lResult;
     TxSendMessage(EM_GETAUTOURLDETECT, 0, 0, &lResult);
     return (BOOL)lResult == TRUE;
 }
 
-bool CRichEditUI::SetAutoURLDetect(bool bAutoDetect)
+bool RichEdit::SetAutoURLDetect(bool bAutoDetect)
 {
     LRESULT lResult;
     TxSendMessage(EM_AUTOURLDETECT, bAutoDetect, 0, &lResult);
     return (BOOL)lResult == FALSE;
 }
 
-DWORD CRichEditUI::GetEventMask() const
+DWORD RichEdit::GetEventMask() const
 {
     LRESULT lResult;
     TxSendMessage(EM_GETEVENTMASK, 0, 0, &lResult);
     return (DWORD)lResult;
 }
 
-DWORD CRichEditUI::SetEventMask(DWORD dwEventMask)
+DWORD RichEdit::SetEventMask(DWORD dwEventMask)
 {
     LRESULT lResult;
     TxSendMessage(EM_SETEVENTMASK, 0, dwEventMask, &lResult);
     return (DWORD)lResult;
 }
 
-CDuiString CRichEditUI::GetTextRange(long nStartChar, long nEndChar) const
+String RichEdit::GetTextRange(long nStartChar, long nEndChar) const
 {
     TEXTRANGEW tr = { 0 };
     tr.chrg.cpMin = nStartChar;
@@ -1452,37 +1452,37 @@ CDuiString CRichEditUI::GetTextRange(long nStartChar, long nEndChar) const
     ::ZeroMemory(lpText, (nEndChar - nStartChar + 1) * sizeof(WCHAR));
     tr.lpstrText = lpText;
     TxSendMessage(EM_GETTEXTRANGE, 0, (LPARAM)&tr, 0);
-    CDuiString sText;
+    String sText;
     sText = (LPCWSTR)lpText;
     delete[] lpText;
     return sText;
 }
 
-void CRichEditUI::HideSelection(bool bHide, bool bChangeStyle)
+void RichEdit::HideSelection(bool bHide, bool bChangeStyle)
 {
     TxSendMessage(EM_HIDESELECTION, bHide, bChangeStyle, 0);
 }
 
-void CRichEditUI::ScrollCaret()
+void RichEdit::ScrollCaret()
 {
     TxSendMessage(EM_SCROLLCARET, 0, 0, 0);
 }
 
-int CRichEditUI::InsertText(long nInsertAfterChar, LPCTSTR lpstrText, bool bCanUndo)
+int RichEdit::InsertText(long nInsertAfterChar, LPCTSTR lpstrText, bool bCanUndo)
 {
     int nRet = SetSel(nInsertAfterChar, nInsertAfterChar);
     ReplaceSel(lpstrText, bCanUndo);
     return nRet;
 }
 
-int CRichEditUI::AppendText(LPCTSTR lpstrText, bool bCanUndo)
+int RichEdit::AppendText(LPCTSTR lpstrText, bool bCanUndo)
 {
     int nRet = SetSel(-1, -1);
     ReplaceSel(lpstrText, bCanUndo);
     return nRet;
 }
 
-DWORD CRichEditUI::GetDefaultCharFormat(CHARFORMAT2 &cf) const
+DWORD RichEdit::GetDefaultCharFormat(CHARFORMAT2 &cf) const
 {
     cf.cbSize = sizeof(CHARFORMAT2);
     LRESULT lResult;
@@ -1490,7 +1490,7 @@ DWORD CRichEditUI::GetDefaultCharFormat(CHARFORMAT2 &cf) const
     return (DWORD)lResult;
 }
 
-bool CRichEditUI::SetDefaultCharFormat(CHARFORMAT2 &cf)
+bool RichEdit::SetDefaultCharFormat(CHARFORMAT2 &cf)
 {
     if( !m_pTwh ) return false;
     cf.cbSize = sizeof(CHARFORMAT2);
@@ -1506,7 +1506,7 @@ bool CRichEditUI::SetDefaultCharFormat(CHARFORMAT2 &cf)
     return false;
 }
 
-DWORD CRichEditUI::GetSelectionCharFormat(CHARFORMAT2 &cf) const
+DWORD RichEdit::GetSelectionCharFormat(CHARFORMAT2 &cf) const
 {
     cf.cbSize = sizeof(CHARFORMAT2);
     LRESULT lResult;
@@ -1514,7 +1514,7 @@ DWORD CRichEditUI::GetSelectionCharFormat(CHARFORMAT2 &cf) const
     return (DWORD)lResult;
 }
 
-bool CRichEditUI::SetSelectionCharFormat(CHARFORMAT2 &cf)
+bool RichEdit::SetSelectionCharFormat(CHARFORMAT2 &cf)
 {
     if( !m_pTwh ) return false;
     cf.cbSize = sizeof(CHARFORMAT2);
@@ -1523,7 +1523,7 @@ bool CRichEditUI::SetSelectionCharFormat(CHARFORMAT2 &cf)
     return (BOOL)lResult == TRUE;
 }
 
-bool CRichEditUI::SetWordCharFormat(CHARFORMAT2 &cf)
+bool RichEdit::SetWordCharFormat(CHARFORMAT2 &cf)
 {
     if( !m_pTwh ) return false;
     cf.cbSize = sizeof(CHARFORMAT2);
@@ -1532,7 +1532,7 @@ bool CRichEditUI::SetWordCharFormat(CHARFORMAT2 &cf)
     return (BOOL)lResult == TRUE;
 }
 
-DWORD CRichEditUI::GetParaFormat(PARAFORMAT2 &pf) const
+DWORD RichEdit::GetParaFormat(PARAFORMAT2 &pf) const
 {
     pf.cbSize = sizeof(PARAFORMAT2);
     LRESULT lResult;
@@ -1540,7 +1540,7 @@ DWORD CRichEditUI::GetParaFormat(PARAFORMAT2 &pf) const
     return (DWORD)lResult;
 }
 
-bool CRichEditUI::SetParaFormat(PARAFORMAT2 &pf)
+bool RichEdit::SetParaFormat(PARAFORMAT2 &pf)
 {
     if( !m_pTwh ) return false;
     pf.cbSize = sizeof(PARAFORMAT2);
@@ -1553,7 +1553,7 @@ bool CRichEditUI::SetParaFormat(PARAFORMAT2 &pf)
     return false;
 }
 
-bool CRichEditUI::Redo()
+bool RichEdit::Redo()
 { 
     if( !m_pTwh ) return false;
     LRESULT lResult;
@@ -1561,7 +1561,7 @@ bool CRichEditUI::Redo()
     return (BOOL)lResult == TRUE; 
 }
 
-bool CRichEditUI::Undo()
+bool RichEdit::Undo()
 { 
     if( !m_pTwh ) return false;
     LRESULT lResult;
@@ -1569,27 +1569,27 @@ bool CRichEditUI::Undo()
     return (BOOL)lResult == TRUE; 
 }
 
-void CRichEditUI::Clear()
+void RichEdit::Clear()
 { 
     TxSendMessage(WM_CLEAR, 0, 0, 0); 
 }
 
-void CRichEditUI::Copy()
+void RichEdit::Copy()
 { 
     TxSendMessage(WM_COPY, 0, 0, 0); 
 }
 
-void CRichEditUI::Cut()
+void RichEdit::Cut()
 { 
     TxSendMessage(WM_CUT, 0, 0, 0); 
 }
 
-void CRichEditUI::Paste()
+void RichEdit::Paste()
 { 
     TxSendMessage(WM_PASTE, 0, 0, 0); 
 }
 
-int CRichEditUI::GetLineCount() const
+int RichEdit::GetLineCount() const
 { 
     if( !m_pTwh ) return 0;
     LRESULT lResult;
@@ -1597,48 +1597,48 @@ int CRichEditUI::GetLineCount() const
     return (int)lResult; 
 }
 
-CDuiString CRichEditUI::GetLine(int nIndex, int nMaxLength) const
+String RichEdit::GetLine(int nIndex, int nMaxLength) const
 {
     LPWSTR lpText = NULL;
     lpText = new WCHAR[nMaxLength + 1];
     ::ZeroMemory(lpText, (nMaxLength + 1) * sizeof(WCHAR));
     *(LPWORD)lpText = (WORD)nMaxLength;
     TxSendMessage(EM_GETLINE, nIndex, (LPARAM)lpText, 0);
-    CDuiString sText;
+    String sText;
     sText = (LPCWSTR)lpText;
     delete[] lpText;
     return sText;
 }
 
-int CRichEditUI::LineIndex(int nLine) const
+int RichEdit::LineIndex(int nLine) const
 {
     LRESULT lResult;
     TxSendMessage(EM_LINEINDEX, nLine, 0, &lResult);
     return (int)lResult;
 }
 
-int CRichEditUI::LineLength(int nLine) const
+int RichEdit::LineLength(int nLine) const
 {
     LRESULT lResult;
     TxSendMessage(EM_LINELENGTH, nLine, 0, &lResult);
     return (int)lResult;
 }
 
-bool CRichEditUI::LineScroll(int nLines, int nChars)
+bool RichEdit::LineScroll(int nLines, int nChars)
 {
     LRESULT lResult;
     TxSendMessage(EM_LINESCROLL, nChars, nLines, &lResult);
     return (BOOL)lResult == TRUE;
 }
 
-CDuiPoint CRichEditUI::GetCharPos(long lChar) const
+CDuiPoint RichEdit::GetCharPos(long lChar) const
 { 
     CDuiPoint pt; 
     TxSendMessage(EM_POSFROMCHAR, (WPARAM)&pt, (LPARAM)lChar, 0); 
     return pt;
 }
 
-long CRichEditUI::LineFromChar(long nIndex) const
+long RichEdit::LineFromChar(long nIndex) const
 { 
     if( !m_pTwh ) return 0L;
     LRESULT lResult;
@@ -1646,14 +1646,14 @@ long CRichEditUI::LineFromChar(long nIndex) const
     return (long)lResult;
 }
 
-CDuiPoint CRichEditUI::PosFromChar(UINT nChar) const
+CDuiPoint RichEdit::PosFromChar(UINT nChar) const
 { 
     POINTL pt; 
     TxSendMessage(EM_POSFROMCHAR, (WPARAM)&pt, nChar, 0); 
     return CDuiPoint(pt.x, pt.y); 
 }
 
-int CRichEditUI::CharFromPos(CDuiPoint pt) const
+int RichEdit::CharFromPos(CDuiPoint pt) const
 { 
     POINTL ptl = {pt.x, pt.y}; 
     if( !m_pTwh ) return 0;
@@ -1662,12 +1662,12 @@ int CRichEditUI::CharFromPos(CDuiPoint pt) const
     return (int)lResult; 
 }
 
-void CRichEditUI::EmptyUndoBuffer()
+void RichEdit::EmptyUndoBuffer()
 { 
     TxSendMessage(EM_EMPTYUNDOBUFFER, 0, 0, 0); 
 }
 
-UINT CRichEditUI::SetUndoLimit(UINT nLimit)
+UINT RichEdit::SetUndoLimit(UINT nLimit)
 { 
     if( !m_pTwh ) return 0;
     LRESULT lResult;
@@ -1675,7 +1675,7 @@ UINT CRichEditUI::SetUndoLimit(UINT nLimit)
     return (UINT)lResult; 
 }
 
-long CRichEditUI::StreamIn(int nFormat, EDITSTREAM &es)
+long RichEdit::StreamIn(int nFormat, EDITSTREAM &es)
 { 
     if( !m_pTwh ) return 0L;
     LRESULT lResult;
@@ -1683,7 +1683,7 @@ long CRichEditUI::StreamIn(int nFormat, EDITSTREAM &es)
     return (long)lResult;
 }
 
-long CRichEditUI::StreamOut(int nFormat, EDITSTREAM &es)
+long RichEdit::StreamOut(int nFormat, EDITSTREAM &es)
 { 
     if( !m_pTwh ) return 0L;
     LRESULT lResult;
@@ -1691,18 +1691,18 @@ long CRichEditUI::StreamOut(int nFormat, EDITSTREAM &es)
     return (long)lResult; 
 }
 
-RECT CRichEditUI::GetTextPadding() const
+RECT RichEdit::GetTextPadding() const
 {
 	return m_rcTextPadding;
 }
 
-void CRichEditUI::SetTextPadding(RECT rc)
+void RichEdit::SetTextPadding(RECT rc)
 {
 	m_rcTextPadding = rc;
 	Invalidate();
 }
 
-void CRichEditUI::DoInit()
+void RichEdit::DoInit()
 {
 	if(m_bInited)
 		return ;
@@ -1727,12 +1727,12 @@ void CRichEditUI::DoInit()
 	m_bInited= true;
 }
 
-HRESULT CRichEditUI::TxSendMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT *plresult) const
+HRESULT RichEdit::TxSendMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT *plresult) const
 {
     if( m_pTwh ) {
         if( msg == WM_KEYDOWN && TCHAR(wparam) == VK_RETURN ) {
             if( !m_bWantReturn || (::GetKeyState(VK_CONTROL) < 0 && !m_bWantCtrlReturn) ) {
-                if( m_pManager != NULL ) m_pManager->SendNotify((CControlUI*)this, DUI_MSGTYPE_RETURN);
+                if( m_pManager != NULL ) m_pManager->SendNotify((Control*)this, DUI_MSGTYPE_RETURN);
                 return S_OK;
             }
         }
@@ -1741,19 +1741,19 @@ HRESULT CRichEditUI::TxSendMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESU
     return S_FALSE;
 }
 
-IDropTarget* CRichEditUI::GetTxDropTarget()
+IDropTarget* RichEdit::GetTxDropTarget()
 {
     IDropTarget *pdt = NULL;
     if( m_pTwh->GetTextServices()->TxGetDropTarget(&pdt) == NOERROR ) return pdt;
     return NULL;
 }
 
-bool CRichEditUI::OnTxViewChanged()
+bool RichEdit::OnTxViewChanged()
 {
     return true;
 }
 
-bool CRichEditUI::SetDropAcceptFile(bool bAccept) 
+bool RichEdit::SetDropAcceptFile(bool bAccept) 
 {
 	LRESULT lResult;
 	TxSendMessage(EM_SETEVENTMASK, 0,ENM_DROPFILES|ENM_LINK, // ENM_CHANGE| ENM_CORRECTTEXT | ENM_DRAGDROPDONE | ENM_DROPFILES | ENM_IMECHANGE | ENM_LINK | ENM_OBJECTPOSITIONS | ENM_PROTECTED | ENM_REQUESTRESIZE | ENM_SCROLL | ENM_SELCHANGE | ENM_UPDATE,
@@ -1761,7 +1761,7 @@ bool CRichEditUI::SetDropAcceptFile(bool bAccept)
 	return (BOOL)lResult == FALSE;
 }
 
-void CRichEditUI::OnTxNotify(DWORD iNotify, void *pv)
+void RichEdit::OnTxNotify(DWORD iNotify, void *pv)
 {
 	switch(iNotify)
 	{ 
@@ -1801,7 +1801,7 @@ void CRichEditUI::OnTxNotify(DWORD iNotify, void *pv)
 
 // 多行非rich格式的richedit有一个滚动条bug，在最后一行是空行时，LineDown和SetScrollPos无法滚动到最后
 // 引入iPos就是为了修正这个bug
-void CRichEditUI::SetScrollPos(SIZE szPos)
+void RichEdit::SetScrollPos(SIZE szPos)
 {
     int cx = 0;
     int cy = 0;
@@ -1832,12 +1832,12 @@ void CRichEditUI::SetScrollPos(SIZE szPos)
     }
 }
 
-void CRichEditUI::LineUp()
+void RichEdit::LineUp()
 {
     TxSendMessage(WM_VSCROLL, SB_LINEUP, 0L, 0);
 }
 
-void CRichEditUI::LineDown()
+void RichEdit::LineDown()
 {
     int iPos = 0;
     if( m_pTwh && !m_bRich && m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) 
@@ -1849,61 +1849,61 @@ void CRichEditUI::LineDown()
     }
 }
 
-void CRichEditUI::PageUp()
+void RichEdit::PageUp()
 {
     TxSendMessage(WM_VSCROLL, SB_PAGEUP, 0L, 0);
 }
 
-void CRichEditUI::PageDown()
+void RichEdit::PageDown()
 {
     TxSendMessage(WM_VSCROLL, SB_PAGEDOWN, 0L, 0);
 }
 
-void CRichEditUI::HomeUp()
+void RichEdit::HomeUp()
 {
     TxSendMessage(WM_VSCROLL, SB_TOP, 0L, 0);
 }
 
-void CRichEditUI::EndDown()
+void RichEdit::EndDown()
 {
     TxSendMessage(WM_VSCROLL, SB_BOTTOM, 0L, 0);
 }
 
-void CRichEditUI::LineLeft()
+void RichEdit::LineLeft()
 {
     TxSendMessage(WM_HSCROLL, SB_LINELEFT, 0L, 0);
 }
 
-void CRichEditUI::LineRight()
+void RichEdit::LineRight()
 {
     TxSendMessage(WM_HSCROLL, SB_LINERIGHT, 0L, 0);
 }
 
-void CRichEditUI::PageLeft()
+void RichEdit::PageLeft()
 {
     TxSendMessage(WM_HSCROLL, SB_PAGELEFT, 0L, 0);
 }
 
-void CRichEditUI::PageRight()
+void RichEdit::PageRight()
 {
     TxSendMessage(WM_HSCROLL, SB_PAGERIGHT, 0L, 0);
 }
 
-void CRichEditUI::HomeLeft()
+void RichEdit::HomeLeft()
 {
     TxSendMessage(WM_HSCROLL, SB_LEFT, 0L, 0);
 }
 
-void CRichEditUI::EndRight()
+void RichEdit::EndRight()
 {
     TxSendMessage(WM_HSCROLL, SB_RIGHT, 0L, 0);
 }
 
-void CRichEditUI::DoEvent(TEventUI& event)
+void RichEdit::DoEvent(TEvent& event)
 {
     if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
         if( m_pParent != NULL ) m_pParent->DoEvent(event);
-        else CControlUI::DoEvent(event);
+        else Control::DoEvent(event);
         return;
     }
 
@@ -1945,7 +1945,7 @@ void CRichEditUI::DoEvent(TEventUI& event)
 					ptCaret.y + m_pTwh->GetCaretHeight() };
 				RECT rcTemp = rcCaret;
 				if( !::IntersectRect(&rcCaret, &rcTemp, &m_rcItem) ) return;
-				CControlUI* pParent = this;
+				Control* pParent = this;
 				RECT rcParent;
 				while( pParent = pParent->GetParent() ) {
 					rcTemp = rcCaret;
@@ -1984,24 +1984,24 @@ void CRichEditUI::DoEvent(TEventUI& event)
     {
         return;
     }
-    CContainerUI::DoEvent(event);
+    Container::DoEvent(event);
 }
 
-SIZE CRichEditUI::EstimateSize(SIZE szAvailable)
+SIZE RichEdit::EstimateSize(SIZE szAvailable)
 {
     //return CDuiSize(m_rcItem); // 这种方式在第一次设置大小之后就大小不变了
-    return CContainerUI::EstimateSize(szAvailable);
+    return Container::EstimateSize(szAvailable);
 }
 
-void CRichEditUI::SetPos(RECT rc, bool bNeedInvalidate)
+void RichEdit::SetPos(RECT rc, bool bNeedInvalidate)
 {
-    CControlUI::SetPos(rc, bNeedInvalidate);
+    Control::SetPos(rc, bNeedInvalidate);
     rc = m_rcItem;
 
-    rc.left += m_rcInset.left;
-    rc.top += m_rcInset.top;
-    rc.right -= m_rcInset.right;
-    rc.bottom -= m_rcInset.bottom;
+    rc.left += m_rcPadding.left;
+    rc.top += m_rcPadding.top;
+    rc.right -= m_rcPadding.right;
+    rc.bottom -= m_rcPadding.bottom;
 
     RECT rcScrollView = rc;
 
@@ -2073,7 +2073,7 @@ void CRichEditUI::SetPos(RECT rc, bool bNeedInvalidate)
     }
 
     for( int it = 0; it < m_items.GetSize(); it++ ) {
-        CControlUI* pControl = static_cast<CControlUI*>(m_items[it]);
+        Control* pControl = static_cast<Control*>(m_items[it]);
         if( !pControl->IsVisible() ) continue;
         if( pControl->IsFloat() ) {
             SetFloatPos(it);
@@ -2090,15 +2090,15 @@ void CRichEditUI::SetPos(RECT rc, bool bNeedInvalidate)
     }
 }
 
-void CRichEditUI::Move(SIZE szOffset, bool bNeedInvalidate)
+void RichEdit::Move(SIZE szOffset, bool bNeedInvalidate)
 {
-	CContainerUI::Move(szOffset, bNeedInvalidate);
+	Container::Move(szOffset, bNeedInvalidate);
 	if( m_pTwh != NULL ) {
 		RECT rc = m_rcItem;
-		rc.left += m_rcInset.left;
-		rc.top += m_rcInset.top;
-		rc.right -= m_rcInset.right;
-		rc.bottom -= m_rcInset.bottom;
+		rc.left += m_rcPadding.left;
+		rc.top += m_rcPadding.top;
+		rc.right -= m_rcPadding.right;
+		rc.bottom -= m_rcPadding.bottom;
 
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
 		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
@@ -2106,14 +2106,14 @@ void CRichEditUI::Move(SIZE szOffset, bool bNeedInvalidate)
 	}
 }
 
-bool CRichEditUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl)
+bool RichEdit::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 {
     RECT rcTemp = { 0 };
     if( !::IntersectRect(&rcTemp, &rcPaint, &m_rcItem) ) return true;
 
     CRenderClip clip;
     CRenderClip::GenerateClip(hDC, rcTemp, clip);
-    CControlUI::DoPaint(hDC, rcPaint, pStopControl);
+    Control::DoPaint(hDC, rcPaint, pStopControl);
 
     if( m_pTwh ) {
         RECT rc;
@@ -2154,16 +2154,16 @@ bool CRichEditUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl
 
     if( m_items.GetSize() > 0 ) {
         RECT rc = m_rcItem;
-        rc.left += m_rcInset.left;
-        rc.top += m_rcInset.top;
-        rc.right -= m_rcInset.right;
-        rc.bottom -= m_rcInset.bottom;
+        rc.left += m_rcPadding.left;
+        rc.top += m_rcPadding.top;
+        rc.right -= m_rcPadding.right;
+        rc.bottom -= m_rcPadding.bottom;
         if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
         if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 
         if( !::IntersectRect(&rcTemp, &rcPaint, &rc) ) {
             for( int it = 0; it < m_items.GetSize(); it++ ) {
-                CControlUI* pControl = static_cast<CControlUI*>(m_items[it]);
+                Control* pControl = static_cast<Control*>(m_items[it]);
 				if( pControl == pStopControl ) return false;
                 if( !pControl->IsVisible() ) continue;
                 if( !::IntersectRect(&rcTemp, &rcPaint, &pControl->GetPos()) ) continue;
@@ -2177,7 +2177,7 @@ bool CRichEditUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl
             CRenderClip childClip;
             CRenderClip::GenerateClip(hDC, rcTemp, childClip);
             for( int it = 0; it < m_items.GetSize(); it++ ) {
-                CControlUI* pControl = static_cast<CControlUI*>(m_items[it]);
+                Control* pControl = static_cast<Control*>(m_items[it]);
 				if( pControl == pStopControl ) return false;
                 if( !pControl->IsVisible() ) continue;
                 if( !::IntersectRect(&rcTemp, &rcPaint, &pControl->GetPos()) ) continue;
@@ -2224,7 +2224,7 @@ bool CRichEditUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl
     return true;
 }
 
-void CRichEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+void RichEdit::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if( _tcscmp(pstrName, _T("vscrollbar")) == 0 ) {
         if( _tcscmp(pstrValue, _T("true")) == 0 ) m_lTwhStyle |= ES_DISABLENOSCROLL | WS_VSCROLL;
@@ -2297,10 +2297,10 @@ void CRichEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
 		SetTextPadding(rcTextPadding);
 	}
-    else CContainerUI::SetAttribute(pstrName, pstrValue);
+    else Container::SetAttribute(pstrName, pstrValue);
 }
 
-LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)
+LRESULT RichEdit::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)
 {
     if( !IsVisible() || !IsEnabled() ) return 0;
     if( !IsMouseEnabled() && uMsg >= WM_MOUSEFIRST && uMsg <= WM_MOUSELAST ) return 0;
@@ -2317,7 +2317,7 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
             case WM_RBUTTONUP:
                 {
                     POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-                    CControlUI* pHover = GetManager()->FindControl(pt);
+                    Control* pHover = GetManager()->FindControl(pt);
                     if(pHover != this) {
                         bWasHandled = false;
                         return 0;
@@ -2379,7 +2379,7 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
     else if( uMsg == WM_CONTEXTMENU ) {
         POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
         ::ScreenToClient(GetManager()->GetPaintWindow(), &pt);
-        CControlUI* pHover = GetManager()->FindControl(pt);
+        Control* pHover = GetManager()->FindControl(pt);
         if(pHover != this) {
             bWasHandled = false;
             return 0;
@@ -2408,4 +2408,4 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
 
 
 
-} // namespace DuiLib
+} // namespace dui

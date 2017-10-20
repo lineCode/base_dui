@@ -1,8 +1,8 @@
 ﻿#include "StdAfx.h"
 
-namespace DuiLib {
+namespace dui {
 
-CControlUI::CControlUI() : 
+Control::Control() : 
 m_pManager(NULL), 
 m_pParent(NULL), 
 m_pCover(NULL),
@@ -41,7 +41,7 @@ m_nTooltipWidth(300)
 	m_piFloatPercent.left = m_piFloatPercent.top = m_piFloatPercent.right = m_piFloatPercent.bottom = 0.0f;
 }
 
-CControlUI::~CControlUI()
+Control::~Control()
 {
     if( m_pCover != NULL ) {
         m_pCover->Delete();
@@ -53,18 +53,18 @@ CControlUI::~CControlUI()
     if( m_pManager != NULL ) m_pManager->ReapObjects(this);
 }
 
-void CControlUI::Delete()
+void Control::Delete()
 {
     if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
     delete this;
 }
 
-CDuiString CControlUI::GetName() const
+String Control::GetName() const
 {
     return m_sName;
 }
 
-void CControlUI::SetName(LPCTSTR pstrName)
+void Control::SetName(LPCTSTR pstrName)
 {
 	if (m_sName != pstrName) {
 		m_sName = pstrName;
@@ -72,40 +72,40 @@ void CControlUI::SetName(LPCTSTR pstrName)
 	}
 }
 
-LPVOID CControlUI::GetInterface(LPCTSTR pstrName)
+LPVOID Control::GetInterface(LPCTSTR pstrName)
 {
     if( _tcscmp(pstrName, DUI_CTR_CONTROL) == 0 ) return this;
     return NULL;
 }
 
-LPCTSTR CControlUI::GetClass() const
+LPCTSTR Control::GetClass() const
 {
     return DUI_CTR_CONTROL;
 }
 
-UINT CControlUI::GetControlFlags() const
+UINT Control::GetControlFlags() const
 {
     return 0;
 }
 
-HWND CControlUI::GetNativeWindow() const
+HWND Control::GetNativeWindow() const
 {
 	return NULL;
 }
 
-bool CControlUI::Activate()
+bool Control::Activate()
 {
     if( !IsVisible() ) return false;
     if( !IsEnabled() ) return false;
     return true;
 }
 
-CPaintManagerUI* CControlUI::GetManager() const
+CPaintManager* Control::GetManager() const
 {
     return m_pManager;
 }
 
-void CControlUI::SetManager(CPaintManagerUI* pManager, CControlUI* pParent, bool bInit)
+void Control::SetManager(CPaintManager* pManager, Control* pParent, bool bInit)
 {
     if( m_pCover != NULL ) m_pCover->SetManager(pManager, this, bInit);
     m_pManager = pManager;
@@ -113,17 +113,17 @@ void CControlUI::SetManager(CPaintManagerUI* pManager, CControlUI* pParent, bool
     if( bInit && m_pParent ) Init();
 }
 
-CControlUI* CControlUI::GetParent() const
+Control* Control::GetParent() const
 {
     return m_pParent;
 }
 
-CControlUI* CControlUI::GetCover() const
+Control* Control::GetCover() const
 {
     return m_pCover;
 }
 
-void CControlUI::SetCover(CControlUI *pControl)
+void Control::SetCover(Control *pControl)
 {
     if( m_pCover == pControl ) return;
     if( m_pCover != NULL ) m_pCover->Delete();
@@ -135,12 +135,12 @@ void CControlUI::SetCover(CControlUI *pControl)
     }
 }
 
-CDuiString CControlUI::GetText() const
+String Control::GetText() const
 {
     return m_sText;
 }
 
-void CControlUI::SetText(LPCTSTR pstrText)
+void Control::SetText(LPCTSTR pstrText)
 {
     if( m_sText == pstrText ) return;
 
@@ -148,12 +148,12 @@ void CControlUI::SetText(LPCTSTR pstrText)
     Invalidate();
 }
 
-DWORD CControlUI::GetBkColor() const
+DWORD Control::GetBkColor() const
 {
     return m_dwBackColor;
 }
 
-void CControlUI::SetBkColor(DWORD dwBackColor)
+void Control::SetBkColor(DWORD dwBackColor)
 {
     if( m_dwBackColor == dwBackColor ) return;
 
@@ -161,12 +161,12 @@ void CControlUI::SetBkColor(DWORD dwBackColor)
     Invalidate();
 }
 
-DWORD CControlUI::GetBkColor2() const
+DWORD Control::GetBkColor2() const
 {
     return m_dwBackColor2;
 }
 
-void CControlUI::SetBkColor2(DWORD dwBackColor)
+void Control::SetBkColor2(DWORD dwBackColor)
 {
     if( m_dwBackColor2 == dwBackColor ) return;
 
@@ -174,12 +174,12 @@ void CControlUI::SetBkColor2(DWORD dwBackColor)
     Invalidate();
 }
 
-DWORD CControlUI::GetBkColor3() const
+DWORD Control::GetBkColor3() const
 {
     return m_dwBackColor3;
 }
 
-void CControlUI::SetBkColor3(DWORD dwBackColor)
+void Control::SetBkColor3(DWORD dwBackColor)
 {
     if( m_dwBackColor3 == dwBackColor ) return;
 
@@ -187,12 +187,12 @@ void CControlUI::SetBkColor3(DWORD dwBackColor)
     Invalidate();
 }
 
-LPCTSTR CControlUI::GetBkImage()
+LPCTSTR Control::GetBkImage()
 {
     return m_diBk.sDrawString.c_str();
 }
 
-void CControlUI::SetBkImage(LPCTSTR pStrImage)
+void Control::SetBkImage(LPCTSTR pStrImage)
 {
 	if( m_diBk.sDrawString == pStrImage && m_diBk.pImageInfo != NULL ) return;
 	m_diBk.Clear();
@@ -205,12 +205,12 @@ void CControlUI::SetBkImage(LPCTSTR pStrImage)
 	Invalidate();
 }
 
-DWORD CControlUI::GetBorderColor() const
+DWORD Control::GetBorderColor() const
 {
     return m_dwBorderColor;
 }
 
-void CControlUI::SetBorderColor(DWORD dwBorderColor)
+void Control::SetBorderColor(DWORD dwBorderColor)
 {
     if( m_dwBorderColor == dwBorderColor ) return;
 
@@ -218,12 +218,12 @@ void CControlUI::SetBorderColor(DWORD dwBorderColor)
     Invalidate();
 }
 
-DWORD CControlUI::GetFocusBorderColor() const
+DWORD Control::GetFocusBorderColor() const
 {
     return m_dwFocusBorderColor;
 }
 
-void CControlUI::SetFocusBorderColor(DWORD dwBorderColor)
+void Control::SetFocusBorderColor(DWORD dwBorderColor)
 {
     if( m_dwFocusBorderColor == dwBorderColor ) return;
 
@@ -231,12 +231,12 @@ void CControlUI::SetFocusBorderColor(DWORD dwBorderColor)
     Invalidate();
 }
 
-bool CControlUI::IsColorHSL() const
+bool Control::IsColorHSL() const
 {
     return m_bColorHSL;
 }
 
-void CControlUI::SetColorHSL(bool bColorHSL)
+void Control::SetColorHSL(bool bColorHSL)
 {
     if( m_bColorHSL == bColorHSL ) return;
 
@@ -244,47 +244,47 @@ void CControlUI::SetColorHSL(bool bColorHSL)
     Invalidate();
 }
 
-RECT CControlUI::GetBorderSize() const
+RECT Control::GetBorderSize() const
 {
     return m_rcBorderSize;
 }
 
-void CControlUI::SetBorderSize( RECT rc )
+void Control::SetBorderSize( RECT rc )
 {
 	m_rcBorderSize = rc;
 	Invalidate();
 }
 
-void CControlUI::SetBorderSize(int iSize)
+void Control::SetBorderSize(int iSize)
 {
 	m_rcBorderSize.left = m_rcBorderSize.top = m_rcBorderSize.right = m_rcBorderSize.bottom = iSize;
 	Invalidate();
 }
 
-SIZE CControlUI::GetBorderRound() const
+SIZE Control::GetBorderRound() const
 {
     return m_cxyBorderRound;
 }
 
-void CControlUI::SetBorderRound(SIZE cxyRound)
+void Control::SetBorderRound(SIZE cxyRound)
 {
     m_cxyBorderRound = cxyRound;
     Invalidate();
 }
 
-bool CControlUI::DrawImage(HDC hDC, TDrawInfo& drawInfo)
+bool Control::DrawImage(HDC hDC, TDrawInfo& drawInfo)
 {
 	return CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, drawInfo);
 }
 
-const RECT& CControlUI::GetPos() const
+const RECT& Control::GetPos() const
 {
     return m_rcItem;
 }
 
-RECT CControlUI::GetRelativePos() const
+RECT Control::GetRelativePos() const
 {
-	CControlUI* pParent = GetParent();
+	Control* pParent = GetParent();
 	if( pParent != NULL ) {
 		RECT rcParentPos = pParent->GetPos();
 		CDuiRect rcRelativePos(m_rcItem);
@@ -296,12 +296,12 @@ RECT CControlUI::GetRelativePos() const
 	}
 }
 
-RECT CControlUI::GetClientPos() const 
+RECT Control::GetClientPos() const 
 {
 	return m_rcItem;
 }
 
-void CControlUI::SetPos(RECT rc, bool bNeedInvalidate)
+void Control::SetPos(RECT rc, bool bNeedInvalidate)
 {
     if( rc.right < rc.left ) rc.right = rc.left;
     if( rc.bottom < rc.top ) rc.bottom = rc.top;
@@ -310,7 +310,7 @@ void CControlUI::SetPos(RECT rc, bool bNeedInvalidate)
     if( ::IsRectEmpty(&invalidateRc) ) invalidateRc = rc;
 
 	if( m_bFloat ) {
-		CControlUI* pParent = GetParent();
+		Control* pParent = GetParent();
 		if( pParent != NULL ) {
 			RECT rcParentPos = pParent->GetPos();
 			RECT rcCtrl = {rcParentPos.left + rc.left, rcParentPos.top + rc.top, 
@@ -342,7 +342,7 @@ void CControlUI::SetPos(RECT rc, bool bNeedInvalidate)
 
 	if( bNeedInvalidate && IsVisible() ) {
 		invalidateRc.Join(m_rcItem);
-		CControlUI* pParent = this;
+		Control* pParent = this;
 		RECT rcTemp;
 		RECT rcParent;
 		while( pParent = pParent->GetParent() ) {
@@ -380,7 +380,7 @@ void CControlUI::SetPos(RECT rc, bool bNeedInvalidate)
     }
 }
 
-void CControlUI::Move(SIZE szOffset, bool bNeedInvalidate)
+void Control::Move(SIZE szOffset, bool bNeedInvalidate)
 {
 	CDuiRect invalidateRc = m_rcItem;
 	m_rcItem.left += szOffset.cx;
@@ -390,7 +390,7 @@ void CControlUI::Move(SIZE szOffset, bool bNeedInvalidate)
 
 	if( bNeedInvalidate && m_pManager == NULL && IsVisible() ) {
 		invalidateRc.Join(m_rcItem);
-		CControlUI* pParent = this;
+		Control* pParent = this;
 		RECT rcTemp;
 		RECT rcParent;
 		while( pParent = pParent->GetParent() ) {
@@ -405,90 +405,90 @@ void CControlUI::Move(SIZE szOffset, bool bNeedInvalidate)
     if( m_pCover != NULL && m_pCover->IsVisible() ) m_pCover->Move(szOffset, false);
 }
 
-int CControlUI::GetWidth() const
+int Control::GetWidth() const
 {
     return m_rcItem.right - m_rcItem.left;
 }
 
-int CControlUI::GetHeight() const
+int Control::GetHeight() const
 {
     return m_rcItem.bottom - m_rcItem.top;
 }
 
-int CControlUI::GetX() const
+int Control::GetX() const
 {
     return m_rcItem.left;
 }
 
-int CControlUI::GetY() const
+int Control::GetY() const
 {
     return m_rcItem.top;
 }
 
-RECT CControlUI::GetMargin() const
+RECT Control::GetMargin() const
 {
     return m_rcMargin;
 }
 
-void CControlUI::SetMargin(RECT rcMargin)
+void Control::SetMargin(RECT rcMargin)
 {
     m_rcMargin = rcMargin;
     NeedParentUpdate();
 }
 
-SIZE CControlUI::GetFixedXY() const
+SIZE Control::GetFixedXY() const
 {
     return m_cXY;
 }
 
-void CControlUI::SetFixedXY(SIZE szXY)
+void Control::SetFixedXY(SIZE szXY)
 {
     m_cXY.cx = szXY.cx;
     m_cXY.cy = szXY.cy;
     NeedParentUpdate();
 }
 
-TPercentInfo CControlUI::GetFloatPercent() const
+TPercentInfo Control::GetFloatPercent() const
 {
 	return m_piFloatPercent;
 }
 
-void CControlUI::SetFloatPercent(TPercentInfo piFloatPercent)
+void Control::SetFloatPercent(TPercentInfo piFloatPercent)
 {
 	m_piFloatPercent = piFloatPercent;
 	NeedParentUpdate();
 }
 
-int CControlUI::GetFixedWidth() const
+int Control::GetFixedWidth() const
 {
     return m_cxyFixed.cx;
 }
 
-void CControlUI::SetFixedWidth(int cx)
+void Control::SetFixedWidth(int cx)
 {
     if( cx < 0 ) return; 
     m_cxyFixed.cx = cx;
     NeedParentUpdate();
 }
 
-int CControlUI::GetFixedHeight() const
+int Control::GetFixedHeight() const
 {
     return m_cxyFixed.cy;
 }
 
-void CControlUI::SetFixedHeight(int cy)
+void Control::SetFixedHeight(int cy)
 {
     if( cy < 0 ) return; 
     m_cxyFixed.cy = cy;
     NeedParentUpdate();
 }
 
-int CControlUI::GetMinWidth() const
+int Control::GetMinWidth() const
 {
     return m_cxyMin.cx;
 }
 
-void CControlUI::SetMinWidth(int cx)
+void Control::SetMinWidth(int cx)
 {
     if( m_cxyMin.cx == cx ) return;
 
@@ -497,13 +497,13 @@ void CControlUI::SetMinWidth(int cx)
     NeedParentUpdate();
 }
 
-int CControlUI::GetMaxWidth() const
+int Control::GetMaxWidth() const
 {
 	if (m_cxyMax.cx < m_cxyMin.cx) return m_cxyMin.cx;
     return m_cxyMax.cx;
 }
 
-void CControlUI::SetMaxWidth(int cx)
+void Control::SetMaxWidth(int cx)
 {
     if( m_cxyMax.cx == cx ) return;
 
@@ -512,12 +512,12 @@ void CControlUI::SetMaxWidth(int cx)
     NeedParentUpdate();
 }
 
-int CControlUI::GetMinHeight() const
+int Control::GetMinHeight() const
 {
     return m_cxyMin.cy;
 }
 
-void CControlUI::SetMinHeight(int cy)
+void Control::SetMinHeight(int cy)
 {
     if( m_cxyMin.cy == cy ) return;
 
@@ -526,13 +526,13 @@ void CControlUI::SetMinHeight(int cy)
     NeedParentUpdate();
 }
 
-int CControlUI::GetMaxHeight() const
+int Control::GetMaxHeight() const
 {
 	if (m_cxyMax.cy < m_cxyMin.cy) return m_cxyMin.cy;
     return m_cxyMax.cy;
 }
 
-void CControlUI::SetMaxHeight(int cy)
+void Control::SetMaxHeight(int cy)
 {
     if( m_cxyMax.cy == cy ) return;
 
@@ -541,78 +541,78 @@ void CControlUI::SetMaxHeight(int cy)
     NeedParentUpdate();
 }
 
-CDuiString CControlUI::GetToolTip() const
+String Control::GetToolTip() const
 {
     return m_sToolTip;
 }
 
-void CControlUI::SetToolTip(LPCTSTR pstrText)
+void Control::SetToolTip(LPCTSTR pstrText)
 {
 #if 1
 	m_sToolTip = pstrText;
 #else
-	CDuiString strTemp(pstrText);
+	String strTemp(pstrText);
 	strTemp.Replace(_T("<n>"),_T("\r\n"));
 	m_sToolTip=strTemp;
 #endif
 }
 
-void CControlUI::SetToolTipWidth( int nWidth )
+void Control::SetToolTipWidth( int nWidth )
 {
 	m_nTooltipWidth=nWidth;
 }
 
-int CControlUI::GetToolTipWidth( void )
+int Control::GetToolTipWidth( void )
 {
 	return m_nTooltipWidth;
 }
 
-TCHAR CControlUI::GetShortcut() const
+TCHAR Control::GetShortcut() const
 {
     return m_chShortcut;
 }
 
-void CControlUI::SetShortcut(TCHAR ch)
+void Control::SetShortcut(TCHAR ch)
 {
     m_chShortcut = ch;
 }
 
-bool CControlUI::IsContextMenuUsed() const
+bool Control::IsContextMenuUsed() const
 {
     return m_bMenuUsed;
 }
 
-void CControlUI::SetContextMenuUsed(bool bMenuUsed)
+void Control::SetContextMenuUsed(bool bMenuUsed)
 {
     m_bMenuUsed = bMenuUsed;
 }
 
-const CDuiString& CControlUI::GetUserData()
+const String& Control::GetUserData()
 {
     return m_sUserData;
 }
 
-void CControlUI::SetUserData(LPCTSTR pstrText)
+void Control::SetUserData(LPCTSTR pstrText)
 {
     m_sUserData = pstrText;
 }
 
-UINT_PTR CControlUI::GetTag() const
+UINT_PTR Control::GetTag() const
 {
     return m_pTag;
 }
 
-void CControlUI::SetTag(UINT_PTR pTag)
+void Control::SetTag(UINT_PTR pTag)
 {
     m_pTag = pTag;
 }
 
-bool CControlUI::IsVisible() const
+bool Control::IsVisible() const
 {
     return m_bVisible && m_bInternVisible;
 }
 
-void CControlUI::SetVisible(bool bVisible)
+void Control::SetVisible(bool bVisible)
 {
     if( m_bVisible == bVisible ) return;
 
@@ -629,7 +629,7 @@ void CControlUI::SetVisible(bool bVisible)
     if( m_pCover != NULL ) m_pCover->SetInternVisible(IsVisible());
 }
 
-void CControlUI::SetInternVisible(bool bVisible)
+void Control::SetInternVisible(bool bVisible)
 {
     m_bInternVisible = bVisible;
 	if (!bVisible && m_pManager && m_pManager->GetFocus() == this) {
@@ -639,12 +639,12 @@ void CControlUI::SetInternVisible(bool bVisible)
     if( m_pCover != NULL ) m_pCover->SetInternVisible(IsVisible());
 }
 
-bool CControlUI::IsEnabled() const
+bool Control::IsEnabled() const
 {
     return m_bEnabled;
 }
 
-void CControlUI::SetEnabled(bool bEnabled)
+void Control::SetEnabled(bool bEnabled)
 {
     if( m_bEnabled == bEnabled ) return;
 
@@ -652,41 +652,41 @@ void CControlUI::SetEnabled(bool bEnabled)
     Invalidate();
 }
 
-bool CControlUI::IsMouseEnabled() const
+bool Control::IsMouseEnabled() const
 {
     return m_bMouseEnabled;
 }
 
-void CControlUI::SetMouseEnabled(bool bEnabled)
+void Control::SetMouseEnabled(bool bEnabled)
 {
     m_bMouseEnabled = bEnabled;
 }
 
-bool CControlUI::IsKeyboardEnabled() const
+bool Control::IsKeyboardEnabled() const
 {
 	return m_bKeyboardEnabled ;
 }
-void CControlUI::SetKeyboardEnabled(bool bEnabled)
+void Control::SetKeyboardEnabled(bool bEnabled)
 {
 	m_bKeyboardEnabled = bEnabled ; 
 }
 
-bool CControlUI::IsFocused() const
+bool Control::IsFocused() const
 {
     return m_bFocused;
 }
 
-void CControlUI::SetFocus()
+void Control::SetFocus()
 {
     if( m_pManager != NULL ) m_pManager->SetFocus(this, false);
 }
 
-bool CControlUI::IsFloat() const
+bool Control::IsFloat() const
 {
     return m_bFloat;
 }
 
-void CControlUI::SetFloat(bool bFloat)
+void Control::SetFloat(bool bFloat)
 {
     if( m_bFloat == bFloat ) return;
 
@@ -694,10 +694,10 @@ void CControlUI::SetFloat(bool bFloat)
     NeedParentUpdate();
 }
 
-void CControlUI::AddCustomAttribute(LPCTSTR pstrName, LPCTSTR pstrAttr)
+void Control::AddCustomAttribute(LPCTSTR pstrName, LPCTSTR pstrAttr)
 {
 	if( pstrName == NULL || pstrName[0] == _T('\0') || pstrAttr == NULL || pstrAttr[0] == _T('\0') ) return;
-	CDuiString* pCostomAttr = new CDuiString(pstrAttr);
+	String* pCostomAttr = new String(pstrAttr);
 	if (pCostomAttr != NULL) {
 		if (m_mCustomAttrHash.Find(pstrName) == NULL)
 			m_mCustomAttrHash.Set(pstrName, (LPVOID)pCostomAttr);
@@ -706,44 +706,44 @@ void CControlUI::AddCustomAttribute(LPCTSTR pstrName, LPCTSTR pstrAttr)
 	}
 }
 
-LPCTSTR CControlUI::GetCustomAttribute(LPCTSTR pstrName) const
+LPCTSTR Control::GetCustomAttribute(LPCTSTR pstrName) const
 {
 	if( pstrName == NULL || pstrName[0] == _T('\0') ) return NULL;
-	CDuiString* pCostomAttr = static_cast<CDuiString*>(m_mCustomAttrHash.Find(pstrName));
+	String* pCostomAttr = static_cast<String*>(m_mCustomAttrHash.Find(pstrName));
 	if (pCostomAttr) return pCostomAttr->c_str();
 	return NULL;
 }
 
-bool CControlUI::RemoveCustomAttribute(LPCTSTR pstrName)
+bool Control::RemoveCustomAttribute(LPCTSTR pstrName)
 {
 	if( pstrName == NULL || pstrName[0] == _T('\0') ) return NULL;
-	CDuiString* pCostomAttr = static_cast<CDuiString*>(m_mCustomAttrHash.Find(pstrName));
+	String* pCostomAttr = static_cast<String*>(m_mCustomAttrHash.Find(pstrName));
 	if( !pCostomAttr ) return false;
 
 	delete pCostomAttr;
 	return m_mCustomAttrHash.Remove(pstrName);
 }
 
-void CControlUI::RemoveAllCustomAttribute()
+void Control::RemoveAllCustomAttribute()
 {
-	CDuiString* pCostomAttr;
+	String* pCostomAttr;
 	for( int i = 0; i< m_mCustomAttrHash.GetSize(); i++ ) {
 		if(LPCTSTR key = m_mCustomAttrHash.GetAt(i)) {
-			pCostomAttr = static_cast<CDuiString*>(m_mCustomAttrHash.Find(key));
+			pCostomAttr = static_cast<String*>(m_mCustomAttrHash.Find(key));
 			delete pCostomAttr;
 		}
 	}
 	m_mCustomAttrHash.Resize();
 }
 
-CControlUI* CControlUI::FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags)
+Control* Control::FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags)
 {
     if( (uFlags & UIFIND_VISIBLE) != 0 && !IsVisible() ) return NULL;
     if( (uFlags & UIFIND_ENABLED) != 0 && !IsEnabled() ) return NULL;
 	if( (uFlags & UIFIND_HITTEST) != 0 && (!::PtInRect(&m_rcItem, * static_cast<LPPOINT>(pData))) ) return NULL;
 	if( (uFlags & UIFIND_UPDATETEST) != 0 && Proc(this, pData) != NULL ) return NULL;
     
-    CControlUI* pResult = NULL;
+    Control* pResult = NULL;
     if( (uFlags & UIFIND_ME_FIRST) != 0 ) {
         if( (uFlags & UIFIND_HITTEST) == 0 || IsMouseEnabled() ) pResult = Proc(this, pData);
     }
@@ -756,13 +756,13 @@ CControlUI* CControlUI::FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFl
     return pResult;
 }
 
-void CControlUI::Invalidate()
+void Control::Invalidate()
 {
     if( !IsVisible() ) return;
 
     RECT invalidateRc = m_rcItem;
 
-    CControlUI* pParent = this;
+    Control* pParent = this;
     RECT rcTemp;
     RECT rcParent;
     while( pParent = pParent->GetParent() )
@@ -778,12 +778,12 @@ void CControlUI::Invalidate()
     if( m_pManager != NULL ) m_pManager->Invalidate(invalidateRc);
 }
 
-bool CControlUI::IsUpdateNeeded() const
+bool Control::IsUpdateNeeded() const
 {
     return m_bUpdateNeeded;
 }
 
-void CControlUI::NeedUpdate()
+void Control::NeedUpdate()
 {
     if( !IsVisible() ) return;
     m_bUpdateNeeded = true;
@@ -792,7 +792,7 @@ void CControlUI::NeedUpdate()
     if( m_pManager != NULL ) m_pManager->NeedUpdate();
 }
 
-void CControlUI::NeedParentUpdate()
+void Control::NeedParentUpdate()
 {
     if( GetParent() ) {
         GetParent()->NeedUpdate();
@@ -805,31 +805,31 @@ void CControlUI::NeedParentUpdate()
     if( m_pManager != NULL ) m_pManager->NeedUpdate();
 }
 
-DWORD CControlUI::GetAdjustColor(DWORD dwColor)
+DWORD Control::GetAdjustColor(DWORD dwColor)
 {
     if( !m_bColorHSL ) return dwColor;
     short H, S, L;
-    CPaintManagerUI::GetHSL(&H, &S, &L);
+    CPaintManager::GetHSL(&H, &S, &L);
     return CRenderEngine::AdjustColor(dwColor, H, S, L);
 }
 
-void CControlUI::Init()
+void Control::Init()
 {
     DoInit();
     if( OnInit ) OnInit(this);
 }
 
-void CControlUI::DoInit()
+void Control::DoInit()
 {
 
 }
 
-void CControlUI::Event(TEventUI& event)
+void Control::Event(TEvent& event)
 {
     if( OnEvent(&event) ) DoEvent(event);
 }
 
-void CControlUI::DoEvent(TEventUI& event)
+void Control::DoEvent(TEvent& event)
 {
     if( event.Type == UIEVENT_SETCURSOR )
     {
@@ -864,20 +864,20 @@ void CControlUI::DoEvent(TEventUI& event)
 }
 
 
-void CControlUI::SetVirtualWnd(LPCTSTR pstrValue)
+void Control::SetVirtualWnd(LPCTSTR pstrValue)
 {
 	m_sVirtualWnd = pstrValue;
 	m_pManager->UsedVirtualWnd(true);
 }
 
-CDuiString CControlUI::GetVirtualWnd() const
+String Control::GetVirtualWnd() const
 {
-	CDuiString str;
+	String str;
 	if( !m_sVirtualWnd.empty() ){
 		str = m_sVirtualWnd;
 	}
 	else{
-		CControlUI* pParent = GetParent();
+		Control* pParent = GetParent();
 		if( pParent != NULL){
 			str = pParent->GetVirtualWnd();
 		}
@@ -888,12 +888,12 @@ CDuiString CControlUI::GetVirtualWnd() const
 	return str;
 }
 
-LPCTSTR CControlUI::GetForeImage() const
+LPCTSTR Control::GetForeImage() const
 {
 	return m_diFore.sDrawString.c_str();
 }
 
-void CControlUI::SetForeImage( LPCTSTR pStrImage )
+void Control::SetForeImage( LPCTSTR pStrImage )
 {
 	if( m_diFore.sDrawString == pStrImage && m_diFore.pImageInfo != NULL ) return;
 	m_diFore.Clear();
@@ -901,12 +901,12 @@ void CControlUI::SetForeImage( LPCTSTR pStrImage )
 	Invalidate();
 }
 
-CDuiString CControlUI::GetAttribute(LPCTSTR pstrName)
+String Control::GetAttribute(LPCTSTR pstrName)
 {
     return _T("");
 }
 
-void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+void Control::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
 	if (_tcscmp(pstrName, _T("class")) == 0){
 		LPCTSTR pValue = m_pManager->GetDefaultAttributeList(pstrValue);
@@ -992,7 +992,7 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if( _tcscmp(pstrName, _T("colorhsl")) == 0 ) SetColorHSL(_tcscmp(pstrValue, _T("true")) == 0);
 	else if( _tcscmp(pstrName, _T("bordersize")) == 0 ) {
-		CDuiString nValue = pstrValue;
+		String nValue = pstrValue;
 		if (nValue.find(',') < 0)
 		{
 			SetBorderSize(_ttoi(pstrValue));
@@ -1033,7 +1033,7 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	else if( _tcscmp(pstrName, _T("keyboard")) == 0 ) SetKeyboardEnabled(_tcscmp(pstrValue, _T("true")) == 0);
     else if( _tcscmp(pstrName, _T("visible")) == 0 ) SetVisible(_tcscmp(pstrValue, _T("true")) == 0);
     else if( _tcscmp(pstrName, _T("float")) == 0 ) {
-		CDuiString nValue = pstrValue;
+		String nValue = pstrValue;
 		if (nValue.find(',') < 0) {
 			SetFloat(_tcscmp(pstrValue, _T("true")) == 0);
 		}
@@ -1057,15 +1057,15 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	}
 }
 
-CDuiString CControlUI::GetAttributeList(bool bIgnoreDefault)
+String Control::GetAttributeList(bool bIgnoreDefault)
 {
 	return _T("");
 }
 
-void CControlUI::SetAttributeList(LPCTSTR pstrList)
+void Control::SetAttributeList(LPCTSTR pstrList)
 {
-    CDuiString sItem;
-    CDuiString sValue;
+    String sItem;
+    String sValue;
     while( *pstrList != _T('\0') ) {
 		sItem.clear();
 		sValue.clear();
@@ -1092,12 +1092,12 @@ void CControlUI::SetAttributeList(LPCTSTR pstrList)
     }
 }
 
-SIZE CControlUI::EstimateSize(SIZE szAvailable)
+SIZE Control::EstimateSize(SIZE szAvailable)
 {
     return m_cxyFixed;
 }
 
-bool CControlUI::Paint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl)
+bool Control::Paint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 {
 	if (pStopControl == this) return false;
 	if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return true;
@@ -1109,7 +1109,7 @@ bool CControlUI::Paint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl)
     return true;
 }
 
-bool CControlUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl)
+bool Control::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 {
     // 绘制循序：背景颜色->背景图->状态图->文本->边框
     if( m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0 ) {
@@ -1131,7 +1131,7 @@ bool CControlUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl)
     return true;
 }
 
-void CControlUI::PaintBkColor(HDC hDC)
+void Control::PaintBkColor(HDC hDC)
 {
     if( m_dwBackColor != 0 ) {
         if( m_dwBackColor2 != 0 ) {
@@ -1151,22 +1151,22 @@ void CControlUI::PaintBkColor(HDC hDC)
     }
 }
 
-void CControlUI::PaintBkImage(HDC hDC)
+void Control::PaintBkImage(HDC hDC)
 {
 	DrawImage(hDC, m_diBk);
 }
 
-void CControlUI::PaintStatusImage(HDC hDC)
+void Control::PaintStatusImage(HDC hDC)
 {
     return;
 }
 
-void CControlUI::PaintText(HDC hDC)
+void Control::PaintText(HDC hDC)
 {
     return;
 }
 
-void CControlUI::PaintBorder(HDC hDC)
+void Control::PaintBorder(HDC hDC)
 {
 	if(m_rcBorderSize.left > 0 && (m_dwBorderColor != 0 || m_dwFocusBorderColor != 0)) {
 		if( m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0 )//画圆角边框
@@ -1230,20 +1230,20 @@ void CControlUI::PaintBorder(HDC hDC)
 	}
 }
 
-void CControlUI::DoPostPaint(HDC hDC, const RECT& rcPaint)
+void Control::DoPostPaint(HDC hDC, const RECT& rcPaint)
 {
 	if( OnPostPaint ) OnPostPaint(this);
 }
 
-int CControlUI::GetBorderStyle() const
+int Control::GetBorderStyle() const
 {
 	return m_nBorderStyle;
 }
 
-void CControlUI::SetBorderStyle( int nStyle )
+void Control::SetBorderStyle( int nStyle )
 {
 	m_nBorderStyle = nStyle;
 	Invalidate();
 }
 
-} // namespace DuiLib
+} // namespace dui

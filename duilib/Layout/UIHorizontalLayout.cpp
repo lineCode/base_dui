@@ -1,41 +1,41 @@
 #include "stdafx.h"
 #include "UIHorizontalLayout.h"
 
-namespace DuiLib
+namespace dui
 {
-	CHorizontalLayoutUI::CHorizontalLayoutUI() : m_iSepWidth(0), m_uButtonState(0), m_bImmMode(false)
+	HorizontalLayout::HorizontalLayout() : m_iSepWidth(0), m_uButtonState(0), m_bImmMode(false)
 	{
 		m_ptLastMouse.x = m_ptLastMouse.y = 0;
 		::ZeroMemory(&m_rcNewPos, sizeof(m_rcNewPos));
 	}
 
-	LPCTSTR CHorizontalLayoutUI::GetClass() const
+	LPCTSTR HorizontalLayout::GetClass() const
 	{
 		return DUI_CTR_HLAYOUT;
 	}
 
-	LPVOID CHorizontalLayoutUI::GetInterface(LPCTSTR pstrName)
+	LPVOID HorizontalLayout::GetInterface(LPCTSTR pstrName)
 	{
-		if( _tcscmp(pstrName, DUI_CTR_HLAYOUT) == 0 ) return static_cast<CHorizontalLayoutUI*>(this);
-		return CContainerUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_HLAYOUT) == 0 ) return static_cast<HorizontalLayout*>(this);
+		return Container::GetInterface(pstrName);
 	}
 
-	UINT CHorizontalLayoutUI::GetControlFlags() const
+	UINT HorizontalLayout::GetControlFlags() const
 	{
 		if( IsEnabled() && m_iSepWidth != 0 ) return UIFLAG_SETCURSOR;
 		else return 0;
 	}
 
-	void CHorizontalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void HorizontalLayout::SetPos(RECT rc, bool bNeedInvalidate)
 	{
-		CControlUI::SetPos(rc, bNeedInvalidate);
+		Control::SetPos(rc, bNeedInvalidate);
 		rc = m_rcItem;
 
-		// Adjust for inset
-		rc.left += m_rcInset.left;
-		rc.top += m_rcInset.top;
-		rc.right -= m_rcInset.right;
-		rc.bottom -= m_rcInset.bottom;
+		// Adjust for padding
+		rc.left += m_rcPadding.left;
+		rc.top += m_rcPadding.top;
+		rc.right -= m_rcPadding.right;
+		rc.bottom -= m_rcPadding.bottom;
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
 		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 
@@ -59,7 +59,7 @@ namespace DuiLib
 		int iControlMaxWidth = 0;
 		int iControlMaxHeight = 0;
 		for( int it1 = 0; it1 < m_items.GetSize(); it1++ ) {
-			CControlUI* pControl = static_cast<CControlUI*>(m_items[it1]);
+			Control* pControl = static_cast<Control*>(m_items[it1]);
 			if( !pControl->IsVisible() ) continue;
 			if( pControl->IsFloat() ) continue;
 			szControlAvailable = szAvailable;
@@ -111,7 +111,7 @@ namespace DuiLib
 		int iAdjustable = 0;
 		int cxFixedRemaining = cxFixed;
 		for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
-			CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
+			Control* pControl = static_cast<Control*>(m_items[it2]);
 			if( !pControl->IsVisible() ) continue;
 			if( pControl->IsFloat() ) {
 				SetFloatPos(it2);
@@ -193,7 +193,7 @@ namespace DuiLib
 		ProcessScrollBar(rc, cxNeeded, cyNeeded);
 	}
 
-	void CHorizontalLayoutUI::DoPostPaint(HDC hDC, const RECT& rcPaint)
+	void HorizontalLayout::DoPostPaint(HDC hDC, const RECT& rcPaint)
 	{
 		if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode ) {
 			RECT rcSeparator = GetThumbRect(true);
@@ -201,17 +201,17 @@ namespace DuiLib
 		}
 	}
 
-	void CHorizontalLayoutUI::SetSepWidth(int iWidth)
+	void HorizontalLayout::SetSepWidth(int iWidth)
 	{
 		m_iSepWidth = iWidth;
 	}
 
-	int CHorizontalLayoutUI::GetSepWidth() const
+	int HorizontalLayout::GetSepWidth() const
 	{
 		return m_iSepWidth;
 	}
 
-	void CHorizontalLayoutUI::SetSepImmMode(bool bImmediately)
+	void HorizontalLayout::SetSepImmMode(bool bImmediately)
 	{
 		if( m_bImmMode == bImmediately ) return;
 		if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode && m_pManager != NULL ) {
@@ -221,19 +221,19 @@ namespace DuiLib
 		m_bImmMode = bImmediately;
 	}
 
-	bool CHorizontalLayoutUI::IsSepImmMode() const
+	bool HorizontalLayout::IsSepImmMode() const
 	{
 		return m_bImmMode;
 	}
 
-	void CHorizontalLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+	void HorizontalLayout::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
 		if( _tcscmp(pstrName, _T("sepwidth")) == 0 ) SetSepWidth(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("sepimm")) == 0 ) SetSepImmMode(_tcscmp(pstrValue, _T("true")) == 0);
-		else CContainerUI::SetAttribute(pstrName, pstrValue);
+		else Container::SetAttribute(pstrName, pstrValue);
 	}
 
-	void CHorizontalLayoutUI::DoEvent(TEventUI& event)
+	void HorizontalLayout::DoEvent(TEvent& event)
 	{
 		if( m_iSepWidth != 0 ) {
 			if( event.Type == UIEVENT_BUTTONDOWN && IsEnabled() )
@@ -315,10 +315,10 @@ namespace DuiLib
 				}
 			}
 		}
-		CContainerUI::DoEvent(event);
+		Container::DoEvent(event);
 	}
 
-	RECT CHorizontalLayoutUI::GetThumbRect(bool bUseNew) const
+	RECT HorizontalLayout::GetThumbRect(bool bUseNew) const
 	{
 		if( (m_uButtonState & UISTATE_CAPTURED) != 0 && bUseNew) {
 			if( m_iSepWidth >= 0 ) return CDuiRect(m_rcNewPos.right - m_iSepWidth, m_rcNewPos.top, m_rcNewPos.right, m_rcNewPos.bottom);

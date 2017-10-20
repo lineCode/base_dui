@@ -3,12 +3,12 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API CSliderUI : public CProgressUI
+	class DUILIB_API Slider : public Progress
 	{
 	public:
-		CSliderUI();
+		Slider();
 
 		LPCTSTR GetClass() const;
 		UINT GetControlFlags() const;
@@ -29,7 +29,7 @@ namespace DuiLib
 		LPCTSTR GetThumbPushedImage() const;
 		void SetThumbPushedImage(LPCTSTR pStrImage);
 
-		void DoEvent(TEventUI& event);
+		void DoEvent(TEvent& event);
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 		void PaintStatusImage(HDC hDC);
 

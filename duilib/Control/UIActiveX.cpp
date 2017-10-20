@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 
-namespace DuiLib {
+namespace dui {
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -118,7 +118,7 @@ public:
 class CActiveXFrameWnd : public IOleInPlaceFrame
 {
 public:
-    CActiveXFrameWnd(CActiveXUI* pOwner) : m_dwRef(1), m_pOwner(pOwner), m_pActiveObject(NULL)
+    CActiveXFrameWnd(ActiveX* pOwner) : m_dwRef(1), m_pOwner(pOwner), m_pActiveObject(NULL)
     {
     }
     ~CActiveXFrameWnd()
@@ -127,7 +127,7 @@ public:
     }
 
     ULONG m_dwRef;
-    CActiveXUI* m_pOwner;
+    ActiveX* m_pOwner;
     IOleInPlaceActiveObject* m_pActiveObject;
 
     // IUnknown
@@ -219,7 +219,7 @@ class CActiveXCtrl :
     public IObjectWithSite,
     public IOleContainer
 {
-    friend class CActiveXUI;
+    friend class ActiveX;
     friend class CActiveXWnd;
 public:
     CActiveXCtrl();
@@ -298,7 +298,7 @@ protected:
 
 protected:
     LONG m_dwRef;
-    CActiveXUI* m_pOwner;
+    ActiveX* m_pOwner;
     CActiveXWnd* m_pWindow;
     IUnknown* m_pUnkSite;
     IViewObject* m_pViewObject;
@@ -779,7 +779,7 @@ LPCTSTR CActiveXWnd::GetWindowClassName() const
 void CActiveXWnd::OnFinalMessage(HWND hWnd)
 {
 	m_pOwner->m_pOwner->GetManager()->RemoveNativeWindow(hWnd);
-    //delete this; // 这里不需要清理，CActiveXUI会清理的
+    //delete this; // 这里不需要清理，ActiveX会清理的
 }
 
 void CActiveXWnd::DoVerb(LONG iVerb)
@@ -919,35 +919,35 @@ LRESULT CActiveXWnd::OnPrint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 //
 //
 
-CActiveXUI::CActiveXUI() : m_pUnk(NULL), m_pControl(NULL), m_hwndHost(NULL), m_bCreated(false), m_bDelayCreate(true)
+ActiveX::ActiveX() : m_pUnk(NULL), m_pControl(NULL), m_hwndHost(NULL), m_bCreated(false), m_bDelayCreate(true)
 {
     m_clsid = IID_NULL;
 	::CoInitialize(NULL);
 }
 
-CActiveXUI::~CActiveXUI()
+ActiveX::~ActiveX()
 {
     ReleaseControl();
 	::CoUninitialize();
 }
 
-LPCTSTR CActiveXUI::GetClass() const
+LPCTSTR ActiveX::GetClass() const
 {
     return DUI_CTR_ACTIVEX;
 }
 
-LPVOID CActiveXUI::GetInterface(LPCTSTR pstrName)
+LPVOID ActiveX::GetInterface(LPCTSTR pstrName)
 {
-	if( _tcscmp(pstrName, DUI_CTR_ACTIVEX) == 0 ) return static_cast<CActiveXUI*>(this);
-	return CControlUI::GetInterface(pstrName);
+	if( _tcscmp(pstrName, DUI_CTR_ACTIVEX) == 0 ) return static_cast<ActiveX*>(this);
+	return Control::GetInterface(pstrName);
 }
 
-UINT CActiveXUI::GetControlFlags() const
+UINT ActiveX::GetControlFlags() const
 {
 	return UIFLAG_TABSTOP;
 }
 
-HWND CActiveXUI::GetNativeWindow() const
+HWND ActiveX::GetNativeWindow() const
 {
     return m_hwndHost;
 }
@@ -967,23 +967,23 @@ static void PixelToHiMetric(const SIZEL* lpSizeInPix, LPSIZEL lpSizeInHiMetric)
     lpSizeInHiMetric->cy = MAP_PIX_TO_LOGHIM(lpSizeInPix->cy, nPixelsPerInchY);
 }
 
-void CActiveXUI::SetVisible(bool bVisible)
+void ActiveX::SetVisible(bool bVisible)
 {
-    CControlUI::SetVisible(bVisible);
+    Control::SetVisible(bVisible);
     if( m_hwndHost != NULL && !m_pControl->m_bWindowless ) 
         ::ShowWindow(m_hwndHost, IsVisible() ? SW_SHOW : SW_HIDE);
 }
 
-void CActiveXUI::SetInternVisible(bool bVisible)
+void ActiveX::SetInternVisible(bool bVisible)
 {
-    CControlUI::SetInternVisible(bVisible);
+    Control::SetInternVisible(bVisible);
     if( m_hwndHost != NULL && !m_pControl->m_bWindowless ) 
         ::ShowWindow(m_hwndHost, IsVisible() ? SW_SHOW : SW_HIDE);
 }
 
-void CActiveXUI::SetPos(RECT rc, bool bNeedInvalidate)
+void ActiveX::SetPos(RECT rc, bool bNeedInvalidate)
 {
-    CControlUI::SetPos(rc, bNeedInvalidate);
+    Control::SetPos(rc, bNeedInvalidate);
 
     if( !m_bCreated ) DoCreateControl();
 
@@ -1010,16 +1010,16 @@ void CActiveXUI::SetPos(RECT rc, bool bNeedInvalidate)
     }
 }
 
-void CActiveXUI::Move(SIZE szOffset, bool bNeedInvalidate)
+void ActiveX::Move(SIZE szOffset, bool bNeedInvalidate)
 {
-	CControlUI::Move(szOffset, bNeedInvalidate);
+	Control::Move(szOffset, bNeedInvalidate);
 	if( !m_pControl->m_bWindowless ) {
 		ASSERT(m_pControl->m_pWindow);
 		::MoveWindow(*m_pControl->m_pWindow, m_rcItem.left, m_rcItem.top, m_rcItem.right - m_rcItem.left, m_rcItem.bottom - m_rcItem.top, TRUE);
 	}
 }
 
-bool CActiveXUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl)
+bool ActiveX::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 {
     if( m_pControl != NULL && m_pControl->m_bWindowless && m_pControl->m_pViewObject != NULL )
     {
@@ -1028,15 +1028,15 @@ bool CActiveXUI::DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl)
     return true;
 }
 
-void CActiveXUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+void ActiveX::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if( _tcscmp(pstrName, _T("clsid")) == 0 ) CreateControl(pstrValue);
     else if( _tcscmp(pstrName, _T("modulename")) == 0 ) SetModuleName(pstrValue);
     else if( _tcscmp(pstrName, _T("delaycreate")) == 0 ) SetDelayCreate(_tcscmp(pstrValue, _T("true")) == 0);
-    else CControlUI::SetAttribute(pstrName, pstrValue);
+    else Control::SetAttribute(pstrName, pstrValue);
 }
 
-LRESULT CActiveXUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)
+LRESULT ActiveX::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)
 {
     if( m_pControl == NULL ) return 0;
     ASSERT(m_pControl->m_bWindowless);
@@ -1083,12 +1083,12 @@ LRESULT CActiveXUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool
     return lResult;
 }
 
-bool CActiveXUI::IsDelayCreate() const
+bool ActiveX::IsDelayCreate() const
 {
     return m_bDelayCreate;
 }
 
-void CActiveXUI::SetDelayCreate(bool bDelayCreate)
+void ActiveX::SetDelayCreate(bool bDelayCreate)
 {
     if( m_bDelayCreate == bDelayCreate ) return;
     if( bDelayCreate == false ) {
@@ -1097,7 +1097,7 @@ void CActiveXUI::SetDelayCreate(bool bDelayCreate)
     m_bDelayCreate = bDelayCreate;
 }
 
-bool CActiveXUI::CreateControl(LPCTSTR pstrCLSID)
+bool ActiveX::CreateControl(LPCTSTR pstrCLSID)
 {
     CLSID clsid = { 0 };
     OLECHAR szCLSID[100] = { 0 };
@@ -1111,7 +1111,7 @@ bool CActiveXUI::CreateControl(LPCTSTR pstrCLSID)
     return CreateControl(clsid);
 }
 
-bool CActiveXUI::CreateControl(const CLSID clsid)
+bool ActiveX::CreateControl(const CLSID clsid)
 {
     ASSERT(clsid!=IID_NULL);
     if( clsid == IID_NULL ) return false;
@@ -1121,7 +1121,7 @@ bool CActiveXUI::CreateControl(const CLSID clsid)
     return true;
 }
 
-void CActiveXUI::ReleaseControl()
+void ActiveX::ReleaseControl()
 {
     //m_hwndHost = NULL;		//djj[20170424]:commit.
     if( m_pUnk != NULL ) {
@@ -1147,7 +1147,7 @@ void CActiveXUI::ReleaseControl()
 
 typedef HRESULT (__stdcall *DllGetClassObjectFunc)(REFCLSID rclsid, REFIID riid, LPVOID* ppv); 
 
-bool CActiveXUI::DoCreateControl()
+bool ActiveX::DoCreateControl()
 {
     ReleaseControl();
     // At this point we'll create the ActiveX control
@@ -1200,7 +1200,7 @@ bool CActiveXUI::DoCreateControl()
     if( FAILED(Hr) ) Hr = m_pUnk->QueryInterface(IID_IViewObject, (LPVOID*) &m_pControl->m_pViewObject);
     // Activate and done...
     m_pUnk->SetHostNames(OLESTR("UIActiveX"), NULL);
-    if( m_pManager != NULL ) m_pManager->SendNotify((CControlUI*)this, DUI_MSGTYPE_SHOWACTIVEX, 0, 0, false);
+    if( m_pManager != NULL ) m_pManager->SendNotify((Control*)this, DUI_MSGTYPE_SHOWACTIVEX, 0, 0, false);
     if( (dwMiscStatus & OLEMISC_INVISIBLEATRUNTIME) == 0 ) {
         Hr = m_pUnk->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL, pOleClientSite, 0, m_pManager->GetPaintWindow(), &m_rcItem);
         //::RedrawWindow(m_pManager->GetPaintWindow(), &m_rcItem, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_INTERNALPAINT | RDW_FRAME);
@@ -1214,7 +1214,7 @@ bool CActiveXUI::DoCreateControl()
     return SUCCEEDED(Hr);
 }
 
-HRESULT CActiveXUI::GetControl(const IID iid, LPVOID* ppRet)
+HRESULT ActiveX::GetControl(const IID iid, LPVOID* ppRet)
 {
     ASSERT(ppRet!=NULL);
     ASSERT(*ppRet==NULL);
@@ -1223,19 +1223,19 @@ HRESULT CActiveXUI::GetControl(const IID iid, LPVOID* ppRet)
     return m_pUnk->QueryInterface(iid, (LPVOID*) ppRet);
 }
 
-CLSID CActiveXUI::GetClisd() const
+CLSID ActiveX::GetClisd() const
 {
 	return m_clsid;
 }
 
-CDuiString CActiveXUI::GetModuleName() const
+String ActiveX::GetModuleName() const
 {
     return m_sModuleName;
 }
 
-void CActiveXUI::SetModuleName(LPCTSTR pstrText)
+void ActiveX::SetModuleName(LPCTSTR pstrText)
 {
     m_sModuleName = pstrText;
 }
 
-} // namespace DuiLib
+} // namespace dui

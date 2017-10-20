@@ -5,12 +5,12 @@
 
 #include <map>
 
-namespace DuiLib
+namespace dui
 {
 	class DUILIB_API CShadowUI
 	{
 	public:
-		friend class CPaintManagerUI;
+		friend class CPaintManager;
 
 		CShadowUI(void);
 		virtual ~CShadowUI(void);
@@ -34,8 +34,8 @@ namespace DuiLib
 		// 把自己的阴影样式复制到传入参数
 		bool CopyShadow(CShadowUI* pShadow);
 
-		//	创建阴影窗体，由CPaintManagerUI自动调用,除非自己要单独创建阴影
-		void Create(CPaintManagerUI* pPaintManager);
+		//	创建阴影窗体，由CPaintManager自动调用,除非自己要单独创建阴影
+		void Create(CPaintManager* pPaintManager);
 	protected:
 
 		//	初始化并注册阴影类
@@ -72,7 +72,7 @@ namespace DuiLib
 
 		static bool s_bHasInit;
 
-		CPaintManagerUI	*m_pManager;		// 父窗体的CPaintManagerUI，用来获取素材资源和父窗体句柄
+		CPaintManager	*m_pManager;		// 父窗体的CPaintManager，用来获取素材资源和父窗体句柄
 		HWND			 m_hWnd;			// 阴影窗体的句柄
 		LONG_PTR		 m_OriParentProc;	// 子类化父窗体
 		BYTE			 m_Status;
@@ -98,7 +98,7 @@ namespace DuiLib
 		COLORREF m_Color;	// Color of shadow
 
 		// 图片阴影成员变量
-		CDuiString	m_sShadowImage;
+		String	m_sShadowImage;
 		RECT		m_rcShadowCorner;
 	};
 }

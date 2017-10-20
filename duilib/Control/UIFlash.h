@@ -9,16 +9,16 @@
 #include "../Utils/FlashEventHandler.h"
 #include "../Utils/flash11.tlh"
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API CFlashUI
-		: public CActiveXUI
+	class DUILIB_API Flash
+		: public ActiveX
 		, public _IShockwaveFlashEvents
 		, public ITranslateAccelerator
 	{
 	public:
-		CFlashUI(void);
-		~CFlashUI(void);
+		Flash(void);
+		~Flash(void);
 
 		void SetFlashEventHandler(CFlashEventHandler* pHandler);
 		virtual bool DoCreateControl();

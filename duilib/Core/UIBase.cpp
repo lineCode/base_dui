@@ -5,7 +5,7 @@
 #pragma comment(lib, "shlwapi.lib")
 #endif
 
-namespace DuiLib {
+namespace dui {
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -95,10 +95,10 @@ LPCTSTR DUI__TraceMsg(UINT uMsg)
 DUI_BASE_BEGIN_MESSAGE_MAP(CNotifyPump)
 DUI_END_MESSAGE_MAP()
 
-static const DUI_MSGMAP_ENTRY* DuiFindMessageEntry(const DUI_MSGMAP_ENTRY* lpEntry,TNotifyUI& msg )
+static const DUI_MSGMAP_ENTRY* DuiFindMessageEntry(const DUI_MSGMAP_ENTRY* lpEntry,TNotify& msg )
 {
-	CDuiString sMsgType = msg.sType;
-	CDuiString sCtrlName = msg.pSender->GetName();
+	String sMsgType = msg.sType;
+	String sCtrlName = msg.pSender->GetName();
 	const DUI_MSGMAP_ENTRY* pMsgTypeEntry = NULL;
 	while (lpEntry->nSig != DuiSig_end)
 	{
@@ -121,7 +121,7 @@ static const DUI_MSGMAP_ENTRY* DuiFindMessageEntry(const DUI_MSGMAP_ENTRY* lpEnt
 	return pMsgTypeEntry;
 }
 
-bool CNotifyPump::AddVirtualWnd(CDuiString strName,CNotifyPump* pObject)
+bool CNotifyPump::AddVirtualWnd(String strName,CNotifyPump* pObject)
 {
 	if (m_VirtualWndMap.Find(strName.c_str()) == NULL)
 	{
@@ -131,7 +131,7 @@ bool CNotifyPump::AddVirtualWnd(CDuiString strName,CNotifyPump* pObject)
 	return false;
 }
 
-bool CNotifyPump::RemoveVirtualWnd(CDuiString strName)
+bool CNotifyPump::RemoveVirtualWnd(String strName)
 {
 	if (m_VirtualWndMap.Find(strName.c_str()) != NULL)
 	{
@@ -141,7 +141,7 @@ bool CNotifyPump::RemoveVirtualWnd(CDuiString strName)
 	return false;
 }
 
-bool CNotifyPump::LoopDispatch(TNotifyUI& msg)
+bool CNotifyPump::LoopDispatch(TNotify& msg)
 {
 	const DUI_MSGMAP_ENTRY* lpEntry = NULL;
 	const DUI_MSGMAP* pMessageMap = NULL;
@@ -188,7 +188,7 @@ LDispatch:
 	return bRet;
 }
 
-void CNotifyPump::NotifyPump(TNotifyUI& msg)
+void CNotifyPump::NotifyPump(TNotify& msg)
 {
 	///±éÀúÐéÄâ´°¿Ú
 	if( !msg.sVirtualWnd.empty() ){
@@ -248,7 +248,7 @@ HWND CWindowWnd::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD 
 {
     if( GetSuperClassName() != NULL && !RegisterSuperclass() ) return NULL;
     if( GetSuperClassName() == NULL && !RegisterWindowClass() ) return NULL;
-    m_hWnd = ::CreateWindowEx(dwExStyle, GetWindowClassName(), pstrName, dwStyle, x, y, cx, cy, hwndParent, hMenu, CPaintManagerUI::GetInstance(), this);
+    m_hWnd = ::CreateWindowEx(dwExStyle, GetWindowClassName(), pstrName, dwStyle, x, y, cx, cy, hwndParent, hMenu, CPaintManager::GetInstance(), this);
     ASSERT(m_hWnd!=NULL);
     return m_hWnd;
 }
@@ -296,7 +296,7 @@ UINT CWindowWnd::ShowModal()
             ::EnableWindow(hWndParent, TRUE);
             ::SetFocus(hWndParent);
         }
-        if( !CPaintManagerUI::TranslateMessage(&msg) ) {
+        if( !CPaintManager::TranslateMessage(&msg) ) {
             ::TranslateMessage(&msg);
             ::DispatchMessage(&msg);
         }
@@ -357,10 +357,10 @@ void CWindowWnd::CenterWindow()
 
 void CWindowWnd::SetIcon(UINT nRes)
 {
-    HICON hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR);
+    HICON hIcon = (HICON)::LoadImage(CPaintManager::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR);
     ASSERT(hIcon);
     ::SendMessage(m_hWnd, WM_SETICON, (WPARAM) TRUE, (LPARAM) hIcon);
-    hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR);
+    hIcon = (HICON)::LoadImage(CPaintManager::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR);
     ASSERT(hIcon);
     ::SendMessage(m_hWnd, WM_SETICON, (WPARAM) FALSE, (LPARAM) hIcon);
 }
@@ -373,7 +373,7 @@ bool CWindowWnd::RegisterWindowClass()
     wc.cbWndExtra = 0;
     wc.hIcon = NULL;
     wc.lpfnWndProc = CWindowWnd::__WndProc;
-    wc.hInstance = CPaintManagerUI::GetInstance();
+    wc.hInstance = CPaintManager::GetInstance();
     wc.hCursor = ::LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = NULL;
     wc.lpszMenuName  = NULL;
@@ -390,14 +390,14 @@ bool CWindowWnd::RegisterSuperclass()
     WNDCLASSEX wc = { 0 };
     wc.cbSize = sizeof(WNDCLASSEX);
     if( !::GetClassInfoEx(NULL, GetSuperClassName(), &wc) ) {
-        if( !::GetClassInfoEx(CPaintManagerUI::GetInstance(), GetSuperClassName(), &wc) ) {
+        if( !::GetClassInfoEx(CPaintManager::GetInstance(), GetSuperClassName(), &wc) ) {
             ASSERT(!"Unable to locate window class");
             return NULL;
         }
     }
     m_OldWndProc = wc.lpfnWndProc;
     wc.lpfnWndProc = CWindowWnd::__ControlProc;
-    wc.hInstance = CPaintManagerUI::GetInstance();
+    wc.hInstance = CPaintManager::GetInstance();
     wc.lpszClassName = GetWindowClassName();
     ATOM ret = ::RegisterClassEx(&wc);
     ASSERT(ret!=NULL || ::GetLastError()==ERROR_CLASS_ALREADY_EXISTS);
@@ -492,4 +492,4 @@ void CWindowWnd::OnFinalMessage(HWND /*hWnd*/)
 {
 }
 
-} // namespace DuiLib
+} // namespace dui

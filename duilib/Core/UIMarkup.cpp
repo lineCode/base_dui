@@ -44,7 +44,7 @@ extern ZRESULT FindZipItemW(HZIP hz, const TCHAR *name, bool ic, int *index, ZIP
 extern ZRESULT UnzipItem(HZIP hz, int index, void *dst, unsigned int len, DWORD flags);
 ///////////////////////////////////////////////////////////////////////////////////////
 
-namespace DuiLib {
+namespace dui {
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -374,17 +374,17 @@ bool CMarkup::LoadFromMem(BYTE* pByte, DWORD dwSize, int encoding)
     return bRes;
 }
 
-bool CMarkup::LoadFromFile(LPCTSTR pstrFilename, CPaintManagerUI *pManager, int encoding)
+bool CMarkup::LoadFromFile(LPCTSTR pstrFilename, CPaintManager *pManager, int encoding)
 {
     Release();
-	CDuiString sFile;
+	String sFile;
 	if (pManager){
 		sFile = pManager->GetThisResPath();
 	}else{
-		sFile = CPaintManagerUI::GetResourcePath();
+		sFile = CPaintManager::GetGlobalResDir();
 	}
  
-    if( CPaintManagerUI::GetResourceZip().empty() ) {
+    if( CPaintManager::GetResourceZip().empty() ) {
         sFile += pstrFilename;
 		HANDLE hFile = ::CreateFile(sFile.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         if( hFile == INVALID_HANDLE_VALUE ) return _Failed(_T("Error opening file"));
@@ -408,9 +408,9 @@ bool CMarkup::LoadFromFile(LPCTSTR pstrFilename, CPaintManagerUI *pManager, int 
         return ret;
     }
     else {
-        sFile += CPaintManagerUI::GetResourceZip();
+        sFile += CPaintManager::GetResourceZip();
         HZIP hz = NULL;
-        if( CPaintManagerUI::IsCachedResourceZip() ) hz = (HZIP)CPaintManagerUI::GetResourceZipHandle();
+        if( CPaintManager::IsCachedResourceZip() ) hz = (HZIP)CPaintManager::GetResourceZipHandle();
         else hz = OpenZip((void*)sFile.c_str(), 0, 2);
         if( hz == NULL ) return _Failed(_T("Error opening zip file"));
         ZIPENTRY ze; 
@@ -423,10 +423,10 @@ bool CMarkup::LoadFromFile(LPCTSTR pstrFilename, CPaintManagerUI *pManager, int 
         int res = UnzipItem(hz, i, pByte, dwSize, 3);
         if( res != 0x00000000 && res != 0x00000600) {
             delete[] pByte;
-            if( !CPaintManagerUI::IsCachedResourceZip() ) CloseZip(hz);
+            if( !CPaintManager::IsCachedResourceZip() ) CloseZip(hz);
             return _Failed(_T("Could not unzip file"));
         }
-        if( !CPaintManagerUI::IsCachedResourceZip() ) CloseZip(hz);
+        if( !CPaintManager::IsCachedResourceZip() ) CloseZip(hz);
         bool ret = LoadFromMem(pByte, dwSize, encoding);
         delete[] pByte;
 
@@ -668,4 +668,4 @@ bool CMarkup::_Failed(LPCTSTR pstrError, LPCTSTR pstrLocation)
     return false; // Always return 'false'
 }
 
-} // namespace DuiLib
+} // namespace dui

@@ -1,25 +1,25 @@
 #include "stdafx.h"
 #include "UICheckBox.h"
 
-namespace DuiLib
+namespace dui
 {
-	LPCTSTR CCheckBoxUI::GetClass() const
+	LPCTSTR CheckBtn::GetClass() const
 	{
 		return DUI_CTR_CHECKBOX;
 	}
 
-	LPVOID CCheckBoxUI::GetInterface(LPCTSTR pstrName)
+	LPVOID CheckBtn::GetInterface(LPCTSTR pstrName)
 	{
-		if( _tcscmp(pstrName, DUI_CTR_CHECKBOX) == 0 ) return static_cast<CCheckBoxUI*>(this);
-		return COptionUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_CHECKBOX) == 0 ) return static_cast<CheckBtn*>(this);
+		return OptionBtn::GetInterface(pstrName);
 	}
 
-	void CCheckBoxUI::SetCheck(bool bCheck, bool bTriggerEvent)
+	void CheckBtn::SetCheck(bool bCheck, bool bTriggerEvent)
 	{
 		Selected(bCheck, bTriggerEvent);
 	}
 
-	bool  CCheckBoxUI::GetCheck() const
+	bool  CheckBtn::GetCheck() const
 	{
 		return IsSelected();
 	}

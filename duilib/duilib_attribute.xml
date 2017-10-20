@@ -152,7 +152,7 @@
     
     <!--Container begin-->
     <Container parent="Control" notifies="" comment="">
-      <Attribute name="inset"           default="" type="" comment=""/>
+      <Attribute name="padding"           default="" type="" comment=""/>
       <Attribute name="mousechild"      default="" type="" comment=""/>
       <Attribute name="vscrollbar"      default="" type="" comment=""/>
       <Attribute name="vscrollbarstyle" default="" type="" comment=""/>

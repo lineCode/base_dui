@@ -9,7 +9,7 @@ enum MsgBoxRet
 
 typedef std::function<void(MsgBoxRet)> MsgboxCallback; 
 
-class MsgBox : public DuiLib::WindowImplBase	//WindowEx
+class MsgBox : public dui::WindowImplBase	//WindowEx
 {
 public:
 	friend void ShowMsgBox(HWND hwnd, MsgboxCallback cb,
@@ -23,7 +23,7 @@ public:
 
 	virtual std::wstring GetSkinFolder() override;
 	virtual std::wstring GetSkinFile() override;
-	virtual DuiLib::UILIB_RESOURCETYPE GetResourceType() const;
+	virtual dui::UILIB_RESOURCETYPE GetResourceType() const;
 	virtual std::wstring GetZIPFileName() const;
 	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 	virtual void OnEsc(BOOL &bHandled);
@@ -34,7 +34,7 @@ public:
 	virtual UINT GetClassStyle() const override;
 	virtual void InitWindow() override;
 private:
-	bool OnClicked(DuiLib::TEventUI* msg);
+	bool OnClicked(dui::TEvent* msg);
 
 	void SetTitle(const std::wstring &str);
 	void SetContent(const std::wstring &str);
@@ -45,10 +45,10 @@ private:
 public:
 	static const LPCTSTR kClassName;
 private:
-	DuiLib::CLabelUI*		title_;
-	DuiLib::CRichEditUI*	content_;
-	DuiLib::CButtonUI*		btn_yes_;
-	DuiLib::CButtonUI*		btn_no_;
+	dui::Label*		title_;
+	dui::RichEdit*	content_;
+	dui::Button*		btn_yes_;
+	dui::Button*		btn_no_;
 
 	MsgboxCallback	 msgbox_callback_;
 };

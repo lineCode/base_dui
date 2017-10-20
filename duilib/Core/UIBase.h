@@ -4,7 +4,7 @@
 
 #pragma once
 
-namespace DuiLib {
+namespace dui {
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
@@ -49,13 +49,13 @@ LPCTSTR DUILIB_API DUI__TraceMsg(UINT uMsg);
 class DUILIB_API CNotifyPump
 {
 public:
-	bool AddVirtualWnd(CDuiString strName,CNotifyPump* pObject);
-	bool RemoveVirtualWnd(CDuiString strName);
-	void NotifyPump(TNotifyUI& msg);
-	bool LoopDispatch(TNotifyUI& msg);
+	bool AddVirtualWnd(String strName,CNotifyPump* pObject);
+	bool RemoveVirtualWnd(String strName);
+	void NotifyPump(TNotify& msg);
+	bool LoopDispatch(TNotify& msg);
 	DUI_DECLARE_MESSAGE_MAP()
 private:
-	CDuiStringPtrMap m_VirtualWndMap;
+	StringPtrMap m_VirtualWndMap;
 };
 
 class DUILIB_API CWindowWnd
@@ -101,6 +101,6 @@ protected:
     bool m_bSubclassed;
 };
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UIBASE_H__

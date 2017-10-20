@@ -36,7 +36,7 @@ namespace shared
 			init_event_cb_();
 		}
 #else
-		DuiLib::GlobalManager::Startup(theme_dir + L"themes\\default", DuiLib::CreateControlCallback());
+		dui::GlobalManager::Startup(theme_dir + L"themes\\default", dui::CreateControlCallback());
 
 		nim_ui::UserConfig::GetInstance()->SetIcon(IDI_ICON);
 
@@ -58,7 +58,7 @@ namespace shared
 
 	void MainThread::Cleanup()
 	{
-		//DuiLib::GlobalManager::Shutdown();
+		//dui::GlobalManager::Shutdown();
 
 		PostMessageLoop();
 		SetThreadWasQuitProperly(true);

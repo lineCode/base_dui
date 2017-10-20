@@ -1,7 +1,7 @@
 #ifndef WIN_IMPL_BASE_HPP
 #define WIN_IMPL_BASE_HPP
 
-namespace DuiLib
+namespace dui
 {
 
 	enum UILIB_RESOURCETYPE
@@ -15,8 +15,8 @@ namespace DuiLib
 	class DUILIB_API WindowImplBase
 		: public CWindowWnd
 		, public CNotifyPump
-		, public INotifyUI
-		, public IMessageFilterUI
+		, public INotify
+		, public IMessageFilter
 		, public IDialogBuilderCallback
 	{
 	public:
@@ -24,25 +24,25 @@ namespace DuiLib
 		virtual ~WindowImplBase(){};
 		virtual void InitWindow(){};
 		virtual void OnFinalMessage( HWND hWnd );
-		virtual void Notify(TNotifyUI& msg);
+		virtual void Notify(TNotify& msg);
 
 		DUI_DECLARE_MESSAGE_MAP()
-		virtual void OnClick(TNotifyUI& msg);
+		virtual void OnClick(TNotify& msg);
 
 	protected:
-		virtual CDuiString GetSkinFolder() = 0;
-		virtual CDuiString GetSkinFile() = 0;
+		virtual String GetSkinFolder() = 0;
+		virtual String GetSkinFile() = 0;
 		virtual LPCTSTR GetWindowClassName(void) const = 0 ;
 		virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam);
 	public:
 		virtual UINT GetClassStyle() const;
 		virtual UILIB_RESOURCETYPE GetResourceType() const;
-		virtual CDuiString GetZIPFileName() const;
+		virtual String GetZIPFileName() const;
 		virtual LPCTSTR GetResourceID() const;
 
 		virtual CDuiRect GetPos(bool layed){ return CDuiRect(0, 0, 600, 400); };		//add by djj
 
-		virtual CControlUI* CreateControl(LPCTSTR pstrClass);
+		virtual Control* CreateControl(LPCTSTR pstrClass);
 		virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/);
 		virtual LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
 		virtual LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
@@ -71,7 +71,7 @@ namespace DuiLib
 		virtual LONG GetStyle();
 
 	protected:
-		CPaintManagerUI m_PaintManager;
+		CPaintManager m_PaintManager;
 		static LPBYTE m_lpResourceZIPBuffer;
 	};
 }

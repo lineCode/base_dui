@@ -1,26 +1,26 @@
 #include "stdafx.h"
 #include "UITabLayout.h"
 
-namespace DuiLib
+namespace dui
 {
-	CTabLayoutUI::CTabLayoutUI() : m_iCurSel(-1)
+	TabLayout::TabLayout() : m_iCurSel(-1)
 	{
 	}
 
-	LPCTSTR CTabLayoutUI::GetClass() const
+	LPCTSTR TabLayout::GetClass() const
 	{
 		return DUI_CTR_TABLAYOUT;
 	}
 
-	LPVOID CTabLayoutUI::GetInterface(LPCTSTR pstrName)
+	LPVOID TabLayout::GetInterface(LPCTSTR pstrName)
 	{
-		if( _tcscmp(pstrName, DUI_CTR_TABLAYOUT) == 0 ) return static_cast<CTabLayoutUI*>(this);
-		return CContainerUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_TABLAYOUT) == 0 ) return static_cast<TabLayout*>(this);
+		return Container::GetInterface(pstrName);
 	}
 
-	bool CTabLayoutUI::Add(CControlUI* pControl)
+	bool TabLayout::Add(Control* pControl)
 	{
-		bool ret = CContainerUI::Add(pControl);
+		bool ret = Container::Add(pControl);
 		if( !ret ) return ret;
 
 		if(m_iCurSel == -1 && pControl->IsVisible())
@@ -35,9 +35,9 @@ namespace DuiLib
 		return ret;
 	}
 
-	bool CTabLayoutUI::AddAt(CControlUI* pControl, int iIndex)
+	bool TabLayout::AddAt(Control* pControl, int iIndex)
 	{
-		bool ret = CContainerUI::AddAt(pControl, iIndex);
+		bool ret = Container::AddAt(pControl, iIndex);
 		if( !ret ) return ret;
 
 		if(m_iCurSel == -1 && pControl->IsVisible())
@@ -56,12 +56,12 @@ namespace DuiLib
 		return ret;
 	}
 
-	bool CTabLayoutUI::Remove(CControlUI* pControl, bool bDoNotDestroy)
+	bool TabLayout::Remove(Control* pControl, bool bDoNotDestroy)
 	{
 		if( pControl == NULL) return false;
 
 		int index = GetItemIndex(pControl);
-		bool ret = CContainerUI::Remove(pControl, bDoNotDestroy);
+		bool ret = Container::Remove(pControl, bDoNotDestroy);
 		if( !ret ) return false;
 
 		if( m_iCurSel == index)
@@ -83,19 +83,19 @@ namespace DuiLib
 		return ret;
 	}
 
-	void CTabLayoutUI::RemoveAll()
+	void TabLayout::RemoveAll()
 	{
 		m_iCurSel = -1;
-		CContainerUI::RemoveAll();
+		Container::RemoveAll();
 		NeedParentUpdate();
 	}
 
-	int CTabLayoutUI::GetCurSel() const
+	int TabLayout::GetCurSel() const
 	{
 		return m_iCurSel;
 	}
 
-	bool CTabLayoutUI::SelectItem(int iIndex,  bool bTriggerEvent)
+	bool TabLayout::SelectItem(int iIndex,  bool bTriggerEvent)
 	{
 		if( iIndex < 0 || iIndex >= m_items.GetSize() ) return false;
 		if( iIndex == m_iCurSel ) return true;
@@ -119,7 +119,7 @@ namespace DuiLib
 		return true;
 	}
 
-	bool CTabLayoutUI::SelectItem(CControlUI* pControl, bool bTriggerEvent)
+	bool TabLayout::SelectItem(Control* pControl, bool bTriggerEvent)
 	{
 		int iIndex=GetItemIndex(pControl);
 		if (iIndex==-1)
@@ -128,25 +128,25 @@ namespace DuiLib
 			return SelectItem(iIndex, bTriggerEvent);
 	}
 
-	void CTabLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+	void TabLayout::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
 		if( _tcscmp(pstrName, _T("selectedid")) == 0 ) SelectItem(_ttoi(pstrValue));
-		return CContainerUI::SetAttribute(pstrName, pstrValue);
+		return Container::SetAttribute(pstrName, pstrValue);
 	}
 
-	void CTabLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void TabLayout::SetPos(RECT rc, bool bNeedInvalidate)
 	{
-		CControlUI::SetPos(rc, bNeedInvalidate);
+		Control::SetPos(rc, bNeedInvalidate);
 		rc = m_rcItem;
 
-		// Adjust for inset
-		rc.left += m_rcInset.left;
-		rc.top += m_rcInset.top;
-		rc.right -= m_rcInset.right;
-		rc.bottom -= m_rcInset.bottom;
+		// Adjust for padding
+		rc.left += m_rcPadding.left;
+		rc.top += m_rcPadding.top;
+		rc.right -= m_rcPadding.right;
+		rc.bottom -= m_rcPadding.bottom;
 
 		for( int it = 0; it < m_items.GetSize(); it++ ) {
-			CControlUI* pControl = static_cast<CControlUI*>(m_items[it]);
+			Control* pControl = static_cast<Control*>(m_items[it]);
 			if( !pControl->IsVisible() ) continue;
 			if( pControl->IsFloat() ) {
 				SetFloatPos(it);

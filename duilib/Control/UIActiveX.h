@@ -6,7 +6,7 @@
 struct IOleObject;
 
 
-namespace DuiLib {
+namespace dui {
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
@@ -25,12 +25,12 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class DUILIB_API CActiveXUI : public CControlUI, public IMessageFilterUI
+class DUILIB_API ActiveX : public Control, public IMessageFilter
 {
     friend class CActiveXCtrl;
 public:
-    CActiveXUI();
-    virtual ~CActiveXUI();
+    ActiveX();
+    virtual ~ActiveX();
 
     LPCTSTR GetClass() const;
 	LPVOID GetInterface(LPCTSTR pstrName);
@@ -44,14 +44,14 @@ public:
     bool CreateControl(LPCTSTR pstrCLSID);
     HRESULT GetControl(const IID iid, LPVOID* ppRet);
 	CLSID GetClisd() const;
-    CDuiString GetModuleName() const;
+    String GetModuleName() const;
     void SetModuleName(LPCTSTR pstrText);
 
     void SetVisible(bool bVisible = true);
     void SetInternVisible(bool bVisible = true);
 	void SetPos(RECT rc, bool bNeedInvalidate = true);
 	void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    bool DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl);
+    bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
 
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
@@ -63,7 +63,7 @@ protected:
 
 protected:
     CLSID m_clsid;
-    CDuiString m_sModuleName;
+    String m_sModuleName;
     bool m_bCreated;
     bool m_bDelayCreate;
     IOleObject* m_pUnk;
@@ -71,6 +71,6 @@ protected:
     HWND m_hwndHost;
 };
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UIACTIVEX_H__

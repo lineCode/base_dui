@@ -3,7 +3,7 @@
 
 #pragma once
 
-namespace DuiLib {
+namespace dui {
 
 enum
 {
@@ -14,7 +14,7 @@ enum
 
 class CMarkup;
 class CMarkupNode;
-class CPaintManagerUI;
+class CPaintManager;
 
 class DUILIB_API CMarkup
 {
@@ -25,7 +25,7 @@ public:
 
     bool Load(LPCTSTR pstrXML);
     bool LoadFromMem(BYTE* pByte, DWORD dwSize, int encoding = XMLFILE_ENCODING_UTF8);
-	bool LoadFromFile(LPCTSTR pstrFilename, CPaintManagerUI *pManager, int encoding = XMLFILE_ENCODING_UTF8);
+	bool LoadFromFile(LPCTSTR pstrFilename, CPaintManager *pManager, int encoding = XMLFILE_ENCODING_UTF8);
     void Release();
     bool IsValid() const;
 
@@ -114,6 +114,6 @@ private:
     CMarkup* m_pOwner;
 };
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UIMARKUP_H__

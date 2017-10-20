@@ -3,23 +3,23 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API CTabLayoutUI : public CContainerUI
+	class DUILIB_API TabLayout : public Container
 	{
 	public:
-		CTabLayoutUI();
+		TabLayout();
 
 		LPCTSTR GetClass() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
 
-		bool Add(CControlUI* pControl);
-		bool AddAt(CControlUI* pControl, int iIndex);
-		bool Remove(CControlUI* pControl, bool bDoNotDestroy=false);
+		bool Add(Control* pControl);
+		bool AddAt(Control* pControl, int iIndex);
+		bool Remove(Control* pControl, bool bDoNotDestroy=false);
 		void RemoveAll();
 		int GetCurSel() const;
 		bool SelectItem(int iIndex, bool bTriggerEvent=true);
-		bool SelectItem(CControlUI* pControl,  bool bTriggerEvent=true);
+		bool SelectItem(Control* pControl,  bool bTriggerEvent=true);
 
 		void SetPos(RECT rc, bool bNeedInvalidate = true);
 

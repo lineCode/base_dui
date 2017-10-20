@@ -3,11 +3,11 @@
 
 #pragma once
 
-namespace DuiLib {
+namespace dui {
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class CControlUI;
+class Control;
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -16,13 +16,13 @@ class CControlUI;
 typedef enum EVENTTYPE_UI
 {
     UIEVENT__FIRST = 1,
-    UIEVENT__KEYBEGIN,
+    UIEVENT__KEYBEGIN,			//2
     UIEVENT_KEYDOWN,
     UIEVENT_KEYUP,
     UIEVENT_CHAR,
     UIEVENT_SYSKEY,
-    UIEVENT__KEYEND,
-    UIEVENT__MOUSEBEGIN,
+    UIEVENT__KEYEND,			//7
+    UIEVENT__MOUSEBEGIN,		//8
     UIEVENT_MOUSEMOVE,
     UIEVENT_MOUSELEAVE,
     UIEVENT_MOUSEENTER,
@@ -33,7 +33,7 @@ typedef enum EVENTTYPE_UI
     UIEVENT_DBLCLICK,
     UIEVENT_CONTEXTMENU,
     UIEVENT_SCROLLWHEEL,
-    UIEVENT__MOUSEEND,
+    UIEVENT__MOUSEEND,			//19
     UIEVENT_KILLFOCUS,
     UIEVENT_SETFOCUS,
     UIEVENT_WINDOWSIZE,
@@ -47,7 +47,7 @@ typedef enum EVENTTYPE_UI
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-// Flags for CControlUI::GetControlFlags()
+// Flags for Control::GetControlFlags()
 #define UIFLAG_TABSTOP       0x00000001
 #define UIFLAG_SETCURSOR     0x00000002
 #define UIFLAG_WANTRETURN    0x00000004
@@ -86,7 +86,7 @@ typedef enum EVENTTYPE_UI
 typedef struct DUILIB_API tagTFontInfo
 {
     HFONT hFont;
-    CDuiString sFontName;
+    String sFontName;
     int iSize;
     bool bBold;
     bool bUnderline;
@@ -103,7 +103,7 @@ typedef struct DUILIB_API tagTImageInfo
     int nY;
     bool bAlpha;
     bool bUseHSL;
-    CDuiString sResType;
+    String sResType;
     DWORD dwMask;
 } TImageInfo;
 
@@ -112,8 +112,8 @@ typedef struct DUILIB_API tagTDrawInfo
 	tagTDrawInfo();
 	tagTDrawInfo(LPCTSTR lpsz);
 	void Clear();
-	CDuiString sDrawString;
-    CDuiString sImageName;
+	String sDrawString;
+    String sImageName;
 	bool bLoaded;
 	const TImageInfo* pImageInfo;
 	RECT rcDestOffset;
@@ -141,11 +141,11 @@ typedef struct DUILIB_API tagTResInfo
 	DWORD m_dwDefaultLinkHoverFontColor;
 	DWORD m_dwDefaultSelectedBkColor;
 	TFontInfo m_DefaultFontInfo;
-	CDuiStringPtrMap m_CustomFonts;			//"Font"
-	CDuiStringPtrMap m_ColorHash;			//"Color"
-	CDuiStringPtrMap m_ImageHash;
-	CDuiStringPtrMap m_AttrHash;			//"Default" + "Class"
-	CDuiStringPtrMap m_MultiLanguageHash;
+	StringPtrMap m_CustomFonts;			//"Font"
+	StringPtrMap m_ColorHash;			//"Color"
+	StringPtrMap m_ImageHash;
+	StringPtrMap m_AttrHash;			//"Default" + "Class"
+	StringPtrMap m_MultiLanguageHash;
 } TResInfo;
 
 // Structure for notifications from the system
@@ -153,24 +153,24 @@ typedef struct DUILIB_API tagTResInfo
 typedef struct DUILIB_API tagTEventUI
 {
     int Type;
-    CControlUI* pSender;
+    Control* pSender;
     DWORD dwTimestamp;
     POINT ptMouse;
     TCHAR chKey;
     WORD wKeyState;
     WPARAM wParam;
     LPARAM lParam;
-} TEventUI;
+} TEvent;
 
 // Listener interface
-class DUILIB_API INotifyUI
+class DUILIB_API INotify
 {
 public:
-    virtual void Notify(TNotifyUI& msg) = 0;
+    virtual void Notify(TNotify& msg) = 0;
 };
 
 // MessageFilter interface
-class DUILIB_API IMessageFilterUI
+class DUILIB_API IMessageFilter
 {
 public:
     virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled) = 0;
@@ -185,14 +185,14 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-typedef CControlUI* (*LPCREATECONTROL)(LPCTSTR pstrType);
+typedef Control* (*LPCREATECONTROL)(LPCTSTR pstrType);
 
 
-class DUILIB_API CPaintManagerUI
+class DUILIB_API CPaintManager
 {
 public:
-    CPaintManagerUI();
-    ~CPaintManagerUI();
+    CPaintManager();
+    ~CPaintManager();
 
 public:
     void Init(HWND hWnd, LPCTSTR pstrName = NULL);
@@ -237,8 +237,8 @@ public:
 
 	bool IsLayered();
 	void SetLayered(bool bLayered);
-	RECT& GetLayeredInset();
-	void SetLayeredInset(RECT& rcLayeredInset);
+	RECT& GetLayeredPadding();
+	void SetLayeredPadding(RECT& rcLayeredPadding);
 	BYTE GetLayeredOpacity();
 	void SetLayeredOpacity(BYTE nOpacity);
 	LPCTSTR GetLayeredImage();
@@ -246,27 +246,27 @@ public:
 	CShadowUI* GetShadow();
 
     static HINSTANCE GetInstance();
-    static CDuiString GetInstancePath();
-    static CDuiString GetCurrentPath();
+    static String GetInstancePath();
+    static String GetCurrentPath();
     static HINSTANCE GetResourceDll();
-    static const CDuiString& GetResourcePath();
-    static const CDuiString& GetResourceZip();
+	static const String& GetGlobalResDir();
+    static const String& GetResourceZip();
     static bool IsCachedResourceZip();
     static HANDLE GetResourceZipHandle();
     static void SetInstance(HINSTANCE hInst);
     static void SetCurrentPath(LPCTSTR pStrPath);
     static void SetResourceDll(HINSTANCE hInst);
-    static void SetResourcePath(LPCTSTR pStrPath);
+    static void SetGlobalResDir(LPCTSTR pStrPath);
 	static void SetResourceZip(LPVOID pVoid, unsigned int len);
     static void SetResourceZip(LPCTSTR pstrZip, bool bCachedResourceZip = false);
 	static bool LoadGlobalResource();				//add by djj
     static bool GetHSL(short* H, short* S, short* L);
     static void SetHSL(bool bUseHSL, short H, short S, short L); // H:0~360, S:0~200, L:0~200 
     static void ReloadSkin();
-	static CPaintManagerUI* GetPaintManager(LPCTSTR pstrName);
-	static CDuiPtrArray* GetPaintManagers();
+	static CPaintManager* GetPaintManager(LPCTSTR pstrName);
+	static PtrArray* GetPaintManagers();
     static bool LoadPlugin(LPCTSTR pstrModuleName);
-    static CDuiPtrArray* GetPlugins();
+    static PtrArray* GetPlugins();
 
 	bool IsForceUseSharedRes() const;
 	void SetForceUseSharedRes(bool bForce);
@@ -322,40 +322,39 @@ public:
     LPCTSTR GetWindowCustomAttribute(LPCTSTR pstrName) const;
     bool RemoveWindowCustomAttribute(LPCTSTR pstrName);
     void RemoveAllWindowCustomAttribute();
-
-    CDuiString GetWindowAttribute(LPCTSTR pstrName);
+	//---------------Window----------------
+    String GetWindowAttribute(LPCTSTR pstrName);
     void SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    CDuiString GetWindowAttributeList(bool bIgnoreDefault = true);
+    String GetWindowAttributeList(bool bIgnoreDefault = true);
     void SetWindowAttributeList(LPCTSTR pstrList);
     bool RemoveWindowAttribute(LPCTSTR pstrName);
 
-    CDuiString GetWindowXML();
-
+	//---------------MultiLanguage----------------
 	static void AddMultiLanguageString(int id, LPCTSTR pStrMultiLanguage);
 	static LPCTSTR GetMultiLanguageString(int id);
 	static bool RemoveMultiLanguageString(int id);
 	static void RemoveAllMultiLanguageString();
-	static void ProcessMultiLanguageTokens(CDuiString& pStrMultiLanguage);
+	static void ProcessMultiLanguageTokens(String& pStrMultiLanguage);
 
-    bool AttachDialog(CControlUI* pControl);
-    bool InitControls(CControlUI* pControl, CControlUI* pParent = NULL);
-	bool RenameControl(CControlUI* pControl, LPCTSTR pstrName);
-    void ReapObjects(CControlUI* pControl);
+    bool AttachDialog(Control* pControl);
+    bool InitControls(Control* pControl, Control* pParent = NULL);
+	bool RenameControl(Control* pControl, LPCTSTR pstrName);
+    void ReapObjects(Control* pControl);
 
-    bool AddOptionGroup(LPCTSTR pStrGroupName, CControlUI* pControl);
-    CDuiPtrArray* GetOptionGroup(LPCTSTR pStrGroupName);
-    void RemoveOptionGroup(LPCTSTR pStrGroupName, CControlUI* pControl);
+    bool AddOptionGroup(LPCTSTR pStrGroupName, Control* pControl);
+    PtrArray* GetOptionGroup(LPCTSTR pStrGroupName);
+    void RemoveOptionGroup(LPCTSTR pStrGroupName, Control* pControl);
     void RemoveAllOptionGroups();
 
-    CControlUI* GetFocus() const;
-    void SetFocus(CControlUI* pControl, bool bFocusWnd=true);
-    void SetFocusNeeded(CControlUI* pControl);
+    Control* GetFocus() const;
+    void SetFocus(Control* pControl, bool bFocusWnd=true);
+    void SetFocusNeeded(Control* pControl);
 
     bool SetNextTabControl(bool bForward = true);
 
-    bool SetTimer(CControlUI* pControl, UINT nTimerID, UINT uElapse);
-    bool KillTimer(CControlUI* pControl, UINT nTimerID);
-    void KillTimer(CControlUI* pControl);
+    bool SetTimer(Control* pControl, UINT nTimerID, UINT uElapse);
+    bool KillTimer(Control* pControl, UINT nTimerID);
+    void KillTimer(Control* pControl);
     void RemoveAllTimers();
 
     void SetCapture();
@@ -365,42 +364,42 @@ public:
 	bool IsPainting();
 	void SetPainting(bool bIsPainting);
 
-    bool AddNotifier(INotifyUI* pControl);
-    bool RemoveNotifier(INotifyUI* pControl);   
-    void SendNotify(TNotifyUI& Msg, bool bAsync = false, bool bEnableRepeat = true);
-    void SendNotify(CControlUI* pControl, LPCTSTR pstrMessage, WPARAM wParam = 0, LPARAM lParam = 0, bool bAsync = false, bool bEnableRepeat = true);
+    bool AddNotifier(INotify* pControl);
+    bool RemoveNotifier(INotify* pControl);   
+    void SendNotify(TNotify& Msg, bool bAsync = false, bool bEnableRepeat = true);
+    void SendNotify(Control* pControl, LPCTSTR pstrMessage, WPARAM wParam = 0, LPARAM lParam = 0, bool bAsync = false, bool bEnableRepeat = true);
 
-    bool AddPreMessageFilter(IMessageFilterUI* pFilter);
-    bool RemovePreMessageFilter(IMessageFilterUI* pFilter);
+    bool AddPreMessageFilter(IMessageFilter* pFilter);
+    bool RemovePreMessageFilter(IMessageFilter* pFilter);
 
-    bool AddMessageFilter(IMessageFilterUI* pFilter);
-    bool RemoveMessageFilter(IMessageFilterUI* pFilter);
+    bool AddMessageFilter(IMessageFilter* pFilter);
+    bool RemoveMessageFilter(IMessageFilter* pFilter);
 
     int GetPostPaintCount() const;
-    bool AddPostPaint(CControlUI* pControl);
-    bool RemovePostPaint(CControlUI* pControl);
-    bool SetPostPaintIndex(CControlUI* pControl, int iIndex);
+    bool AddPostPaint(Control* pControl);
+    bool RemovePostPaint(Control* pControl);
+    bool SetPostPaintIndex(Control* pControl, int iIndex);
 
 	int GetNativeWindowCount() const;
 	RECT GetNativeWindowRect(HWND hChildWnd);
-	bool AddNativeWindow(CControlUI* pControl, HWND hChildWnd);
+	bool AddNativeWindow(Control* pControl, HWND hChildWnd);
 	bool RemoveNativeWindow(HWND hChildWnd);
 
-    void AddDelayedCleanup(CControlUI* pControl);
-    void AddMouseLeaveNeeded(CControlUI* pControl);
-    bool RemoveMouseLeaveNeeded(CControlUI* pControl);
+    void AddDelayedCleanup(Control* pControl);
+    void AddMouseLeaveNeeded(Control* pControl);
+    bool RemoveMouseLeaveNeeded(Control* pControl);
 
 	bool AddTranslateAccelerator(ITranslateAccelerator *pTranslateAccelerator);
 	bool RemoveTranslateAccelerator(ITranslateAccelerator *pTranslateAccelerator);
 	bool TranslateAccelerator(LPMSG pMsg);
 
-    CControlUI* GetRoot() const;
-    CControlUI* FindControl(POINT pt) const;
-    CControlUI* FindControl(LPCTSTR pstrName) const;
-    CControlUI* FindSubControlByPoint(CControlUI* pParent, POINT pt) const;
-    CControlUI* FindSubControlByName(CControlUI* pParent, LPCTSTR pstrName) const;
-    CControlUI* FindSubControlByClass(CControlUI* pParent, LPCTSTR pstrClass, int iIndex = 0);
-    CDuiPtrArray* FindSubControlsByClass(CControlUI* pParent, LPCTSTR pstrClass);
+    Control* GetRoot() const;
+    Control* FindControl(POINT pt) const;
+    Control* FindControl(LPCTSTR pstrName) const;
+    Control* FindSubControlByPoint(Control* pParent, POINT pt) const;
+    Control* FindSubControlByName(Control* pParent, LPCTSTR pstrName) const;
+    Control* FindSubControlByClass(Control* pParent, LPCTSTR pstrClass, int iIndex = 0);
+    PtrArray* FindSubControlsByClass(Control* pParent, LPCTSTR pstrClass);
 
     static void MessageLoop();
     static bool TranslateMessage(const LPMSG pMsg);
@@ -411,24 +410,24 @@ public:
 	void UsedVirtualWnd(bool bUsed);
 
 private:
-	CDuiPtrArray* GetFoundControls();
-    static CControlUI* CALLBACK __FindControlFromNameHash(CControlUI* pThis, LPVOID pData);
-    static CControlUI* CALLBACK __FindControlFromCount(CControlUI* pThis, LPVOID pData);
-    static CControlUI* CALLBACK __FindControlFromPoint(CControlUI* pThis, LPVOID pData);
-    static CControlUI* CALLBACK __FindControlFromTab(CControlUI* pThis, LPVOID pData);
-    static CControlUI* CALLBACK __FindControlFromShortcut(CControlUI* pThis, LPVOID pData);
-    static CControlUI* CALLBACK __FindControlFromName(CControlUI* pThis, LPVOID pData);
-    static CControlUI* CALLBACK __FindControlFromClass(CControlUI* pThis, LPVOID pData);
-    static CControlUI* CALLBACK __FindControlsFromClass(CControlUI* pThis, LPVOID pData);
-	static CControlUI* CALLBACK __FindControlsFromUpdate(CControlUI* pThis, LPVOID pData);
+	PtrArray* GetFoundControls();
+    static Control* CALLBACK __FindControlFromNameHash(Control* pThis, LPVOID pData);
+    static Control* CALLBACK __FindControlFromCount(Control* pThis, LPVOID pData);
+    static Control* CALLBACK __FindControlFromPoint(Control* pThis, LPVOID pData);
+    static Control* CALLBACK __FindControlFromTab(Control* pThis, LPVOID pData);
+    static Control* CALLBACK __FindControlFromShortcut(Control* pThis, LPVOID pData);
+    static Control* CALLBACK __FindControlFromName(Control* pThis, LPVOID pData);
+    static Control* CALLBACK __FindControlFromClass(Control* pThis, LPVOID pData);
+    static Control* CALLBACK __FindControlsFromClass(Control* pThis, LPVOID pData);
+	static Control* CALLBACK __FindControlsFromUpdate(Control* pThis, LPVOID pData);
 
 	static void AdjustSharedImagesHSL();
 	void AdjustImagesHSL();
 	void PostAsyncNotify();
 
 private:
-	CDuiString m_sName;
-	CDuiString m_pThisResPath;
+	String m_sName;
+	String m_pThisResPath;
     HWND m_hWndPaint;
     HDC m_hDcPaint;
     HDC m_hDcOffscreen;
@@ -446,12 +445,12 @@ private:
     bool m_bShowUpdateRect;
 	CShadowUI m_shadow;
     //
-    CControlUI* m_pRoot;
-    CControlUI* m_pFocus;
-    CControlUI* m_pEventHover;
-    CControlUI* m_pEventClick;
-    CControlUI* m_pEventKey;
-    CControlUI* m_pLastToolTip;
+    Control* m_pRoot;
+    Control* m_pFocus;
+    Control* m_pEventHover;
+    Control* m_pEventClick;
+    Control* m_pEventKey;
+    Control* m_pLastToolTip;
     //
     POINT m_ptLastMousePos;
     SIZE m_szMinWindow;
@@ -468,7 +467,7 @@ private:
 
 	BYTE m_nOpacity;
 	bool m_bLayered;
-	RECT m_rcLayeredInset;
+	RECT m_rcLayeredPadding;
 	bool m_bLayeredChanged;
 	RECT m_rcLayeredUpdate;
 	TDrawInfo m_diLayered;
@@ -480,30 +479,30 @@ private:
 	bool m_bAsyncNotifyPosted;
 
     //
-    CDuiPtrArray m_aNotifiers;				//WindowImplBase::INotifyUI; CMenuWnd::INotifyUI(void Notify(TNotifyUI& msg))
-    CDuiPtrArray m_aTimers;					//TIMERINFO
-	CDuiPtrArray m_aPreMessageFilters;		//WindowImplBase::IMessageFilterUI
-    CDuiPtrArray m_aMessageFilters;
-    CDuiPtrArray m_aPostPaintControls;
-	CDuiPtrArray m_aNativeWindow;
-	CDuiPtrArray m_aNativeWindowControl;
-    CDuiPtrArray m_aDelayedCleanup;
-    CDuiPtrArray m_aAsyncNotify;
-    CDuiPtrArray m_aFoundControls;
-    CDuiPtrArray m_aNeedMouseLeaveNeeded;
-	CDuiPtrArray m_aTranslateAccelerator;
-    CDuiStringPtrMap m_mNameHash;			//(key:name, value:pControl)
-	CDuiStringPtrMap m_mWindowAttrHash;		//
-    CDuiStringPtrMap m_mOptionGroup;		//
+    PtrArray m_aNotifiers;				//save WindowImplBase::INotify* and CMenuWnd::INotify*, add in WindowImplBase::OnCreate, remove in WindowImplBase::OnFinalMessage
+    PtrArray m_aTimers;					//TIMERINFO
+	PtrArray m_aPreMessageFilters;		//save WindowImplBase::IMessageFilter*, add in WindowImplBase::OnCreate, remove in WindowImplBase::OnFinalMessage
+    PtrArray m_aMessageFilters;			//save ActiveX::IMessageFilter* and RichEdit::IMessageFilter*, add in WindowImplBase::OnCreate->CPaintManager::InitControls(pControl)->Container::SetManager()->Control::Init()->RichEdit::DoInit(), remove in ~RichEdit()
+    PtrArray m_aPostPaintControls;
+	PtrArray m_aNativeWindow;
+	PtrArray m_aNativeWindowControl;
+    PtrArray m_aDelayedCleanup;
+    PtrArray m_aAsyncNotify;
+    PtrArray m_aFoundControls;
+    PtrArray m_aNeedMouseLeaveNeeded;
+	PtrArray m_aTranslateAccelerator;
+    StringPtrMap m_mNameHash;			//(key:name, value:pControl)
+	StringPtrMap m_mWindowAttrHash;		//
+    StringPtrMap m_mOptionGroup;		//
 
     //
 	bool m_bForceUseSharedRes;
-	TResInfo m_ResInfo;		//CDuiStringPtrMap fonts, images, attrs, MultiLanguages,
+	TResInfo m_ResInfo;		//StringPtrMap fonts, images, attrs, MultiLanguages,
 
     //
 	static HINSTANCE m_hResourceInstance;
-	static CDuiString m_pStrResourcePath;
-	static CDuiString m_pStrResourceZip;
+	static String m_pStrGlobalResDir;
+	static String m_pStrResourceZip;
 	static HANDLE m_hResourceZip;
 
 	static bool m_bCachedResourceZip;
@@ -513,13 +512,13 @@ private:
     static short m_H;
     static short m_S;
     static short m_L;
-    static CDuiPtrArray m_aPreMessages;		//what's for?
-    static CDuiPtrArray m_aPlugins;
+    static PtrArray m_aPreMessages;		//save all live CPaintManager*, add in CPaintManager::Init(HWND hWnd, LPCTSTR pstrName), remove in ~CPaintManager()
+    static PtrArray m_aPlugins;
 
 public:
-	//CDuiPtrArray m_aTranslateAccelerator;
+	//PtrArray m_aTranslateAccelerator;
 };
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UIMANAGER_H__

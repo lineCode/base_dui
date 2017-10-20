@@ -3,7 +3,7 @@
 #include <ExDispid.h>
 #include <mshtmhst.h>
 
-namespace DuiLib
+namespace dui
 {
 	class CWebBrowserEventHandler
 	{

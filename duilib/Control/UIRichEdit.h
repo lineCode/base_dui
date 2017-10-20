@@ -3,15 +3,15 @@
 
 #pragma once
 
-namespace DuiLib {
+namespace dui {
 
 class CTxtWinHost;
 
-class DUILIB_API CRichEditUI : public CContainerUI, public IMessageFilterUI
+class DUILIB_API RichEdit : public Container, public IMessageFilter
 {
 public:
-    CRichEditUI();
-    ~CRichEditUI();
+    RichEdit();
+    ~RichEdit();
 
     LPCTSTR GetClass() const;
     LPVOID GetInterface(LPCTSTR pstrName);
@@ -41,7 +41,7 @@ public:
     int GetLimitText();
     void SetLimitText(int iChars);
     long GetTextLength(DWORD dwFlags = GTL_DEFAULT) const;
-    CDuiString GetText() const;
+    String GetText() const;
     void SetText(LPCTSTR pstrText);
     bool IsModify() const;
     void SetModify(bool bModified = true) const;
@@ -51,7 +51,7 @@ public:
     int SetSel(long nStartChar, long nEndChar);
     void ReplaceSel(LPCTSTR lpszNewText, bool bCanUndo);
     void ReplaceSelW(LPCWSTR lpszNewText, bool bCanUndo = false);
-    CDuiString GetSelText() const;
+    String GetSelText() const;
     int SetSelAll();
     int SetSelNone();
     WORD GetSelectionType() const;
@@ -62,7 +62,7 @@ public:
     bool SetAutoURLDetect(bool bAutoDetect = true);
     DWORD GetEventMask() const;
     DWORD SetEventMask(DWORD dwEventMask);
-    CDuiString GetTextRange(long nStartChar, long nEndChar) const;
+    String GetTextRange(long nStartChar, long nEndChar) const;
     void HideSelection(bool bHide = true, bool bChangeStyle = false);
     void ScrollCaret();
     int InsertText(long nInsertAfterChar, LPCTSTR lpstrText, bool bCanUndo = false);
@@ -81,7 +81,7 @@ public:
     void Cut();
     void Paste();
     int GetLineCount() const;
-    CDuiString GetLine(int nIndex, int nMaxLength) const;
+    String GetLine(int nIndex, int nMaxLength) const;
     int LineIndex(int nLine = -1) const;
     int LineLength(int nLine = -1) const;
     bool LineScroll(int nLines, int nChars = 0);
@@ -123,8 +123,8 @@ public:
     SIZE EstimateSize(SIZE szAvailable);
 	void SetPos(RECT rc, bool bNeedInvalidate = true);
 	void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    void DoEvent(TEventUI& event);
-    bool DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl);
+    void DoEvent(TEvent& event);
+    bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
 
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
@@ -153,6 +153,6 @@ protected:
 	RECT	m_rcTextPadding;
 };
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UIRICHEDIT_H__

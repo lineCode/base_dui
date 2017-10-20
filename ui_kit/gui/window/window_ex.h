@@ -8,7 +8,7 @@ namespace nim_comp
   * @copyright (c) 2015, NetEase Inc. All rights reserved
   * @date 2015/9/16
   */
-class WindowEx : public DuiLib::WindowImplBase
+class WindowEx : public dui::WindowImplBase
 {
 public:
 	WindowEx();
@@ -24,7 +24,7 @@ public:
 	* @param[in] rc 窗口位置
 	* @return HWND 窗口句柄
 	*/
-	HWND Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, bool isLayeredWindow = true, const DuiLib::CDuiRect& rc = DuiLib::CDuiRect(0, 0, 0, 0));
+	HWND Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, bool isLayeredWindow = true, const dui::CDuiRect& rc = dui::CDuiRect(0, 0, 0, 0));
 
 	/**
 	* 处理窗口被销毁的消息

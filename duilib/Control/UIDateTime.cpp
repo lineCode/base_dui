@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "UIDateTime.h"
 
-namespace DuiLib
+namespace dui
 {
-	//CDateTimeUI::m_nDTUpdateFlag
+	//DateTime::m_nDTUpdateFlag
 #define DT_NONE   0
 #define DT_UPDATE 1
 #define DT_DELETE 2
@@ -14,7 +14,7 @@ namespace DuiLib
 	public:
 		CDateTimeWnd();
 
-		void Init(CDateTimeUI* pOwner);
+		void Init(DateTime* pOwner);
 		RECT CalPos();
 
 		LPCTSTR GetWindowClassName() const;
@@ -26,7 +26,7 @@ namespace DuiLib
 		//LRESULT OnEditChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 	protected:
-		CDateTimeUI* m_pOwner;
+		DateTime* m_pOwner;
 		HBRUSH m_hBkBrush;
 		bool m_bInit;
 	};
@@ -35,7 +35,7 @@ namespace DuiLib
 	{
 	}
 
-	void CDateTimeWnd::Init(CDateTimeUI* pOwner)
+	void CDateTimeWnd::Init(DateTime* pOwner)
 	{
 		m_pOwner = pOwner;
 		m_pOwner->m_nDTUpdateFlag = DT_NONE;
@@ -62,7 +62,7 @@ namespace DuiLib
 	{
 		CDuiRect rcPos = m_pOwner->GetPos();
 
-		CControlUI* pParent = m_pOwner;
+		Control* pParent = m_pOwner;
 		RECT rcParent;
 		while( pParent = pParent->GetParent() ) {
 			if( !pParent->IsVisible() ) {
@@ -192,7 +192,7 @@ namespace DuiLib
 
 	//////////////////////////////////////////////////////////////////////////
 	//
-	CDateTimeUI::CDateTimeUI()
+	DateTime::DateTime()
 	{
 		::GetLocalTime(&m_sysTime);
 		m_bReadOnly = false;
@@ -206,62 +206,62 @@ namespace DuiLib
 		m_nDTUpdateFlag = DT_NONE;
 	}
 
-	LPCTSTR CDateTimeUI::GetClass() const
+	LPCTSTR DateTime::GetClass() const
 	{
 		return DUI_CTR_DATETIME;
 	}
 
-	LPVOID CDateTimeUI::GetInterface(LPCTSTR pstrName)
+	LPVOID DateTime::GetInterface(LPCTSTR pstrName)
 	{
-		if( _tcscmp(pstrName, DUI_CTR_DATETIME) == 0 ) return static_cast<CDateTimeUI*>(this);
-		return CLabelUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_DATETIME) == 0 ) return static_cast<DateTime*>(this);
+		return Label::GetInterface(pstrName);
 	}
 
-	UINT CDateTimeUI::GetControlFlags() const
+	UINT DateTime::GetControlFlags() const
 	{
 		return UIFLAG_TABSTOP;
 	}
 
-	HWND CDateTimeUI::GetNativeWindow() const
+	HWND DateTime::GetNativeWindow() const
 	{
 		if (m_pWindow) return m_pWindow->GetHWND();
 		return NULL;
 	}
 
-	SYSTEMTIME& CDateTimeUI::GetTime()
+	SYSTEMTIME& DateTime::GetTime()
 	{
 		return m_sysTime;
 	}
 
-	void CDateTimeUI::SetTime(SYSTEMTIME* pst)
+	void DateTime::SetTime(SYSTEMTIME* pst)
 	{
 		m_sysTime = *pst;
 		Invalidate();
 	}
 
-	void CDateTimeUI::SetReadOnly(bool bReadOnly)
+	void DateTime::SetReadOnly(bool bReadOnly)
 	{
 		m_bReadOnly = bReadOnly;
 		Invalidate();
 	}
 
-	bool CDateTimeUI::IsReadOnly() const
+	bool DateTime::IsReadOnly() const
 	{
 		return m_bReadOnly;
 	}
 
 	//djj:format string.[20170421]
-	CDuiString CDateTimeUI::GetFormat()				
+	String DateTime::GetFormat()				
 	{
 		return m_sFormat;
 	}
 
-	void CDateTimeUI::SetFormat(LPCTSTR format)
+	void DateTime::SetFormat(LPCTSTR format)
 	{
 		m_sFormat = format;
 	}
 
-	void CDateTimeUI::UpdateText()
+	void DateTime::UpdateText()
 	{
 		if (m_nDTUpdateFlag == DT_DELETE)
 			SetText(_T(""));
@@ -273,7 +273,7 @@ namespace DuiLib
 				m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay, m_sysTime.wHour, m_sysTime.wMinute);
 			SetText(cText);
 #else
-			CDuiString sText;
+			String sText;
 			sText.SmallFormat(/*_T("%4d-%02d-%02d"),*/
 				m_sFormat,		//djj:format string.[20170421]
 				m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay, m_sysTime.wHour, m_sysTime.wMinute);
@@ -282,9 +282,9 @@ namespace DuiLib
 		}
 	}
 
-    void CDateTimeUI::SetPos(RECT rc, bool bNeedInvalidate)
+    void DateTime::SetPos(RECT rc, bool bNeedInvalidate)
     {
-        CControlUI::SetPos(rc, bNeedInvalidate);
+        Control::SetPos(rc, bNeedInvalidate);
         if( m_pWindow != NULL ) {
             RECT rcPos = m_pWindow->CalPos();
             if (::IsRectEmpty(&rcPos)) ::ShowWindow(m_pWindow->GetHWND(), SW_HIDE);
@@ -299,9 +299,9 @@ namespace DuiLib
 		m_nDTUpdateFlag = DT_NONE;
     }
 
-    void CDateTimeUI::Move(SIZE szOffset, bool bNeedInvalidate)
+    void DateTime::Move(SIZE szOffset, bool bNeedInvalidate)
     {
-        CControlUI::Move(szOffset, bNeedInvalidate);
+        Control::Move(szOffset, bNeedInvalidate);
         if( m_pWindow != NULL ) {
             RECT rcPos = m_pWindow->CalPos();
             if (::IsRectEmpty(&rcPos)) ::ShowWindow(m_pWindow->GetHWND(), SW_HIDE);
@@ -312,11 +312,11 @@ namespace DuiLib
         }
     }
 
-	void CDateTimeUI::DoEvent(TEventUI& event)
+	void DateTime::DoEvent(TEvent& event)
 	{
 		if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
 			if( m_pParent != NULL ) m_pParent->DoEvent(event);
-			else CLabelUI::DoEvent(event);
+			else Label::DoEvent(event);
 			return;
 		}
 
@@ -375,18 +375,18 @@ namespace DuiLib
 			return;
 		}
 
-		CLabelUI::DoEvent(event);
+		Label::DoEvent(event);
 	}
 
 
-	void CDateTimeUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)		//djj:[20170421]
+	void DateTime::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)		//djj:[20170421]
 	{
 		if( _tcscmp(pstrName, _T("format")) == 0 )
 		{
 			SetFormat(pstrValue);
 		}
 		else 
-			CLabelUI::SetAttribute(pstrName, pstrValue);
+			Label::SetAttribute(pstrName, pstrValue);
 	}
 }
 

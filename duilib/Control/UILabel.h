@@ -14,13 +14,13 @@ struct DUILIB_API Gdiplus::GdiplusStartupInput;
 #endif
 
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API CLabelUI : public CControlUI
+	class DUILIB_API Label : public Control
 	{
 	public:
-		CLabelUI();
-		~CLabelUI();
+		Label();
+		~Label();
 
 		LPCTSTR GetClass() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
@@ -45,7 +45,7 @@ namespace DuiLib
 		void SetShowHtml(bool bShowHtml = true);
 
 		SIZE EstimateSize(SIZE szAvailable);
-		void DoEvent(TEventUI& event);
+		void DoEvent(TEvent& event);
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
 		void PaintText(HDC hDC);

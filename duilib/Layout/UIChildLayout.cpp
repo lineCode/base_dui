@@ -1,19 +1,19 @@
 #include "stdafx.h"
 #include "UIChildLayout.h"
 
-namespace DuiLib
+namespace dui
 {
-	CChildLayoutUI::CChildLayoutUI()
+	ChildLayout::ChildLayout()
 	{
 
 	}
 
-	void CChildLayoutUI::Init()
+	void ChildLayout::Init()
 	{
 		if (!m_pstrXMLFile.empty())
 		{
 			CDialogBuilder builder;
-			CContainerUI* pChildWindow = static_cast<CContainerUI*>(builder.Create(m_pstrXMLFile.c_str(), (UINT)0, NULL, m_pManager));
+			Container* pChildWindow = static_cast<Container*>(builder.Create(m_pstrXMLFile.c_str(), (UINT)0, NULL, m_pManager));
 			if (pChildWindow)
 			{
 				this->Add(pChildWindow);
@@ -25,32 +25,32 @@ namespace DuiLib
 		}
 	}
 
-	void CChildLayoutUI::SetAttribute( LPCTSTR pstrName, LPCTSTR pstrValue )
+	void ChildLayout::SetAttribute( LPCTSTR pstrName, LPCTSTR pstrValue )
 	{
 		if( _tcscmp(pstrName, _T("xmlfile")) == 0 )
 			SetChildLayoutXML(pstrValue);
 		else
-			CContainerUI::SetAttribute(pstrName,pstrValue);
+			Container::SetAttribute(pstrName,pstrValue);
 	}
 
-	void CChildLayoutUI::SetChildLayoutXML( CDuiString pXML )
+	void ChildLayout::SetChildLayoutXML( String pXML )
 	{
 		m_pstrXMLFile=pXML;
 	}
 
-	CDuiString CChildLayoutUI::GetChildLayoutXML()
+	String ChildLayout::GetChildLayoutXML()
 	{
 		return m_pstrXMLFile;
 	}
 
-	LPVOID CChildLayoutUI::GetInterface( LPCTSTR pstrName )
+	LPVOID ChildLayout::GetInterface( LPCTSTR pstrName )
 	{
-		if( _tcscmp(pstrName, DUI_CTR_CHILDLAYOUT) == 0 ) return static_cast<CChildLayoutUI*>(this);
-		return CControlUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_CHILDLAYOUT) == 0 ) return static_cast<ChildLayout*>(this);
+		return Control::GetInterface(pstrName);
 	}
 
-	LPCTSTR CChildLayoutUI::GetClass() const
+	LPCTSTR ChildLayout::GetClass() const
 	{
 		return DUI_CTR_CHILDLAYOUT;
 	}
-} // namespace DuiLib
+} // namespace dui

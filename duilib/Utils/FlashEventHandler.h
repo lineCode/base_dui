@@ -6,7 +6,7 @@
 #pragma once
 //#include <ExDisp.h>
 
-namespace DuiLib
+namespace dui
 {
 	class CFlashEventHandler
 	{

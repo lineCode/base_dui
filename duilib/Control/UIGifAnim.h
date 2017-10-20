@@ -3,23 +3,23 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
 	class CControl;
 
 #define EVENT_TIEM_ID	100
 
-	class DUILIB_API CGifAnimUI : public CControlUI
+	class DUILIB_API GifAnim : public Control
 	{
 	public:
-		CGifAnimUI(void);
-		~CGifAnimUI(void);
+		GifAnim(void);
+		~GifAnim(void);
 
 		LPCTSTR	GetClass() const;
 		LPVOID	GetInterface(LPCTSTR pstrName);
 		void	DoInit() override;
-		bool	DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl);
-		void	DoEvent(TEventUI& event);
+		bool	DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
+		void	DoEvent(TEvent& event);
 		void	SetVisible(bool bVisible = true );
 		void	SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 		void	SetBkImage(LPCTSTR pStrImage);
@@ -46,7 +46,7 @@ namespace DuiLib
 		UINT			m_nFramePosition;			// 当前放到第几帧
 		Gdiplus::PropertyItem*	m_pPropertyItem;	// 帧与帧之间间隔时间
 
-		CDuiString		m_sBkImage;
+		String		m_sBkImage;
 		bool			m_bIsAutoPlay;				// 是否自动播放gif
 		bool			m_bIsAutoSize;				// 是否自动根据图片设置大小
 		bool			m_bIsPlaying;

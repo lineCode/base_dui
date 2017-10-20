@@ -1,42 +1,42 @@
 #include "stdafx.h"
 #include "UIOption.h"
 
-namespace DuiLib
+namespace dui
 {
-	COptionUI::COptionUI() : m_bSelected(false), m_dwSelectedBkColor(0), m_dwSelectedTextColor(0)
+	OptionBtn::OptionBtn() : m_bSelected(false), m_dwSelectedBkColor(0), m_dwSelectedTextColor(0)
 	{
 	}
 
-	COptionUI::~COptionUI()
+	OptionBtn::~OptionBtn()
 	{
 		if (!m_sGroupName.empty() && m_pManager) m_pManager->RemoveOptionGroup(m_sGroupName.c_str(), this);
 	}
 
-	LPCTSTR COptionUI::GetClass() const
+	LPCTSTR OptionBtn::GetClass() const
 	{
 		return DUI_CTR_OPTION;
 	}
 
-	LPVOID COptionUI::GetInterface(LPCTSTR pstrName)
+	LPVOID OptionBtn::GetInterface(LPCTSTR pstrName)
 	{
-		if( _tcscmp(pstrName, DUI_CTR_OPTION) == 0 ) return static_cast<COptionUI*>(this);
-		return CButtonUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_OPTION) == 0 ) return static_cast<OptionBtn*>(this);
+		return Button::GetInterface(pstrName);
 	}
 
-	void COptionUI::SetManager(CPaintManagerUI* pManager, CControlUI* pParent, bool bInit)
+	void OptionBtn::SetManager(CPaintManager* pManager, Control* pParent, bool bInit)
 	{
-		CControlUI::SetManager(pManager, pParent, bInit);
+		Control::SetManager(pManager, pParent, bInit);
 		if (bInit && !m_sGroupName.empty()) {
 			if (m_pManager) m_pManager->AddOptionGroup(m_sGroupName.c_str(), this);
 		}
 	}
 
-	LPCTSTR COptionUI::GetGroup() const
+	LPCTSTR OptionBtn::GetGroup() const
 	{
 		return m_sGroupName.c_str();
 	}
 
-	void COptionUI::SetGroup(LPCTSTR pStrGroupName)
+	void OptionBtn::SetGroup(LPCTSTR pStrGroupName)
 	{
 		if( pStrGroupName == NULL ) {
 			if (m_sGroupName.empty()) return;
@@ -58,12 +58,12 @@ namespace DuiLib
 		Selected(m_bSelected);
 	}
 
-	bool COptionUI::IsSelected() const
+	bool OptionBtn::IsSelected() const
 	{
 		return m_bSelected;
 	}
 
-	void COptionUI::Selected(bool bSelected, bool bTriggerEvent)
+	void OptionBtn::Selected(bool bSelected, bool bTriggerEvent)
 	{
 		if( m_bSelected == bSelected ) return;
 		m_bSelected = bSelected;
@@ -73,9 +73,9 @@ namespace DuiLib
 		if( m_pManager != NULL ) {
 			if( !m_sGroupName.empty() ) {
 				if( m_bSelected ) {
-					CDuiPtrArray* aOptionGroup = m_pManager->GetOptionGroup(m_sGroupName.c_str());
+					PtrArray* aOptionGroup = m_pManager->GetOptionGroup(m_sGroupName.c_str());
 					for( int i = 0; i < aOptionGroup->GetSize(); i++ ) {
-						COptionUI* pControl = static_cast<COptionUI*>(aOptionGroup->GetAt(i));
+						OptionBtn* pControl = static_cast<OptionBtn*>(aOptionGroup->GetAt(i));
 						if( pControl != this ) {
 							pControl->Selected(false, bTriggerEvent);
 						}
@@ -91,30 +91,30 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	bool COptionUI::Activate()
+	bool OptionBtn::Activate()
 	{
-		if( !CButtonUI::Activate() ) return false;
+		if( !Button::Activate() ) return false;
 		if( !m_sGroupName.empty() ) Selected(true);
 		else Selected(!m_bSelected);
 
 		return true;
 	}
 
-	void COptionUI::SetEnabled(bool bEnable)
+	void OptionBtn::SetEnabled(bool bEnable)
 	{
-		CControlUI::SetEnabled(bEnable);
+		Control::SetEnabled(bEnable);
 		if( !IsEnabled() ) {
 			if( m_bSelected ) m_uButtonState = UISTATE_SELECTED;
 			else m_uButtonState = 0;
 		}
 	}
 
-	LPCTSTR COptionUI::GetSelectedImage()
+	LPCTSTR OptionBtn::GetSelectedImage()
 	{
 		return m_diSelected.sDrawString.c_str();
 	}
 
-	void COptionUI::SetSelectedImage(LPCTSTR pStrImage)
+	void OptionBtn::SetSelectedImage(LPCTSTR pStrImage)
 	{
 		if( m_diSelected.sDrawString == pStrImage && m_diSelected.pImageInfo != NULL ) return;
 		m_diSelected.Clear();
@@ -122,12 +122,12 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	LPCTSTR COptionUI::GetSelectedHotImage()
+	LPCTSTR OptionBtn::GetSelectedHotImage()
 	{
 		return m_diSelectedHot.sDrawString.c_str();
 	}
 
-	void COptionUI::SetSelectedHotImage( LPCTSTR pStrImage )
+	void OptionBtn::SetSelectedHotImage( LPCTSTR pStrImage )
 	{
 		if( m_diSelectedHot.sDrawString == pStrImage && m_diSelectedHot.pImageInfo != NULL ) return;
 		m_diSelectedHot.Clear();
@@ -135,34 +135,34 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	void COptionUI::SetSelectedTextColor(DWORD dwTextColor)
+	void OptionBtn::SetSelectedTextColor(DWORD dwTextColor)
 	{
 		m_dwSelectedTextColor = dwTextColor;
 	}
 
-	DWORD COptionUI::GetSelectedTextColor()
+	DWORD OptionBtn::GetSelectedTextColor()
 	{
 		if (m_dwSelectedTextColor == 0) m_dwSelectedTextColor = m_pManager->GetDefaultFontColor();
 		return m_dwSelectedTextColor;
 	}
 
-	void COptionUI::SetSelectedBkColor( DWORD dwBkColor )
+	void OptionBtn::SetSelectedBkColor( DWORD dwBkColor )
 	{
 		m_dwSelectedBkColor = dwBkColor;
 	}
 
-	DWORD COptionUI::GetSelectBkColor()
+	DWORD OptionBtn::GetSelectBkColor()
 	{
 		return m_dwSelectedBkColor;
 	}
 
-	SIZE COptionUI::EstimateSize(SIZE szAvailable)
+	SIZE OptionBtn::EstimateSize(SIZE szAvailable)
 	{
 		if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
-		return CControlUI::EstimateSize(szAvailable);
+		return Control::EstimateSize(szAvailable);
 	}
 
-	void COptionUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+	void OptionBtn::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
 		if( _tcscmp(pstrName, _T("group")) == 0 ) SetGroup(pstrValue);
 		else if( _tcscmp(pstrName, _T("selected")) == 0 ) Selected(_tcscmp(pstrValue, _T("true")) == 0);
@@ -184,10 +184,10 @@ namespace DuiLib
 			}
 			SetSelectedTextColor(clrColor);
 		}
-		else CButtonUI::SetAttribute(pstrName, pstrValue);
+		else Button::SetAttribute(pstrName, pstrValue);
 	}
 
-	void COptionUI::PaintStatusImage(HDC hDC)
+	void OptionBtn::PaintStatusImage(HDC hDC)
 	{
 		if( (m_uButtonState & UISTATE_SELECTED) != 0 ) {
 			if ((m_uButtonState & UISTATE_HOT) != 0)
@@ -204,14 +204,14 @@ namespace DuiLib
 
 		UINT uSavedState = m_uButtonState;
 		m_uButtonState &= ~UISTATE_PUSHED;
-		CButtonUI::PaintStatusImage(hDC);
+		Button::PaintStatusImage(hDC);
 		m_uButtonState = uSavedState;
 
 Label_ForeImage:
 		DrawImage(hDC, m_diFore);
 	}
 
-	void COptionUI::PaintText(HDC hDC)
+	void OptionBtn::PaintText(HDC hDC)
 	{
 		if( (m_uButtonState & UISTATE_SELECTED) != 0 )
 		{
@@ -242,7 +242,7 @@ Label_ForeImage:
 		{
 			UINT uSavedState = m_uButtonState;
 			m_uButtonState &= ~UISTATE_PUSHED;
-			CButtonUI::PaintText(hDC);
+			Button::PaintText(hDC);
 			m_uButtonState = uSavedState;
 		}
 	}

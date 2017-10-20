@@ -3,7 +3,7 @@
 #include "math.h"
 #include "crtdbg.h"
 
-namespace DuiLib
+namespace dui
 {
 
 const TCHAR *strWndClassName = _T("PerryShadowWnd");
@@ -60,13 +60,13 @@ bool CShadowUI::Initialize(HINSTANCE hInstance)
 	return true;
 }
 
-void CShadowUI::Create(CPaintManagerUI* pPaintManager)
+void CShadowUI::Create(CPaintManager* pPaintManager)
 {
 	if(!m_bIsShowShadow)
 		return;
 
 	// Already initialized
-	_ASSERT(CPaintManagerUI::GetInstance() != INVALID_HANDLE_VALUE);
+	_ASSERT(CPaintManager::GetInstance() != INVALID_HANDLE_VALUE);
 	_ASSERT(pPaintManager != NULL);
 	m_pManager = pPaintManager;
 	HWND hParentWnd = m_pManager->GetPaintWindow();
@@ -81,7 +81,7 @@ void CShadowUI::Create(CPaintManagerUI* pPaintManager)
 	LONG styleValue = lParentStyle & WS_CAPTION;
 	m_hWnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TRANSPARENT, strWndClassName, NULL,
 		/*WS_VISIBLE | */styleValue | WS_POPUPWINDOW,
-		CW_USEDEFAULT, 0, 0, 0, hParentWnd, NULL, CPaintManagerUI::GetInstance(), NULL);
+		CW_USEDEFAULT, 0, 0, 0, hParentWnd, NULL, CPaintManager::GetInstance(), NULL);
 
 	if(!(WS_VISIBLE & lParentStyle))	// Parent invisible
 		m_Status = SS_ENABLED;
@@ -599,4 +599,4 @@ bool CShadowUI::CopyShadow(CShadowUI* pShadow)
 	}
 	return true;
 }
-} //namespace DuiLib
+} //namespace dui

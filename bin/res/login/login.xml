@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="270,386" caption="0,0,75,49" sizebox="6,6,6,6" >
-  <VLayout inset="" bkimage="login_bk.png" > 
+  <VLayout padding="" bkimage="login_bk.png" > 
     <HLayout height="50" margin="0,6,5,9">
       <Label width="60" height="32" margin="10" align="" valign="" font="3" text="微微"/>
       <Control />

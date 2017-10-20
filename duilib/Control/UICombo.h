@@ -3,17 +3,17 @@
 
 #pragma once
 
-namespace DuiLib {
+namespace dui {
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
 class CComboWnd;
 
-class DUILIB_API CComboUI : public CContainerUI, public IListOwnerUI
+class DUILIB_API Combo : public Container, public IListOwner
 {
     friend class CComboWnd;
 public:
-    CComboUI();
+    Combo();
 
     LPCTSTR GetClass() const;
     LPVOID GetInterface(LPCTSTR pstrName);
@@ -21,10 +21,10 @@ public:
     void DoInit();
     UINT GetControlFlags() const;
 
-    CDuiString GetText() const;
+    String GetText() const;
     void SetEnabled(bool bEnable = true);
 
-    CDuiString GetDropBoxAttributeList();
+    String GetDropBoxAttributeList();
     void SetDropBoxAttributeList(LPCTSTR pstrList);
     SIZE GetDropBoxSize() const;
     void SetDropBoxSize(SIZE szDropBox);
@@ -36,11 +36,11 @@ public:
     bool ExpandItem(int iIndex, bool bExpand = true);
     int GetExpandedItem() const;
 
-    bool SetItemIndex(CControlUI* pControl, int iNewIndex);
-    bool SetMultiItemIndex(CControlUI* pStartControl, int iCount, int iNewStartIndex);
-    bool Add(CControlUI* pControl);
-    bool AddAt(CControlUI* pControl, int iIndex);
-    bool Remove(CControlUI* pControl, bool bDoNotDestroy=false);
+    bool SetItemIndex(Control* pControl, int iNewIndex);
+    bool SetMultiItemIndex(Control* pStartControl, int iCount, int iNewStartIndex);
+    bool Add(Control* pControl);
+    bool AddAt(Control* pControl, int iIndex);
+    bool Remove(Control* pControl, bool bDoNotDestroy=false);
     bool RemoveAt(int iIndex, bool bDoNotDestroy=false);
     void RemoveAll();
 
@@ -61,7 +61,7 @@ public:
     LPCTSTR GetDisabledImage() const;
     void SetDisabledImage(LPCTSTR pStrImage);
 
-    TListInfoUI* GetListInfo();
+    TListInfo* GetListInfo();
     UINT GetItemFixedHeight();
     void SetItemFixedHeight(UINT nHeight);
     int GetItemFont(int index);
@@ -110,10 +110,10 @@ public:
     SIZE EstimateSize(SIZE szAvailable);
 	void SetPos(RECT rc, bool bNeedInvalidate = true);
 	void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    void DoEvent(TEventUI& event);
+    void DoEvent(TEvent& event);
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
     
-    bool DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl);
+    bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
     void PaintText(HDC hDC);
     void PaintStatusImage(HDC hDC);
 
@@ -124,7 +124,7 @@ protected:
 	bool m_bShowText;
 	bool m_bSelectCloseFlag;
     RECT m_rcTextPadding;
-    CDuiString m_sDropBoxAttributes;
+    String m_sDropBoxAttributes;
     SIZE m_szDropBox;
     UINT m_uButtonState;
 
@@ -134,9 +134,9 @@ protected:
     TDrawInfo m_diFocused;
     TDrawInfo m_diDisabled;
 
-    TListInfoUI m_ListInfo;
+    TListInfo m_ListInfo;
 };
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UICOMBO_H__

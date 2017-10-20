@@ -3,7 +3,7 @@
 
 #pragma once
 
-namespace DuiLib {
+namespace dui {
 
 class DUILIB_API CDelegateBase	 
 {
@@ -90,9 +90,9 @@ public:
     bool operator() (void* param);
 
 protected:
-    CDuiPtrArray m_aDelegates;
+    PtrArray m_aDelegates;
 };
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UIDELEGATE_H__

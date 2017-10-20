@@ -71,9 +71,9 @@
 #include <string>
 
 #ifdef _UNICODE
-typedef std::wstring CDuiString;
+typedef std::wstring String;
 #else
-typedef std::string CDuiString;
+typedef std::string String;
 #endif
 
 #include "Utils/Utils.h"

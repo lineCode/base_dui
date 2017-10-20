@@ -2,7 +2,7 @@
 //////////////BEGIN消息映射宏定义////////////////////////////////////////////////////
 ///
 
-namespace DuiLib
+namespace dui
 {
 
 #define _USEIMM					1
@@ -15,31 +15,31 @@ enum DuiSig
 {
 	DuiSig_end = 0, // [marks end of message map]
 	DuiSig_lwl,     // LRESULT (WPARAM, LPARAM)
-	DuiSig_vn,      // void (TNotifyUI)
+	DuiSig_vn,      // void (TNotify)
 };
 
-class CControlUI;
+class Control;
 
 // Structure for notifications to the outside world
 typedef struct tagTNotifyUI 
 {
-	CDuiString sType;
-	CDuiString sVirtualWnd;
-	CControlUI* pSender;
+	String sType;
+	String sVirtualWnd;
+	Control* pSender;
 	DWORD dwTimestamp;
 	POINT ptMouse;
 	WPARAM wParam;
 	LPARAM lParam;
-} TNotifyUI;
+} TNotify;
 
 class CNotifyPump;
-typedef void (CNotifyPump::*DUI_PMSG)(TNotifyUI& msg);  //指针类型
+typedef void (CNotifyPump::*DUI_PMSG)(TNotify& msg);  //指针类型
 
 union DuiMessageMapFunctions
 {
 	DUI_PMSG pfn;   // generic member function pointer
 	LRESULT (CNotifyPump::*pfn_Notify_lwl)(WPARAM, LPARAM);
-	void (CNotifyPump::*pfn_Notify_vn)(TNotifyUI&);
+	void (CNotifyPump::*pfn_Notify_vn)(TNotify&);
 };
 
 //定义所有消息类型
@@ -99,8 +99,8 @@ struct DUI_MSGMAP
 //结构定义
 struct DUI_MSGMAP_ENTRY //定义一个结构体，来存放消息信息
 {
-	CDuiString sMsgType;          // DUI消息类型
-	CDuiString sCtrlName;         // 控件名称
+	String sMsgType;          // DUI消息类型
+	String sCtrlName;         // 控件名称
 	UINT       nSig;              // 标记函数指针类型
 	DUI_PMSG   pfn;               // 指向函数的指针
 };
@@ -281,5 +281,5 @@ protected:                                                                \
 //////////////END控件名称宏定义//////////////////////////////////////////////////
 
 
-}// namespace DuiLib
+}// namespace dui
 

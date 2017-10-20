@@ -3,24 +3,24 @@
 
 #pragma once
 
-namespace DuiLib {
+namespace dui {
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-typedef CControlUI* (CALLBACK* FINDCONTROLPROC)(CControlUI*, LPVOID);
+typedef Control* (CALLBACK* FINDCONTROLPROC)(Control*, LPVOID);
 
-class DUILIB_API CControlUI
+class DUILIB_API Control
 {
 public:
-    CControlUI();
+    Control();
     virtual void Delete();
 
 protected:
-    virtual ~CControlUI();
+    virtual ~Control();
 
 public:
-    virtual CDuiString GetName() const;
+    virtual String GetName() const;
     virtual void SetName(LPCTSTR pstrName);
     virtual LPCTSTR GetClass() const;
     virtual LPVOID GetInterface(LPCTSTR pstrName);
@@ -28,14 +28,14 @@ public:
 	virtual HWND GetNativeWindow() const;
 
     virtual bool Activate();
-    virtual CPaintManagerUI* GetManager() const;
-    virtual void SetManager(CPaintManagerUI* pManager, CControlUI* pParent, bool bInit = true);
-    virtual CControlUI* GetParent() const;
-    virtual CControlUI* GetCover() const;
-    virtual void SetCover(CControlUI *pControl);
+    virtual CPaintManager* GetManager() const;
+    virtual void SetManager(CPaintManager* pManager, Control* pParent, bool bInit = true);
+    virtual Control* GetParent() const;
+    virtual Control* GetCover() const;
+    virtual void SetCover(Control *pControl);
 
     // 文本相关
-    virtual CDuiString GetText() const;
+    virtual String GetText() const;
     virtual void SetText(LPCTSTR pstrText);
 
     // 图形相关
@@ -67,7 +67,7 @@ public:
     // 位置相关
     virtual const RECT& GetPos() const;
 	virtual RECT GetRelativePos() const; // 相对(父控件)位置
-	virtual RECT GetClientPos() const; // 客户区域（除去scrollbar和inset）
+	virtual RECT GetClientPos() const; // 客户区域（除去scrollbar和padding）
 	// 只有控件为float的时候，外部调用SetPos和Move才是有效的，位置参数是相对父控件的位置
     virtual void SetPos(RECT rc, bool bNeedInvalidate = true);
 	virtual void Move(SIZE szOffset, bool bNeedInvalidate = true);
@@ -97,7 +97,7 @@ public:
 	void SetForeImage(LPCTSTR pStrImage);
 
     // 鼠标提示
-    virtual CDuiString GetToolTip() const;
+    virtual String GetToolTip() const;
     virtual void SetToolTip(LPCTSTR pstrText);
 	virtual void SetToolTipWidth(int nWidth);
 	virtual int	  GetToolTipWidth(void);	// 多行ToolTip单行最长宽度
@@ -111,7 +111,7 @@ public:
     virtual void SetContextMenuUsed(bool bMenuUsed);
 
     // 用户属性
-    virtual const CDuiString& GetUserData(); // 辅助函数，供用户使用
+    virtual const String& GetUserData(); // 辅助函数，供用户使用
     virtual void SetUserData(LPCTSTR pstrText); // 辅助函数，供用户使用
     virtual UINT_PTR GetTag() const; // 辅助函数，供用户使用
     virtual void SetTag(UINT_PTR pTag); // 辅助函数，供用户使用
@@ -137,7 +137,7 @@ public:
 	bool RemoveCustomAttribute(LPCTSTR pstrName);
 	void RemoveAllCustomAttribute();
 
-    virtual CControlUI* FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags);
+    virtual Control* FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags);
 
     void Invalidate();
     bool IsUpdateNeeded() const;
@@ -148,18 +148,18 @@ public:
     virtual void Init();
     virtual void DoInit();
 
-    virtual void Event(TEventUI& event);
-    virtual void DoEvent(TEventUI& event);
+    virtual void Event(TEvent& event);
+    virtual void DoEvent(TEvent& event);
 
-    virtual CDuiString GetAttribute(LPCTSTR pstrName);
+    virtual String GetAttribute(LPCTSTR pstrName);
     virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-	virtual CDuiString GetAttributeList(bool bIgnoreDefault = true);
+	virtual String GetAttributeList(bool bIgnoreDefault = true);
     virtual void SetAttributeList(LPCTSTR pstrList);
 
     virtual SIZE EstimateSize(SIZE szAvailable);
 
-	virtual bool Paint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl=NULL); // 返回要不要继续绘制
-    virtual bool DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl);
+	virtual bool Paint(HDC hDC, const RECT& rcPaint, Control* pStopControl=NULL); // 返回要不要继续绘制
+    virtual bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
     virtual void PaintBkColor(HDC hDC);
     virtual void PaintBkImage(HDC hDC);
     virtual void PaintStatusImage(HDC hDC);
@@ -170,7 +170,7 @@ public:
 
 	//虚拟窗口参数
 	void SetVirtualWnd(LPCTSTR pstrValue);
-	CDuiString GetVirtualWnd() const;
+	String GetVirtualWnd() const;
 
 public:
     CEventSource OnInit;
@@ -182,11 +182,11 @@ public:
 	CEventSource OnPostPaint;
 
 protected:
-    CPaintManagerUI* m_pManager;
-    CControlUI* m_pParent;
-    CControlUI* m_pCover;
-	CDuiString m_sVirtualWnd;
-    CDuiString m_sName;
+    CPaintManager* m_pManager;
+    Control* m_pParent;
+    Control* m_pCover;
+	String m_sVirtualWnd;
+    String m_sName;
     bool m_bUpdateNeeded;
     bool m_bMenuUsed;
 	bool m_bAsyncNotify;
@@ -206,10 +206,10 @@ protected:
 	TPercentInfo m_piFloatPercent;
     bool m_bSetPos; // 防止SetPos循环调用
 
-    CDuiString m_sText;
-    CDuiString m_sToolTip;
+    String m_sText;
+    String m_sToolTip;
     TCHAR m_chShortcut;
-    CDuiString m_sUserData;
+    String m_sUserData;
     UINT_PTR m_pTag;
 
     DWORD m_dwBackColor;
@@ -225,9 +225,9 @@ protected:
     SIZE m_cxyBorderRound;
     RECT m_rcPaint;
 	RECT m_rcBorderSize;
-	CDuiStringPtrMap m_mCustomAttrHash;
+	StringPtrMap m_mCustomAttrHash;
 };
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UICONTROL_H__

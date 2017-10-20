@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "UIText.h"
 
-namespace DuiLib
+namespace dui
 {
 	CTextUI::CTextUI() : m_nLinks(0), m_nHoverLink(-1)
 	{
@@ -23,7 +23,7 @@ namespace DuiLib
 	LPVOID CTextUI::GetInterface(LPCTSTR pstrName)
 	{
 		if( _tcscmp(pstrName, DUI_CTR_TEXT) == 0 ) return static_cast<CTextUI*>(this);
-		return CLabelUI::GetInterface(pstrName);
+		return Label::GetInterface(pstrName);
 	}
 
 	UINT CTextUI::GetControlFlags() const
@@ -32,17 +32,17 @@ namespace DuiLib
 		else return 0;
 	}
 
-	CDuiString* CTextUI::GetLinkContent(int iIndex)
+	String* CTextUI::GetLinkContent(int iIndex)
 	{
 		if( iIndex >= 0 && iIndex < m_nLinks ) return &m_sLinks[iIndex];
 		return NULL;
 	}
 
-	void CTextUI::DoEvent(TEventUI& event)
+	void CTextUI::DoEvent(TEvent& event)
 	{
 		if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
 			if( m_pParent != NULL ) m_pParent->DoEvent(event);
-			else CLabelUI::DoEvent(event);
+			else Label::DoEvent(event);
 			return;
 		}
 
@@ -106,7 +106,7 @@ namespace DuiLib
 			}
 		}
 
-		CLabelUI::DoEvent(event);
+		Label::DoEvent(event);
 	}
 
 	void CTextUI::PaintText(HDC hDC)

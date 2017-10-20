@@ -3,18 +3,18 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API COptionUI : public CButtonUI
+	class DUILIB_API OptionBtn : public Button
 	{
 	public:
-		COptionUI();
-		~COptionUI();
+		OptionBtn();
+		~OptionBtn();
 
 		LPCTSTR GetClass() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
 
-		void SetManager(CPaintManagerUI* pManager, CControlUI* pParent, bool bInit = true);
+		void SetManager(CPaintManager* pManager, Control* pParent, bool bInit = true);
 
 		bool Activate();
 		void SetEnabled(bool bEnable = true);
@@ -47,7 +47,7 @@ namespace DuiLib
 
 	protected:
 		bool			m_bSelected;
-		CDuiString		m_sGroupName;
+		String		m_sGroupName;
 
 		DWORD			m_dwSelectedBkColor;
 		DWORD			m_dwSelectedTextColor;
@@ -56,6 +56,6 @@ namespace DuiLib
 		TDrawInfo		m_diSelectedHot;
 	};
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UIOPTION_H__

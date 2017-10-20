@@ -1,41 +1,41 @@
 #include "stdafx.h"
 #include "UIVerticalLayout.h"
 
-namespace DuiLib
+namespace dui
 {
-	CVerticalLayoutUI::CVerticalLayoutUI() : m_iSepHeight(0), m_uButtonState(0), m_bImmMode(false)
+	VerticalLayout::VerticalLayout() : m_iSepHeight(0), m_uButtonState(0), m_bImmMode(false)
 	{
 		m_ptLastMouse.x = m_ptLastMouse.y = 0;
 		::ZeroMemory(&m_rcNewPos, sizeof(m_rcNewPos));
 	}
 
-	LPCTSTR CVerticalLayoutUI::GetClass() const
+	LPCTSTR VerticalLayout::GetClass() const
 	{
 		return DUI_CTR_VLAYOUT;
 	}
 
-	LPVOID CVerticalLayoutUI::GetInterface(LPCTSTR pstrName)
+	LPVOID VerticalLayout::GetInterface(LPCTSTR pstrName)
 	{
-		if( _tcscmp(pstrName, DUI_CTR_VLAYOUT) == 0 ) return static_cast<CVerticalLayoutUI*>(this);
-		return CContainerUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_VLAYOUT) == 0 ) return static_cast<VerticalLayout*>(this);
+		return Container::GetInterface(pstrName);
 	}
 
-	UINT CVerticalLayoutUI::GetControlFlags() const
+	UINT VerticalLayout::GetControlFlags() const
 	{
 		if( IsEnabled() && m_iSepHeight != 0 ) return UIFLAG_SETCURSOR;
 		else return 0;
 	}
 
-	void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
+	void VerticalLayout::SetPos(RECT rc, bool bNeedInvalidate)
 	{
-		CControlUI::SetPos(rc, bNeedInvalidate);
+		Control::SetPos(rc, bNeedInvalidate);
 		rc = m_rcItem;
 
-		// Adjust for inset
-		rc.left += m_rcInset.left;
-		rc.top += m_rcInset.top;
-		rc.right -= m_rcInset.right;
-		rc.bottom -= m_rcInset.bottom;
+		// Adjust for padding
+		rc.left += m_rcPadding.left;
+		rc.top += m_rcPadding.top;
+		rc.right -= m_rcPadding.right;
+		rc.bottom -= m_rcPadding.bottom;
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
 		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 
@@ -59,7 +59,7 @@ namespace DuiLib
 		int iControlMaxWidth = 0;
 		int iControlMaxHeight = 0;
 		for( int it1 = 0; it1 < m_items.GetSize(); it1++ ) {
-			CControlUI* pControl = static_cast<CControlUI*>(m_items[it1]);
+			Control* pControl = static_cast<Control*>(m_items[it1]);
 			if( !pControl->IsVisible() ) continue;
 			if( pControl->IsFloat() ) continue;
 			szControlAvailable = szAvailable;
@@ -104,7 +104,7 @@ namespace DuiLib
 		int iAdjustable = 0;
 		int cyFixedRemaining = cyFixed;
 		for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
-			CControlUI* pControl = static_cast<CControlUI*>(m_items[it2]);
+			Control* pControl = static_cast<Control*>(m_items[it2]);
 			if( !pControl->IsVisible() ) continue;
 			if( pControl->IsFloat() ) {
 				SetFloatPos(it2);
@@ -186,7 +186,7 @@ namespace DuiLib
 		ProcessScrollBar(rc, cxNeeded, cyNeeded);
 	}
 
-	void CVerticalLayoutUI::DoPostPaint(HDC hDC, const RECT& rcPaint)
+	void VerticalLayout::DoPostPaint(HDC hDC, const RECT& rcPaint)
 	{
 		if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode ) {
 			RECT rcSeparator = GetThumbRect(true);
@@ -194,17 +194,17 @@ namespace DuiLib
 		}
 	}
 
-	void CVerticalLayoutUI::SetSepHeight(int iHeight)
+	void VerticalLayout::SetSepHeight(int iHeight)
 	{
 		m_iSepHeight = iHeight;
 	}
 
-	int CVerticalLayoutUI::GetSepHeight() const
+	int VerticalLayout::GetSepHeight() const
 	{
 		return m_iSepHeight;
 	}
 
-	void CVerticalLayoutUI::SetSepImmMode(bool bImmediately)
+	void VerticalLayout::SetSepImmMode(bool bImmediately)
 	{
 		if( m_bImmMode == bImmediately ) return;
 		if( (m_uButtonState & UISTATE_CAPTURED) != 0 && !m_bImmMode && m_pManager != NULL ) {
@@ -214,19 +214,19 @@ namespace DuiLib
 		m_bImmMode = bImmediately;
 	}
 
-	bool CVerticalLayoutUI::IsSepImmMode() const
+	bool VerticalLayout::IsSepImmMode() const
 	{
 		return m_bImmMode;
 	}
 
-	void CVerticalLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+	void VerticalLayout::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
 		if( _tcscmp(pstrName, _T("sepheight")) == 0 ) SetSepHeight(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("sepimm")) == 0 ) SetSepImmMode(_tcscmp(pstrValue, _T("true")) == 0);
-		else CContainerUI::SetAttribute(pstrName, pstrValue);
+		else Container::SetAttribute(pstrName, pstrValue);
 	}
 
-	void CVerticalLayoutUI::DoEvent(TEventUI& event)
+	void VerticalLayout::DoEvent(TEvent& event)
 	{
 		if( m_iSepHeight != 0 ) {
 			if( event.Type == UIEVENT_BUTTONDOWN && IsEnabled() )
@@ -308,10 +308,10 @@ namespace DuiLib
 				}
 			}
 		}
-		CContainerUI::DoEvent(event);
+		Container::DoEvent(event);
 	}
 
-	RECT CVerticalLayoutUI::GetThumbRect(bool bUseNew) const
+	RECT VerticalLayout::GetThumbRect(bool bUseNew) const
 	{
 		if( (m_uButtonState & UISTATE_CAPTURED) != 0 && bUseNew) {
 			if( m_iSepHeight >= 0 ) 

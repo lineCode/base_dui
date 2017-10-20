@@ -3,21 +3,21 @@
 
 #pragma once
 
-namespace DuiLib {
+namespace dui {
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class IContainerUI
+class IContainer
 {
 public:
-    virtual CControlUI* GetItemAt(int iIndex) const = 0;
-    virtual int GetItemIndex(CControlUI* pControl) const  = 0;
-    virtual bool SetItemIndex(CControlUI* pControl, int iNewIndex) = 0;
-    virtual bool SetMultiItemIndex(CControlUI* pStartControl, int iCount, int iNewStartIndex) = 0;
+    virtual Control* GetItemAt(int iIndex) const = 0;
+    virtual int GetItemIndex(Control* pControl) const  = 0;
+    virtual bool SetItemIndex(Control* pControl, int iNewIndex) = 0;
+    virtual bool SetMultiItemIndex(Control* pStartControl, int iCount, int iNewStartIndex) = 0;
     virtual int GetCount() const = 0;
-    virtual bool Add(CControlUI* pControl) = 0;
-    virtual bool AddAt(CControlUI* pControl, int iIndex)  = 0;
-    virtual bool Remove(CControlUI* pControl, bool bDoNotDestroy=false) = 0;
+    virtual bool Add(Control* pControl) = 0;
+    virtual bool AddAt(Control* pControl, int iIndex)  = 0;
+    virtual bool Remove(Control* pControl, bool bDoNotDestroy=false) = 0;
     virtual bool RemoveAt(int iIndex, bool bDoNotDestroy=false)  = 0;
     virtual void RemoveAll() = 0;
 };
@@ -25,36 +25,36 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-class CScrollBarUI;
+class ScrollBar;
 
-class DUILIB_API CContainerUI : public CControlUI, public IContainerUI
+class DUILIB_API Container : public Control, public IContainer
 {
 public:
-    CContainerUI();
-    virtual ~CContainerUI();
+    Container();
+    virtual ~Container();
 
 public:
     LPCTSTR GetClass() const;
     LPVOID GetInterface(LPCTSTR pstrName);
 
-    CControlUI* GetItemAt(int iIndex) const;
-    int GetItemIndex(CControlUI* pControl) const;
-    bool SetItemIndex(CControlUI* pControl, int iNewIndex);
-    bool SetMultiItemIndex(CControlUI* pStartControl, int iCount, int iNewStartIndex);
+    Control* GetItemAt(int iIndex) const;
+    int GetItemIndex(Control* pControl) const;
+    bool SetItemIndex(Control* pControl, int iNewIndex);
+    bool SetMultiItemIndex(Control* pStartControl, int iCount, int iNewStartIndex);
     int GetCount() const;
-    bool Add(CControlUI* pControl);
-    bool AddAt(CControlUI* pControl, int iIndex);
-    bool Remove(CControlUI* pControl, bool bDoNotDestroy=false);
+    bool Add(Control* pControl);
+    bool AddAt(Control* pControl, int iIndex);
+    bool Remove(Control* pControl, bool bDoNotDestroy=false);
     bool RemoveAt(int iIndex, bool bDoNotDestroy=false);
     void RemoveAll();
 
-    void DoEvent(TEventUI& event);
+    void DoEvent(TEvent& event);
     void SetVisible(bool bVisible = true);
     void SetInternVisible(bool bVisible = true);
     void SetMouseEnabled(bool bEnable = true);
 
-    virtual RECT GetInset() const;
-    virtual void SetInset(RECT rcInset); // 设置内边距，相当于设置客户区
+    virtual RECT GetPadding() const;
+    virtual void SetPadding(RECT rcPadding); // 设置内边距，相当于设置客户区
     virtual int GetChildPadding() const;
     virtual void SetChildPadding(int iPadding);
 	virtual UINT GetChildAlign() const;
@@ -73,23 +73,23 @@ public:
 	RECT GetClientPos() const;
 	void SetPos(RECT rc, bool bNeedInvalidate = true);
 	void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    bool DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl);
+    bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
 
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
-    void SetManager(CPaintManagerUI* pManager, CControlUI* pParent, bool bInit = true);
-    CControlUI* FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags);
+    void SetManager(CPaintManager* pManager, Control* pParent, bool bInit = true);
+    Control* FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags);
 
 	bool SetSubControlText(LPCTSTR pstrSubControlName,LPCTSTR pstrText);
 	bool SetSubControlFixedHeight(LPCTSTR pstrSubControlName,int cy);
 	bool SetSubControlFixedWdith(LPCTSTR pstrSubControlName,int cx);
 	bool SetSubControlUserData(LPCTSTR pstrSubControlName,LPCTSTR pstrText);
 
-	CDuiString GetSubControlText(LPCTSTR pstrSubControlName);
+	String GetSubControlText(LPCTSTR pstrSubControlName);
 	int GetSubControlFixedHeight(LPCTSTR pstrSubControlName);
 	int GetSubControlFixedWdith(LPCTSTR pstrSubControlName);
-	const CDuiString GetSubControlUserData(LPCTSTR pstrSubControlName);
-	CControlUI* FindSubControl(LPCTSTR pstrSubControlName);
+	const String GetSubControlUserData(LPCTSTR pstrSubControlName);
+	Control* FindSubControl(LPCTSTR pstrSubControlName);
 
     virtual SIZE GetScrollPos() const;
     virtual SIZE GetScrollRange() const;
@@ -107,16 +107,16 @@ public:
     virtual void HomeLeft();
     virtual void EndRight();
     virtual void EnableScrollBar(bool bEnableVertical = true, bool bEnableHorizontal = false);
-    virtual CScrollBarUI* GetVerticalScrollBar() const;
-    virtual CScrollBarUI* GetHorizontalScrollBar() const;
+    virtual ScrollBar* GetVerticalScrollBar() const;
+    virtual ScrollBar* GetHorizontalScrollBar() const;
 
 protected:
     virtual void SetFloatPos(int iIndex);
     virtual void ProcessScrollBar(RECT rc, int cxRequired, int cyRequired);
 
 protected:
-    CDuiPtrArray m_items;
-    RECT m_rcInset;
+    PtrArray m_items;
+    RECT m_rcPadding;
     int m_iChildPadding;
 	UINT m_iChildAlign;
 	UINT m_iChildVAlign;
@@ -125,10 +125,10 @@ protected:
     bool m_bMouseChildEnabled;
     bool m_bScrollProcess; // 防止SetPos循环调用
 
-    CScrollBarUI* m_pVerticalScrollBar;
-    CScrollBarUI* m_pHorizontalScrollBar;
+    ScrollBar* m_pVerticalScrollBar;
+    ScrollBar* m_pHorizontalScrollBar;
 };
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UICONTAINER_H__

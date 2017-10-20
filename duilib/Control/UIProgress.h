@@ -3,12 +3,12 @@
 
 #pragma once
 
-namespace DuiLib
+namespace dui
 {
-	class DUILIB_API CProgressUI : public CLabelUI
+	class DUILIB_API Progress : public Label
 	{
 	public:
-		CProgressUI();
+		Progress();
 
 		LPCTSTR GetClass() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
@@ -32,6 +32,6 @@ namespace DuiLib
 		int m_nValue;
 	};
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UIPROGRESS_H__

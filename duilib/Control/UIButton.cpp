@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "UIButton.h"
 
-namespace DuiLib
+namespace dui
 {
-	CButtonUI::CButtonUI()
+	Button::Button()
 		: m_uButtonState(0)
 		, m_dwHotTextColor(0)
 		, m_dwPushedTextColor(0)
@@ -15,27 +15,27 @@ namespace DuiLib
 		m_uTextStyle = DT_SINGLELINE | DT_VCENTER | DT_CENTER;
 	}
 
-	LPCTSTR CButtonUI::GetClass() const
+	LPCTSTR Button::GetClass() const
 	{
 		return DUI_CTR_BUTTON;
 	}
 
-	LPVOID CButtonUI::GetInterface(LPCTSTR pstrName)
+	LPVOID Button::GetInterface(LPCTSTR pstrName)
 	{
-		if( _tcscmp(pstrName, DUI_CTR_BUTTON) == 0 ) return static_cast<CButtonUI*>(this);
-		return CLabelUI::GetInterface(pstrName);
+		if( _tcscmp(pstrName, DUI_CTR_BUTTON) == 0 ) return static_cast<Button*>(this);
+		return Label::GetInterface(pstrName);
 	}
 
-	UINT CButtonUI::GetControlFlags() const
+	UINT Button::GetControlFlags() const
 	{
 		return (IsKeyboardEnabled() ? UIFLAG_TABSTOP : 0) | (IsEnabled() ? UIFLAG_SETCURSOR : 0);
 	}
 
-	void CButtonUI::DoEvent(TEventUI& event)
+	void Button::DoEvent(TEvent& event)
 	{
 		if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
 			if( m_pParent != NULL ) m_pParent->DoEvent(event);
-			else CLabelUI::DoEvent(event);
+			else Label::DoEvent(event);
 			return;
 		}
 
@@ -146,70 +146,70 @@ namespace DuiLib
 			Invalidate();
 			return;
 		}
-		CLabelUI::DoEvent(event);
+		Label::DoEvent(event);
 	}
 
-	bool CButtonUI::Activate()
+	bool Button::Activate()
 	{
-		if( !CControlUI::Activate() ) return false;
+		if( !Control::Activate() ) return false;
 		if( m_pManager != NULL ) m_pManager->SendNotify(this, DUI_MSGTYPE_CLICK);
 		return true;
 	}
 
-	void CButtonUI::SetEnabled(bool bEnable)
+	void Button::SetEnabled(bool bEnable)
 	{
-		CControlUI::SetEnabled(bEnable);
+		Control::SetEnabled(bEnable);
 		if( !IsEnabled() ) {
 			m_uButtonState = 0;
 		}
 	}
 
-	void CButtonUI::SetHotBkColor( DWORD dwColor )
+	void Button::SetHotBkColor( DWORD dwColor )
 	{
 		m_dwHotBkColor = dwColor;
 	}
 
-	DWORD CButtonUI::GetHotBkColor() const
+	DWORD Button::GetHotBkColor() const
 	{
 		return m_dwHotBkColor;
 	}
 
-	void CButtonUI::SetHotTextColor(DWORD dwColor)
+	void Button::SetHotTextColor(DWORD dwColor)
 	{
 		m_dwHotTextColor = dwColor;
 	}
 
-	DWORD CButtonUI::GetHotTextColor() const
+	DWORD Button::GetHotTextColor() const
 	{
 		return m_dwHotTextColor;
 	}
 
-	void CButtonUI::SetPushedTextColor(DWORD dwColor)
+	void Button::SetPushedTextColor(DWORD dwColor)
 	{
 		m_dwPushedTextColor = dwColor;
 	}
 
-	DWORD CButtonUI::GetPushedTextColor() const
+	DWORD Button::GetPushedTextColor() const
 	{
 		return m_dwPushedTextColor;
 	}
 
-	void CButtonUI::SetFocusedTextColor(DWORD dwColor)
+	void Button::SetFocusedTextColor(DWORD dwColor)
 	{
 		m_dwFocusedTextColor = dwColor;
 	}
 
-	DWORD CButtonUI::GetFocusedTextColor() const
+	DWORD Button::GetFocusedTextColor() const
 	{
 		return m_dwFocusedTextColor;
 	}
 
-	LPCTSTR CButtonUI::GetNormalImage()
+	LPCTSTR Button::GetNormalImage()
 	{
 		return m_diNormal.sDrawString.c_str();
 	}
 
-	void CButtonUI::SetNormalImage(LPCTSTR pStrImage)
+	void Button::SetNormalImage(LPCTSTR pStrImage)
 	{
 		if( m_diNormal.sDrawString == pStrImage && m_diNormal.pImageInfo != NULL ) return;
 		m_diNormal.Clear();
@@ -217,12 +217,12 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	LPCTSTR CButtonUI::GetHotImage()
+	LPCTSTR Button::GetHotImage()
 	{
 		return m_diHot.sDrawString.c_str();
 	}
 
-	void CButtonUI::SetHotImage(LPCTSTR pStrImage)
+	void Button::SetHotImage(LPCTSTR pStrImage)
 	{
 		if( m_diHot.sDrawString == pStrImage && m_diHot.pImageInfo != NULL ) return;
 		m_diHot.Clear();
@@ -230,12 +230,12 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	LPCTSTR CButtonUI::GetPushedImage()
+	LPCTSTR Button::GetPushedImage()
 	{
 		return m_diPushed.sDrawString.c_str();
 	}
 
-	void CButtonUI::SetPushedImage(LPCTSTR pStrImage)
+	void Button::SetPushedImage(LPCTSTR pStrImage)
 	{
 		if( m_diPushed.sDrawString == pStrImage && m_diPushed.pImageInfo != NULL ) return;
 		m_diPushed.Clear();
@@ -243,12 +243,12 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	LPCTSTR CButtonUI::GetFocusedImage()
+	LPCTSTR Button::GetFocusedImage()
 	{
 		return m_diFocused.sDrawString.c_str();
 	}
 
-	void CButtonUI::SetFocusedImage(LPCTSTR pStrImage)
+	void Button::SetFocusedImage(LPCTSTR pStrImage)
 	{
 		if( m_diFocused.sDrawString == pStrImage && m_diFocused.pImageInfo != NULL ) return;
 		m_diFocused.Clear();
@@ -256,12 +256,12 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	LPCTSTR CButtonUI::GetDisabledImage()
+	LPCTSTR Button::GetDisabledImage()
 	{
 		return m_diDisabled.sDrawString.c_str();
 	}
 
-	void CButtonUI::SetDisabledImage(LPCTSTR pStrImage)
+	void Button::SetDisabledImage(LPCTSTR pStrImage)
 	{
 		if( m_diDisabled.sDrawString == pStrImage && m_diDisabled.pImageInfo != NULL ) return;
 		m_diDisabled.Clear();
@@ -269,12 +269,12 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	LPCTSTR CButtonUI::GetHotForeImage()
+	LPCTSTR Button::GetHotForeImage()
 	{
 		return m_diHotFore.sDrawString.c_str();
 	}
 
-	void CButtonUI::SetHotForeImage( LPCTSTR pStrImage )
+	void Button::SetHotForeImage( LPCTSTR pStrImage )
 	{
 		if( m_diHotFore.sDrawString == pStrImage && m_diHotFore.pImageInfo != NULL ) return;
 		m_diHotFore.Clear();
@@ -282,7 +282,7 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	void CButtonUI::SetFiveStatusImage(LPCTSTR pStrImage)
+	void Button::SetFiveStatusImage(LPCTSTR pStrImage)
 	{
 		m_diNormal.Clear();
 		m_diNormal.sDrawString = pStrImage;
@@ -336,23 +336,23 @@ namespace DuiLib
 		Invalidate();
 	}
 
-	void CButtonUI::SetFadeAlphaDelta(BYTE uDelta)
+	void Button::SetFadeAlphaDelta(BYTE uDelta)
 	{
 		m_uFadeAlphaDelta = uDelta;
 	}
 
-	BYTE CButtonUI::GetFadeAlphaDelta()
+	BYTE Button::GetFadeAlphaDelta()
 	{
 		return m_uFadeAlphaDelta;
 	}
 
-	SIZE CButtonUI::EstimateSize(SIZE szAvailable)
+	SIZE Button::EstimateSize(SIZE szAvailable)
 	{
 		if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
-		return CControlUI::EstimateSize(szAvailable);
+		return Control::EstimateSize(szAvailable);
 	}
 
-	void CButtonUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+	void Button::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
 		if( _tcscmp(pstrName, _T("normalimage")) == 0 ) SetNormalImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("hotimage")) == 0 ) SetHotImage(pstrValue);
@@ -406,10 +406,10 @@ namespace DuiLib
 			}
 			SetFocusedTextColor(clrColor);
 		}
-		else CLabelUI::SetAttribute(pstrName, pstrValue);
+		else Label::SetAttribute(pstrName, pstrValue);
 	}
 
-	void CButtonUI::PaintText(HDC hDC)
+	void Button::PaintText(HDC hDC)
 	{
 		if( IsFocused() ) m_uButtonState |= UISTATE_FOCUSED;
 		else m_uButtonState &= ~ UISTATE_FOCUSED;
@@ -444,7 +444,7 @@ namespace DuiLib
 			m_iFont, m_uTextStyle);
 	}
 
-	void CButtonUI::PaintStatusImage(HDC hDC)
+	void Button::PaintStatusImage(HDC hDC)
 	{
 		if( IsFocused() ) m_uButtonState |= UISTATE_FOCUSED;
 		else m_uButtonState &= ~ UISTATE_FOCUSED;

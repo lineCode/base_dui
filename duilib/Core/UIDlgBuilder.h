@@ -3,12 +3,12 @@
 
 #pragma once
 
-namespace DuiLib {
+namespace dui {
 
 class IDialogBuilderCallback
 {
 public:
-    virtual CControlUI* CreateControl(LPCTSTR pstrClass) = 0;
+    virtual Control* CreateControl(LPCTSTR pstrClass) = 0;
 };
 
 
@@ -16,23 +16,23 @@ class DUILIB_API CDialogBuilder
 {
 public:
     CDialogBuilder();
-    CControlUI* Create(STRINGorID xml, LPCTSTR type = NULL, IDialogBuilderCallback* pCallback = NULL,
-        CPaintManagerUI* pManager = NULL, CControlUI* pParent = NULL);
-    CControlUI* Create(IDialogBuilderCallback* pCallback = NULL, CPaintManagerUI* pManager = NULL,
-        CControlUI* pParent = NULL);
+    Control* Create(STRINGorID xml, LPCTSTR type = NULL, IDialogBuilderCallback* pCallback = NULL,
+        CPaintManager* pManager = NULL, Control* pParent = NULL);
+    Control* Create(IDialogBuilderCallback* pCallback = NULL, CPaintManager* pManager = NULL,
+        Control* pParent = NULL);
 
     CMarkup* GetMarkup();
 
     void GetLastErrorMessage(LPTSTR pstrMessage, SIZE_T cchMax) const;
     void GetLastErrorLocation(LPTSTR pstrSource, SIZE_T cchMax) const;
 private:
-    CControlUI* _Parse(CMarkupNode* parent, CControlUI* pParent = NULL, CPaintManagerUI* pManager = NULL);
+    Control* _Parse(CMarkupNode* parent, Control* pParent = NULL, CPaintManager* pManager = NULL);
 
     CMarkup m_xml;
     IDialogBuilderCallback* m_pCallback;
     LPCTSTR m_pstrtype;
 };
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UIDLGBUILDER_H__
