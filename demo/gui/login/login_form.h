@@ -43,6 +43,8 @@ protected:
 	void StartLogin();
 	void CancelLogin();
 	void ShowMenu(bool show, POINT pt);
+
+	bool ImportDataToDB();
 public:
 	static const LPCTSTR kClassName;
 

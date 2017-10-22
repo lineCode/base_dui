@@ -11,6 +11,9 @@
     <Filter Include="gui\login">
       <UniqueIdentifier>{ec13c4c7-f422-4a6c-81ed-d055391b1725}</UniqueIdentifier>
     </Filter>
+    <Filter Include="gui\main">
+      <UniqueIdentifier>{29f77d8c-533f-4aa2-b538-cdda2c0b2f74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -21,11 +24,20 @@
     <ClCompile Include="gui\login\login_form.cpp">
       <Filter>gui\login</Filter>
     </ClCompile>
+    <ClCompile Include="gui\main\main_form.cpp">
+      <Filter>gui\main</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\main\main_form_ui.cpp">
+      <Filter>gui\main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="gui\login\login_form.h">
       <Filter>gui\login</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\main\main_form.h">
+      <Filter>gui\main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -38,6 +50,9 @@
     </Xml>
     <Xml Include="..\bin\res\menu\menu.xml">
       <Filter>gui</Filter>
+    </Xml>
+    <Xml Include="..\bin\res\main\main.xml">
+      <Filter>gui\main</Filter>
     </Xml>
   </ItemGroup>
 </Project>

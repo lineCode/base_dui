@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "login_form.h"
-//#include "kit_define.h"
+#include "../main/main_form.h"
+#include "module/db/user_db.h"
 #include "module/login/login_manager.h"
+#include "module/window/windows_manager.h"
 #include "gui/msgbox/msgbox.h"
 
 
@@ -62,7 +64,7 @@ void LoginForm::RegLoginManagerCallback()
 	};
 
 	nim_comp::OnShowMainWindow cb_show_main = [this]{
-		//nim_comp::WindowsManager::SingletonShow<MainForm>(MainForm::kClassName);
+		nim_comp::WindowsManager::SingletonShow<MainForm>(MainForm::kClassName);
 	};
 
 	nim_comp::LoginManager::GetInstance()->RegLoginManagerCallback(/*ToWeakCallback*/(cb_start),
@@ -112,4 +114,14 @@ void LoginForm::OnCancelLogin()
 	btn_cancel_login_->SetText(L"È¡ÏûµÇÂ¼");
 	btn_cancel_login_->SetEnabled(true);
 #endif
+}
+
+bool LoginForm::ImportDataToDB()
+{
+	nim_comp::UserDB::account_info info;
+	info.account_id = nbase::UTF16ToUTF8(L"13777073806");
+	info.account_name = nbase::UTF16ToUTF8(L"¶¡¿¡½Ü");
+	info.password = nbase::UTF16ToUTF8(L"dingjunjie");
+	nim_comp::UserDB::GetInstance()->InsertAccountInfo(info);
+	return true;
 }

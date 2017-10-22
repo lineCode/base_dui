@@ -85,11 +85,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="gui\login\login_form.h" />
+    <ClInclude Include="gui\main\main_form.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\login\login_form.cpp" />
     <ClCompile Include="gui\login\login_form_ui.cpp" />
+    <ClCompile Include="gui\main\main_form.cpp" />
+    <ClCompile Include="gui\main\main_form_ui.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -101,6 +104,7 @@
     <Xml Include="..\bin\res\login\login.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\bin\res\main\main.xml" />
     <Xml Include="..\bin\res\menu\menu.xml" />
     <Xml Include="..\duilib\duilib_attribute.xml">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

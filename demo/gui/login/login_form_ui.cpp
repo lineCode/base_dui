@@ -12,7 +12,6 @@ LoginForm::LoginForm()
 
 LoginForm::~LoginForm()
 {
-
 }
 
 String LoginForm::GetSkinFolder()
@@ -82,6 +81,7 @@ void LoginForm::Notify(dui::TNotify& msg)
 	{
 		bHandle = true;
 		wprintf(_T("LoginForm::Notify Name:%s MSG:%s\n"), pControl->GetName().c_str(), DUI_MSGTYPE_ITEMCLICK);
+		ImportDataToDB();
 	}
 	if (!bHandle)
 	{

@@ -26,6 +26,7 @@ public:
 	*/
 	HWND Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, bool isLayeredWindow = true, const dui::CDuiRect& rc = dui::CDuiRect(0, 0, 0, 0));
 
+	virtual void OnFinalMessage(HWND hWnd) override;
 	/**
 	* 处理窗口被销毁的消息
 	* @param[in] uMsg 消息

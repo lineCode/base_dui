@@ -31,6 +31,12 @@ HWND WindowEx::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dw
 	return hwnd;
 }
 
+void WindowEx::OnFinalMessage(HWND hWnd)
+{
+	__super::OnFinalMessage(hWnd);
+	delete this;
+}
+
 LRESULT WindowEx::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	UnRegisterWnd();

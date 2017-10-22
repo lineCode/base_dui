@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "shared/threads.h"
 #include "gui/login/login_form.h"
+#include "gui/main/main_form.h"
 #include "module/init/init_manager.h"
 #include "module/window/windows_manager.h"
 
@@ -14,7 +15,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	nim_comp::InitManager::GetInstance()->Init();
 
 	shared::MainThreadEventCallBack init_event_cb = [](){
-		nim_comp::WindowsManager::GetInstance()->SingletonShow<LoginForm>(LoginForm::kClassName);
+		//nim_comp::WindowsManager::GetInstance()->SingletonShow<LoginForm>(LoginForm::kClassName);
+		nim_comp::WindowsManager::GetInstance()->SingletonShow<MainForm>(MainForm::kClassName);
 		return;
 	};
 

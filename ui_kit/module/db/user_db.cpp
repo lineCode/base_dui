@@ -78,6 +78,29 @@ bool UserDB::CreateDBFile()
 	return result;
 }
 #if 1
+bool UserDB::InsertAccountInfo(account_info &info)
+{
+	nbase::NAutoLock auto_lock(&lock_);
+	ndb::SQLiteStatement stmt;
+	db_.Query(stmt, "INSERT into account_info (account_id, account_name, password) values (?, ?, ?);");
+
+	stmt.BindText(1, info.account_id.c_str(), info.account_id.size());
+	stmt.BindText(2, info.account_name.c_str(), info.account_name.size());
+	stmt.BindText(3, info.password.c_str(), info.password.size());
+	int32_t result = stmt.NextRow();
+	bool no_error = result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE;
+	if (no_error)
+	{
+		return true;
+	}
+	else
+	{
+		QLOG_ERR(L"error: INSERT account_info for account_id: {0}, account_name: {1}, password: {2}") 
+			<< info.account_id << info.account_name << info.password;
+	}
+
+	return false;
+}
 
 bool UserDB::QueryAccountInfo(std::string account_id, account_info &info)
 {
@@ -90,11 +113,11 @@ bool UserDB::QueryAccountInfo(std::string account_id, account_info &info)
 	bool find = false;
 	if (result == SQLITE_ROW)
 	{
-		//info.iid = stmt.GetTextField(1);
-		info.account_id = stmt.GetTextField(2);
-		info.account_name = stmt.GetTextField(3);
-		info.password = stmt.GetTextField(4);
-		info.last_login_time = stmt.GetTextField(5);
+		//info.iid = atoi(stmt.GetTextField(0));
+		info.account_id = stmt.GetTextField(1);
+		info.account_name = stmt.GetTextField(2);
+		info.password = stmt.GetTextField(3);
+		//info.last_login_time = stmt.GetTextField(5);
 		find = true;
 	}
 	bool no_error = (result == SQLITE_OK || result == SQLITE_ROW || result == SQLITE_DONE);
