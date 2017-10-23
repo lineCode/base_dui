@@ -23,7 +23,7 @@ public:
 	* @param[in] enable_subscribe_event	是否启用事件订阅模块
 	* @return void	无返回值
 	*/
-	void Init(bool enable_subscribe_event = false);
+	void Init(LPCTSTR dui_res_dir = _T("res\\"));
 
 	/**
 	* 清理UI组件

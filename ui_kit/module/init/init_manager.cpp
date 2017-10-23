@@ -6,12 +6,12 @@
 namespace nim_comp
 {
 
-void InitManager::Init(bool enable_subscribe_event)
+void InitManager::Init(LPCTSTR dui_res_dir)
 {
 	UserDB::GetInstance()->Load();
 
 	dui::CPaintManager::SetInstance(GetModuleHandle(NULL));
-	dui::CPaintManager::SetGlobalResDir((dui::CPaintManager::GetInstancePath() + _T("res\\")).c_str());
+	dui::CPaintManager::SetGlobalResDir((dui::CPaintManager::GetInstancePath() + dui_res_dir).c_str());
 }
 
 void InitManager::Clean()
