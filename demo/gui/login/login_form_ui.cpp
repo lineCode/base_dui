@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "resource.h"
 #include "login_form.h"
 
 
@@ -52,7 +53,9 @@ UINT LoginForm::GetClassStyle() const
 void LoginForm::InitWindow()
 {
 	//m_PaintManager.AttachEvent(ui::kEventClick, nbase::Bind(&LoginForm::OnClicked, this, std::placeholders::_1));
-	
+	SetIcon(IDI_ICON1);
+	SetTaskbarTitle(L"µÇÂ¼");
+
 	re_account_ = (RichEdit*)m_PaintManager.FindControl(L"re_account");
 	re_pwd_ = (RichEdit*)m_PaintManager.FindControl(L"re_pwd");
 	label_info_ = (Label*)m_PaintManager.FindControl(L"label_info");

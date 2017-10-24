@@ -15,8 +15,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	nim_comp::InitManager::GetInstance()->Init();
 
 	shared::MainThreadEventCallBack init_event_cb = [](){
-		//nim_comp::WindowsManager::GetInstance()->SingletonShow<LoginForm>(LoginForm::kClassName);
-		nim_comp::WindowsManager::GetInstance()->SingletonShow<MainForm>(MainForm::kClassName);
+		nim_comp::WindowsManager::GetInstance()->SingletonShow<LoginForm>(LoginForm::kClassName);
+		//nim_comp::WindowsManager::GetInstance()->SingletonShow<MainForm>(MainForm::kClassName);
 		return;
 	};
 

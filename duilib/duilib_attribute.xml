@@ -106,6 +106,7 @@
       <Attribute name="endellipsis" default="false" type="" comment=""/>
       <Attribute name="font"        default="" type="" comment=""/>
       <Attribute name="textcolor"   default="" type="" comment=""/>
+      <Attribute name="normaltextcolor"   default="" type="" comment="同textcolor"/>
       <Attribute name="disabledtextcolor" default="" type="" comment=""/>
       <Attribute name="textpadding"       default="" type="" comment=""/>
       <Attribute name="multiline"         default="" type="" comment=""/>
@@ -158,7 +159,7 @@
       <Attribute name="vscrollbarstyle" default="" type="" comment=""/>
       <Attribute name="hscrollbar"      default="" type="" comment=""/>
       <Attribute name="hscrollbarstyle" default="" type="" comment=""/>
-      <Attribute name="childpadding"    default="" type="" comment=""/>
+      <Attribute name="childmargin"    default="" type="" comment=""/>
       <Attribute name="childalign"      default="" type="" comment=""/>
       <Attribute name="childvalign"     default="" type="" comment=""/>
     </Container>
@@ -195,6 +196,7 @@
       <Attribute name="align"             default="" type="" comment=""/>
       <Attribute name="font"              default="" type="" comment=""/>
       <Attribute name="textcolor"         default="" type="" comment=""/>
+      <Attribute name="normaltextcolor"   default="" type="" comment="同textcolor"/>
       <Attribute name="textpadding"       default="" type="" comment=""/>
     </RichEdit>
 

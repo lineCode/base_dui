@@ -365,6 +365,11 @@ void CWindowWnd::SetIcon(UINT nRes)
     ::SendMessage(m_hWnd, WM_SETICON, (WPARAM) FALSE, (LPARAM) hIcon);
 }
 
+void CWindowWnd::SetIcon(LPCTSTR strIcon)
+{
+	assert(0);
+}
+
 bool CWindowWnd::RegisterWindowClass()
 {
     WNDCLASS wc = { 0 };

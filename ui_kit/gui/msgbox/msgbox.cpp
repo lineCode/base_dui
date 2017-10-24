@@ -5,21 +5,21 @@
 
 using namespace dui;
 
-void ShowMsgBox(HWND hwnd, MsgboxCallback cb,
+void ShowMsgBox(HWND hParentWnd, MsgboxCallback cb,
 	const std::wstring &content, bool content_is_id,
 	const std::wstring &title, bool title_is_id,
 	const std::wstring &yes, bool btn_yes_is_id,
 	const std::wstring &no, bool btn_no_is_id)
 {
-	MsgBox* msgbox = new MsgBox;
-	HWND hWnd = msgbox->Create(hwnd, L"", WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX, 0);
+	MsgBox* msgbox = new MsgBox(cb);
+	HWND hWnd = msgbox->Create(hParentWnd, L"", WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX, 0);
 	if(hWnd == NULL)
 		return;
 #if 1
 	msgbox->SetTitle(title);
 	msgbox->SetContent(content);
 	msgbox->SetButton(yes, no);
-	msgbox->Show(hwnd, cb);
+	msgbox->Show();
 #else
 	MutiLanSupport *multilan = MutiLanSupport::GetInstance();
 	msgbox->SetTitle(title_is_id ? multilan->GetStringViaID(title) : title);
@@ -31,7 +31,7 @@ void ShowMsgBox(HWND hwnd, MsgboxCallback cb,
 
 const LPCTSTR MsgBox::kClassName = L"MsgBox";
 
-MsgBox::MsgBox()
+MsgBox::MsgBox(MsgboxCallback cb/* = nullptr*/) :msgbox_callback_(cb)
 {
 }
 
@@ -74,6 +74,12 @@ UINT MsgBox::GetClassStyle() const
 	return (UI_CLASSSTYLE_FRAME | CS_DBLCLKS);
 }
 
+void MsgBox::OnFinalMessage(HWND hWnd)
+{
+	__super::OnFinalMessage(hWnd);
+	delete this;
+}
+
 LRESULT MsgBox::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	//if(uMsg == WM_DESTROY)
@@ -94,17 +100,11 @@ void MsgBox::OnEsc( BOOL &bHandled )
 	bHandled = TRUE;
 	EndMsgBox(MB_NO);
 }
-void MsgBox::Close(UINT nRet)
-{
-	// 提示框关闭之前先Enable父窗口，防止父窗口隐到后面去。
-	HWND hWndParent = GetWindowOwner(m_hWnd);
-	if (hWndParent)
-	{
-		::EnableWindow(hWndParent, TRUE);
-		::SetFocus(hWndParent);
-	}
 
-	__super::Close(nRet);
+LRESULT MsgBox::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	EndMsgBox(MB_NO);
+	return __super::OnClose(uMsg, wParam, lParam, bHandled);
 }
 
 void MsgBox::InitWindow()
@@ -118,22 +118,25 @@ void MsgBox::InitWindow()
 	btn_no_ = (Button*)m_PaintManager.FindControl(L"btn_no");
 }
 
-bool MsgBox::OnClicked(dui::TEvent* msg)
+void MsgBox::OnClick(dui::TNotify& msg)
 {
-	std::wstring name = msg->pSender->GetName();
+	bool bHandle = false;
+	std::wstring name = msg.pSender->GetName();
 	if(name == L"btn_yes")
 	{
+		bHandle = true;
 		EndMsgBox(MB_YES);
 	}
 	else if(name == L"btn_no")
 	{
+		bHandle = true;
 		EndMsgBox(MB_NO);
 	}
-	else if(name == L"closebtn")
+	
+	if (!bHandle)
 	{
-		EndMsgBox(MB_NO);
+		__super::OnClick(msg);
 	}
-	return true;
 }
 
 void MsgBox::SetTitle( const std::wstring &str )
@@ -143,9 +146,8 @@ void MsgBox::SetTitle( const std::wstring &str )
 
 void MsgBox::SetContent( const std::wstring &str )
 {
-#if 0
 	content_->SetText(str.c_str());
-
+#if 0
 	int width = content_->GetFixedWidth();
 
 	CDuiSize sz = content_->GetNaturalSize(width, 0);
@@ -179,13 +181,24 @@ void MsgBox::SetButton( const std::wstring &yes, const std::wstring &no )
 	}
 }
 
-void MsgBox::Show( HWND hwnd, MsgboxCallback cb )
+void MsgBox::Show()
 {
-	msgbox_callback_ = cb;
-
-	::EnableWindow(hwnd, FALSE);
+	::EnableWindow(GetParent(m_hWnd), FALSE);
 	CenterWindow();
 	ShowWindow(true);
+}
+
+void MsgBox::Close(UINT nRet)
+{
+	// 提示框关闭之前先Enable父窗口，防止父窗口隐到后面去。
+	HWND hWndParent = GetWindowOwner(m_hWnd);
+	if (hWndParent)
+	{
+		::EnableWindow(hWndParent, TRUE);
+		::SetFocus(hWndParent);
+	}
+
+	__super::Close(nRet);
 }
 
 void MsgBox::EndMsgBox( MsgBoxRet ret )

@@ -116,19 +116,19 @@ namespace dui
 
 		int cxNeeded = 0;
 		int cyNeeded = 0;
-		int iChildPadding = m_iChildPadding;
+		int iChildMargin = m_iChildMargin;
 		if (m_nColumnsFixed == 0) { 
 			if (rc.right - rc.left >= m_szItem.cx) {
 				m_nColumns = (rc.right - rc.left)/m_szItem.cx;
 				cxNeeded = rc.right - rc.left;
 				if (m_nColumns > 1) {
-					if (iChildPadding <= 0) {
-						iChildPadding = (cxNeeded-m_nColumns*m_szItem.cx)/(m_nColumns-1);
+					if (iChildMargin <= 0) {
+						iChildMargin = (cxNeeded-m_nColumns*m_szItem.cx)/(m_nColumns-1);
 					}
-					if (iChildPadding < 0) iChildPadding = 0;
+					if (iChildMargin < 0) iChildMargin = 0;
 				}
 				else {
-					iChildPadding = 0;
+					iChildMargin = 0;
 				}
 			}
 			else {
@@ -142,20 +142,20 @@ namespace dui
 		else {
 			m_nColumns = m_nColumnsFixed;
 			if (m_nColumns > 1) {
-				if (iChildPadding <= 0) {
+				if (iChildMargin <= 0) {
 					if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() && rc.right - rc.left >= m_nColumns*m_szItem.cx) {
-						iChildPadding = (rc.right - rc.left-m_nColumns*m_szItem.cx)/(m_nColumns-1);
+						iChildMargin = (rc.right - rc.left-m_nColumns*m_szItem.cx)/(m_nColumns-1);
 					}
 					else {
-						iChildPadding = (szAvailable.cx-m_nColumns*m_szItem.cx)/(m_nColumns-1);
+						iChildMargin = (szAvailable.cx-m_nColumns*m_szItem.cx)/(m_nColumns-1);
 					}
 				}
-				if (iChildPadding < 0) iChildPadding = 0;
+				if (iChildMargin < 0) iChildMargin = 0;
 			}
-			else iChildPadding = 0;
+			else iChildMargin = 0;
 
-			if (nEstimateNum >= m_nColumns) cxNeeded = m_nColumns*m_szItem.cx + (m_nColumns-1)*iChildPadding;
-			else cxNeeded = nEstimateNum*m_szItem.cx + (nEstimateNum-1)*iChildPadding;
+			if (nEstimateNum >= m_nColumns) cxNeeded = m_nColumns*m_szItem.cx + (m_nColumns-1)*iChildMargin;
+			else cxNeeded = nEstimateNum*m_szItem.cx + (nEstimateNum-1)*iChildMargin;
 			m_nRows = (nEstimateNum-1)/m_nColumns+1;
 			cyNeeded = m_nRows*m_szItem.cy + (m_nRows-1)*m_iChildVPadding;
 		}
@@ -181,7 +181,7 @@ namespace dui
 			UINT iChildVAlign = GetChildVAlign();
 			int iColumnIndex = it1/m_nColumns;
 			int iRowIndex = it1%m_nColumns;
-			int iPosX = rc.left + iRowIndex*(m_szItem.cx+iChildPadding);
+			int iPosX = rc.left + iRowIndex*(m_szItem.cx+iChildMargin);
 			if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) {
 				iPosX -= m_pHorizontalScrollBar->GetScrollPos();
 			}
@@ -325,7 +325,7 @@ namespace dui
 
 	//		if( (++iCount % m_nColumns) == 0 ) {
 	//			ptTile.x = iPosX;
-	//			ptTile.y += cyHeight + iChildPadding;
+	//			ptTile.y += cyHeight + iChildMargin;
 	//			cyHeight = 0;
 	//		}
 	//		else {

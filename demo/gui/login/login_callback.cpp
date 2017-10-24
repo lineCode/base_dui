@@ -15,8 +15,7 @@
 #include "shared/closure.h"
 //#include "nim_cpp_client.h"
 
-namespace nim_comp
-{
+
 //
 ////退出程序前的处理：比如保存数据
 //void _DoBeforeAppExit()
@@ -34,7 +33,7 @@ namespace nim_comp
 //	//nim::Client::Logout( type, &LoginCallbackObject::OnLogoutCallback );
 //}
 
-void LoginCallbackObject::OnLoginCallback(LoginRes& login_res, const void* user_data)
+void LoginCallbackObject::OnLoginCallback(nim_comp::LoginRes& login_res, const void* user_data)
 {
 	QLOG_APP(L"OnLoginCallback: {0} - {1}") << login_res.login_step_ << login_res.res_code_;
 	
@@ -55,16 +54,16 @@ void LoginCallbackObject::OnLoginCallback(LoginRes& login_res, const void* user_
 	}*/
 }
 
-void LoginCallbackObject::UILoginCallback(const LoginRes& login_res)
+void LoginCallbackObject::UILoginCallback(const nim_comp::LoginRes& login_res)
 {
 #if 1
-	LoginManager::GetInstance()->SetErrorCode(login_res.res_code_);
+	nim_comp::LoginManager::GetInstance()->SetErrorCode(login_res.res_code_);
 
 	QLOG_APP(L"-----login end {0}-----") << login_res.res_code_;
 
-	if (LoginManager::GetInstance()->IsLoginFormValid())
+	if (nim_comp::LoginManager::GetInstance()->IsLoginFormValid())
 	{
-		if (LoginManager::GetInstance()->GetLoginStatus() == LoginStatus_CANCEL)
+		if (nim_comp::LoginManager::GetInstance()->GetLoginStatus() == nim_comp::LoginStatus_CANCEL)
 		{
 			QLOG_APP(L"-----login cancel end-----");
 #if 0
@@ -78,19 +77,19 @@ void LoginCallbackObject::UILoginCallback(const LoginRes& login_res)
 			return;
 		}
 		else
-			LoginManager::GetInstance()->SetLoginStatus(login_res.res_code_ == kNIMResSuccess ? LoginStatus_SUCCESS : LoginStatus_NONE);
+			nim_comp::LoginManager::GetInstance()->SetLoginStatus(login_res.res_code_ == nim_comp::kNIMResSuccess ? nim_comp::LoginStatus_SUCCESS : nim_comp::LoginStatus_NONE);
 
-		if (login_res.res_code_ == kNIMResSuccess)
+		if (login_res.res_code_ == nim_comp::kNIMResSuccess)
 		{
-			LoginManager::GetInstance()->InvokeHideWindow();
-			LoginManager::GetInstance()->DoAfterLogin();
+			nim_comp::LoginManager::GetInstance()->InvokeHideWindow();
+			nim_comp::LoginManager::GetInstance()->DoAfterLogin();
 			// 登录成功，显示主界面
-			LoginManager::GetInstance()->InvokeShowMainForm();
-			LoginManager::GetInstance()->InvokeDestroyWindow();
+			nim_comp::LoginManager::GetInstance()->InvokeShowMainForm();
+			nim_comp::LoginManager::GetInstance()->InvokeDestroyWindow();
 		}
 		else
 		{
-			LoginManager::GetInstance()->InvokeLoginError(login_res.res_code_);
+			nim_comp::LoginManager::GetInstance()->InvokeLoginError(login_res.res_code_);
 		}
 	}
 	else
@@ -216,7 +215,7 @@ void LoginCallbackObject::UILoginCallback(const LoginRes& login_res)
 //#endif
 //}
 
-void LoginCallbackObject::OnLogoutCallback(NIMResCode res_code)
+void LoginCallbackObject::OnLogoutCallback(nim_comp::NIMResCode res_code)
 {
 	QLOG_APP(L"OnLogoutCallback: {0}") << res_code;
 	QLOG_APP(L"-----logout end-----");
@@ -238,8 +237,8 @@ void LoginCallbackObject::UILogoutCallback()
 		_DoBeforeAppExit();
 	}
 #else
-	LoginManager::GetInstance()->SetLoginStatus(LoginStatus_NONE);
-	LoginManager::GetInstance()->InvokeCancelLogin();
+	nim_comp::LoginManager::GetInstance()->SetLoginStatus(nim_comp::LoginStatus_NONE);
+	nim_comp::LoginManager::GetInstance()->InvokeCancelLogin();
 #endif
 }
 
@@ -255,7 +254,7 @@ void LoginCallbackObject::UILogoutCallback()
 //#endif
 //}
 
-void LoginCallbackObject::OnKickoutCallback(const KickoutRes& res)
+void LoginCallbackObject::OnKickoutCallback(const nim_comp::KickoutRes& res)
 {
 #if 1
 #else
@@ -267,10 +266,10 @@ void LoginCallbackObject::OnKickoutCallback(const KickoutRes& res)
 void LoginCallbackObject::OnDisconnectCallback()
 {
 	QLOG_APP(L"OnDisconnectCallback");
-	LoginManager::GetInstance()->SetLinkActive(false);
+	nim_comp::LoginManager::GetInstance()->SetLinkActive(false);
 }
 
-void LoginCallbackObject::OnReLoginCallback(const LoginRes& login_res)
+void LoginCallbackObject::OnReLoginCallback(const nim_comp::LoginRes& login_res)
 {
 #if 1
 #else
@@ -291,7 +290,7 @@ void LoginCallbackObject::OnReLoginCallback(const LoginRes& login_res)
 }
 
 //多端
-void LoginCallbackObject::OnMultispotLoginCallback(const MultiSpotLoginRes& res)
+void LoginCallbackObject::OnMultispotLoginCallback(const nim_comp::MultiSpotLoginRes& res)
 {
 #if 1
 #else
@@ -303,7 +302,7 @@ void LoginCallbackObject::OnMultispotLoginCallback(const MultiSpotLoginRes& res)
 #endif
 }
 
-void LoginCallbackObject::OnMultispotChange(bool online, const std::list<OtherClientPres>& clients)
+void LoginCallbackObject::OnMultispotChange(bool online, const std::list<nim_comp::OtherClientPres>& clients)
 {
 #if 1
 #else
@@ -311,7 +310,7 @@ void LoginCallbackObject::OnMultispotChange(bool online, const std::list<OtherCl
 #endif
 }
 
-void LoginCallbackObject::OnKickoutOtherClientCallback(const KickOtherRes& res)
+void LoginCallbackObject::OnKickoutOtherClientCallback(const nim_comp::KickOtherRes& res)
 {
 #if 1
 #else
@@ -321,5 +320,4 @@ void LoginCallbackObject::OnKickoutOtherClientCallback(const KickOtherRes& res)
 		nim_ui::SessionListManager::GetInstance()->OnMultispotKickout(res.device_ids_);
 	}
 #endif
-}
 }

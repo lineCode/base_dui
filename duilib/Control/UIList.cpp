@@ -500,14 +500,14 @@ TListInfo* List::GetListInfo()
     return &m_ListInfo;
 }
 
-int List::GetChildPadding() const
+int List::GetChildMargin() const
 {
-    return m_pList->GetChildPadding();
+    return m_pList->GetChildMargin();
 }
 
-void List::SetChildPadding(int iPadding)
+void List::SetChildMargin(int iPadding)
 {
-    m_pList->SetChildPadding(iPadding);
+    m_pList->SetChildMargin(iPadding);
 }
 
 UINT List::GetItemFixedHeight()
@@ -1218,12 +1218,12 @@ void ListBody::SetPos(RECT rc, bool bNeedInvalidate)
     if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) 
         szAvailable.cx += m_pHorizontalScrollBar->GetScrollRange();
 
-    int iChildPadding = m_iChildPadding;
+	int iChildMargin = m_iChildMargin;
     TListInfo* pInfo = NULL;
     if( m_pOwner ) {
         pInfo = m_pOwner->GetListInfo();
         if( pInfo != NULL ) {
-            iChildPadding += pInfo->iHLineSize;
+            iChildMargin += pInfo->iHLineSize;
             if (pInfo->nColumns > 0) {
                 szAvailable.cx = pInfo->rcColumn[pInfo->nColumns - 1].right - pInfo->rcColumn[0].left;
             }
@@ -1260,7 +1260,7 @@ void ListBody::SetPos(RECT rc, bool bNeedInvalidate)
         cxNeeded = MAX(cxNeeded, sz.cx);
         nEstimateNum++;
     }
-    cyFixed += (nEstimateNum - 1) * iChildPadding;
+    cyFixed += (nEstimateNum - 1) * iChildMargin;
 
     if( m_pOwner ) {
         ListHeader* pHeader = m_pOwner->GetHeader();
@@ -1313,11 +1313,11 @@ void ListBody::SetPos(RECT rc, bool bNeedInvalidate)
         RECT rcCtrl = { iPosX + rcMargin.left, iPosY + rcMargin.top, iPosX + rcMargin.left + sz.cx, iPosY + sz.cy + rcMargin.top + rcMargin.bottom };
         pControl->SetPos(rcCtrl, false);
 
-        iPosY += sz.cy + iChildPadding + rcMargin.top + rcMargin.bottom;
+        iPosY += sz.cy + iChildMargin + rcMargin.top + rcMargin.bottom;
         cyNeeded += sz.cy + rcMargin.top + rcMargin.bottom;
-        szRemaining.cy -= sz.cy + iChildPadding + rcMargin.bottom;
+        szRemaining.cy -= sz.cy + iChildMargin + rcMargin.bottom;
     }
-    cyNeeded += (nEstimateNum - 1) * iChildPadding;
+    cyNeeded += (nEstimateNum - 1) * iChildMargin;
 
     // Process the scrollbar
     ProcessScrollBar(rc, cxNeeded, cyNeeded);
@@ -1716,7 +1716,7 @@ void ListHeaderItem::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         else m_uTextStyle |= DT_SINGLELINE;
     }
     else if( _tcscmp(pstrName, _T("font")) == 0 ) SetFont(_ttoi(pstrValue));
-    else if( _tcscmp(pstrName, _T("textcolor")) == 0 ) {
+	else if (_tcscmp(pstrName, _T("textcolor")) == 0 || _tcscmp(pstrName, _T("normaltextcolor")) == 0) {
 		DWORD clrColor = m_pManager->GetColor(pstrValue);
 		if (clrColor == 0)
 		{

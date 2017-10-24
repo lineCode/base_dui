@@ -74,9 +74,6 @@
     <ClInclude Include="module\login\login_define.h">
       <Filter>module\login</Filter>
     </ClInclude>
-    <ClInclude Include="module\login\login_callback.h">
-      <Filter>module\login</Filter>
-    </ClInclude>
     <ClInclude Include="kit_define.h" />
     <ClInclude Include="util\user_path.h">
       <Filter>util</Filter>
@@ -112,9 +109,6 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="module\login\login_manager.cpp">
-      <Filter>module\login</Filter>
-    </ClCompile>
-    <ClCompile Include="module\login\login_callback.cpp">
       <Filter>module\login</Filter>
     </ClCompile>
     <ClCompile Include="util\user_path.cpp">

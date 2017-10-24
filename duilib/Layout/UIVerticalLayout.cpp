@@ -87,7 +87,7 @@ namespace dui
 			cxNeeded = MAX(cxNeeded, sz.cx + rcMargin.left + rcMargin.right);
 			nEstimateNum++;
 		}
-		cyFixed += (nEstimateNum - 1) * m_iChildPadding;
+		cyFixed += (nEstimateNum - 1) * m_iChildMargin;
 
 		// Place elements
 		int cyNeeded = 0;
@@ -124,7 +124,7 @@ namespace dui
 			if (szControlAvailable.cx > iControlMaxWidth) szControlAvailable.cx = iControlMaxWidth;
 			if (szControlAvailable.cy > iControlMaxHeight) szControlAvailable.cy = iControlMaxHeight;
       cyFixedRemaining = cyFixedRemaining - (rcMargin.top + rcMargin.bottom);
-			if (iEstimate > 1) cyFixedRemaining = cyFixedRemaining - m_iChildPadding;
+			if (iEstimate > 1) cyFixedRemaining = cyFixedRemaining - m_iChildMargin;
 			SIZE sz = pControl->EstimateSize(szControlAvailable);
 			if( sz.cy == 0 ) {
 				iAdjustable++;
@@ -176,11 +176,11 @@ namespace dui
 				pControl->SetPos(rcCtrl, false);
 			}
 
-			iPosY += sz.cy + m_iChildPadding + rcMargin.top + rcMargin.bottom;
+			iPosY += sz.cy + m_iChildMargin + rcMargin.top + rcMargin.bottom;
 			cyNeeded += sz.cy + rcMargin.top + rcMargin.bottom;
-			szRemaining.cy -= sz.cy + m_iChildPadding + rcMargin.bottom;
+			szRemaining.cy -= sz.cy + m_iChildMargin + rcMargin.bottom;
 		}
-		cyNeeded += (nEstimateNum - 1) * m_iChildPadding;
+		cyNeeded += (nEstimateNum - 1) * m_iChildMargin;
 
 		// Process the scrollbar
 		ProcessScrollBar(rc, cxNeeded, cyNeeded);

@@ -8,7 +8,7 @@ namespace dui
 	//
 
 	Container::Container()
-		: m_iChildPadding(0),
+		: m_iChildMargin(0),
 		m_iChildAlign(DT_LEFT),
 		m_iChildVAlign(DT_TOP),
 		m_bAutoDestroy(true),
@@ -185,15 +185,15 @@ namespace dui
 		NeedUpdate();
 	}
 
-	int Container::GetChildPadding() const
+	int Container::GetChildMargin() const
 	{
-		return m_iChildPadding;
+		return m_iChildMargin;
 	}
 
-	void Container::SetChildPadding(int iPadding)
+	void Container::SetChildMargin(int iPadding)
 	{
-		m_iChildPadding = iPadding;
-		if (m_iChildPadding < 0) m_iChildPadding = 0;
+		m_iChildMargin = iPadding;
+		if (m_iChildMargin < 0) m_iChildMargin = 0;
 		NeedUpdate();
 	}
 
@@ -698,7 +698,7 @@ namespace dui
 			EnableScrollBar(GetVerticalScrollBar() != NULL, true);
 			if( GetHorizontalScrollBar() ) GetHorizontalScrollBar()->SetAttributeList(pstrValue);
 		}
-		else if( _tcscmp(pstrName, _T("childpadding")) == 0 ) SetChildPadding(_ttoi(pstrValue));
+		else if( _tcscmp(pstrName, _T("childmargin")) == 0 ) SetChildMargin(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("childalign")) == 0 ) {
 			if( _tcscmp(pstrValue, _T("left")) == 0 ) m_iChildAlign = DT_LEFT;
 			else if( _tcscmp(pstrValue, _T("center")) == 0 ) m_iChildAlign = DT_CENTER;

@@ -55,8 +55,8 @@ public:
 
     virtual RECT GetPadding() const;
     virtual void SetPadding(RECT rcPadding); // 设置内边距，相当于设置客户区
-    virtual int GetChildPadding() const;
-    virtual void SetChildPadding(int iPadding);
+    virtual int GetChildMargin() const;
+    virtual void SetChildMargin(int iPadding);
 	virtual UINT GetChildAlign() const;
 	virtual void SetChildAlign(UINT iAlign);
 	virtual UINT GetChildVAlign() const;
@@ -117,7 +117,7 @@ protected:
 protected:
     PtrArray m_items;
     RECT m_rcPadding;
-    int m_iChildPadding;
+    int m_iChildMargin;
 	UINT m_iChildAlign;
 	UINT m_iChildVAlign;
     bool m_bAutoDestroy;

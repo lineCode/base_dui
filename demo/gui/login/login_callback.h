@@ -1,17 +1,8 @@
 ﻿#pragma once
 //#include "nim_client_helper.h"
-#include "login_define.h"
+#include "module/login/login_define.h"
 
-namespace nim_comp
-{
 
-	typedef std::function<void(const LoginRes&)>	LoginCallback; /**< 登录回调模板 */
-	typedef std::function<void(NIMResCode)>			LogoutCallback;		/**< 登出回调模板 */
-	typedef std::function<void(const KickoutRes&)>	KickoutCallback;	/**< 被踢通知回调模板 */
-	typedef std::function<void(void)>				DisconnectCallback;		/**< 断网通知回调模板 */
-	typedef std::function<void(const MultiSpotLoginRes&)>	MultiSpotLoginCallback;	/**< 多端登录通知回调模板 */
-	typedef std::function<void(const KickOtherRes&)>		KickOtherCallback;	/**< 将多端下线回调模板 */
-	typedef std::function<void(int, bool)>					MultiportPushConfigCallback;	/**< 多端推送控制开关回调模板 */
 
 /** @class LoginCallbackObject
   * @brief 登录注销相关回调函数类
@@ -36,14 +27,14 @@ public:
 	* @param[in] user_data 登录时用户传的数据，sdk原封不动传给回调
 	* @return void	无返回值
 	*/
-	static void OnLoginCallback(LoginRes& login_res, const void* user_data);
+	static void OnLoginCallback(nim_comp::LoginRes& login_res, const void* user_data);
 
 	/**
 	* 登录成功或失败时，做一些界面上的显示。
 	* @param[in] login_res 登录的信息
 	* @return void	无返回值
 	*/
-	static void UILoginCallback(const LoginRes& login_res);
+	static void UILoginCallback(const nim_comp::LoginRes& login_res);
 
 	/**
 	* 取消登录
@@ -64,7 +55,7 @@ public:
 	* @param[in] res_code 错误码
 	* @return void	无返回值
 	*/
-	static void OnLogoutCallback(NIMResCode res_code);
+	static void OnLogoutCallback(nim_comp::NIMResCode res_code);
 
 	/**
 	* 退出登录时，做一些界面上的显示。
@@ -83,7 +74,7 @@ public:
 	* @param[in] res 被踢的信息
 	* @return void	无返回值
 	*/
-	static void OnKickoutCallback(const KickoutRes& res);
+	static void OnKickoutCallback(const nim_comp::KickoutRes& res);
 
 	/**
 	* 掉线的回调，要在程序开始运行时就注册好。
@@ -96,14 +87,14 @@ public:
 	* @param[in] login_res 重连结果
 	* @return void	无返回值
 	*/
-	static void OnReLoginCallback(const LoginRes& login_res);
+	static void OnReLoginCallback(const nim_comp::LoginRes& login_res);
 	
 	/**
 	* 移动端登录时的回调，要在程序开始运行时就注册好。
 	* @param[in] res 多端登录回调信息
 	* @return void	无返回值
 	*/
-	static void OnMultispotLoginCallback(const MultiSpotLoginRes& res);
+	static void OnMultispotLoginCallback(const nim_comp::MultiSpotLoginRes& res);
 
 	/**
 	* 移动端登录发生变化时的回调，要在程序开始运行时就注册好。
@@ -111,14 +102,13 @@ public:
 	* @param[in] clients 其他客户端信息
 	* @return void	无返回值
 	*/
-	static void OnMultispotChange(bool online, const std::list<OtherClientPres>& clients);
+	static void OnMultispotChange(bool online, const std::list<nim_comp::OtherClientPres>& clients);
 
 	/**
 	* 把移动端踢下线的结果回调，要在程序开始运行时就注册好。
 	* @param[in] res 踢人结果信息
 	* @return void	无返回值
 	*/
-	static void OnKickoutOtherClientCallback(const KickOtherRes& res);
+	static void OnKickoutOtherClientCallback(const nim_comp::KickOtherRes& res);
 };
 
-}

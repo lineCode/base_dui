@@ -163,17 +163,20 @@
   <Class name="checkbox_green" value="normalimage=&quot;file='../public/CheckBox/check_green_no.png'&quot; disabledimage=&quot;file='../public/CheckBox/check_green_no.png' fade='80'&quot; selectednormalimage=&quot;file='../public/CheckBox/check_green_yes.png'&quot; selecteddisabledimage=&quot;file='../public/CheckBox/check_green_yes.png' fade='80'&quot;"/>
 
   <!--全局按钮-->
-  <Class name="btn_global_green_80x30" value="font=&quot;7&quot; normaltextcolor=&quot;white&quot; normalimage=&quot;file='../public/button/btn_global_green_80x30_normal.png'&quot; hotimage=&quot;file='../public/button/btn_global_green_80x30_hovered.png'&quot; pushedimage=&quot;file='../public/button/btn_global_green_80x30_pushed.png'&quot; disabledimage=&quot;file='../public/button/btn_global_green_80x30_normal.png' fade='80'&quot;"/>
+  <Class name="btn_global_blue" value="normalimage=&quot;file='../public/button/blue.png' source='0,0,10,30' corner='3,3,3,3'&quot; hotimage=&quot;file='../public/button/blue.png' source='10,0,20,30' corner='3,3,3,3'&quot; pushedimage=&quot;file='public/button/blue.png' source='20,0,30,30' corner='3,3,3,3'&quot;"/>
 
-  <Class name="btn_global_white_80x30" value="font=&quot;7&quot; normaltextcolor=&quot;btn_global_white&quot; normalimage=&quot;file='../public/button/btn_global_white_80x30_normal.png'&quot; hotimage=&quot;file='../public/button/btn_global_white_80x30_hovered.png'&quot; pushedimage=&quot;file='../public/button/btn_global_white_80x30_pushed.png'&quot; disabledimage=&quot;file='../public/button/btn_global_white_80x30_normal.png' fade='128'&quot;"/>
+  <Class name="btn_global_gray" value="normalimage=&quot;file='../public/button/gray.png' source='0,0,10,30' corner='3,3,3,3'&quot; hotimage=&quot;file='../public/button/gray.png' source='10,0,20,30' corner='3,3,3,3'&quot; pushedimage=&quot;file='public/button/gray.png' source='20,0,30,30' corner='3,3,3,3'&quot;"/>
 
-  <Class name="btn_global_red_80x30" value="font=&quot;7&quot; normaltextcolor=&quot;white&quot; normalimage=&quot;file='../public/button/btn_global_red_80x30_normal.png'&quot; hotimage=&quot;file='../public/button/btn_global_red_80x30_hovered.png'&quot; pushedimage=&quot;file='../public/button/btn_global_red_80x30_pushed.png'&quot; disabledimage=&quot;file='../public/button/btn_global_red_80x30_normal.png' fade='80'&quot;"/>
+  <!--<Class name="btn_global_white_80x30" value="font=&quot;7&quot; normaltextcolor=&quot;btn_global_white&quot; normalimage=&quot;file='../public/button/btn_global_white_80x30_normal.png'&quot; hotimage=&quot;file='../public/button/btn_global_white_80x30_hovered.png'&quot; pushedimage=&quot;file='../public/button/btn_global_white_80x30_pushed.png'&quot; disabledimage=&quot;file='../public/button/btn_global_white_80x30_normal.png' fade='128'&quot;"/>-->
+
+  <!--<Class name="btn_global_red_80x30" value="font=&quot;7&quot; normaltextcolor=&quot;white&quot; normalimage=&quot;file='../public/button/btn_global_red_80x30_normal.png'&quot; hotimage=&quot;file='../public/button/btn_global_red_80x30_hovered.png'&quot; pushedimage=&quot;file='../public/button/btn_global_red_80x30_pushed.png'&quot; disabledimage=&quot;file='../public/button/btn_global_red_80x30_normal.png' fade='80'&quot;"/>-->
 
   <!--窗口右上角按钮-->
   <!-- 灰色版 -->
   <Class name="btn_wnd_min" value="width=&quot;auto&quot; height=&quot;auto&quot; forenormalimage=&quot;file='../public/button/btn_wnd_gray_min.png' dest='4,4,16,16'&quot; normalimage=&quot;&quot; hotimage=&quot;../public/button/btn_wnd_gray_min_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_gray_min_pushed.png&quot;"/>
 
-  <Class name="btn_wnd_close" value="width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;file='../public/button/btn_wnd_gray_close.png' dest='4,4,16,16'&quot; hotimage=&quot;../public/button/btn_wnd_white_close_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_white_close_pushed.png&quot; fadehot=&quot;false&quot;"/>
+  <!--<Class name="btn_wnd_close" value="width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;file='../public/button/btn_wnd_gray_close.png' dest='4,4,16,16'&quot; hotimage=&quot;../public/button/btn_wnd_white_close_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_white_close_pushed.png&quot; fadehot=&quot;false&quot;"/>-->
+  <Class name="btn_wnd_close" value="name=&quot;closebtn&quot; width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;file='../public/button/close.png' source='0,0,20,20'&quot; hotimage=&quot;file='../public/button/close.png' source='20,0,40,20'&quot; fadehot=&quot;false&quot;"/>
 
   <Class name="btn_wnd_max" value="width=&quot;auto&quot; height=&quot;auto&quot; forenormalimage=&quot;file='../public/button/btn_wnd_gray_max.png' dest='4,4,16,16'&quot; normalimage=&quot;&quot; hotimage=&quot;../public/button/btn_wnd_gray_max_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_gray_max_pushed.png&quot;"/>
 

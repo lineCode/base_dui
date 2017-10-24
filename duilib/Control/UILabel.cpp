@@ -284,7 +284,7 @@ namespace dui
 			else m_uTextStyle &= ~DT_END_ELLIPSIS;
 		}    
 		else if( _tcscmp(pstrName, _T("font")) == 0 ) SetFont(_ttoi(pstrValue));
-		else if( _tcscmp(pstrName, _T("textcolor")) == 0 ) {
+		else if (_tcscmp(pstrName, _T("textcolor")) == 0 || _tcscmp(pstrName, _T("normaltextcolor")) == 0) {
 			DWORD clrColor = m_pManager->GetColor(pstrValue);
 			if (clrColor == 0)
 			{

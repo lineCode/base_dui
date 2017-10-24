@@ -5,6 +5,13 @@
 
 namespace nim_comp
 {
+	typedef std::function<void(const LoginRes&)>	LoginCallback;		/**< 登录回调模板 */
+	typedef std::function<void(NIMResCode)>			LogoutCallback;		/**< 登出回调模板 */
+	typedef std::function<void(const KickoutRes&)>	KickoutCallback;	/**< 被踢通知回调模板 */
+	typedef std::function<void(void)>				DisconnectCallback;					/**< 断网通知回调模板 */
+	typedef std::function<void(const MultiSpotLoginRes&)>	MultiSpotLoginCallback;		/**< 多端登录通知回调模板 */
+	typedef std::function<void(const KickOtherRes&)>		KickOtherCallback;			/**< 将多端下线回调模板 */
+	typedef std::function<void(int, bool)>					MultiportPushConfigCallback;	/**< 多端推送控制开关回调模板 */
 /** @class LoginManager
   * @brief 登陆管理器
   * @copyright (c) 2016, NetEase Inc. All rights reserved
@@ -86,7 +93,7 @@ public:
 	* @param[in] pass 用户密码
 	* @return void	无返回值
 	*/
-	void DoLogin(std::string user, std::string pass);
+	void DoLogin(std::string user, std::string pass, LoginCallback cb);
 
 	/**
 	* 退出登录
@@ -166,7 +173,7 @@ private:
 	*/
 	void ReadDemoLogLevel();
 
-	
+	void DoLoginAsyn(LoginCallback *pcb);
 
 private:
 	std::string account_;

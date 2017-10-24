@@ -26,16 +26,16 @@
         <RichEdit name="re_pwd" width="170" height="28" margin="5" bkimage="file='rich_bk.png' corner='1,1,1,1'" rich="false" multiline="false" textpadding="4,6" font="2" password="true"/>
       </HLayout>
       <Label name="label_info" height="20" margin="40, 5" textcolor="gray"/>
-      <Button name="btn_login" width="190" height="35" margin="40,5" normalimage="file='../public/button/blue.png' source='0,0,10,30' corner='3,3,3,3'" 
-              hotimage="file='../public/button/blue.png' source='10,0,20,30' corner='3,3,3,3'" pushedimage="file='public/button/blue.png' source='20,0,30,30' corner='3,3,3,3'" 
+      <Button class="btn_global_blue" name="btn_login" width="190" height="35" margin="40,5" 
               font="8" textcolor="white" text="登  录"/>
-      <Button name="btn_cancel_login" width="190" height="35" margin="40,5" normalimage="file='../public/button/gray.png' source='0,0,10,30' corner='3,3,3,3'"
+      <Button class="btn_global_blue" name="btn_cancel_login" width="190" height="35" margin="40,5" normalimage="file='../public/button/gray.png' source='0,0,10,30' corner='3,3,3,3'"
               hotimage="file='../public/button/gray.png' source='10,0,20,30' corner='3,3,3,3'" pushedimage="file='public/button/gray.png' source='20,0,30,30' corner='3,3,3,3'"
               font="8" textcolor="white" disabledtextcolor="white" text="取消登录" visible="false"/>
       <HLayout height="30" margin="0,10">
         <CheckBox name="login_pw_chb" width="60" height="20" margin="40,5,0,0"  textpadding="14,2,0,0" normalimage="file='check.png' dest='0,5,11,16'"  selectedimage="file='check_sel.png' dest='0,5,11,16'" font="1" text="记住密码" />
         <CheckBox name="login_zd_chb" width="60" height="20" margin="68,5,0,0"  textpadding="14,2,0,0" normalimage="file='check.png' dest='0,5,11,16'"  selectedimage="file='check_sel.png' dest='0,5,11,16'" font="1" text="自动登录" />
       </HLayout> 
+      <!--<Control name="ctrl_gif" width="16" height="16" bkimage="../public/animation/ani_loading.gif"/>-->
     </VLayout>
   </VLayout>
 </Window>

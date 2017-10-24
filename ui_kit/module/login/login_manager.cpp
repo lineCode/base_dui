@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "login_manager.h"
 //#include "shared/xml_util.h"
-#include "login_callback.h"
+//#include "login_callback.h"
 #include "util/user_path.h"
 #include "module/db/user_db.h"
 
@@ -27,7 +27,7 @@ bool LoginManager::IsSelf( const std::string &account )
 void LoginManager::SetAccount( const std::string &account )
 {
 	account_ = account;
-	nbase::LowerString(account_);;
+	nbase::LowerString(account_);
 }
 
 std::string LoginManager::GetAccount()
@@ -208,7 +208,7 @@ void LoginManager::DoLogout(bool over, NIMLogoutType type )
 	//LoginCallbackObject::DoLogout(over, type);
 }
 
-void LoginManager::DoLogin(std::string user, std::string pass)
+void LoginManager::DoLogin(std::string user, std::string pass, LoginCallback cb)
 {
 	assert(GetLoginStatus() == LoginStatus_NONE);
 	SetLoginStatus(LoginStatus_LOGIN);
@@ -245,56 +245,52 @@ void LoginManager::DoLogin(std::string user, std::string pass)
 		QLOG_APP(L"-----login begin-----");
 	}
 
-
 	//----------------------------------------------------------------
-	LoginCallback cb = std::bind(&LoginCallbackObject::UILoginCallback, std::placeholders::_1);
-
 	LoginCallback *pcb = new LoginCallback(cb);
-
-	StdClosure task = std::bind([this](const void* user_data)
-	{
-		printf("login in thread GlobalMisc\n");
-
-		Sleep(1000);
-
-		LoginRes login_res;
-		login_res.login_step_ = kNIMLoginStepLogin;
-
-		UserDB::account_info info;
-		if (!UserDB::GetInstance()->QueryAccountInfo(GetAccount(), info))
-		{
-			login_res.res_code_ = kNIMResUidNotExist;
-		}
-		else
-		{
-			if (info.password == GetPassword())
-			{
-				login_res.res_code_ = kNIMResSuccess;
-			}
-			else
-			{
-				login_res.res_code_ = kNIMResUidPassError;
-			}
-		}
-
-		if (user_data)
-		{
-			LoginCallback* pcb = (LoginCallback*)user_data;
-			if (*pcb)
-			{
-				shared::Post2UI(std::bind(*pcb, login_res));
-			}
-			delete pcb;
-		}
-		return;
-	}, pcb);
-
+	StdClosure task = std::bind(&LoginManager::DoLoginAsyn, this, pcb);
 	shared::Post2GlobalMisc(task);
 
 	if (cb_start_login_)
 	{
 		cb_start_login_();
 	}
+}
+
+void LoginManager::DoLoginAsyn(LoginCallback *pcb)
+{
+	printf("login in thread GlobalMisc\n");
+
+	Sleep(1000);
+
+	LoginRes login_res;
+	login_res.login_step_ = kNIMLoginStepLogin;
+
+	UserDB::account_info info;
+	if (!UserDB::GetInstance()->QueryAccountInfo(GetAccount(), info))
+	{
+		login_res.res_code_ = kNIMResUidNotExist;
+	}
+	else
+	{
+		if (info.password == GetPassword())
+		{
+			login_res.res_code_ = kNIMResSuccess;
+		}
+		else
+		{
+			login_res.res_code_ = kNIMResUidPassError;
+		}
+	}
+
+	if (pcb)
+	{
+		if (*pcb)
+		{
+			shared::Post2UI(std::bind(*pcb, login_res));
+		}
+		delete pcb;
+	}
+	return;
 }
 
 void LoginManager::CancelLogin()

@@ -30,6 +30,9 @@
     <ClCompile Include="gui\main\main_form_ui.cpp">
       <Filter>gui\main</Filter>
     </ClCompile>
+    <ClCompile Include="gui\login\login_callback.cpp">
+      <Filter>gui\login</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -39,20 +42,32 @@
     <ClInclude Include="gui\main\main_form.h">
       <Filter>gui\main</Filter>
     </ClInclude>
+    <ClInclude Include="gui\login\login_callback.h">
+      <Filter>gui\login</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\bin\res\login\login.xml">
       <Filter>gui\login</Filter>
     </Xml>
     <Xml Include="..\duilib\duilib_attribute.xml" />
-    <Xml Include="..\bin\res\global.xml">
-      <Filter>gui</Filter>
-    </Xml>
     <Xml Include="..\bin\res\menu\menu.xml">
       <Filter>gui</Filter>
     </Xml>
     <Xml Include="..\bin\res\main\main.xml">
       <Filter>gui\main</Filter>
     </Xml>
+    <Xml Include="..\bin\res\global.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="demo.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="nim.ico">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

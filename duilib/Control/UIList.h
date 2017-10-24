@@ -125,8 +125,8 @@ public:
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);
 
-    int GetChildPadding() const;
-    void SetChildPadding(int iPadding);
+    int GetChildMargin() const;
+    void SetChildMargin(int iPadding);
 
     ListHeader* GetHeader() const;  
     Container* GetList() const;

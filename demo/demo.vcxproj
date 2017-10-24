@@ -56,7 +56,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;UILIB_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../;../ui_kit/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../;../ui_kit/</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -84,11 +84,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="gui\login\login_callback.h" />
     <ClInclude Include="gui\login\login_form.h" />
     <ClInclude Include="gui\main\main_form.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="gui\login\login_callback.cpp" />
     <ClCompile Include="gui\login\login_form.cpp" />
     <ClCompile Include="gui\login\login_form_ui.cpp" />
     <ClCompile Include="gui\main\main_form.cpp" />
@@ -109,6 +112,12 @@
     <Xml Include="..\duilib\duilib_attribute.xml">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="demo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="nim.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

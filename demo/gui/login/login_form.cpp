@@ -5,6 +5,7 @@
 #include "module/login/login_manager.h"
 #include "module/window/windows_manager.h"
 #include "gui/msgbox/msgbox.h"
+#include "login_callback.h"
 
 
 void LoginForm::StartLogin()
@@ -21,14 +22,15 @@ void LoginForm::StartLogin()
 	}
 	if (!nim_comp::LoginManager::GetInstance()->CheckSingletonRun(re_account_->GetText()))
 	{
-		ShowMsgBox(this->GetHWND(), MsgboxCallback(), L"STRID_CHECK_SINGLETON_RUN", true);
+		ShowMsgBox(this->GetHWND(), MsgboxCallback(), _T("同一账号不允许重复登录!"), false, _T("提示"), false, _T("确定"), false, _T("取消"), false);
 		return;
 	}
 
 	std::string account = nbase::UTF16ToUTF8(re_account_->GetText());
 	std::string pwd = nbase::UTF16ToUTF8(re_pwd_->GetText());
 
-	nim_comp::LoginManager::GetInstance()->DoLogin(account, pwd);
+	nim_comp::LoginCallback cb = std::bind(&LoginCallbackObject::UILoginCallback, std::placeholders::_1);
+	nim_comp::LoginManager::GetInstance()->DoLogin(account, pwd, cb);
 }
 
 void LoginForm::CancelLogin()

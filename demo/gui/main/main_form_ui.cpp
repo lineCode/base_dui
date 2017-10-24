@@ -1,5 +1,5 @@
 #include "stdafx.h"
-//#include "resource.h"
+#include "resource.h"
 #include "main_form.h"
 //#include "util/user.h"
 //#include "callback/team/team_callback.h"
@@ -82,6 +82,8 @@ LRESULT MainForm::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 
 void MainForm::InitWindow()
 {
+	SetIcon(IDI_ICON1);
+	SetTaskbarTitle(L"΢΢");
 	/*SetIcon(IDI_ICON);
 	m_pRoot->AttachBubbledEvent(ui::kEventClick, nbase::Bind(&MainForm::OnClicked, this, std::placeholders::_1));
 
