@@ -267,9 +267,10 @@ public:
 	static const LPCTSTR kClassName;
 
 private:
-	/*dui::Button*	btn_header_;
+	dui::Button*	btn_header_;
 	dui::Label*		label_name_;
-	dui::Button*	btn_online_state_;
+	dui::TabLayout	*tab_session_friend_;
+	/*dui::Button*	btn_online_state_;
 	bool			is_busy_;
 
 	dui::Box*		box_unread_;

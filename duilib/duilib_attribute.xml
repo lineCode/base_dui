@@ -169,6 +169,20 @@
 
     <OptionContainer parent="Container" notifies="" comment="同Container">
     </OptionContainer>
+    
+    <HLayout parent="Container" notifies="" comment="">
+      <Attribute name="sepheight"     default="" type="" comment=""/>
+      <Attribute name="sepimm"        default="" type="" comment=""/>
+    </HLayout>
+    
+    <VLayout parent="Container" notifies="" comment="">
+      <Attribute name="sepheight"     default="" type="" comment=""/>
+      <Attribute name="sepimm"        default="" type="" comment=""/>
+    </VLayout>
+    
+    <TabLayout parent="Container" notifies="" comment="">
+      <Attribute name="selectedid"     default="" type="" comment=""/>
+    </TabLayout>
 
     <ListContainerElement parent="Container" notifies="" comment="">
       <Attribute name="selected"        default="" type="" comment=""/>
@@ -205,11 +219,6 @@
       <Attribute name="normaltextcolor"   default="" type="" comment="同textcolor"/>
       <Attribute name="textpadding"       default="" type="" comment=""/>
     </RichEdit>
-
-    <VLayout parent="Container" notifies="" comment="">
-      <Attribute name="sepheight"     default="" type="" comment=""/>
-      <Attribute name="sepimm"        default="" type="" comment=""/>
-    </VLayout>
 
     <List parent="VLayout" notifies="" comment="">
       <Attribute name="header"            default="" type="" comment=""/>

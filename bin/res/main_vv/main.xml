@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--<Window size="961,644" mininfo="961,644" roundcorner="4,4" sizebox="4,4,4,4" bkcolor="white" caption="300,0,0,30">-->
-<Window size="261,344" roundcorner="4,4" sizebox="4,4,4,4" bkcolor="white" caption="0,0,0,30">
+<Window size="961,644" mininfo="961,644" roundcorner="4,4" sizebox="4,4,4,4" bkcolor="white" caption="300,0,0,30">
+  <!--<Window size="261,344" roundcorner="4,4" sizebox="4,4,4,4" bkcolor="white" caption="0,0,0,30">-->
   <HLayout bkcolor="white" >
     <VLayout width="60" bkcolor="main_blue">
       <Container width="40" height="40" margin="10,10,10,10" >
@@ -8,64 +8,45 @@
         <Control width="40" height="40" bkimage="head_mask.png" mouse="false"/>
       </Container>
       <ButtonContainer name="btnbox_opt_session" width="40" height="40" margin="10,5,10,0" padding="" mousechild="">
-        <Option name="opt_session" width="40" height="40" normalimage="file='icon_01.png' dest='7,7,33,33'" pushedimage="file='icon_01_sel.png' dest='7,7,33,33'" group="session_friend_tab"  tooltip="消息"/>
+        <Option name="opt_session" width="40" height="40" normalimage="file='icon_01.png' dest='7,7,33,33'" pushedimage="file='icon_01_sel.png' dest='7,7,33,33'" group="group_session_friend"  tooltip="消息"/>
         <Label name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>
       </ButtonContainer>
+      <ButtonContainer name="btnbox_opt_friends" width="40" height="40" margin="10,5,10,0" padding="" mousechild="">
+        <Option name="opt_friends" width="40" height="40" normalimage="file='icon_02.png' dest='7,7,33,33'" pushedimage="file='icon_02_sel.png' dest='7,7,33,33'" group="group_session_friend"  tooltip="好友"/>
+        <!--<Label name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>-->
+      </ButtonContainer>
+      <ButtonContainer name="btnbox_opt_groups" width="40" height="40" margin="10,5,10,0" padding="" mousechild="">
+        <Option name="opt_groups" width="40" height="40" normalimage="file='icon_03.png' dest='7,7,33,33'" pushedimage="file='icon_03_sel.png' dest='7,7,33,33'" group="group_session_friend"  tooltip="群组"/>
+        <!--<Label name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>-->
+      </ButtonContainer>
       <Control />
-      <Button class="btn_wnd_min" margin="20,0,20,20"/>
       
-
-      <!--<Box name="box_unread" width="auto" minwidth="18" height="18" margin="40,8,0,0" padding="2,1,2,2" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" mouse="false" mousechild="false" visible="false">
-        <Label name="label_unread" halign="center" normaltextcolor="white"/>
-      </Box>
-
-      <OptionBox group="session_friend_tab" name="btn_friend_list" tooltip="通讯录"  height="48" margin="10,5,10,0">
-        <Event type="unselect" receiver=".\friend_option_icon" applyattribute="state=&quot;normal&quot;"/>
-        <Event type="select" receiver=".\friend_option_icon" applyattribute="state=&quot;pushed&quot;"/>
-        <Event type="select" receiver="session_or_friend_list_tabbox" applyattribute="selectedid=&quot;1&quot;"/>
-
-        <Control name="friend_option_icon" mouse="false" width="26" height="26" halign="center" valign="center"
-                 normalimage="icon_02.png" pushedimage="file='icon_02_sel.png'"/>
-        <Button name ="unread_number" bkimage="file='../public/icon/icon_number.png' corner='8,0,8,0'" font="1" normaltextcolor="white"
-                margin="60,0,0,0" halign="center" valign="center" visible="false"/>
-      </OptionBox>
-      --><!--erp--><!--
-      <OptionBox group="session_friend_tab" name="btn_friend_exlist" tooltip="erp"  height="48" margin="10,5,10,0">
-        <Event type="unselect" receiver=".\friendex_option_icon" applyattribute="state=&quot;normal&quot;"/>
-        <Event type="select" receiver=".\friendex_option_icon" applyattribute="state=&quot;pushed&quot;"/>
-        <Event type="select" receiver="session_or_friend_list_tabbox" applyattribute="selectedid=&quot;2&quot;"/>
-        <Control name="friendex_option_icon" mouse="false" width="26" height="26" halign="center" valign="center"
-                 normalimage="icon_04.png" pushedimage="file='icon_04_sel.png'"/>
-        <Button name ="unread_number" bkimage="file='../public/icon/icon_number.png' corner='8,0,8,0'" font="1" normaltextcolor="white"
-                margin="60,0,0,0" halign="center" valign="center" visible="false"/>
-      </OptionBox>
-      --><!--应用--><!--
-      <OptionBox group="session_friend_tab" name="btn_web" tooltip="应用"  height="48" margin="10,5,10,0">
-        <Event type="unselect" receiver=".\web_option_icon" applyattribute="state=&quot;normal&quot;"/>
-        <Event type="select" receiver=".\web_option_icon" applyattribute="state=&quot;pushed&quot;"/>
-        <Control name="web_option_icon" mouse="false" width="26" height="26" halign="center" valign="center"
-                 normalimage="icon_05.png" pushedimage="icon_05_sel.png"/>
-      </OptionBox>
-
-      <Control width="stretch" height="stretch"/>
-      --><!--客服--><!--
-      <OptionBox group="session_friend_tab" name="btn_customer_list" tooltip="客服"  height="48" margin="10,5,10,0">
-        <Event type="unselect" receiver=".\customer_option_icon" applyattribute="state=&quot;normal&quot;"/>
-        <Event type="select" receiver=".\customer_option_icon" applyattribute="state=&quot;pushed&quot;"/>
-        <Event type="select" receiver="session_or_friend_list_tabbox" applyattribute="selectedid=&quot;3&quot;"/>
-
-        <Control name="customer_option_icon" mouse="false" width="26" height="26" halign="center" valign="center"
-                 normalimage="icon_08.png" pushedimage="icon_08_sel.png"/>
-      </OptionBox>
-      --><!--设置--><!--
-      <OptionBox group="session_friend_tab" name="btn_menu_list" height="48" margin=",,,0" tooltip="设置"   >
-        <Event type="unselect" receiver=".\menu_option_icon" applyattribute="state=&quot;normal&quot;"/>
-        <Event type="select" receiver=".\menu_option_icon" applyattribute="state=&quot;pushed&quot;"/>
-        <Event type="select" receiver="session_or_friend_list_tabbox" applyattribute="selectedid=&quot;4&quot;"/>
-
-        <Control name="menu_option_icon" mouse="false" width="26" height="26" halign="center" valign="center"
-                 normalimage="icon_06.png" pushedimage="icon_06_sel.png"/>
-      </OptionBox>-->
+      <ButtonContainer name="btnbox_opt_menu" width="40" height="40" margin="10,5,10,10" padding="" mousechild="">
+        <Option name="opt_menu" width="40" height="40" normalimage="file='icon_06.png' dest='7,7,33,33'" pushedimage="file='icon_06_sel.png' dest='7,7,33,33'" group="group_session_friend"  tooltip="设置"/>
+        <!--<Label name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>-->
+      </ButtonContainer>
+    </VLayout>
+    <VLayout width="240" bkcolor="">
+      <HLayout height="50">
+      </HLayout>
+      <Control class="splitline_hor_level1"/>
+      <TabLayout name="tab_session_friend">
+        <List name="list_session" bkcolor="white"/>
+        <List name="list_friends" bkcolor="gray"/>
+        <List name="list_groups" bkcolor="main_blue"/>
+      </TabLayout>
+    </VLayout>
+    <Control class="splitline_ver_level1"/>
+    <VLayout>
+      <HLayout height="50">
+        <Button name="btn_title" width="60" margin="10" font="4" text="微微" />
+        <Control />
+        <Button class="btn_wnd_min" margin=""/>
+        <Button class="btn_wnd_max" margin="2"/>
+        <Button class="btn_wnd_close" margin="2,0,1"/>
+      </HLayout>
+      <Control class="splitline_hor_level1"/>
+      <Include count="1" source="session.xml"/>
     </VLayout>
   </HLayout>
 </Window>

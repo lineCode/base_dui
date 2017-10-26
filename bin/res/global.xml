@@ -174,14 +174,14 @@
 
   <!--窗口右上角按钮-->
   <!-- 灰色版 -->
-  <Class name="btn_wnd_min" value="name=&quot;minbtn&quot; width=&quot;auto&quot; height=&quot;auto&quot; normalimage=&quot;file='../public/button/btn_wnd_gray_min.png'&quot; hotimage=&quot;../public/button/btn_wnd_gray_min_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_gray_min_pushed.png&quot;"/>
+  <Class name="btn_wnd_min" value="name=&quot;minbtn&quot; width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;file='../public/button/btn_wnd_gray_min.png'&quot; hotimage=&quot;../public/button/btn_wnd_gray_min_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_gray_min_pushed.png&quot;"/>
 
   <!--<Class name="btn_wnd_close" value="width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;file='../public/button/btn_wnd_gray_close.png' dest='4,4,16,16'&quot; hotimage=&quot;../public/button/btn_wnd_white_close_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_white_close_pushed.png&quot; fadehot=&quot;false&quot;"/>-->
   <Class name="btn_wnd_close" value="name=&quot;closebtn&quot; width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;file='../public/button/close.png' source='0,0,20,20'&quot; hotimage=&quot;file='../public/button/close.png' source='20,0,40,20'&quot; fadehot=&quot;false&quot;"/>
 
-  <Class name="btn_wnd_max" value="width=&quot;auto&quot; height=&quot;auto&quot; forenormalimage=&quot;file='../public/button/btn_wnd_gray_max.png' dest='4,4,16,16'&quot; normalimage=&quot;&quot; hotimage=&quot;../public/button/btn_wnd_gray_max_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_gray_max_pushed.png&quot;"/>
+  <Class name="btn_wnd_max" value="name=&quot;maxbtn&quot; width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;../public/button/btn_wnd_gray_max_hovered.png&quot; hotimage=&quot;../public/button/btn_wnd_gray_max_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_gray_max_pushed.png&quot;"/>
 
-  <Class name="btn_wnd_restore" value="width=&quot;auto&quot; height=&quot;auto&quot; forenormalimage=&quot;file='../public/button/btn_wnd_gray_restore.png' dest='4,4,16,16'&quot; normalimage=&quot;&quot; hotimage=&quot;../public/button/btn_wnd_gray_restore_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_gray_restore_pushed.png&quot;"/>
+  <Class name="btn_wnd_restore" value="width=&quot;auto&quot; height=&quot;auto&quot; normalimage=&quot;file='../public/button/btn_wnd_gray_restore.png' dest='4,4,16,16'&quot; normalimage=&quot;&quot; hotimage=&quot;../public/button/btn_wnd_gray_restore_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_gray_restore_pushed.png&quot;"/>
 
   <!-- 白色版 -->
   <Class name="btn_wnd_white_min" value="width=&quot;auto&quot; height=&quot;auto&quot; forenormalimage=&quot;file='../public/button/btn_wnd_white_min.png'&quot; normalimage=&quot;&quot; hotimage=&quot;../public/button/btn_wnd_white_min_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_white_min_pushed.png&quot;"/>

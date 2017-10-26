@@ -84,7 +84,10 @@ void MainForm::InitWindow()
 {
 	SetIcon(IDI_ICON1);
 	SetTaskbarTitle(L"΢΢");
-	
+
+	btn_header_ = dynamic_cast<Button*>(m_PaintManager.FindControl(_T("btn_header")));
+	tab_session_friend_ = dynamic_cast<TabLayout*>(m_PaintManager.FindControl(_T("tab_session_friend")));
+
 }
 
 void MainForm::OnClick(dui::TNotify& msg)
@@ -94,6 +97,18 @@ void MainForm::OnClick(dui::TNotify& msg)
 	Control *pControl = msg.pSender;
 	String name = pControl->GetName();
 	wprintf(L"MainForm::OnClicked %s\n", name.c_str());
+	if (name == _T("btnbox_opt_session"))
+	{
+		tab_session_friend_->SelectItem(0);
+	}
+	else if (name == _T("btnbox_opt_friends"))
+	{
+		tab_session_friend_->SelectItem(1);
+	}
+	else if (name == _T("btnbox_opt_groups"))
+	{
+		tab_session_friend_->SelectItem(2);
+	}
 
 	if (!bHandle)
 	{

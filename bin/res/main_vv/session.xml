@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VLayout>
+  <List>
+
+  </List>
+  <HLayout height="20" bkcolor="gray">
+
+  </HLayout>
+
+  <HLayout height="100" bkcolor="main_blue">
+    <!--<RichEdit />-->
+  </HLayout>
+  <HLayout height="45" bkcolor="gray">
+    <Label width="80" margin="20" font="2" text="按Enter发送"/>
+    <Control />
+    <Button width="80" height="25" font="3" text="发送"/>
+  </HLayout>
+</VLayout>
