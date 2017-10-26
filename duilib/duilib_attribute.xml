@@ -101,7 +101,7 @@
     </Control>
 
     <Label parent="Control" notifies="��ʱ��д" >
-      <Attribute name="align"       default="" type="" comment=""/>
+      <Attribute name="halign"       default="" type="" comment=""/>
       <Attribute name="valign"      default="" type="" comment=""/>
       <Attribute name="endellipsis" default="false" type="" comment=""/>
       <Attribute name="font"        default="" type="" comment=""/>
@@ -153,31 +153,37 @@
     
     <!--Container begin-->
     <Container parent="Control" notifies="" comment="">
-      <Attribute name="padding"           default="" type="" comment=""/>
+      <Attribute name="padding"         default="" type="" comment=""/>
       <Attribute name="mousechild"      default="" type="" comment=""/>
       <Attribute name="vscrollbar"      default="" type="" comment=""/>
       <Attribute name="vscrollbarstyle" default="" type="" comment=""/>
       <Attribute name="hscrollbar"      default="" type="" comment=""/>
       <Attribute name="hscrollbarstyle" default="" type="" comment=""/>
-      <Attribute name="childmargin"    default="" type="" comment=""/>
+      <Attribute name="childmargin"     default="" type="" comment=""/>
       <Attribute name="childalign"      default="" type="" comment=""/>
       <Attribute name="childvalign"     default="" type="" comment=""/>
     </Container>
 
+    <ButtonContainer parent="Container" notifies="" comment="同Container">
+    </ButtonContainer>
+
+    <OptionContainer parent="Container" notifies="" comment="同Container">
+    </OptionContainer>
+
     <ListContainerElement parent="Container" notifies="" comment="">
       <Attribute name="selected"        default="" type="" comment=""/>
-      <Attribute name="expandable"       default="" type="" comment=""/>
+      <Attribute name="expandable"      default="" type="" comment=""/>
     </ListContainerElement>
 
     <MenuElement parent="ListContainerElement" notifies="" comment="">
-      <Attribute name="icon"        default="" type="" comment=""/>
-      <Attribute name="iconsize"       default="" type="" comment=""/>
+      <Attribute name="icon"            default="" type="" comment=""/>
+      <Attribute name="iconsize"        default="" type="" comment=""/>
       <Attribute name="checkitem"       default="" type="" comment=""/>
-      <Attribute name="ischeck"       default="" type="" comment=""/>
-      <Attribute name="expland"       default="" type="" comment=""/>
-      <Attribute name="linetype"       default="" type="" comment=""/>
+      <Attribute name="ischeck"         default="" type="" comment=""/>
+      <Attribute name="expland"         default="" type="" comment=""/>
+      <Attribute name="linetype"        default="" type="" comment=""/>
       <Attribute name="linecolor"       default="" type="" comment=""/>
-      <Attribute name="linepadding"       default="" type="" comment=""/>
+      <Attribute name="linepadding"     default="" type="" comment=""/>
     </MenuElement>
 
     <RichEdit parent="Container" notifies="" comment="">
@@ -193,7 +199,7 @@
       <Attribute name="multiline"         default="" type="" comment=""/>
       <Attribute name="readonly"          default="" type="" comment=""/>
       <Attribute name="password"          default="" type="" comment=""/>
-      <Attribute name="align"             default="" type="" comment=""/>
+      <Attribute name="halign"             default="" type="" comment=""/>
       <Attribute name="font"              default="" type="" comment=""/>
       <Attribute name="textcolor"         default="" type="" comment=""/>
       <Attribute name="normaltextcolor"   default="" type="" comment="同textcolor"/>

@@ -1675,7 +1675,7 @@ void ListHeaderItem::SetSepImage(LPCTSTR pStrImage)
 void ListHeaderItem::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if( _tcscmp(pstrName, _T("dragable")) == 0 ) SetDragable(_tcscmp(pstrValue, _T("true")) == 0);
-    else if( _tcscmp(pstrName, _T("align")) == 0 ) {
+    else if( _tcscmp(pstrName, _T("halign")) == 0 ) {
         if( _tcsstr(pstrValue, _T("left")) != NULL ) {
             m_uTextStyle &= ~(DT_CENTER | DT_RIGHT);
             m_uTextStyle |= DT_LEFT;

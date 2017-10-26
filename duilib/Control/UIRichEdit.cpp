@@ -2262,7 +2262,7 @@ void RichEdit::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if( _tcscmp(pstrName, _T("password")) == 0 ) {
         if( _tcscmp(pstrValue, _T("true")) == 0 ) m_lTwhStyle |= ES_PASSWORD;
     }
-    else if( _tcscmp(pstrName, _T("align")) == 0 ) {
+    else if( _tcscmp(pstrName, _T("halign")) == 0 ) {
         if( _tcsstr(pstrValue, _T("left")) != NULL ) {
             m_lTwhStyle &= ~(ES_CENTER | ES_RIGHT);
             m_lTwhStyle |= ES_LEFT;

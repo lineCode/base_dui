@@ -265,7 +265,6 @@ namespace dui
 			else Control::DoEvent(event);
 			return;
 		}
-
 		if( event.Type == UIEVENT_SETFOCUS ) 
 		{
 			m_bFocused = true;
@@ -621,6 +620,41 @@ namespace dui
 
 	void Container::SetPos(RECT rc, bool bNeedInvalidate)
 	{
+		
+#if 1
+		Control::SetPos(rc, bNeedInvalidate);
+		rc = m_rcItem;
+		if (m_items.IsEmpty()) return;
+
+		rc.left += m_rcPadding.left;
+		rc.top += m_rcPadding.top;
+		rc.right -= m_rcPadding.right;
+		rc.bottom -= m_rcPadding.bottom;
+		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
+		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
+
+		for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
+			Control* pControl = static_cast<Control*>(m_items[it2]);
+			if( !pControl->IsVisible() ) continue;
+			if( pControl->IsFloat() ) {
+				SetFloatPos(it2);
+				continue;
+			}
+
+			int iControlFixedWidth = pControl->GetFixedWidth();
+			int iControlFixedHeight = pControl->GetFixedHeight();
+			RECT rcMargin = pControl->GetMargin();
+			SIZE sz = { iControlFixedWidth, iControlFixedHeight };
+
+			int iPosX = rc.left;
+			int iPosY = rc.top;
+			if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) {
+				iPosY -= m_pVerticalScrollBar->GetScrollPos();
+			}
+			RECT rcCtrl = { iPosX + rcMargin.left, iPosY + rcMargin.top, iPosX + sz.cx + rcMargin.left, iPosY + sz.cy + rcMargin.top };
+			pControl->SetPos(rcCtrl, false);
+		}
+#else
 		Control::SetPos(rc, bNeedInvalidate);
 		if (m_items.IsEmpty()) return;
 
@@ -659,6 +693,7 @@ namespace dui
 				pControl->SetPos(rcCtrl, false);
 			}
 		}
+#endif
 	}
 
 	void Container::Move(SIZE szOffset, bool bNeedInvalidate)

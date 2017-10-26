@@ -56,9 +56,7 @@ namespace dui
 			FADE_TIMERID = 11,
 			FADE_ELLAPSE = 30,
 		};
-
 		UINT m_uButtonState;
-
 		DWORD m_dwHotBkColor;
 		DWORD m_dwHotTextColor;
 		DWORD m_dwPushedTextColor;

@@ -341,6 +341,7 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
             case 15:
                 if( _tcsicmp(pstrClass, DUI_CTR_LISTTEXTELEMENT) == 0 )       pControl = new ListTextElement;
                 else if( _tcsicmp(pstrClass, DUI_CTR_LISTHBOXELEMENT) == 0 )  pControl = new ListHBoxElement;
+				else if (_tcsicmp(pstrClass, DUI_CTR_BUTTONCONTAINER) == 0)   pControl = new ButtonContainer;
                 break;
             case 16:
                 if( _tcsicmp(pstrClass, DUI_CTR_HLAYOUT) == 0 )      pControl = new HorizontalLayout;

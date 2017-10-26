@@ -241,8 +241,8 @@ protected:                                                                \
 #define  DUI_CTR_CONTROL                         (_T("Control"))
 #define  DUI_CTR_ACTIVEX                         (_T("ActiveX"))
 #define  DUI_CTR_GIFANIM                         (_T("GifAnim"))
-#define  DUI_CTR_HLAYOUT                         (_T("HLayOut"))
-#define  DUI_CTR_VLAYOUT                         (_T("VLayOut"))
+#define  DUI_CTR_HLAYOUT                         (_T("HLayout"))
+#define  DUI_CTR_VLAYOUT                         (_T("VLayout"))
 //8
 #define  DUI_CTR_PROGRESS                        (_T("Progress"))
 #define  DUI_CTR_RICHEDIT                        (_T("RichEdit"))
@@ -266,15 +266,19 @@ protected:                                                                \
 #define  DUI_CTR_CHILDLAYOUT                     (_T("ChildLayout"))
 #define  DUI_CTR_LISTELEMENT                     (_T("ListElement"))
 #define  DUI_CTR_VIRTUALLIST                     (_T("VirtualList"))
-//
+//14
 #define  DUI_CTR_LISTHEADERITEM                  (_T("ListHeaderItem"))
-//
+//15
 #define  DUI_CTR_LISTHBOXELEMENT                 (_T("ListHBoxElement"))
 #define  DUI_CTR_LISTTEXTELEMENT                 (_T("ListTextElement"))
-//
+#define  DUI_CTR_BUTTONCONTAINER				 (_T("ButtonContainer"))
+//16
 #define  DUI_CTR_LISTLABELELEMENT                (_T("ListLabelElement"))
-//
+//20
 #define  DUI_CTR_LISTCONTAINERELEMENT            (_T("ListContainerElement"))
+
+
+
 
 
 ///

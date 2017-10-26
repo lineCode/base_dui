@@ -48,10 +48,10 @@ public:
     bool RemoveAt(int iIndex, bool bDoNotDestroy=false);
     void RemoveAll();
 
-    void DoEvent(TEvent& event);
-    void SetVisible(bool bVisible = true);
-    void SetInternVisible(bool bVisible = true);
-    void SetMouseEnabled(bool bEnable = true);
+	virtual void DoEvent(TEvent& event) override;
+	virtual void SetVisible(bool bVisible = true) override;
+	virtual void SetInternVisible(bool bVisible = true) override;
+	virtual void SetMouseEnabled(bool bEnable = true) override;
 
     virtual RECT GetPadding() const;
     virtual void SetPadding(RECT rcPadding); // 设置内边距，相当于设置客户区

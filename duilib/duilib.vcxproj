@@ -267,6 +267,7 @@
     <None Include="Utils\flash11.tlh" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Control\UIButtonContainer.cpp" />
     <ClCompile Include="Control\UIActiveX.cpp" />
     <ClCompile Include="Control\UIButton.cpp" />
     <ClCompile Include="Control\UICheckBox.cpp" />
@@ -318,6 +319,7 @@
   <ItemGroup>
     <ClInclude Include="Control\UIActiveX.h" />
     <ClInclude Include="Control\UIButton.h" />
+    <ClInclude Include="Control\UIButtonContainer.h" />
     <ClInclude Include="Control\UICheckBox.h" />
     <ClInclude Include="Control\UICombo.h" />
     <ClInclude Include="Control\UIDateTime.h" />

@@ -33,7 +33,7 @@ namespace dui
 		pFolderButton->SetFixedWidth(GetFixedHeight());
 		pDottedLine->SetFixedWidth(2);
 		pCheckBox->SetFixedWidth(GetFixedHeight());
-		pItemButton->SetAttribute(_T("align"),_T("left"));
+		pItemButton->SetAttribute(_T("halign"),_T("left"));
 
 		pDottedLine->SetVisible(false);
 		pCheckBox->SetVisible(false);

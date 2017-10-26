@@ -35,7 +35,7 @@ MainForm::~MainForm()
 
 std::wstring MainForm::GetSkinFolder()
 {
-	return L"main";
+	return L"main_vv";
 }
 
 std::wstring MainForm::GetSkinFile()
@@ -84,147 +84,21 @@ void MainForm::InitWindow()
 {
 	SetIcon(IDI_ICON1);
 	SetTaskbarTitle(L"Î¢Î¢");
-	/*SetIcon(IDI_ICON);
-	m_pRoot->AttachBubbledEvent(ui::kEventClick, nbase::Bind(&MainForm::OnClicked, this, std::placeholders::_1));
-
-	btn_header_ = (Button*) FindControl(L"btn_header");
-	label_name_ = (Label*) FindControl(L"label_name");
-	btn_online_state_ = (Button*)FindControl(L"btn_online_state");
-	btn_online_state_->SetVisible(nim_comp::SubscribeEventManager::GetInstance()->IsEnabled());
-	btn_online_state_->AttachClick(nbase::Bind(&MainForm::OnlineStateMenuButtonClick, this, std::placeholders::_1));
-	InitHeader();
-
-	box_unread_ = (Box*) this->FindControl(L"box_unread");
-	label_unread_ = (Label*) this->FindControl(L"label_unread");
-	((OptionBox*) FindControl(L"btn_session_list"))->Selected(true, true);
-	ui::ListBox* session_list = (ListBox*)FindControl(L"session_list");
-	nim_ui::SessionListManager::GetInstance()->AttachListBox(session_list);
-	unregister_cb.Add(nim_ui::SessionListManager::GetInstance()->RegUnreadCountChange(nbase::Bind(&MainForm::OnUnreadCountChange, this, std::placeholders::_1)));
-
-	ui::TreeView* friend_list = (TreeView*) FindControl(L"friend_list");
-	nim_ui::ContactsListManager::GetInstance()->AttachFriendListBox(friend_list);
-	ui::TreeView* group_list = (TreeView*) FindControl(L"group_list");
-	nim_ui::ContactsListManager::GetInstance()->AttachGroupListBox(group_list);
-
-	Button* main_menu_button = (Button*) FindControl(L"main_menu_button");
-	main_menu_button->AttachClick(nbase::Bind(&MainForm::MainMenuButtonClick, this, std::placeholders::_1));
-
-	search_edit_ = static_cast<RichEdit*>(FindControl(_T("search_edit")));
-	search_edit_->AttachTextChange(nbase::Bind(&MainForm::SearchEditChange, this, std::placeholders::_1));
-	search_edit_->SetLimitText(30);
-	btn_clear_input_ = static_cast<ui::Button*>(FindControl(L"clear_input"));
-	btn_clear_input_->AttachClick(nbase::Bind(&MainForm::OnClearInputBtnClicked, this, std::placeholders::_1));
-	btn_clear_input_->SetNoFocus();
-
-	search_result_list_ = static_cast<ui::ListBox*>(FindControl(_T("search_result_list")));
-
-	TrayIcon::GetInstance()->Init(this);
-	TrayIcon::GetInstance()->SetTrayIcon(::LoadIconW(nbase::win32::GetCurrentModuleHandle(), MAKEINTRESOURCE(IDI_ICON)), MutiLanSupport::GetInstance()->GetStringViaID(L"STRID_MIANWINDOW_TITLE"));
-
-	nim_ui::NotifyCenter::GetInstance()->RegNotify(NT_LINK, nbase::Bind(&MainForm::CheckOnlineState, this, std::placeholders::_1));
-
-	nim_ui::ContactsListManager::GetInstance()->InvokeGetAllUserInfo();
-	nim_ui::SessionListManager::GetInstance()->InvokeLoadSessionList();
-	nim_ui::SessionListManager::GetInstance()->QueryUnreadSysMsgCount();
-	nim_ui::SubscribeEventManager::GetInstance()->StartAutoSubscribe();*/
+	
 }
 
-bool MainForm::OnClicked(dui::TNotify& msg)
+void MainForm::OnClick(dui::TNotify& msg)
 {
-	//std::wstring name = msg->pSender->GetName();
+	bool bHandle = false;
 
-	//if(name == L"btn_search_team")
-	//{
-	//	nim_ui::WindowsManager::GetInstance()->SingletonShow<nim_comp::TeamSearchForm>(nim_comp::TeamSearchForm::kClassName);
-	//}
-	//else if (name == L"btn_wnd_close")
-	//{
-	//	SendMessage(WM_SYSCOMMAND, SC_MINIMIZE);
-	//	::ShowWindow(m_hWnd, SW_HIDE);
-	//}
-	//else if(name == L"btn_create_group")
-	//{
-	//	nim_comp::ContactSelectForm *contact_select_form = (nim_comp::ContactSelectForm *)nim_comp::WindowsManager::GetInstance()->GetWindow\
-	//		(nim_comp::ContactSelectForm::kClassName, nbase::UTF8ToUTF16(nim_comp::ContactSelectForm::kCreateGroup));
+	Control *pControl = msg.pSender;
+	String name = pControl->GetName();
+	wprintf(L"MainForm::OnClicked %s\n", name.c_str());
 
-	//	if (!contact_select_form)
-	//	{
-	//		auto cb = ToWeakCallback([this](const std::list<std::string> &friend_list, const std::list<std::string> &team_list)
-	//		{
-	//			if (friend_list.empty())
-	//			{
-	//				ShowMsgBox(m_hWnd, MsgboxCallback(), L"STRID_MAINWINDOW_PLEASE_INVITE_FRIEND");
-	//				return;
-	//			}
-
-	//			UTF16String user_names;
-	//			auto it = friend_list.cbegin();
-	//			for (int i = 0; it != friend_list.cend() && i < 2; it++, i++)
-	//				user_names += nim_ui::UserManager::GetInstance()->GetUserName(*it, false) + L";";
-	//			user_names += nim_ui::UserManager::GetInstance()->GetUserName(it == friend_list.end() ? nim_ui::LoginManager::GetInstance()->GetAccount() : *it, false);
-
-	//			nim::TeamInfo tinfo;
-	//			tinfo.SetType(nim::kNIMTeamTypeNormal);
-	//			tinfo.SetName(nbase::UTF16ToUTF8(user_names));
-	//			nim::Team::CreateTeamAsync(tinfo, friend_list, "", nbase::Bind(&nim_comp::TeamCallback::OnTeamEventCallback, std::placeholders::_1));
-	//		});
-	//		contact_select_form = new nim_comp::ContactSelectForm(nim_comp::ContactSelectForm::kCreateGroup, std::list<UTF8String>(), cb);
-	//		contact_select_form->Create(NULL, L"", UI_WNDSTYLE_FRAME& ~WS_MAXIMIZEBOX, 0L);
-	//		contact_select_form->CenterWindow();
-	//	}
-	//	else
-	//	{
-	//		contact_select_form->ActiveWindow();
-	//	}
-	//}
-	//else if (name == L"btn_create_team")
-	//{
-	//	std::wstring caption = ui::MutiLanSupport::GetInstance()->GetStringViaID(L"STRING_INVITEUSERFORM_INVITE_JOINCHAT");
-	//	nim_comp::TeamInfoForm* team_info_form = (nim_comp::TeamInfoForm*)nim_ui::WindowsManager::GetInstance()->GetWindow\
-	//		(nim_comp::TeamInfoForm::kClassName, nim_comp::TeamInfoForm::kTeamInfoWindowId);
-	//	if (team_info_form == NULL)
-	//	{
-	//		team_info_form = new nim_comp::TeamInfoForm(true, nim::kNIMTeamTypeAdvanced, "", nim::TeamInfo());
-	//		team_info_form->Create(NULL, caption.c_str(), WS_OVERLAPPEDWINDOW& ~WS_MAXIMIZEBOX, 0L);
-	//		team_info_form->CenterWindow();
-	//		team_info_form->ShowWindow(true);
-	//	}
-	//	else
-	//	{
-	//		team_info_form->ActiveWindow();
-	//	}
-	//}
-	//else if (name == L"btn_header")
-	//	nim_ui::WindowsManager::GetInstance()->ShowProfileForm(nim_ui::LoginManager::GetInstance()->GetAccount());
-	//else if (name == L"chatroom")
-	//	nim_ui::WindowsManager::GetInstance()->SingletonShow<nim_chatroom::ChatroomFrontpage>(nim_chatroom::ChatroomFrontpage::kClassName);
-	//else if (name == L"cef_test")
-	//{
-	//	// Cefä¯ÀÀÆ÷Ä£¿é
-	//	if (nim_cef::CefManager::GetInstance()->IsEnableOffsetRender())
-	//	{
-	//		// ¿ªÆôÀëÆÁäÖÈ¾
-	//		CefForm *form = new CefForm;
-	//		form->Create(NULL, CefForm::kClassName, WS_OVERLAPPEDWINDOW, 0, true);
-	//		form->CenterWindow();
-	//		form->ShowWindow();
-	//	}
-	//	else
-	//	{
-	//		// ÎÞÀëÆÁäÖÈ¾£¬ÓÐ´°¿ÚÄ£Ê½
-	//		CefNativeForm *form = new CefNativeForm;
-	//		form->Create(NULL, CefNativeForm::kClassName, WS_OVERLAPPEDWINDOW, 0, false);
-	//		form->CenterWindow();
-	//		form->ShowWindow();
-	//	}
-	//}
-	//else if (name == L"change_skin")
-	//{
-	//	// »»·ôÊ¾Àý
-	//	std::wstring theme_dir = QPath::GetAppPath();
-	//	ui::GlobalManager::ReloadSkin(theme_dir + L"themes\\skin1");
-	//}
-	return true;
+	if (!bHandle)
+	{
+		__super::OnClick(msg);
+	}
 }
 #if 0
 bool MainForm::MainMenuButtonClick(ui::EventArgs* param)

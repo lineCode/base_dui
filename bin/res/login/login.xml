@@ -2,7 +2,7 @@
 <Window size="270,386" caption="0,0,75,49" sizebox="6,6,6,6" >
   <VLayout padding="" bkimage="login_bk.png" > 
     <HLayout height="50" margin="0,6,5,9">
-      <Label width="60" height="32" margin="10" align="" valign="" font="3" text="微微"/>
+      <Label width="60" height="32" margin="10" halign="" valign="" font="3" text="微微"/>
       <Control />
       <CheckBox name="chk_arrow_down" width="20" height="20" margin="0,2,2" normalimage="file='btn_arrow_down.png' source='0,0,20,20'" hotimage="file='btn_arrow_down.png' source='20,0,40,20'" 
                 selectedimage="file='btn_arrow_down.png' source='40,0,60,20'" selectedhotimage="file='btn_arrow_down.png' source='60,0,80,20'"/>

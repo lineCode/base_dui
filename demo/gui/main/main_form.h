@@ -32,7 +32,7 @@ public:
 
 private:
 	/* @return bool true 继续传递控件消息，false 停止传递控件消息*/
-	bool OnClicked(dui::TNotify& msg);
+	virtual void OnClick(dui::TNotify& msg) override;
 #if 0
 	/**
 	* 处理主窗口弹出菜单按钮的单击消息
