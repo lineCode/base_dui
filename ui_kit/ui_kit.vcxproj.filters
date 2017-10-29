@@ -41,6 +41,9 @@
     <Filter Include="module\db">
       <UniqueIdentifier>{a3c1eb8a-2bcb-4231-b6e7-12dca7c59cbf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="module\user">
+      <UniqueIdentifier>{c6360deb-bf56-408d-9baa-6ce44d841ad6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gui\msgbox\msgbox.h">
@@ -84,6 +87,12 @@
     <ClInclude Include="module\init\init_manager.h">
       <Filter>module\init</Filter>
     </ClInclude>
+    <ClInclude Include="module\user\user_define.h">
+      <Filter>module\user</Filter>
+    </ClInclude>
+    <ClInclude Include="module\user\user_manager.h">
+      <Filter>module\user</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\msgbox\msgbox.cpp">
@@ -119,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="module\init\init_manager.cpp">
       <Filter>module\init</Filter>
+    </ClCompile>
+    <ClCompile Include="module\user\user_manager.cpp">
+      <Filter>module\user</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

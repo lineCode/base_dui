@@ -32,8 +32,8 @@
       <Control class="splitline_hor_level1"/>
       <TabLayout name="tab_session_friend">
         <List name="list_session" bkcolor="white"/>
-        <List name="list_friends" bkcolor="gray"/>
-        <List name="list_groups" bkcolor="main_blue"/>
+        <List name="list_friend" bkcolor="gray"/>
+        <List name="list_group" bkcolor="main_blue"/>
       </TabLayout>
     </VLayout>
     <Control class="splitline_ver_level1"/>

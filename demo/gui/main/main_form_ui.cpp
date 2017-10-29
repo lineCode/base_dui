@@ -88,6 +88,9 @@ void MainForm::InitWindow()
 	btn_header_ = dynamic_cast<Button*>(m_PaintManager.FindControl(_T("btn_header")));
 	tab_session_friend_ = dynamic_cast<TabLayout*>(m_PaintManager.FindControl(_T("tab_session_friend")));
 
+	list_friend_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_friend")));
+
+	//nim_comp::UserManager::GetInstance()->DoLoadUser();
 }
 
 void MainForm::OnClick(dui::TNotify& msg)
