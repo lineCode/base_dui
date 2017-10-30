@@ -8,17 +8,17 @@
 #if 0
 std::string QString::GetGUID()
 {
-	return nim::Tool::GetUuid();
+	return Tool::GetUuid();
 }
 
 std::string QString::GetMd5(const std::string& input)
 {
-	return nim::Tool::GetMd5(input);
+	return Tool::GetMd5(input);
 }
 
 void QString::NIMFreeBuf(void *data)
 {
-	return nim::Global::FreeBuf(data);
+	return Global::FreeBuf(data);
 }
 #endif
 //
@@ -32,7 +32,7 @@ std::wstring QPath::GetUserAppDataDir(const std::string& app_account)
 #if 1
 	return GetAppPath();
 #else
-	return nbase::UTF8ToUTF16(nim::Tool::GetUserAppdataDir(app_account));
+	return nbase::UTF8ToUTF16(Tool::GetUserAppdataDir(app_account));
 #endif
 }
 
@@ -41,7 +41,7 @@ std::wstring QPath::GetLocalAppDataDir()
 #if 1
 	return L"";
 #else
-	return nbase::UTF8ToUTF16(nim::Tool::GetLocalAppdataDir());
+	return nbase::UTF8ToUTF16(Tool::GetLocalAppdataDir());
 #endif
 }
 

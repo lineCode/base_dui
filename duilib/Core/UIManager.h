@@ -425,6 +425,13 @@ private:
 	void AdjustImagesHSL();
 	void PostAsyncNotify();
 
+	Container* CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *dlg_builder = NULL);
+	/*static Box* CreateBox(const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
+	static Box* CreateBoxWithCache(const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
+
+	static void FillBox(Box* userDefinedBox, const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
+	static void FillBoxWithCache(Box* userDefinedBox, const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());*/
+
 private:
 	String m_sName;
 	String m_pThisResPath;

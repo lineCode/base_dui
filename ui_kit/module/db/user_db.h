@@ -68,15 +68,15 @@ public:
 	* @param[in] msg 自定义通知消息
 	* @return bool true 成功，false 失败
 	*/
-	//bool InsertMsgData(const nim::SysMessage& msg);
+	//bool InsertMsgData(const SysMessage& msg);
 
 	/**
 	* 获取指定时间之后的自定义通知消息
 	* @param[in] time 时间
 	* @param[in] time 获取的数量上限
-	* @return std::vector<nim::SysMessage> 自定义消息列表
+	* @return std::vector<SysMessage> 自定义消息列表
 	*/
-	//std::vector<nim::SysMessage> QueryMsgData(int64_t time, int limit = 20);
+	//std::vector<SysMessage> QueryMsgData(int64_t time, int limit = 20);
 
 public:
 	/**

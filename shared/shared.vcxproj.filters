@@ -16,6 +16,7 @@
     <ClInclude Include="tool.h" />
     <ClInclude Include="image_ole_i.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="auto_unregister.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="closure.cpp" />

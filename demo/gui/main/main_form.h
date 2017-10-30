@@ -5,6 +5,7 @@
 //#include "shared/ui/msgbox.h"
 //#include "base/framework/task.h"
 #include "gui/window/window_ex.h"
+#include "module/user/user_define.h"
 
 class MainForm : public nim_comp::WindowEx/*, public ITrayIconDelegate*/
 {
@@ -33,7 +34,9 @@ public:
 private:
 	/* @return bool true 继续传递控件消息，false 停止传递控件消息*/
 	virtual void OnClick(dui::TNotify& msg) override;
-#if 0
+#if 1
+	void OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list);
+#else
 	/**
 	* 处理主窗口弹出菜单按钮的单击消息
 	* @param[in] msg 消息的相关信息
@@ -95,7 +98,7 @@ private:
 	* @param[in] msg 消息的相关信息
 	* @return bool true 继续传递控件消息，false 停止传递控件消息
 	*/
-	bool ClearChatRecordBySessionTypeMenuItemClick(bool del_session, nim::NIMSessionType type, ui::EventArgs* param);
+	bool ClearChatRecordBySessionTypeMenuItemClick(bool del_session, NIMSessionType type, ui::EventArgs* param);
 
 	/**
 	* 处理音视频设置菜单项的单击消息
@@ -239,7 +242,7 @@ private:
 	* @param[in] uinfos 新的个人资料列表
 	* @return void 无返回值
 	*/
-	void OnUserInfoChange(const std::list<nim::UserNameCard> &uinfos);
+	void OnUserInfoChange(const std::list<UserNameCard> &uinfos);
 
 	/**
 	* 响应头像下载完成的回调函数

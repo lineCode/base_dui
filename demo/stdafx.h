@@ -30,11 +30,13 @@
 #include "base/time/time.h"
 #include "base/framework/task.h"
 
+#include "duilib/UIlib.h"
 
 //third_party
-#include "duilib/UIlib.h"
+#include "third_party/jsoncpp/include/json/json.h"
 
 //shared
 #include "shared/log.h"
+#include "shared/auto_unregister.h"
 
 

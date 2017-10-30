@@ -60,7 +60,7 @@ bool UserDB::CreateDBFile()
 	std::wstring dirctory = GetUserOtherResPath();
 	UTF8String dbfile = nbase::UTF16ToUTF8(dirctory) + APP_DB;
 	db_filepath_ = dbfile;
-	std::string key =/* nim::Tool::GetMd5*/(LoginManager::GetInstance()->GetAccount());
+	std::string key =/* Tool::GetMd5*/(LoginManager::GetInstance()->GetAccount());
 	result = db_.Open(dbfile.c_str(),
 		key,
 		ndb::SQLiteDB::modeReadWrite|ndb::SQLiteDB::modeCreate|ndb::SQLiteDB::modeSerialized
@@ -173,7 +173,7 @@ bool UserDB::QueryDataWithMsgId(const std::string& msg_id, std::string& path, st
 }
 #endif
 //用于保存一些自定义通知消息
-//bool UserDB::InsertMsgData(const nim::SysMessage& msg)
+//bool UserDB::InsertMsgData(const SysMessage& msg)
 //{
 //	nbase::NAutoLock auto_lock(&lock_);
 //	ndb::SQLiteStatement stmt;
@@ -203,10 +203,10 @@ bool UserDB::QueryDataWithMsgId(const std::string& msg_id, std::string& path, st
 //	return no_error;
 //}
 //
-//std::vector<nim::SysMessage> UserDB::QueryMsgData(int64_t time, int limit)
+//std::vector<SysMessage> UserDB::QueryMsgData(int64_t time, int limit)
 //{
 //	nbase::NAutoLock auto_lock(&lock_);
-//	std::vector<nim::SysMessage> ret_msgs;
+//	std::vector<SysMessage> ret_msgs;
 //	ndb::SQLiteStatement stmt;
 //	if (time <= 0)
 //	{
@@ -222,17 +222,17 @@ bool UserDB::QueryDataWithMsgId(const std::string& msg_id, std::string& path, st
 //	int32_t result = stmt.NextRow();
 //	while (result == SQLITE_ROW)
 //	{
-//		nim::SysMessage msg;
+//		SysMessage msg;
 //		msg.receiver_accid_ = stmt.GetTextField(1);
 //		msg.sender_accid_ = stmt.GetTextField(2);
-//		msg.type_ = (nim::NIMSysMsgType)stmt.GetIntField(3);
+//		msg.type_ = (NIMSysMsgType)stmt.GetIntField(3);
 //		msg.timetag_ = stmt.GetInt64Field(4);
 //		msg.id_ = stmt.GetInt64Field(5);
-//		msg.msg_setting_.need_offline_ = stmt.GetIntField(6) > 0 ? nim::BS_TRUE : nim::BS_FALSE;
+//		msg.msg_setting_.need_offline_ = stmt.GetIntField(6) > 0 ? BS_TRUE : BS_FALSE;
 //		msg.content_ = stmt.GetTextField(7);
 //		msg.attach_ = stmt.GetTextField(8);
 //		msg.msg_setting_.push_content_ = stmt.GetTextField(9);
-//		msg.status_ = (nim::NIMSysMsgStatus)stmt.GetIntField(10);
+//		msg.status_ = (NIMSysMsgStatus)stmt.GetIntField(10);
 //		ret_msgs.push_back(msg);
 //		result = stmt.NextRow();
 //	}

@@ -62,6 +62,9 @@
     <Xml Include="..\bin\res\main_vv\session.xml">
       <Filter>gui\main</Filter>
     </Xml>
+    <Xml Include="..\bin\res\main_vv\friend_item.xml">
+      <Filter>gui\main</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="demo.rc">

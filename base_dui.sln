@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bulid", "bulid", "{64B136BD-5C11-447E-9BAA-CF754438BCFB}"
 	ProjectSection(SolutionItems) = preProject
@@ -30,6 +30,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "jsoncpp", "jsoncpp", "{6E1B7426-03DB-4221-B8A7-E7769F6F355F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "include", "include", "{4072B962-61C4-4C5C-8144-C3E836AB4165}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "json", "json", "{8477D664-1693-40CF-81AD-9788426D7120}"
 	ProjectSection(SolutionItems) = preProject
 		third_party\jsoncpp\include\json\assertions.h = third_party\jsoncpp\include\json\assertions.h
 		third_party\jsoncpp\include\json\autolink.h = third_party\jsoncpp\include\json\autolink.h
@@ -142,5 +144,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6E1B7426-03DB-4221-B8A7-E7769F6F355F} = {03EBF52E-95F6-497C-A64D-3B59BE8DB55D}
 		{4072B962-61C4-4C5C-8144-C3E836AB4165} = {6E1B7426-03DB-4221-B8A7-E7769F6F355F}
+		{8477D664-1693-40CF-81AD-9788426D7120} = {4072B962-61C4-4C5C-8144-C3E836AB4165}
 	EndGlobalSection
 EndGlobal

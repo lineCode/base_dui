@@ -63,7 +63,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../libs/;../libs/thread_part_libs;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>base_d.lib;shared_d.lib;duilib_d.lib;db_d.lib;wxsqlite3_d.lib;ui_kit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>base_d.lib;shared_d.lib;duilib_d.lib;db_d.lib;wxsqlite3_d.lib;jsoncpp_d.lib;ui_kit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -107,6 +107,7 @@
     <Xml Include="..\bin\res\login\login.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\bin\res\main_vv\friend_item.xml" />
     <Xml Include="..\bin\res\main_vv\main.xml">
       <SubType>Designer</SubType>
     </Xml>

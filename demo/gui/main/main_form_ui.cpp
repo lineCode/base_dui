@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "resource.h"
+#include "module/user/user_define.h"
+#include "module/user/user_manager.h"
+
+
 #include "main_form.h"
 //#include "util/user.h"
 //#include "callback/team/team_callback.h"
@@ -90,7 +94,7 @@ void MainForm::InitWindow()
 
 	list_friend_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_friend")));
 
-	//nim_comp::UserManager::GetInstance()->DoLoadUser();
+	nim_comp::UserManager::GetInstance()->DoLoadFriends(std::bind(&MainForm::OnGetAllFriendInfo, this, std::placeholders::_1));
 }
 
 void MainForm::OnClick(dui::TNotify& msg)
@@ -157,13 +161,13 @@ void MainForm::PopupMainMenu(POINT point)
 	clear_chat_record_ex->AttachSelect(nbase::Bind(&MainForm::ClearChatRecordMenuItemClick, this, false, std::placeholders::_1));
 
 	CMenuElementUI* clear_chat_record_p2p = (CMenuElementUI*)pMenu->FindControl(L"clear_chat_record_p2p");
-	clear_chat_record_p2p->AttachSelect(nbase::Bind(&MainForm::ClearChatRecordBySessionTypeMenuItemClick, this, true, nim::kNIMSessionTypeP2P, std::placeholders::_1));
+	clear_chat_record_p2p->AttachSelect(nbase::Bind(&MainForm::ClearChatRecordBySessionTypeMenuItemClick, this, true, kNIMSessionTypeP2P, std::placeholders::_1));
 	CMenuElementUI* clear_chat_record_p2p_ex = (CMenuElementUI*)pMenu->FindControl(L"clear_chat_record_p2p_ex");
-	clear_chat_record_p2p_ex->AttachSelect(nbase::Bind(&MainForm::ClearChatRecordBySessionTypeMenuItemClick, this, false, nim::kNIMSessionTypeP2P, std::placeholders::_1));
+	clear_chat_record_p2p_ex->AttachSelect(nbase::Bind(&MainForm::ClearChatRecordBySessionTypeMenuItemClick, this, false, kNIMSessionTypeP2P, std::placeholders::_1));
 	CMenuElementUI* clear_chat_record_team = (CMenuElementUI*)pMenu->FindControl(L"clear_chat_record_team");
-	clear_chat_record_team->AttachSelect(nbase::Bind(&MainForm::ClearChatRecordBySessionTypeMenuItemClick, this, true, nim::kNIMSessionTypeTeam, std::placeholders::_1));
+	clear_chat_record_team->AttachSelect(nbase::Bind(&MainForm::ClearChatRecordBySessionTypeMenuItemClick, this, true, kNIMSessionTypeTeam, std::placeholders::_1));
 	CMenuElementUI* clear_chat_record_team_ex = (CMenuElementUI*)pMenu->FindControl(L"clear_chat_record_team_ex");
-	clear_chat_record_team_ex->AttachSelect(nbase::Bind(&MainForm::ClearChatRecordBySessionTypeMenuItemClick, this, false, nim::kNIMSessionTypeTeam, std::placeholders::_1));
+	clear_chat_record_team_ex->AttachSelect(nbase::Bind(&MainForm::ClearChatRecordBySessionTypeMenuItemClick, this, false, kNIMSessionTypeTeam, std::placeholders::_1));
 
 	CMenuElementUI* vchat_setting = (CMenuElementUI*)pMenu->FindControl(L"vchat_setting");
 	vchat_setting->AttachSelect(nbase::Bind(&MainForm::VChatSettingMenuItemClick, this, std::placeholders::_1));
@@ -221,7 +225,7 @@ bool MainForm::LookLogMenuItemClick(ui::EventArgs* param)
 
 bool MainForm::FileTransMenuItemClick(ui::EventArgs* param)
 {
-	nim_ui::SessionManager::GetInstance()->OpenSessionBox(nim_ui::LoginManager::GetInstance()->GetAccount(), nim::kNIMSessionTypeP2P);
+	nim_ui::SessionManager::GetInstance()->OpenSessionBox(nim_ui::LoginManager::GetInstance()->GetAccount(), kNIMSessionTypeP2P);
 	return true;
 }
 
@@ -250,13 +254,13 @@ bool MainForm::ImportMsglogMenuItemClick(ui::EventArgs* param)
 
 bool MainForm::ClearChatRecordMenuItemClick(bool del_session, ui::EventArgs* param)
 {
-	nim::MsgLog::DeleteAllAsync(del_session, nim::MsgLog::DeleteAllCallback());
+	MsgLog::DeleteAllAsync(del_session, MsgLog::DeleteAllCallback());
 	return true;
 }
 
-bool MainForm::ClearChatRecordBySessionTypeMenuItemClick(bool del_session, nim::NIMSessionType type, ui::EventArgs* param)
+bool MainForm::ClearChatRecordBySessionTypeMenuItemClick(bool del_session, NIMSessionType type, ui::EventArgs* param)
 {
-	nim::MsgLog::DeleteBySessionTypeAsync(del_session, type, nim::MsgLog::DeleteBySessionTypeCallback());
+	MsgLog::DeleteBySessionTypeAsync(del_session, type, MsgLog::DeleteBySessionTypeCallback());
 	return true;
 }
 
@@ -381,7 +385,7 @@ bool MainForm::LogoffMenuItemClick(ui::EventArgs* param)
 	QCommand::Set(kCmdRestart, L"true");
 	std::wstring wacc = nbase::UTF8ToUTF16(nim_ui::LoginManager::GetInstance()->GetAccount());
 	QCommand::Set(kCmdAccount, wacc);
-	nim_ui::LoginManager::GetInstance()->DoLogout(false, nim::kNIMLogoutChangeAccout);
+	nim_ui::LoginManager::GetInstance()->DoLogout(false, kNIMLogoutChangeAccout);
 	return true;
 }
 
@@ -451,10 +455,10 @@ void MainForm::SetOnlineState()
 	if (!nim_comp::SubscribeEventManager::GetInstance()->IsEnabled())
 		return;
 
-	nim::EventData event_data = nim_ui::SubscribeEventManager::GetInstance()->CreateBusyEvent(is_busy_);
-	nim::SubscribeEvent::Publish(event_data,
-		this->ToWeakCallback([this](nim::NIMResCode res_code, int event_type, const nim::EventData& event_data){
-		if (res_code == nim::kNIMResSuccess)
+	EventData event_data = nim_ui::SubscribeEventManager::GetInstance()->CreateBusyEvent(is_busy_);
+	SubscribeEvent::Publish(event_data,
+		this->ToWeakCallback([this](NIMResCode res_code, int event_type, const EventData& event_data){
+		if (res_code == kNIMResSuccess)
 		{
 			if (is_busy_)
 				btn_online_state_->SetBkImage(L"..\\menu\\icon_busy.png");
@@ -485,5 +489,10 @@ void MainForm::PopupTrayMenu(POINT point)
 	//quit->AttachSelect(nbase::Bind(&MainForm::QuitMenuItemClick, this, std::placeholders::_1));
 	////ÏÔÊ¾
 	//pMenu->Show();
+}
+
+void MainForm::OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list)
+{
+	printf("MainForm::OnGetAllFriendInfo %d\n", list.size());
 }
 

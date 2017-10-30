@@ -24,7 +24,7 @@ bool MainForm::OnClearInputBtnClicked(ui::EventArgs* param)
 	return true;
 }
 
-void MainForm::OnUserInfoChange(const std::list<nim::UserNameCard> &uinfos)
+void MainForm::OnUserInfoChange(const std::list<UserNameCard> &uinfos)
 {
 	for (auto iter = uinfos.cbegin(); iter != uinfos.cend(); iter++)
 	{

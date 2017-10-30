@@ -3809,4 +3809,25 @@ void CPaintManager::UsedVirtualWnd(bool bUsed)
 	m_bUsedVirtualWnd = bUsed;
 }
 
+Container* CPaintManager::CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *dlg_builder/* = NULL*/)
+{
+	CDialogBuilder builder;
+
+	Control* pRoot = NULL;
+	if (GetResourceType() == UILIB_RESOURCE)
+	{
+		STRINGorID xml(_ttoi(GetSkinFile().c_str()));
+		pRoot = builder.Create(xml, _T("xml"), this, &m_PaintManager);
+	}
+	else
+		pRoot = builder.Create(GetSkinFile().c_str(), (UINT)0, this, &m_PaintManager);
+	ASSERT(pRoot);
+	if (pRoot == NULL)
+	{
+		MessageBox(NULL, _T("加载资源文件失败"), _T("Duilib"), MB_OK | MB_ICONERROR);
+		ExitProcess(1);
+		return 0;
+	}
+}
+
 } // namespace dui

@@ -1,10 +1,20 @@
 ﻿#pragma once
 
-#include "module/service/user_service.h"
-#include "tool_kits/base/memory/singleton.h"
+//#include "module/service/user_service.h"
+
+//#include "user_define.h"
 
 namespace nim_comp
 {
+
+	typedef std::function<void(int res, const std::string& err_msg)> OnRegisterAccountCallback;
+	typedef std::function<void(FriendChangeType change_type, const std::string& accid)> OnFriendListChangeCallback;
+	typedef std::function<void(const std::list<UserNameCard>&)> OnUserInfoChangeCallback;
+	typedef std::function<void(const std::list<UserNameCard>&)> OnGetUserInfoCallback;
+	typedef std::function<void(NIMResCode res)> OnUpdateUserInfoCallback;
+
+	/*const static char* g_AppServerAddress = "kAppServerAddress";
+	const static char* g_AppKey = "kAppKey";*/
 
 /** @class UserManager
   * @brief 提供用户数据获取接口
@@ -12,7 +22,7 @@ namespace nim_comp
   * @author Redrain
   * @date 2015/9/16
   */
-class NIM_UI_DLL_API UserManager
+class UserManager
 {
 public:
 	SINGLETON_DEFINE(UserManager);
@@ -30,16 +40,16 @@ public:
 
 	/**
 	* 获取本地保存的所有用户信息
-	* @return std::map<std::string, nim::UserNameCard>& 用户信息列表
+	* @return std::map<std::string, UserNameCard>& 用户信息列表
 	*/
-	const std::map<std::string, nim::UserNameCard>& GetAllUserInfos();
+	const std::map<std::string, UserNameCard>& GetAllUserInfos();
 	/**
 	* 查询本地保存的用户信息
 	* @param[in] id 用户id
 	* @param[out] info 用户信息
 	* @return bool true 查询到，false 没有查询到
 	*/
-	bool GetUserInfo(const std::string &id, nim::UserNameCard &info);
+	bool GetUserInfo(const std::string &id, UserNameCard &info);
 
 	/**
 	* 查询本地保存的用户信息
@@ -47,14 +57,14 @@ public:
 	* @param[out] uinfos 用户信息列表
 	* @return void 无返回值
 	*/
-	void GetUserInfos(const std::list<std::string> &ids, std::list<nim::UserNameCard>&uinfos);
+	void GetUserInfos(const std::list<std::string> &ids, std::list<UserNameCard>&uinfos);
 
 	/**
 	* 获取某个用户的好友类型
 	* @param[in] id 用户id
 	* @return NIMFriendFlag 好友类型
 	*/
-	nim::NIMFriendFlag GetUserType(const std::string &id);
+	NIMFriendFlag GetUserType(const std::string &id);
 
 	/**
 	* 获取好友昵称或者备注名
@@ -92,6 +102,10 @@ public:
 	*/
 	UnregisterCallback RegMiscUInfoChange(const OnUserInfoChangeCallback& callback);
 
+public:
+	void DoLoadFriends(const OnGetUserInfoCallback& cb);
+private:
+	void DoLoadFriendsAsyn(const OnGetUserInfoCallback* pcb);
 private:
 	UserManager(){};
 	~UserManager(){};
