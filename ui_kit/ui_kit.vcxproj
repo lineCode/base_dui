@@ -85,6 +85,7 @@
     <ClInclude Include="gui\msgbox\msgbox.h" />
     <ClInclude Include="gui\window\window_ex.h" />
     <ClInclude Include="kit_define.h" />
+    <ClInclude Include="main\control\friend_item.h" />
     <ClInclude Include="module\db\user_db.h" />
     <ClInclude Include="module\init\init_manager.h" />
     <ClInclude Include="module\login\login_define.h" />
@@ -104,6 +105,7 @@
     <ClCompile Include="gui\modal_wnd\file_dialog_ex.cpp" />
     <ClCompile Include="gui\msgbox\msgbox.cpp" />
     <ClCompile Include="gui\window\window_ex.cpp" />
+    <ClCompile Include="main\control\friend_item.cpp" />
     <ClCompile Include="module\db\user_db.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
     </ClCompile>

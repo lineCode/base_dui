@@ -8,8 +8,8 @@ namespace dui {
 //
 
 class Control;
-
-
+class Container;
+class IDialogBuilderCallback;
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
@@ -186,7 +186,6 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////
 //
 typedef Control* (*LPCREATECONTROL)(LPCTSTR pstrType);
-
 
 class DUILIB_API CPaintManager
 {
@@ -409,6 +408,12 @@ public:
     bool PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
 	void UsedVirtualWnd(bool bUsed);
 
+	/*static*/ Container* CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
+	/*static Box* CreateBoxWithCache(const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
+
+	static void FillBox(Box* userDefinedBox, const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
+	static void FillBoxWithCache(Box* userDefinedBox, const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());*/
+
 private:
 	PtrArray* GetFoundControls();
     static Control* CALLBACK __FindControlFromNameHash(Control* pThis, LPVOID pData);
@@ -425,12 +430,8 @@ private:
 	void AdjustImagesHSL();
 	void PostAsyncNotify();
 
-	Container* CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *dlg_builder = NULL);
-	/*static Box* CreateBox(const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
-	static Box* CreateBoxWithCache(const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
-
-	static void FillBox(Box* userDefinedBox, const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
-	static void FillBoxWithCache(Box* userDefinedBox, const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());*/
+	
+	
 
 private:
 	String m_sName;

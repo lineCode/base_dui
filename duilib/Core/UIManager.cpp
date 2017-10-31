@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include <zmouse.h>
 #include <stdlib.h>
+//#include "Core\UIDlgBuilder.h"
 
 //#include "base/util/string_util.h"
 
@@ -3809,25 +3810,26 @@ void CPaintManager::UsedVirtualWnd(bool bUsed)
 	m_bUsedVirtualWnd = bUsed;
 }
 
-Container* CPaintManager::CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *dlg_builder/* = NULL*/)
+//static
+Container* CPaintManager::CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback/* = NULL*/, CPaintManager *pManager/* = NULL*/, Control *pParent/* = NULL*/)
 {
 	CDialogBuilder builder;
 
-	Control* pRoot = NULL;
-	if (GetResourceType() == UILIB_RESOURCE)
-	{
-		STRINGorID xml(_ttoi(GetSkinFile().c_str()));
-		pRoot = builder.Create(xml, _T("xml"), this, &m_PaintManager);
-	}
-	else
-		pRoot = builder.Create(GetSkinFile().c_str(), (UINT)0, this, &m_PaintManager);
-	ASSERT(pRoot);
-	if (pRoot == NULL)
+	Container* pBox = NULL;
+	
+	Control *pRoot = builder.Create(xmlPath.c_str(), (UINT)0, pCallback, pManager);
+
+	pBox = dynamic_cast<Container*>(pRoot);
+	ASSERT(pBox);
+	if (pBox == NULL)
 	{
 		MessageBox(NULL, _T("加载资源文件失败"), _T("Duilib"), MB_OK | MB_ICONERROR);
 		ExitProcess(1);
 		return 0;
 	}
+
+
+	return pBox;
 }
 
 } // namespace dui

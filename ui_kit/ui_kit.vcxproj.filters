@@ -44,6 +44,12 @@
     <Filter Include="module\user">
       <UniqueIdentifier>{c6360deb-bf56-408d-9baa-6ce44d841ad6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="gui\main">
+      <UniqueIdentifier>{45f28601-e1da-4fee-807f-fdad70fe256a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui\main\control">
+      <UniqueIdentifier>{35a9fa02-bd6e-4a31-ba42-111322fe0fe9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gui\msgbox\msgbox.h">
@@ -93,6 +99,9 @@
     <ClInclude Include="module\user\user_manager.h">
       <Filter>module\user</Filter>
     </ClInclude>
+    <ClInclude Include="main\control\friend_item.h">
+      <Filter>gui\main\control</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\msgbox\msgbox.cpp">
@@ -131,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="module\user\user_manager.cpp">
       <Filter>module\user</Filter>
+    </ClCompile>
+    <ClCompile Include="main\control\friend_item.cpp">
+      <Filter>gui\main\control</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

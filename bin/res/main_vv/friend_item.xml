@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window>
-  <ListContainerElement class="listitem" normalcolor="bk_wnd_lightcolor" height="60">
-    <HBox padding="9,5,10,5" mouse="false">
-      <Box width="auto" height="auto" valign="center" mouse="false">
-        <ButtonBox name="head_image" width="38" height="38" borderround="38,38" margin="1,1,0,0" cursortype="hand"/>
-        <Button class="icon_headimage_mask_40x40" name="head_image_mask" mouse="false"/>
-        <!--<Control bkimage="head_mask.png" mouse="false"/>-->
-      </Box>
-      <VBox margin="10,2,0,2" mouse="false" mousechild="false">
+  <ListContainerElement bkcolor="white" width="240" height="60">
+    <HLayout padding="9,5,10,5" mouse="false">
+      <Container width="auto" height="auto" valign="center" mouse="false">
+        <Button name="head_image" width="38" height="38" borderround="38,38" margin="1,1,0,0" />
+        <Control class="icon_headimage_mask_40x40" name="head_image_mask" mouse="false"/>
+        <Control bkimage="head_mask.png" mouse="false"/>
+      </Container>
+      <VLayout margin="10,2,0,2" mouse="false" mousechild="false">
         <Control />
-        <Label name="contact" width="stretch" margin="0,0,0,4" halign="center" font="2" mouse="false" />
-        <Label name="post" font="1" mouse="false" width="stretch" text="岗位" normaltextcolor="lightcolor"/>
+        <Label name="contact" width="100" height="18" margin="0,0,0,4" halign="center" font="2" text="张阿狗"/>
+        <Label name="post" width="100"  height="18" font="1" normaltextcolor="lightcolor" text="销售顾问"/>
         <Control />
-      </VBox>
-    </HBox>
+      </VLayout>
+    </HLayout>
     <Control class="splitline_hor_level1" margin="10,0,0,0"/>
   </ListContainerElement>
 </Window>
