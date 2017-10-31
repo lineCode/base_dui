@@ -97,6 +97,23 @@ void MainForm::InitWindow()
 	nim_comp::UserManager::GetInstance()->DoLoadFriends(std::bind(&MainForm::OnGetAllFriendInfo, this, std::placeholders::_1));
 }
 
+void MainForm::Notify(dui::TNotify& msg)
+{
+	bool bHandle = false;
+
+	Control *pControl = msg.pSender;
+	String name = pControl->GetName();
+	wprintf(L"MainForm::Notify %s:%s\n", name.c_str(), msg.sType.c_str());
+	if (msg.sType == DUI_MSGTYPE_ITEMCLICK )
+	{
+		bHandle = true;
+	}
+	if (!bHandle)
+	{
+		__super::Notify(msg);
+	}
+}
+
 void MainForm::OnClick(dui::TNotify& msg)
 {
 	bool bHandle = false;
@@ -494,7 +511,7 @@ void MainForm::PopupTrayMenu(POINT point)
 void MainForm::OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list)
 {
 	printf("MainForm::OnGetAllFriendInfo %d\n", list.size());
-	for (size_t i = 0; i < list.size() && i < 4; i++)
+	for (size_t i = 0; i < list.size() /*&& i < 4*/; i++)
 	{
 		Container *frient_item = m_PaintManager.CreateBox(_T("friend_item.xml"), this, &m_PaintManager, NULL);
 

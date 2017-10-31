@@ -18,6 +18,8 @@ public:
 	virtual LPCTSTR GetWindowClassName() const override;
 	virtual LPCTSTR GetWindowId() const override;
 	virtual UINT GetClassStyle() const override;
+
+	virtual void Notify(dui::TNotify& msg) override;
 	
 	/**
 	* 处理窗口销毁消息

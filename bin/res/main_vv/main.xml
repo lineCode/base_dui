@@ -32,7 +32,7 @@
       <Control class="splitline_hor_level1"/>
       <TabLayout name="tab_session_friend">
         <List name="list_session" bkcolor="white"/>
-        <List name="list_friend" bkcolor="gray"/>
+        <List class="list" name="list_friend" />
         <List name="list_group" bkcolor="main_blue"/>
       </TabLayout>
     </VLayout>

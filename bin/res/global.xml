@@ -55,6 +55,7 @@
   <Color name="bk_main_wnd_title" value="#ff238efa"/>
   <Color name="bk_main_wnd_search" value="#ff1e7ad7"/>
   <Color name="bk_wnd_darkcolor" value="#fff0f2f5"/>
+  <Color name="bk_wnd_darkcolor2" value="#ffe0e2e5"/>
   <Color name="bk_wnd_lightcolor" value="#ffffffff"/>
   <Color name="bk_wnd_logincolor" value="#fffafbfc"/>
   <Color name="bk_menuitem_hovered" value="#ffe1e6eb"/>
@@ -237,7 +238,7 @@
   <Class name="checkbox_team_headimage_mask_52x52" value="width=&quot;52&quot; height=&quot;52&quot; bkimage=&quot;&quot; normalimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_normal.png&quot; hotimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_hover.png&quot; pushedimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_hover.png&quot; selectednormalimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_hover.png&quot; selectedhotimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_hover.png&quot; selectedpushedimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_hover.png&quot;"/>
 
   <!--list-->
-  <Class name="list" value="bkcolor=&quot;bk_wnd_lightcolor&quot; vscrollbar=&quot;true&quot;"/>
+  <Class name="list" value="bkcolor=&quot;bk_wnd_lightcolor&quot; vscrollbar=&quot;true&quot; itembkcolor=&quot;&quot; itemhotbkcolor=&quot;bk_wnd_darkcolor&quot; itemselectedbkcolor=&quot;bk_wnd_darkcolor2&quot;"/>
   <Class name="listitem" value="hotcolor=&quot;bk_listitem_hovered&quot; pushedcolor=&quot;bk_listitem_selected&quot; selectednormalcolor=&quot;bk_listitem_selected&quot; fadehot=&quot;false&quot;"/>
   <Class name="list_topitem" value="normalcolor=&quot;bk_topitem_normal&quot; hotcolor=&quot;bk_topitem_hovered&quot; pushedcolor=&quot;bk_topitem_selected&quot; selectednormalcolor=&quot;bk_topitem_selected&quot; fadehot=&quot;false&quot;"/>
 
