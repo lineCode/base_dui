@@ -2,7 +2,7 @@
 #include "resource.h"
 #include "module/user/user_define.h"
 #include "module/user/user_manager.h"
-
+#include "gui/main/control/friend_item.h"
 
 #include "main_form.h"
 //#include "util/user.h"
@@ -511,12 +511,17 @@ void MainForm::PopupTrayMenu(POINT point)
 void MainForm::OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list)
 {
 	printf("MainForm::OnGetAllFriendInfo %d\n", list.size());
-	for (size_t i = 0; i < list.size() /*&& i < 4*/; i++)
-	{
-		Container *frient_item = m_PaintManager.CreateBox(_T("friend_item.xml"), this, &m_PaintManager, NULL);
 
-		list_friend_->Add(frient_item);
+	clock_t ck1 = clock();
+
+	for (auto it = list.cbegin(); it != list.cend(); it++)
+	{
+		nim_comp::FriendItem *item = new nim_comp::FriendItem(*it);
+		m_PaintManager.FillBox(item, _T("friend_item.xml"), this, &m_PaintManager, NULL);
+		list_friend_->Add(item);
+
 	}
-	
+	printf("load friends ui %d ms\n", clock()-ck1);
+
 }
 

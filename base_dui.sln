@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "json", "json", "{8477D664-1
 		third_party\jsoncpp\include\json\writer.h = third_party\jsoncpp\include\json\writer.h
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "debug_dui_demo", "debug_dui_demo\debug_dui_demo.vcxproj", "{34A879C9-6244-49FB-8480-944CD6775906}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -137,6 +139,18 @@ Global
 		{745E6452-9FE1-435B-833A-767617EEE1DA}.UnicodeRelease|Win32.Build.0 = Release|Win32
 		{745E6452-9FE1-435B-833A-767617EEE1DA}.UnicodeRelease|x64.ActiveCfg = Release|x64
 		{745E6452-9FE1-435B-833A-767617EEE1DA}.UnicodeRelease|x64.Build.0 = Release|x64
+		{34A879C9-6244-49FB-8480-944CD6775906}.Debug|Win32.ActiveCfg = Debug|Win32
+		{34A879C9-6244-49FB-8480-944CD6775906}.Debug|Win32.Build.0 = Debug|Win32
+		{34A879C9-6244-49FB-8480-944CD6775906}.Debug|x64.ActiveCfg = Debug|Win32
+		{34A879C9-6244-49FB-8480-944CD6775906}.Release|Win32.ActiveCfg = Release|Win32
+		{34A879C9-6244-49FB-8480-944CD6775906}.Release|Win32.Build.0 = Release|Win32
+		{34A879C9-6244-49FB-8480-944CD6775906}.Release|x64.ActiveCfg = Release|Win32
+		{34A879C9-6244-49FB-8480-944CD6775906}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
+		{34A879C9-6244-49FB-8480-944CD6775906}.UnicodeDebug|Win32.Build.0 = Debug|Win32
+		{34A879C9-6244-49FB-8480-944CD6775906}.UnicodeDebug|x64.ActiveCfg = Debug|Win32
+		{34A879C9-6244-49FB-8480-944CD6775906}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
+		{34A879C9-6244-49FB-8480-944CD6775906}.UnicodeRelease|Win32.Build.0 = Release|Win32
+		{34A879C9-6244-49FB-8480-944CD6775906}.UnicodeRelease|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

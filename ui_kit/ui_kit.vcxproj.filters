@@ -99,7 +99,7 @@
     <ClInclude Include="module\user\user_manager.h">
       <Filter>module\user</Filter>
     </ClInclude>
-    <ClInclude Include="main\control\friend_item.h">
+    <ClInclude Include="gui\main\control\friend_item.h">
       <Filter>gui\main\control</Filter>
     </ClInclude>
   </ItemGroup>
@@ -141,7 +141,7 @@
     <ClCompile Include="module\user\user_manager.cpp">
       <Filter>module\user</Filter>
     </ClCompile>
-    <ClCompile Include="main\control\friend_item.cpp">
+    <ClCompile Include="gui\main\control\friend_item.cpp">
       <Filter>gui\main\control</Filter>
     </ClCompile>
   </ItemGroup>

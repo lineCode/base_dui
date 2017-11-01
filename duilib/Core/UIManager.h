@@ -13,36 +13,6 @@ class IDialogBuilderCallback;
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-typedef enum EVENTTYPE_UI
-{
-    UIEVENT__FIRST = 1,
-    UIEVENT__KEYBEGIN,			//2
-    UIEVENT_KEYDOWN,
-    UIEVENT_KEYUP,
-    UIEVENT_CHAR,
-    UIEVENT_SYSKEY,
-    UIEVENT__KEYEND,			//7
-    UIEVENT__MOUSEBEGIN,		//8
-    UIEVENT_MOUSEMOVE,
-    UIEVENT_MOUSELEAVE,
-    UIEVENT_MOUSEENTER,
-    UIEVENT_MOUSEHOVER,
-    UIEVENT_BUTTONDOWN,
-    UIEVENT_BUTTONUP,
-    UIEVENT_RBUTTONDOWN,
-    UIEVENT_DBLCLICK,
-    UIEVENT_CONTEXTMENU,
-    UIEVENT_SCROLLWHEEL,
-    UIEVENT__MOUSEEND,			//19
-    UIEVENT_KILLFOCUS,
-    UIEVENT_SETFOCUS,
-    UIEVENT_WINDOWSIZE,
-    UIEVENT_SETCURSOR,
-    UIEVENT_TIMER,
-    UIEVENT_NOTIFY,
-    UIEVENT_COMMAND,
-    UIEVENT__LAST,
-};
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -147,20 +117,6 @@ typedef struct DUILIB_API tagTResInfo
 	StringPtrMap m_AttrHash;			//"Default" + "Class"
 	StringPtrMap m_MultiLanguageHash;
 } TResInfo;
-
-// Structure for notifications from the system
-// to the control implementation.
-typedef struct DUILIB_API tagTEventUI
-{
-    int Type;
-    Control* pSender;
-    DWORD dwTimestamp;
-    POINT ptMouse;
-    TCHAR chKey;
-    WORD wKeyState;
-    WPARAM wParam;
-    LPARAM lParam;
-} TEvent;
 
 // Listener interface
 class DUILIB_API INotify
@@ -409,10 +365,10 @@ public:
 	void UsedVirtualWnd(bool bUsed);
 
 	/*static*/ Container* CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
-	/*static Box* CreateBoxWithCache(const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
+	//static Box* CreateBoxWithCache(const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
 
-	static void FillBox(Box* userDefinedBox, const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
-	static void FillBoxWithCache(Box* userDefinedBox, const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());*/
+	/*static */bool FillBox(Container* pFilledContainer, const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
+	//static void FillBoxWithCache(Box* userDefinedBox, const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
 
 private:
 	PtrArray* GetFoundControls();

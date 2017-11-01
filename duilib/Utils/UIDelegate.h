@@ -2,9 +2,30 @@
 #define __UIDELEGATE_H__
 
 #pragma once
+#include "Core/UIDefine.h"
 
 namespace dui {
+#if 0
+	typedef std::function<bool(TEvent*)> EventCallback;
 
+	class DUILIB_API CEventSource
+	{
+		typedef bool(*FnType)(TEvent*);
+	public:
+		~CEventSource();
+		operator bool();
+		void operator+= (const EventCallback& d); // add const for gcc
+		void operator+= (FnType pFn);
+		void operator-= (const EventCallback& d);
+		void operator-= (FnType pFn);
+		bool operator() (TEvent* param);
+
+	protected:
+		PtrArray m_aDelegates;
+	};
+	
+	typedef std::map<EVENTTYPE_UI, CEventSource> EventMap;
+#else
 class DUILIB_API CDelegateBase	 
 {
 public:
@@ -92,7 +113,7 @@ public:
 protected:
     PtrArray m_aDelegates;
 };
-
+#endif
 } // namespace dui
 
 #endif // __UIDELEGATE_H__

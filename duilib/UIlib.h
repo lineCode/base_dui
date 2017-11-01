@@ -69,6 +69,7 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <string>
+#include <functional>
 
 #ifdef _UNICODE
 typedef std::wstring String;

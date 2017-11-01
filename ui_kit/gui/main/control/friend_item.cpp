@@ -8,9 +8,9 @@ using namespace dui;
 
 namespace nim_comp
 {
-	FriendItem::FriendItem()
+	FriendItem::FriendItem(const UserNameCard &info)
 	{
-
+		info_ = info;
 	}
 
 	FriendItem::~FriendItem()
@@ -25,6 +25,17 @@ namespace nim_comp
 		contact_ = (Label*) this->FindSubControl(L"contact");
 		post_ = (Label*) this->FindSubControl(L"post");
 		post_->SetVisible(false);
+
+		wstring wname, wmobile;
+		nbase::win32::MBCSToUnicode(info_.GetName(), wname, CP_UTF8);
+		contact_->SetText(wname.c_str());
+
+		if (!info_.GetMobile().empty())
+		{
+			nbase::win32::MBCSToUnicode(info_.GetMobile(), wmobile, CP_UTF8);
+			post_->SetVisible(true);
+			post_->SetText(wmobile.c_str());
+		}
 
 		//is_team_ = is_team;
 		//id_ = accid;

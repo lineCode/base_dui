@@ -16,17 +16,21 @@ class DUILIB_API CDialogBuilder
 {
 public:
     CDialogBuilder();
+
+	/*ps: func 'Create' and '_Parse'
+	when call CPaintManager::FillBox(Container* pFilledContainer, ...), pass pFilledContainer to last param of this func;
+	when pFilledContainer is null, the same as you known;*/
     Control* Create(STRINGorID xml, LPCTSTR type = NULL, IDialogBuilderCallback* pCallback = NULL,
-        CPaintManager* pManager = NULL, Control* pParent = NULL);
+        CPaintManager* pManager = NULL, Control* pParent = NULL, Container *pFilledContainer = NULL);
     Control* Create(IDialogBuilderCallback* pCallback = NULL, CPaintManager* pManager = NULL,
-        Control* pParent = NULL);
+		Control* pParent = NULL, Container *pFilledContainer = NULL);
 
     CMarkup* GetMarkup();
 
     void GetLastErrorMessage(LPTSTR pstrMessage, SIZE_T cchMax) const;
     void GetLastErrorLocation(LPTSTR pstrSource, SIZE_T cchMax) const;
 private:
-    Control* _Parse(CMarkupNode* parent, Control* pParent = NULL, CPaintManager* pManager = NULL);
+	Control* _Parse(CMarkupNode* parent, Control* pParent = NULL, CPaintManager* pManager = NULL, Container *pFilledContainer = NULL);
 
     CMarkup m_xml;
     IDialogBuilderCallback* m_pCallback;

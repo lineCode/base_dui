@@ -1,6 +1,6 @@
 #pragma once
 
-//#include "shared/pin_yin_helper.h"
+#include "module/user/user_define.h"
 
 namespace nim_comp
 {
@@ -10,10 +10,10 @@ namespace nim_comp
   * @author towik
   * @date 2015/1/1
   */
-class FriendItem : public dui::TreeNode
+class FriendItem : public dui::ListContainerElement
 {
 public:
-	FriendItem();
+	FriendItem(const UserNameCard &info);
 	virtual ~FriendItem();
 	virtual void Init();
 	/*bool GetIsTeam() const
@@ -65,11 +65,12 @@ private:
 	std::string		neteaseid_;
 
 	std::wstring	nick_name_;
-	std::string	post_name_;
+	std::string		post_name_;
 	UTF8String		nick_name_full_spell_;
 	UTF8String		nick_name_simple_spell_;
 	std::string		head_image;
 
 	//AutoUnregister unregister_cb;
+	UserNameCard	info_;
 };
 }
