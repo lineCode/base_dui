@@ -877,7 +877,7 @@ void ScrollBar::DoEvent(TEvent& event)
 
 void ScrollBar::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-	if( _tcscmp(pstrName, _T("button1color")) == 0 ) {
+	/*if( _tcscmp(pstrName, _T("button1color")) == 0 ) {
 		while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);
 		DWORD clrColor = m_pManager->GetColor(pstrValue);
 		if (clrColor == 0)
@@ -888,11 +888,11 @@ void ScrollBar::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		}
 		SetButton1Color(clrColor);
 	}
-	else if( _tcscmp(pstrName, _T("button1normalimage")) == 0 ) SetButton1NormalImage(pstrValue);
+	else */if( _tcscmp(pstrName, _T("button1normalimage")) == 0 ) SetButton1NormalImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button1hotimage")) == 0 ) SetButton1HotImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button1pushedimage")) == 0 ) SetButton1PushedImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button1disabledimage")) == 0 ) SetButton1DisabledImage(pstrValue);
-	else if( _tcscmp(pstrName, _T("button2color")) == 0 ) {
+	/*else if( _tcscmp(pstrName, _T("button2color")) == 0 ) {
 		while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);
 		DWORD clrColor = m_pManager->GetColor(pstrValue);
 		if (clrColor == 0)
@@ -902,12 +902,12 @@ void ScrollBar::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 			clrColor = _tcstoul(pstrValue, &pstr, 16);
 		}
 		SetButton2Color(clrColor);
-	}
+	}*/
 	else if( _tcscmp(pstrName, _T("button2normalimage")) == 0 ) SetButton2NormalImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button2hotimage")) == 0 ) SetButton2HotImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button2pushedimage")) == 0 ) SetButton2PushedImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button2disabledimage")) == 0 ) SetButton2DisabledImage(pstrValue);
-	else if( _tcscmp(pstrName, _T("thumbcolor")) == 0 ) {
+	/*else if( _tcscmp(pstrName, _T("thumbcolor")) == 0 ) {
 		while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);
 		DWORD clrColor = m_pManager->GetColor(pstrValue);
 		if (clrColor == 0)
@@ -917,7 +917,7 @@ void ScrollBar::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 			clrColor = _tcstoul(pstrValue, &pstr, 16);
 		}
 		SetThumbColor(clrColor);
-	}
+	}*/
 	else if( _tcscmp(pstrName, _T("thumbnormalimage")) == 0 ) SetThumbNormalImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("thumbhotimage")) == 0 ) SetThumbHotImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("thumbpushedimage")) == 0 ) SetThumbPushedImage(pstrValue);

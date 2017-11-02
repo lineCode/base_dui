@@ -16,7 +16,12 @@ namespace dui {
 
 		virtual bool Activate();
 		virtual void DoEvent(TEvent& event) override;
-
+#if MODE_EVENTMAP
+		void AttachClick(const EventCallback& callback)
+		{
+			OnEvent[UIEVENT_CLICK] += callback;
+		}
+#endif
 	protected:
 		UINT m_uButtonState;
 	};

@@ -20,7 +20,15 @@ namespace nim_comp
 
 	void FriendItem::Init()
 	{
-		//this->AttachClick(nbase::Bind(&FriendItem::OnClicked, this, std::placeholders::_1));
+#if MODE_EVENTMAP
+		auto OnItemClick = [this](void *param){
+			TEvent *event = static_cast<TEvent *>(param);
+			printf("FriendItem OnItemClick, name:%s, phone:%s\n", event->pSender->GetName().c_str(), info_.GetMobile().c_str());
+			return false;
+		};
+		this->AttachItemClick(std::bind(OnItemClick, std::placeholders::_1));
+#endif
+		
 
 		contact_ = (Label*) this->FindSubControl(L"contact");
 		post_ = (Label*) this->FindSubControl(L"post");
@@ -36,7 +44,18 @@ namespace nim_comp
 			post_->SetVisible(true);
 			post_->SetText(wmobile.c_str());
 		}
-
+#if MODE_EVENTMAP
+		dui::Button *btn_friend_head = dynamic_cast<dui::Button *>(FindSubControl(L"btn_friend_head"));
+		if (btn_friend_head)
+		{
+			auto OnFriendHeadClicked = [this](void* param){
+				TEvent *event = static_cast<TEvent *>(param);
+				printf("FriendItem OnFriendHeadClicked, name:%s, phone:%s\n", event->pSender->GetName().c_str(), info_.GetMobile().c_str());
+				return false; };
+			
+			btn_friend_head->AttachClick(std::bind(OnFriendHeadClicked, std::placeholders::_1));
+		}
+#endif
 		//is_team_ = is_team;
 		//id_ = accid;
 
@@ -100,6 +119,12 @@ namespace nim_comp
 		//	unregister_cb.Add(PhotoService::GetInstance()->RegPhotoReady(nbase::Bind(&FriendItem::OnUserPhotoReady, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 		//}
 	}
+
+	/*bool FriendItem::OnFriendHeadClicked(void *param)
+	{
+		printf("FriendItem OnFriendHeadClicked, phone:%s\n", info_.GetMobile().c_str());
+		return false;
+	}*/
 #if 0
 	bool FriendItem::OnClicked(ui::EventArgs* arg)
 	{

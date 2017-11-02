@@ -11,6 +11,8 @@ namespace dui
 
 #define SCROLLBAR_LINESIZE      8
 
+#define MODE_EVENTMAP	1
+
 enum DuiSig
 {
 	DuiSig_end = 0, // [marks end of message map]
@@ -43,6 +45,23 @@ typedef enum EVENTTYPE_UI
 	UIEVENT_SETFOCUS,
 	UIEVENT_WINDOWSIZE,
 	UIEVENT_SETCURSOR,
+#if MODE_EVENTMAP		
+	UIEVENT_CLICK,
+	UIEVENT_ITEMCLICK,
+	UIEVENT_SELECT,
+	UIEVENT_UNSELECT,
+	UIEVENT_TEXTCHANGE,
+	UIEVENT_CUSTOMLINKCLICK,
+
+	UIEVENT_SCROLLCHANGE,
+
+	UIEVENT_VALUECHANGE,
+	UIEVENT_RETURN,
+	UIEVENT_TAB,
+	UIEVENT_WINDOWCLOSE,
+
+	UIEVENT_RESIZE,
+#endif
 	UIEVENT_TIMER,
 	UIEVENT_NOTIFY,
 	UIEVENT_COMMAND,
@@ -56,7 +75,7 @@ class Control;
 // to the control implementation.
 typedef struct tagTEventUI
 {
-	int Type;
+	EVENTTYPE_UI Type;
 	Control* pSender;
 	DWORD dwTimestamp;
 	POINT ptMouse;
@@ -64,6 +83,9 @@ typedef struct tagTEventUI
 	WORD wKeyState;
 	WPARAM wParam;
 	LPARAM lParam;
+	tagTEventUI(){
+		Type = UIEVENT__FIRST; pSender = NULL; ptMouse = {}; dwTimestamp = chKey = wKeyState = wParam = lParam = 0;
+	}
 } TEvent;
 
 // Structure for notifications to the outside world
@@ -76,6 +98,9 @@ typedef struct tagTNotifyUI
 	POINT ptMouse;
 	WPARAM wParam;
 	LPARAM lParam;
+	tagTNotifyUI(){
+		pSender = NULL; ptMouse = {}; dwTimestamp = wParam = lParam = 0;
+	}
 } TNotify;
 
 class CNotifyPump;
@@ -121,7 +146,7 @@ union DuiMessageMapFunctions
 #define DUI_MSGTYPE_SHOWACTIVEX            (_T("showactivex"))
 
 #define DUI_MSGTYPE_ITEMCOLLAPSE           (_T("itemcollapse"))
-#define DUI_MSGTYPE_ITEMACTIVATE           (_T("itemactivate"))
+//#define DUI_MSGTYPE_ITEMACTIVATE           (_T("itemactivate"))
 #define DUI_MSGTYPE_VALUECHANGED           (_T("valuechanged"))
 
 #define DUI_MSGTYPE_SELECTCHANGED 		   (_T("selectchanged"))

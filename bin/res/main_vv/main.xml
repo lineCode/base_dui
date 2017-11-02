@@ -4,7 +4,7 @@
   <HLayout bkcolor="white" >
     <VLayout width="60" bkcolor="main_blue">
       <Container width="40" height="40" margin="10,10,10,10" >
-        <Button name="button_head" width="40" height="40" borderround="40,40" bkcolor=""/>
+        <Button name="btn_head" width="40" height="40" borderround="40,40" bkcolor=""/>
         <Control width="40" height="40" bkimage="head_mask.png" mouse="false"/>
       </Container>
       <ButtonContainer name="btnbox_opt_session" width="40" height="40" margin="10,5,10,0" padding="" mousechild="">

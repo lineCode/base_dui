@@ -620,7 +620,6 @@ namespace dui
 
 	void Container::SetPos(RECT rc, bool bNeedInvalidate)
 	{
-		
 #if 1
 		Control::SetPos(rc, bNeedInvalidate);
 		rc = m_rcItem;

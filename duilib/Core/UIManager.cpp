@@ -821,7 +821,7 @@ bool CPaintManager::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, L
     case WM_SYSKEYDOWN:
         {
            if( m_pFocus != NULL ) {
-               TEvent event = { 0 };
+               TEvent event/* = { UIEVENT__FIRST }*/;
                event.Type = UIEVENT_SYSKEY;
 			   event.pSender = m_pFocus;
                event.chKey = (TCHAR)wParam;
@@ -922,7 +922,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
     case WM_CLOSE:
         {
             // Make sure all matching "closing" events are sent
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.ptMouse = m_ptLastMousePos;
 			event.wKeyState = MapKeyState();
             event.dwTimestamp = ::GetTickCount();
@@ -1240,7 +1240,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
     case WM_SIZE:
         {
             if( m_pFocus != NULL ) {
-                TEvent event = { 0 };
+                TEvent event/* = { UIEVENT__FIRST }*/;
                 event.Type = UIEVENT_WINDOWSIZE;
                 event.pSender = m_pFocus;
                 event.wParam = wParam;
@@ -1266,7 +1266,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
             for( int i = 0; i < m_aTimers.GetSize(); i++ ) {
                 const TIMERINFO* pTimer = static_cast<TIMERINFO*>(m_aTimers[i]);
                 if( pTimer->hWnd == m_hWndPaint && pTimer->uWinTimer == LOWORD(wParam) && pTimer->bKilled == false) {
-                    TEvent event = { 0 };
+                    TEvent event/* = { UIEVENT__FIRST }*/;
                     event.Type = UIEVENT_TIMER;
                     event.pSender = pTimer->pSender;
                     event.dwTimestamp = ::GetTickCount();
@@ -1297,7 +1297,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
             if (pHover == NULL) break;
             // Generate mouse hover event
             if (m_pEventHover != NULL) {
-                TEvent event = { 0 };
+                TEvent event/* = { UIEVENT__FIRST }*/;
                 event.Type = UIEVENT_MOUSEHOVER;
                 event.pSender = m_pEventHover;
                 event.wParam = wParam;
@@ -1392,7 +1392,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
             m_ptLastMousePos = pt;
             Control* pNewHover = FindControl(pt);
             if( pNewHover != NULL && pNewHover->GetManager() != this ) break;
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.ptMouse = pt;
             event.wParam = wParam;
             event.lParam = lParam;
@@ -1450,7 +1450,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
             m_pEventClick = pControl;
             pControl->SetFocus();
             SetCapture();
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.Type = UIEVENT_BUTTONDOWN;
             event.pSender = pControl;
             event.wParam = wParam;
@@ -1470,7 +1470,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
             if( pControl == NULL ) break;
             if( pControl->GetManager() != this ) break;
             SetCapture();
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.Type = UIEVENT_DBLCLICK;
             event.pSender = pControl;
             event.ptMouse = pt;
@@ -1486,7 +1486,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
             m_ptLastMousePos = pt;
             if( m_pEventClick == NULL ) break;
             ReleaseCapture();
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.Type = UIEVENT_BUTTONUP;
             event.pSender = m_pEventClick;
             event.wParam = wParam;
@@ -1515,7 +1515,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
             if( pControl == NULL ) break;
             if( pControl->GetManager() != this ) break;
             pControl->SetFocus();
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.Type = UIEVENT_RBUTTONDOWN;
             event.pSender = pControl;
             event.wParam = wParam;
@@ -1535,7 +1535,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
             ::ScreenToClient(m_hWndPaint, &pt);
             m_ptLastMousePos = pt;
             if( m_pEventClick == NULL ) break;
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.Type = UIEVENT_CONTEXTMENU;
             event.pSender = m_pEventClick;
             event.ptMouse = pt;
@@ -1556,7 +1556,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
             if( pControl == NULL ) break;
             if( pControl->GetManager() != this ) break;
             int zDelta = (int) (short) HIWORD(wParam);
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.Type = UIEVENT_SCROLLWHEEL;
             event.pSender = pControl;
             event.wParam = MAKELPARAM(zDelta < 0 ? SB_LINEDOWN : SB_LINEUP, 0);
@@ -1574,7 +1574,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
         {
             if( m_pRoot == NULL ) break;
             if( m_pFocus == NULL ) break;
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.Type = UIEVENT_CHAR;
             event.pSender = m_pFocus;
             event.wParam = wParam;
@@ -1590,7 +1590,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
         {
             if( m_pRoot == NULL ) break;
             if( m_pFocus == NULL ) break;
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.Type = UIEVENT_KEYDOWN;
             event.pSender = m_pFocus;
             event.wParam = wParam;
@@ -1607,7 +1607,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
         {
             if( m_pRoot == NULL ) break;
             if( m_pEventKey == NULL ) break;
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.Type = UIEVENT_KEYUP;
             event.pSender = m_pEventKey;
             event.wParam = wParam;
@@ -1632,7 +1632,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
             Control* pControl = FindControl(pt);
             if( pControl == NULL ) break;
             if( (pControl->GetControlFlags() & UIFLAG_SETCURSOR) == 0 ) break;
-            TEvent event = { 0 };
+            TEvent event/* = { UIEVENT__FIRST }*/;
             event.Type = UIEVENT_SETCURSOR;
             event.pSender = pControl;
             event.wParam = wParam;
@@ -1904,7 +1904,7 @@ void CPaintManager::SetFocus(Control* pControl, bool bFocusWnd)
     // Remove focus from old control
     if( m_pFocus != NULL ) 
     {
-        TEvent event = { 0 };
+        TEvent event/* = { UIEVENT__FIRST }*/;
         event.Type = UIEVENT_KILLFOCUS;
         event.pSender = pControl;
         event.dwTimestamp = ::GetTickCount();
@@ -1920,7 +1920,7 @@ void CPaintManager::SetFocus(Control* pControl, bool bFocusWnd)
         && pControl->IsEnabled() ) 
     {
         m_pFocus = pControl;
-        TEvent event = { 0 };
+        TEvent event/* = { UIEVENT__FIRST }*/;
         event.Type = UIEVENT_SETFOCUS;
         event.pSender = pControl;
         event.dwTimestamp = ::GetTickCount();
@@ -1934,7 +1934,7 @@ void CPaintManager::SetFocusNeeded(Control* pControl)
     if (!m_bNoActivate) ::SetFocus(m_hWndPaint);
     if( pControl == NULL ) return;
     if( m_pFocus != NULL ) {
-        TEvent event = { 0 };
+        TEvent event/* = { UIEVENT__FIRST }*/;
         event.Type = UIEVENT_KILLFOCUS;
         event.pSender = pControl;
         event.dwTimestamp = ::GetTickCount();

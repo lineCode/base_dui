@@ -171,16 +171,70 @@ public:
 	//ÐéÄâ´°¿Ú²ÎÊý
 	void SetVirtualWnd(LPCTSTR pstrValue);
 	String GetVirtualWnd() const;
+#if MODE_EVENTMAP
+	void AttachMouseEnter(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_MOUSEENTER] += callback;
+	}
 
+	void AttachMouseLeave(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_MOUSELEAVE] += callback;
+	}
+
+	void AttachMouseHover(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_MOUSEHOVER] += callback;
+	}
+
+	void AttachButtonDown(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_BUTTONDOWN] += callback;
+	}
+
+	void AttachButtonUp(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_BUTTONUP] += callback;
+	}
+
+	void AttachSetFocus(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_SETFOCUS] += callback;
+	}
+
+	void AttachKillFocus(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_KILLFOCUS] += callback;
+	}
+
+	void AttachMenu(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_CONTEXTMENU] += callback;
+	}
+
+	void AttachResize(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_RESIZE] += callback;
+	}
+#endif
 public:
-    CEventSource OnInit;
-    CEventSource OnDestroy;
-    CEventSource OnSize;
-    CEventSource OnEvent;
-    CEventSource OnNotify;
+#if !MODE_EVENTMAP
+	CEventSource OnInit;
+	CEventSource OnDestroy;
+	CEventSource OnSize;
+	CEventSource OnNotify;
 	CEventSource OnPaint;
 	CEventSource OnPostPaint;
-
+	CEventSource OnEvent;
+#else
+	CEventSource OnInit;
+	CEventSource OnDestroy;
+	//CEventSource OnSize;
+	CEventSource OnNotify;
+	CEventSource OnPaint;
+	CEventSource OnPostPaint;
+	EventMap	OnEvent;
+#endif
 protected:
     CPaintManager* m_pManager;
     Control* m_pParent;

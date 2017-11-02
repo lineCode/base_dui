@@ -778,11 +778,11 @@ namespace dui
 
         TreeNode* pTreeNode = static_cast<TreeNode*>(pControl->GetInterface(DUI_CTR_TREENODE));
         if (pTreeNode == NULL) return false;
-
+#if !MODE_EVENTMAP
 		pTreeNode->OnNotify += MakeDelegate(this,&TreeView::OnDBClickItem);
 		pTreeNode->GetFolderButton()->OnNotify += MakeDelegate(this,&TreeView::OnFolderChanged);
 		pTreeNode->GetCheckBox()->OnNotify += MakeDelegate(this,&TreeView::OnCheckBoxChanged);
-
+#endif
 		pTreeNode->SetVisibleFolderBtn(m_bVisibleFolderBtn);
 		pTreeNode->SetVisibleCheckBtn(m_bVisibleCheckBtn);
 		if(m_uItemMinWidth > 0)	pTreeNode->SetMinWidth(m_uItemMinWidth);
@@ -858,11 +858,11 @@ namespace dui
 
         TreeNode* pParent = static_cast<TreeNode*>(GetItemAt(iIndex));
         if(!pParent) return -1;
-
+#if !MODE_EVENTMAP
         pTreeNode->OnNotify += MakeDelegate(this,&TreeView::OnDBClickItem);
         pTreeNode->GetFolderButton()->OnNotify += MakeDelegate(this,&TreeView::OnFolderChanged);
         pTreeNode->GetCheckBox()->OnNotify += MakeDelegate(this,&TreeView::OnCheckBoxChanged);
-
+#endif
         pTreeNode->SetVisibleFolderBtn(m_bVisibleFolderBtn);
         pTreeNode->SetVisibleCheckBtn(m_bVisibleCheckBtn);
 

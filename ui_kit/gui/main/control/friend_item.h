@@ -56,6 +56,8 @@ private:
 	void OnTeamNameChange(const nim::TeamInfo& user_info);
 	void OnUserPhotoReady(PhotoType type, const std::string& tid, const std::wstring &photo_path);*/
 
+protected:
+	//bool OnFriendHeadClicked(void *param);
 private:
 	dui::Label*		contact_;
 	dui::Label*		post_;

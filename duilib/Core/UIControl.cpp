@@ -334,7 +334,15 @@ void Control::SetPos(RECT rc, bool bNeedInvalidate)
 
     if( !m_bSetPos ) {
         m_bSetPos = true;
-        if( OnSize ) OnSize(this);
+#if MODE_EVENTMAP
+		if (OnEvent.find(UIEVENT_RESIZE) != OnEvent.cend())
+		{
+			OnEvent.find(UIEVENT_RESIZE)->second(this);
+		}
+#else
+        if( OnSize ) 
+			OnSize(this);
+#endif
         m_bSetPos = false;
     }
     
@@ -816,7 +824,12 @@ DWORD Control::GetAdjustColor(DWORD dwColor)
 void Control::Init()
 {
     DoInit();
-    if( OnInit ) OnInit(this);
+#if MODE_EVENTMAP
+	
+#else
+    if( OnInit ) 
+		OnInit(this);
+#endif
 }
 
 void Control::DoInit()
@@ -826,7 +839,15 @@ void Control::DoInit()
 
 void Control::Event(TEvent& event)
 {
+#if MODE_EVENTMAP
+	auto it = OnEvent.find(event.Type);
+	if (it == OnEvent.cend() || it->second(&event))
+	{
+		DoEvent(event);
+	}
+#else
     if( OnEvent(&event) ) DoEvent(event);
+#endif
 }
 
 void Control::DoEvent(TEvent& event)

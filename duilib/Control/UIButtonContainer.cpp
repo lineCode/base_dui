@@ -100,6 +100,16 @@ namespace dui{
 	bool ButtonContainer::Activate()
 	{
 		if (!Control::Activate()) return false;
+#if MODE_EVENTMAP
+		if (OnEvent.find(UIEVENT_CLICK) != OnEvent.cend()){
+			TEvent event;
+			event.Type = UIEVENT_CLICK;
+			event.pSender = this;
+			if (!OnEvent.find(UIEVENT_CLICK)->second(&event)){
+				return false;
+			}
+		}
+#endif
 		if (m_pManager != NULL) m_pManager->SendNotify(this, DUI_MSGTYPE_CLICK);
 		return true;
 	}

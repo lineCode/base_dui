@@ -458,6 +458,12 @@ public:
 
     SIZE EstimateSize(SIZE szAvailable);
 
+#if MODE_EVENTMAP
+	void AttachItemClick(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_ITEMCLICK] += callback;
+	}
+#endif
 protected:
     int m_iIndex;
     int m_iDrawIndex;

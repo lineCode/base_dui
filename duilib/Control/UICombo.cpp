@@ -280,7 +280,7 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     else if( uMsg == WM_MOUSEWHEEL ) {
         int zDelta = (int) (short) HIWORD(wParam);
-        TEvent event = { 0 };
+        TEvent event/* = { UIEVENT__FIRST }*/;
         event.Type = UIEVENT_SCROLLWHEEL;
         event.wParam = MAKELPARAM(zDelta < 0 ? SB_LINEDOWN : SB_LINEUP, 0);
         event.lParam = lParam;

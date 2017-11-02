@@ -76,7 +76,8 @@ namespace dui
 		if( event.Type == UIEVENT_BUTTONUP )
 		{
 			if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) {
-				if( ::PtInRect(&m_rcItem, event.ptMouse) && IsEnabled()) Activate();
+				if( ::PtInRect(&m_rcItem, event.ptMouse) && IsEnabled()) 
+					Activate();
 				m_uButtonState &= ~(UISTATE_PUSHED | UISTATE_CAPTURED);
 				Invalidate();
 			}
@@ -152,6 +153,16 @@ namespace dui
 	bool Button::Activate()
 	{
 		if( !Control::Activate() ) return false;
+#if MODE_EVENTMAP
+		if (OnEvent.find(UIEVENT_CLICK) != OnEvent.cend()){
+			TEvent event;
+			event.Type = UIEVENT_CLICK;
+			event.pSender = this;
+			if (!OnEvent.find(UIEVENT_CLICK)->second(&event)){
+				return false;
+			}
+		}
+#endif
 		if( m_pManager != NULL ) m_pManager->SendNotify(this, DUI_MSGTYPE_CLICK);
 		return true;
 	}

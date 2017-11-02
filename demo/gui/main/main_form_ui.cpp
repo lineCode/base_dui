@@ -89,7 +89,38 @@ void MainForm::InitWindow()
 	SetIcon(IDI_ICON1);
 	SetTaskbarTitle(L"΢΢");
 
-	btn_header_ = dynamic_cast<Button*>(m_PaintManager.FindControl(_T("btn_header")));
+	btn_head_ = dynamic_cast<Button*>(m_PaintManager.FindControl(_T("btn_head")));
+#if MODE_EVENTMAP
+	if (btn_head_)
+	{
+		auto OnBtnHeadClicked = [this](void* param){
+			TEvent *event = static_cast<TEvent *>(param);
+			printf("MainForm OnBtnHeadClicked, name:%s\n", event->pSender->GetName().c_str());
+			return false; };
+
+		btn_head_->AttachClick(std::bind(OnBtnHeadClicked, std::placeholders::_1));
+	}
+
+	auto OnBtnContainerClicked = [this](void* param, int index){
+		TEvent *event = static_cast<TEvent *>(param);
+		printf("MainForm OnBtnContainerClicked, name:%s\n", event->pSender->GetName().c_str());
+
+		if (index < 3)
+		{
+			tab_session_friend_->SelectItem(index);
+		}
+		
+		
+		return false; };
+	ButtonContainer *btnbox_opt_session = dynamic_cast<ButtonContainer *>(m_PaintManager.FindControl(_T("btnbox_opt_session")));
+	ButtonContainer *btnbox_opt_friends = dynamic_cast<ButtonContainer *>(m_PaintManager.FindControl(_T("btnbox_opt_friends")));
+	ButtonContainer *btnbox_opt_groups = dynamic_cast<ButtonContainer *>(m_PaintManager.FindControl(_T("btnbox_opt_groups")));
+	ButtonContainer *btnbox_opt_menu = dynamic_cast<ButtonContainer *>(m_PaintManager.FindControl(_T("btnbox_opt_menu")));
+	btnbox_opt_session->AttachClick(std::bind(OnBtnContainerClicked, std::placeholders::_1, 0));
+	btnbox_opt_friends->AttachClick(std::bind(OnBtnContainerClicked, std::placeholders::_1, 1));
+	btnbox_opt_groups->AttachClick(std::bind(OnBtnContainerClicked, std::placeholders::_1, 2));
+	btnbox_opt_menu->AttachClick(std::bind(OnBtnContainerClicked, std::placeholders::_1, 3));
+#endif
 	tab_session_friend_ = dynamic_cast<TabLayout*>(m_PaintManager.FindControl(_T("tab_session_friend")));
 
 	list_friend_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_friend")));
@@ -103,7 +134,7 @@ void MainForm::Notify(dui::TNotify& msg)
 
 	Control *pControl = msg.pSender;
 	String name = pControl->GetName();
-	wprintf(L"MainForm::Notify %s:%s\n", name.c_str(), msg.sType.c_str());
+	//wprintf(L"MainForm::Notify name:%s, msgtype:%s\n", name.c_str(), msg.sType.c_str());
 	if (msg.sType == DUI_MSGTYPE_ITEMCLICK )
 	{
 		bHandle = true;

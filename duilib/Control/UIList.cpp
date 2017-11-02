@@ -829,7 +829,7 @@ void List::Scroll(int dx, int dy)
 
 void List::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if( _tcscmp(pstrName, _T("header")) == 0 ) GetHeader()->SetVisible(_tcscmp(pstrValue, _T("hidden")) != 0);
+    if( _tcscmp(pstrName, _T("header")) == 0 ) GetHeader()->SetVisible(_tcscmp(pstrValue, _T("true")) == 0);
     else if( _tcscmp(pstrName, _T("headerbkimage")) == 0 ) GetHeader()->SetBkImage(pstrValue);
     else if( _tcscmp(pstrName, _T("scrollselect")) == 0 ) SetScrollSelect(_tcscmp(pstrValue, _T("true")) == 0);
     else if( _tcscmp(pstrName, _T("multiexpanding")) == 0 ) SetMultiExpanding(_tcscmp(pstrValue, _T("true")) == 0);
@@ -2054,7 +2054,7 @@ void ListElement::Invalidate()
 bool ListElement::Activate()
 {
     if( !Control::Activate() ) return false;
-    if( m_pManager != NULL ) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMACTIVATE);
+    if( m_pManager != NULL ) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
     return true;
 }
 
@@ -2806,7 +2806,17 @@ void ListContainerElement::Invalidate()
 bool ListContainerElement::Activate()
 {
     if( !Container::Activate() ) return false;
-    if( m_pManager != NULL ) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMACTIVATE);
+#if MODE_EVENTMAP
+	if (OnEvent.find(UIEVENT_ITEMCLICK) != OnEvent.cend()){
+		TEvent event;
+		event.Type = UIEVENT_ITEMCLICK;
+		event.pSender = this;
+		if (!OnEvent.find(UIEVENT_ITEMCLICK)->second(&event)){
+			return false;
+		}
+	}
+#endif
+	if (m_pManager != NULL) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
     return true;
 }
 
@@ -2868,14 +2878,17 @@ void ListContainerElement::DoEvent(TEvent& event)
 
     if( event.Type == UIEVENT_DBLCLICK )
     {
+#if 0
         if( IsEnabled() ) {
             Activate();
             Invalidate();
         }
+#endif
         return;
     }
     if( event.Type == UIEVENT_KEYDOWN )
     {
+#if 0
         if (IsKeyboardEnabled() && IsEnabled()) {
             if( event.chKey == VK_RETURN ) {
                 Activate();
@@ -2883,11 +2896,16 @@ void ListContainerElement::DoEvent(TEvent& event)
                 return;
             }
         }
+#endif
     }
     if( event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_RBUTTONDOWN )
     {
         if( IsEnabled() ) {
+#if MODE_EVENTMAP
+			Activate();
+#else
             m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
+#endif	
             Select();
             Invalidate();
         }

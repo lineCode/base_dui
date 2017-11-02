@@ -63,6 +63,7 @@
 
 
 #define MODE_COMMENT	0		//ÔÝÊ±×¢ÊÍµô
+#define MODE_EVENTMAP	1
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

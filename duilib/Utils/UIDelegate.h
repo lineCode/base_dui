@@ -4,6 +4,8 @@
 #pragma once
 #include "Core/UIDefine.h"
 
+#define MODE_EVENTMAP	1
+
 namespace dui {
 #if 0
 	typedef std::function<bool(TEvent*)> EventCallback;
@@ -24,6 +26,27 @@ namespace dui {
 		PtrArray m_aDelegates;
 	};
 	
+	typedef std::map<EVENTTYPE_UI, CEventSource> EventMap;
+#endif
+#if MODE_EVENTMAP
+	typedef std::function<bool(void*)> EventCallback;
+
+	class DUILIB_API CEventSource
+	{
+		typedef bool(*FnType)(void*);
+	public:
+		~CEventSource();
+		operator bool();
+		void operator+= (const EventCallback& d); // add const for gcc
+		void operator+= (FnType pFn);
+		void operator-= (const EventCallback& d);
+		void operator-= (FnType pFn);
+		bool operator() (void* param);
+
+	protected:
+		PtrArray m_aDelegates;
+	};
+
 	typedef std::map<EVENTTYPE_UI, CEventSource> EventMap;
 #else
 class DUILIB_API CDelegateBase	 

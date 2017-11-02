@@ -99,7 +99,7 @@
       <Attribute name="virtualwnd"  default="" type="" comment=""/>
       <Attribute name="foreimage"   default="" type="" comment=""/>
     </Control>
-
+    <!--Label-->
     <Label parent="Control" notifies="��ʱ��д" >
       <Attribute name="halign"       default="" type="" comment=""/>
       <Attribute name="valign"      default="" type="" comment=""/>
@@ -123,7 +123,7 @@
       <Attribute name="textshadowcolorb"  default="" type="" comment=""/>
       <Attribute name="strokecolor"       default="" type="" comment=""/>
     </Label>
-
+    <!--Button-->
     <Button parent="Label" notifies="" comment="">
       <Attribute name="normalimage"     default="" type="" comment=""/>
       <Attribute name="hotimage"        default="" type="" comment=""/>
@@ -138,8 +138,8 @@
       <Attribute name="pushedtextcolor" default="" type="" comment=""/>
       <Attribute name="focusedtextcolor"  default="" type="" comment=""/>
     </Button>
-
-    <Option parent="Button" notifies="��ʱ��д"  >
+    <!--Option-->
+    <Option parent="Button" notifies=""  >
       <Attribute name="group"             default="" type="STRING" comment=""/>
       <Attribute name="selected"          default="" type="" comment=""/>
       <Attribute name="selectedimage"     default="" type="" comment=""/>
@@ -147,9 +147,41 @@
       <Attribute name="selectedbkcolor"   default="" type="" comment=""/>
       <Attribute name="selectedtextcolor" default="" type="" comment=""/>
     </Option>
-
+    <!--CheckBox-->
     <CheckBox parent="Option" notifies="同Option" >
     </CheckBox>
+    <!--ScrollBar-->
+    <ScrollBar parent="Control" notifies="">
+      <Attribute name="button1normalimage"    default="" type="" comment=""/>
+      <Attribute name="button1hotimage"       default="" type="" comment=""/>
+      <Attribute name="button1pushedimage"    default="" type="" comment=""/>
+      <Attribute name="button1disabledimage"  default="" type="" comment=""/>
+      <Attribute name="button2normalimage"    default="" type="" comment=""/>
+      <Attribute name="button2hotimage"       default="" type="" comment=""/>
+      <Attribute name="button2pushedimage"    default="" type="" comment=""/>
+      <Attribute name="button2disabledimage"  default="" type="" comment=""/>
+      <Attribute name="thumbnormalimage"      default="" type="" comment=""/>
+      <Attribute name="thumbhotimage"         default="" type="" comment=""/>
+      <Attribute name="thumbpushedimage"      default="" type="" comment=""/>
+      <Attribute name="thumbdisabledimage"    default="" type="" comment=""/>
+      <Attribute name="railnormalimage"     default="" type="" comment=""/>
+      <Attribute name="railhotimage"        default="" type="" comment=""/>
+      <Attribute name="railpushedimage"     default="" type="" comment=""/>
+      <Attribute name="raildisabledimage"   default="" type="" comment=""/>
+      <Attribute name="bknormalimage"       default="" type="" comment=""/>
+      <Attribute name="bkhotimage"          default="" type="" comment=""/>
+      <Attribute name="bkpushedimage"       default="" type="" comment=""/>
+      <Attribute name="bkdisabledimage"     default="" type="" comment=""/>
+      <Attribute name="hor"         default="" type="" comment=""/>
+      <Attribute name="linesize"    default="" type="" comment=""/>
+      <Attribute name="range"       default="" type="" comment=""/>
+      <Attribute name="value"       default="" type="" comment=""/>
+      <Attribute name="scrollunit"  default="" type="" comment=""/>
+      <Attribute name="showbutton1" default="" type="" comment=""/>
+      <Attribute name="showbutton2" default="" type="" comment=""/>
+    </ScrollBar>
+    
+    
     
     <!--Container begin-->
     <Container parent="Control" notifies="" comment="">
