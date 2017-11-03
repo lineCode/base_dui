@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "resource.h"
-#include "module/user/user_define.h"
-#include "module/user/user_manager.h"
 #include "gui/main/control/friend_item.h"
+#include "gui/main/control/session_item.h"
 
 #include "main_form.h"
 //#include "util/user.h"
@@ -124,8 +123,10 @@ void MainForm::InitWindow()
 	tab_session_friend_ = dynamic_cast<TabLayout*>(m_PaintManager.FindControl(_T("tab_session_friend")));
 
 	list_friend_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_friend")));
+	list_session_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_session")));
 
 	nim_comp::UserManager::GetInstance()->DoLoadFriends(std::bind(&MainForm::OnGetAllFriendInfo, this, std::placeholders::_1));
+	nim_comp::SessionManager::GetInstance()->DoLoadSession(std::bind(&MainForm::OnGetAllSessionInfo, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void MainForm::Notify(dui::TNotify& msg)
@@ -541,7 +542,7 @@ void MainForm::PopupTrayMenu(POINT point)
 
 void MainForm::OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list)
 {
-	printf("MainForm::OnGetAllFriendInfo %d\n", list.size());
+	printf("MainForm::OnGetAllFriendInfo size:%d\n", list.size());
 
 	clock_t ck1 = clock();
 
@@ -550,9 +551,22 @@ void MainForm::OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list)
 		nim_comp::FriendItem *item = new nim_comp::FriendItem(*it);
 		m_PaintManager.FillBox(item, _T("friend_item.xml"), this, &m_PaintManager, NULL);
 		list_friend_->Add(item);
-
 	}
 	printf("load friends ui %d ms\n", clock()-ck1);
+}
 
+void MainForm::OnGetAllSessionInfo(int unread_count, const nim_comp::SessionDataList& data_list)
+{
+	printf("MainForm::OnGetAllSessionInfo size:%d\n", data_list.sessions_.size());
+
+	clock_t ck1 = clock();
+	std::list<nim_comp::SessionData> list = (data_list.sessions_);
+	for (auto it = list.cbegin(); it != list.cend(); it++)
+	{
+		nim_comp::SessionItem *item = new nim_comp::SessionItem(*it);
+		m_PaintManager.FillBox(item, _T("session_item.xml"), this, &m_PaintManager, NULL);
+		list_session_->Add(item);
+	}
+	printf("load Session ui %d ms\n", clock() - ck1);
 }
 

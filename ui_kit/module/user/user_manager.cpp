@@ -1,9 +1,5 @@
 ﻿#include "stdafx.h"
 #include <fstream>
-#include "base/memory/singleton.h"
-#include "shared/auto_unregister.h"
-#include "user_define.h"
-
 #include "user_manager.h"
 
 namespace nim_comp
@@ -20,7 +16,18 @@ NIMFriendFlag UserManager::GetUserType(const std::string &id)
 
 bool UserManager::GetUserInfo(const std::string &account, UserNameCard &info)
 {
-	return GetUserInfo(account, info);
+	bool bFind = false;
+	for (auto it = all_user_.cbegin(); it != all_user_.cend(); it++)
+	{
+		if (it->first == account)
+		{
+			info = it->second;
+			bFind = true;
+			break;
+		}
+	}
+
+	return bFind;
 }
 
 void UserManager::GetUserInfos(const std::list<std::string>& ids, std::list<UserNameCard>& uinfos)
@@ -30,16 +37,18 @@ void UserManager::GetUserInfos(const std::list<std::string>& ids, std::list<User
 
 const std::map<std::string, UserNameCard>& UserManager::GetAllUserInfos()
 {
-	return GetAllUserInfos();
+	return all_user_;
 }
 
 std::wstring UserManager::GetUserName(const std::string &id, bool alias_prior/* = true */)
 {
-#if 0
-	return nim_comp::UserService::GetInstance()->GetUserName(id, alias_prior);
-#else
-	return L"";
-#endif
+	wstring name = L"unknown";
+	UserNameCard card;
+	if (GetUserInfo(id, card))
+	{
+		nbase::win32::MBCSToUnicode(card.GetName(), name, CP_UTF8);
+	}
+	return name;
 }
 
 std::wstring UserManager::GetFriendAlias(const std::string & id)
@@ -109,6 +118,12 @@ void UserManager::DoLoadFriendsAsyn(const OnGetUserInfoCallback* pcb)
 					card.SetIconUrl(value[i]["userPhoto"].asString());
 					card.SetMobile(value[i]["friendMobile"].asString());
 					list.push_back(card);
+				}
+
+				all_user_.clear();
+				for (auto it = list.cbegin(); it != list.cend(); it++)
+				{
+					all_user_[it->GetAccId()] = *it;
 				}
 
 				shared::Post2UI(std::bind(*pcb, list));

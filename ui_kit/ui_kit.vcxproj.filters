@@ -50,6 +50,12 @@
     <Filter Include="gui\main\control">
       <UniqueIdentifier>{35a9fa02-bd6e-4a31-ba42-111322fe0fe9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="module\session">
+      <UniqueIdentifier>{17321255-b6e3-4bc4-91bc-af005b760f64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\photo">
+      <UniqueIdentifier>{d7f910b1-57af-4e4a-896f-db5102b23be1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gui\msgbox\msgbox.h">
@@ -102,6 +108,21 @@
     <ClInclude Include="gui\main\control\friend_item.h">
       <Filter>gui\main\control</Filter>
     </ClInclude>
+    <ClInclude Include="gui\main\control\session_item.h">
+      <Filter>gui\main\control</Filter>
+    </ClInclude>
+    <ClInclude Include="module\session\session_define.h">
+      <Filter>module\session</Filter>
+    </ClInclude>
+    <ClInclude Include="module\session\session_manager.h">
+      <Filter>module\session</Filter>
+    </ClInclude>
+    <ClInclude Include="module\session\session_util.h">
+      <Filter>module\session</Filter>
+    </ClInclude>
+    <ClInclude Include="module\photo\photo_manager.h">
+      <Filter>module\photo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\msgbox\msgbox.cpp">
@@ -144,5 +165,25 @@
     <ClCompile Include="gui\main\control\friend_item.cpp">
       <Filter>gui\main\control</Filter>
     </ClCompile>
+    <ClCompile Include="gui\main\control\session_item.cpp">
+      <Filter>gui\main\control</Filter>
+    </ClCompile>
+    <ClCompile Include="module\session\session_manager.cpp">
+      <Filter>module\session</Filter>
+    </ClCompile>
+    <ClCompile Include="module\session\session_util.cpp">
+      <Filter>module\session</Filter>
+    </ClCompile>
+    <ClCompile Include="module\photo\photo_manager.cpp">
+      <Filter>module\photo</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\bin\res\main_vv\friend_item.xml">
+      <Filter>gui\main\control</Filter>
+    </Xml>
+    <Xml Include="..\bin\res\main_vv\session_item.xml">
+      <Filter>gui\main\control</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

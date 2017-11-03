@@ -17,6 +17,7 @@
     <ClInclude Include="image_ole_i.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="auto_unregister.h" />
+    <ClInclude Include="pin_yin_helper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="closure.cpp" />
@@ -28,5 +29,6 @@
     <ClCompile Include="image_ole_i.c" />
     <ClCompile Include="threads.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="pin_yin_helper.cpp" />
   </ItemGroup>
 </Project>

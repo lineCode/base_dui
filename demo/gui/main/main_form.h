@@ -5,7 +5,8 @@
 //#include "shared/ui/msgbox.h"
 //#include "base/framework/task.h"
 #include "gui/window/window_ex.h"
-#include "module/user/user_define.h"
+#include "module/user/user_manager.h"
+#include "module/session/session_manager.h"
 
 class MainForm : public nim_comp::WindowEx/*, public ITrayIconDelegate*/
 {
@@ -38,6 +39,7 @@ private:
 	virtual void OnClick(dui::TNotify& msg) override;
 #if 1
 	void OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list);
+	void OnGetAllSessionInfo(int unread_count, const nim_comp::SessionDataList& data_list);
 #else
 	/**
 	* 处理主窗口弹出菜单按钮的单击消息
@@ -277,6 +279,7 @@ private:
 	dui::TabLayout	*tab_session_friend_;
 
 	dui::List		*list_friend_;
+	dui::List		*list_session_;
 	/*dui::Button*	btn_online_state_;
 	bool			is_busy_;
 

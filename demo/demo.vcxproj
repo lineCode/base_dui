@@ -103,15 +103,18 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\bin\res\global.xml" />
+    <Xml Include="..\bin\res\global.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\bin\res\login\login.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="..\bin\res\main_vv\friend_item.xml" />
     <Xml Include="..\bin\res\main_vv\main.xml">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="..\bin\res\main_vv\session.xml" />
+    <Xml Include="..\bin\res\main_vv\session.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\bin\res\menu\menu.xml" />
     <Xml Include="..\duilib\duilib_attribute.xml">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

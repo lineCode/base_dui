@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClInclude Include="gui\emoji\emoji_info.h" />
     <ClInclude Include="gui\main\control\friend_item.h" />
+    <ClInclude Include="gui\main\control\session_item.h" />
     <ClInclude Include="gui\modal_wnd\async_do_modal.h" />
     <ClInclude Include="gui\modal_wnd\async_modal_runner.h" />
     <ClInclude Include="gui\modal_wnd\file_dialog_ex.h" />
@@ -90,6 +91,10 @@
     <ClInclude Include="module\init\init_manager.h" />
     <ClInclude Include="module\login\login_define.h" />
     <ClInclude Include="module\login\login_manager.h" />
+    <ClInclude Include="module\photo\photo_manager.h" />
+    <ClInclude Include="module\session\session_define.h" />
+    <ClInclude Include="module\session\session_manager.h" />
+    <ClInclude Include="module\session\session_util.h" />
     <ClInclude Include="module\user\user_define.h" />
     <ClInclude Include="module\user\user_manager.h" />
     <ClInclude Include="module\window\windows_manager.h" />
@@ -101,6 +106,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="gui\main\control\friend_item.cpp" />
+    <ClCompile Include="gui\main\control\session_item.cpp" />
     <ClCompile Include="gui\modal_wnd\async_do_modal.cpp" />
     <ClCompile Include="gui\modal_wnd\async_modal_runner.cpp" />
     <ClCompile Include="gui\modal_wnd\file_dialog_ex.cpp" />
@@ -113,6 +119,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="module\login\login_manager.cpp" />
+    <ClCompile Include="module\photo\photo_manager.cpp" />
+    <ClCompile Include="module\session\session_manager.cpp" />
+    <ClCompile Include="module\session\session_util.cpp" />
     <ClCompile Include="module\user\user_manager.cpp" />
     <ClCompile Include="module\window\windows_manager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -122,6 +131,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="util\user_path.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\bin\res\main_vv\friend_item.xml" />
+    <Xml Include="..\bin\res\main_vv\session_item.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

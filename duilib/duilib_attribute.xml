@@ -181,8 +181,6 @@
       <Attribute name="showbutton2" default="" type="" comment=""/>
     </ScrollBar>
     
-    
-    
     <!--Container begin-->
     <Container parent="Control" notifies="" comment="">
       <Attribute name="padding"         default="" type="" comment=""/>
@@ -212,8 +210,9 @@
       <Attribute name="sepimm"        default="" type="" comment=""/>
     </VLayout>
     
-    <TabLayout parent="Container" notifies="" comment="">
+    <TabLayout parent="Container" notifies="" comment="fadeswitch 未完成">
       <Attribute name="selectedid"     default="" type="" comment=""/>
+      <Attribute name="fadeswitch"     default="false" type="bool" comment="tab切换动画"/>  
     </TabLayout>
 
     <ListContainerElement parent="Container" notifies="" comment="">

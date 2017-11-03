@@ -61,8 +61,9 @@ protected:
 private:
 	dui::Label*		contact_;
 	dui::Label*		post_;
+	dui::Button		*btn_head_;
 
-	bool			is_team_;
+	/*bool			is_team_;
 	std::string		id_;
 	std::string		neteaseid_;
 
@@ -70,7 +71,7 @@ private:
 	std::string		post_name_;
 	UTF8String		nick_name_full_spell_;
 	UTF8String		nick_name_simple_spell_;
-	std::string		head_image;
+	std::string		head_image;*/
 
 	//AutoUnregister unregister_cb;
 	UserNameCard	info_;

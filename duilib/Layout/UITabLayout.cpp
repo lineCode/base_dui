@@ -1,9 +1,13 @@
 #include "stdafx.h"
 #include "UITabLayout.h"
 
+#define TABLAYOUT_FADESWITCH_DELTA		20
+#define TABLAYOUT_FADESWITCH_TIMERID	12
+#define TABLAYOUT_FADESWITCH_ELLAPSE	30
+
 namespace dui
 {
-	TabLayout::TabLayout() : m_iCurSel(-1)
+	TabLayout::TabLayout() : m_iCurSel(-1), m_uFadeSwitchPos(0), m_uFadeSwitchDelta(0), m_cFadeSwitchLeftId(-1), m_cFadeSwitchRightId(-1), m_badeSwitchRightToLeft(false)
 	{
 	}
 
@@ -16,6 +20,16 @@ namespace dui
 	{
 		if( _tcscmp(pstrName, DUI_CTR_TABLAYOUT) == 0 ) return static_cast<TabLayout*>(this);
 		return Container::GetInterface(pstrName);
+	}
+
+	void TabLayout::SetFadeSwitch(bool bFadeSwitch)
+	{
+		m_uFadeSwitchDelta = bFadeSwitch ? TABLAYOUT_FADESWITCH_DELTA : 0;
+	}
+
+	bool TabLayout::GetFadeSwitch()
+	{
+		return m_uFadeSwitchDelta > 0;
 	}
 
 	bool TabLayout::Add(Control* pControl)
@@ -116,6 +130,15 @@ namespace dui
 			m_pManager->SetNextTabControl();
 			if (bTriggerEvent) m_pManager->SendNotify(this, DUI_MSGTYPE_TABSELECT, m_iCurSel, iOldSel);
 		}
+		//fadeswitch
+		if (GetFadeSwitch() && iOldSel >= 0) {
+			m_pManager->SetTimer(this, TABLAYOUT_FADESWITCH_TIMERID, TABLAYOUT_FADESWITCH_ELLAPSE);
+			m_uFadeSwitchPos = 255;
+			m_badeSwitchRightToLeft = m_iCurSel > iOldSel;
+			m_cFadeSwitchLeftId = m_badeSwitchRightToLeft ? iOldSel : m_iCurSel;
+			m_cFadeSwitchRightId = m_badeSwitchRightToLeft ? m_iCurSel : iOldSel;
+			printf("m_uFadeSwitchPos SetTimer\n");
+		}
 		return true;
 	}
 
@@ -131,6 +154,7 @@ namespace dui
 	void TabLayout::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
 		if( _tcscmp(pstrName, _T("selectedid")) == 0 ) SelectItem(_ttoi(pstrValue));
+		else if (_tcscmp(pstrName, _T("fadeswitch")) == 0) SetFadeSwitch(_tcscmp(pstrValue, _T("true")) == 0);
 		return Container::SetAttribute(pstrName, pstrValue);
 	}
 
@@ -179,5 +203,114 @@ namespace dui
 			RECT rcCtrl = { rc.left, rc.top, rc.left + sz.cx, rc.top + sz.cy};
 			pControl->SetPos(rcCtrl, false);
 		}
+	}
+
+	void TabLayout::DoEvent(TEvent& event)
+	{
+		bool bHandle = false;
+		if (event.Type == UIEVENT_TIMER  && event.wParam == TABLAYOUT_FADESWITCH_TIMERID)
+		{
+			if (m_uFadeSwitchPos > m_uFadeSwitchDelta) 
+				m_uFadeSwitchPos -= m_uFadeSwitchDelta;
+			else {
+				m_uFadeSwitchPos = 0;
+				m_pManager->KillTimer(this, TABLAYOUT_FADESWITCH_TIMERID);
+				printf("m_uFadeSwitchPos KillTimer\n");
+			}
+			
+			/*if (m_uFadeSwitchPos < 255 - m_uFadeAlphaDelta)
+				m_uFadeAlpha += m_uFadeAlphaDelta;
+			else {
+				m_uFadeAlpha = 255;
+				m_pManager->KillTimer(this, TABLAYOUT_FADESWITCH_TIMERID);
+			}*/
+			
+			Invalidate();
+			bHandle = true;
+			printf("m_uFadeSwitchPos:%d\n", m_uFadeSwitchPos);
+		}
+
+		return __super::DoEvent(event);
+	}
+
+	bool TabLayout::Paint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
+	{
+		return __super::Paint(hDC, rcPaint, pStopControl);
+	}
+
+	bool TabLayout::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
+	{
+#if 1
+		RECT rcTemp = { 0 };
+		if (!::IntersectRect(&rcTemp, &rcPaint, &m_rcItem)) return true;
+
+		CRenderClip clip;
+		CRenderClip::GenerateClip(hDC, rcTemp, clip);
+		Control::DoPaint(hDC, rcPaint, pStopControl);
+
+		if (m_items.GetSize() > 0) {
+			RECT rc = m_rcItem;
+			rc.left += m_rcPadding.left;
+			rc.top += m_rcPadding.top;
+			rc.right -= m_rcPadding.right;
+			rc.bottom -= m_rcPadding.bottom;
+			if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
+			if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible()) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
+
+			if (!::IntersectRect(&rcTemp, &rcPaint, &rc)) {
+				for (int it = 0; it < m_items.GetSize(); it++) {
+					Control* pControl = static_cast<Control*>(m_items[it]);
+					if (pControl == pStopControl) return false;
+					if (!pControl->IsVisible()) continue;
+					if (!::IntersectRect(&rcTemp, &rcPaint, &pControl->GetPos())) continue;
+					if (pControl->IsFloat()) {
+						if (!::IntersectRect(&rcTemp, &m_rcItem, &pControl->GetPos())) continue;
+						if (!pControl->Paint(hDC, rcPaint, pStopControl)) return false;
+					}
+				}
+			}
+			else {
+				CRenderClip childClip;
+				CRenderClip::GenerateClip(hDC, rcTemp, childClip);
+				for (int it = 0; it < m_items.GetSize(); it++) {
+					Control* pControl = static_cast<Control*>(m_items[it]);
+					if (pControl == pStopControl) return false;
+					if (!pControl->IsVisible()) continue;
+					if (!::IntersectRect(&rcTemp, &rcPaint, &pControl->GetPos())) continue;
+					if (pControl->IsFloat()) {
+						if (!::IntersectRect(&rcTemp, &m_rcItem, &pControl->GetPos())) continue;
+						CRenderClip::UseOldClipBegin(hDC, childClip);
+						if (!pControl->Paint(hDC, rcPaint, pStopControl)) return false;
+						CRenderClip::UseOldClipEnd(hDC, childClip);
+					}
+					else {
+						if (!::IntersectRect(&rcTemp, &rc, &pControl->GetPos())) continue;
+						if (!pControl->Paint(hDC, rcPaint, pStopControl)) return false;
+					}
+				}
+			}
+		}
+
+		if (m_pVerticalScrollBar != NULL) {
+			if (m_pVerticalScrollBar == pStopControl) return false;
+			if (m_pVerticalScrollBar->IsVisible()) {
+				if (::IntersectRect(&rcTemp, &rcPaint, &m_pVerticalScrollBar->GetPos())) {
+					if (!m_pVerticalScrollBar->Paint(hDC, rcPaint, pStopControl)) return false;
+				}
+			}
+		}
+
+		if (m_pHorizontalScrollBar != NULL) {
+			if (m_pHorizontalScrollBar == pStopControl) return false;
+			if (m_pHorizontalScrollBar->IsVisible()) {
+				if (::IntersectRect(&rcTemp, &rcPaint, &m_pHorizontalScrollBar->GetPos())) {
+					if (!m_pHorizontalScrollBar->Paint(hDC, rcPaint, pStopControl)) return false;
+				}
+			}
+		}
+		return true;
+#else
+		return __super::DoPaint(hDC, rcPaint, pStopControl);
+#endif
 	}
 }

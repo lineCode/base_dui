@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-//#include "module/service/user_service.h"
-
-//#include "user_define.h"
+#include "base/memory/singleton.h"
+#include "shared/auto_unregister.h"
+#include "module/user/user_define.h"
 
 namespace nim_comp
 {
@@ -109,7 +109,8 @@ private:
 private:
 	UserManager(){};
 	~UserManager(){};
-
+private:
+	std::map<std::string, UserNameCard> all_user_; //好友+陌生人
 };
 
 }
