@@ -30,7 +30,6 @@ namespace dui
 
 		virtual void DoEvent(TEvent& event) override;
 
-		virtual bool Paint(HDC hDC, const RECT& rcPaint, Control* pStopControl = NULL) override; // 返回要不要继续绘制
 		virtual bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl) override;
 
 	protected:
@@ -40,7 +39,9 @@ namespace dui
 		BYTE	m_uFadeSwitchDelta;
 		char	m_cFadeSwitchLeftId;
 		char	m_cFadeSwitchRightId;
-		bool	m_badeSwitchRightToLeft;		//true l<-r; false l->r
+		bool	m_bFadeSwitchRightToLeft;		//true l<-r; false l->r
+
+		//Control *pOldFadeSwitchItem_;
 	};
 }
 #endif // __UITABLAYOUT_H__

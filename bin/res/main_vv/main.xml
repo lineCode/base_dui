@@ -15,7 +15,7 @@
         <Option name="opt_friends" width="40" height="40" normalimage="file='icon_02.png' dest='7,7,33,33'" pushedimage="file='icon_02_sel.png' dest='7,7,33,33'" group="group_session_friend"  tooltip="好友"/>
         <!--<Label name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>-->
       </ButtonContainer>
-      <ButtonContainer name="btnbox_opt_groups" width="40" height="40" margin="10,5,10,0" padding="" mousechild="" visible="false">
+      <ButtonContainer name="btnbox_opt_groups" width="40" height="40" margin="10,5,10,0" padding="" mousechild="" visible="true">
         <Option name="opt_groups" width="40" height="40" normalimage="file='icon_03.png' dest='7,7,33,33'" pushedimage="file='icon_03_sel.png' dest='7,7,33,33'" group="group_session_friend"  tooltip="群组"/>
         <!--<Label name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>-->
       </ButtonContainer>

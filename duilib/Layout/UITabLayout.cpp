@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "UITabLayout.h"
 
-#define TABLAYOUT_FADESWITCH_DELTA		20
+#define TABLAYOUT_FADESWITCH_DELTA		25
 #define TABLAYOUT_FADESWITCH_TIMERID	12
-#define TABLAYOUT_FADESWITCH_ELLAPSE	30
+#define TABLAYOUT_FADESWITCH_ELLAPSE	15
 
 namespace dui
 {
-	TabLayout::TabLayout() : m_iCurSel(-1), m_uFadeSwitchPos(0), m_uFadeSwitchDelta(0), m_cFadeSwitchLeftId(-1), m_cFadeSwitchRightId(-1), m_badeSwitchRightToLeft(false)
+	TabLayout::TabLayout() : m_iCurSel(-1), m_uFadeSwitchPos(0), m_uFadeSwitchDelta(0), m_cFadeSwitchLeftId(-1), m_cFadeSwitchRightId(-1), m_bFadeSwitchRightToLeft(false)/*, pOldFadeSwitchItem_(NULL)*/
 	{
 	}
 
@@ -122,7 +122,8 @@ namespace dui
 				GetItemAt(it)->SetVisible(true);
 				GetItemAt(it)->SetFocus();
 			}
-			else GetItemAt(it)->SetVisible(false);
+			else 
+				GetItemAt(it)->SetVisible(false);
 		}
 		NeedParentUpdate();
 
@@ -131,13 +132,20 @@ namespace dui
 			if (bTriggerEvent) m_pManager->SendNotify(this, DUI_MSGTYPE_TABSELECT, m_iCurSel, iOldSel);
 		}
 		//fadeswitch
-		if (GetFadeSwitch() && iOldSel >= 0) {
+		if (GetFadeSwitch() /*&& iOldSel >= 0*/) {
 			m_pManager->SetTimer(this, TABLAYOUT_FADESWITCH_TIMERID, TABLAYOUT_FADESWITCH_ELLAPSE);
 			m_uFadeSwitchPos = 255;
-			m_badeSwitchRightToLeft = m_iCurSel > iOldSel;
-			m_cFadeSwitchLeftId = m_badeSwitchRightToLeft ? iOldSel : m_iCurSel;
-			m_cFadeSwitchRightId = m_badeSwitchRightToLeft ? m_iCurSel : iOldSel;
-			printf("m_uFadeSwitchPos SetTimer\n");
+			m_bFadeSwitchRightToLeft = m_iCurSel > iOldSel;
+			m_cFadeSwitchLeftId = m_bFadeSwitchRightToLeft ? iOldSel : m_iCurSel;
+			m_cFadeSwitchRightId = m_bFadeSwitchRightToLeft ? m_iCurSel : iOldSel;
+
+			if (iOldSel >= 0 && iOldSel < m_items.GetSize())
+			{
+				//pOldFadeSwitchItem_ = GetItemAt(iOldSel);
+				GetItemAt(iOldSel)->SetVisible(true);
+			}
+			
+			printf("TabLayout SetTimer\n");
 		}
 		return true;
 	}
@@ -210,12 +218,48 @@ namespace dui
 		bool bHandle = false;
 		if (event.Type == UIEVENT_TIMER  && event.wParam == TABLAYOUT_FADESWITCH_TIMERID)
 		{
-			if (m_uFadeSwitchPos > m_uFadeSwitchDelta) 
+			if (m_uFadeSwitchPos > m_uFadeSwitchDelta){
 				m_uFadeSwitchPos -= m_uFadeSwitchDelta;
+			}
 			else {
 				m_uFadeSwitchPos = 0;
 				m_pManager->KillTimer(this, TABLAYOUT_FADESWITCH_TIMERID);
-				printf("m_uFadeSwitchPos KillTimer\n");
+				printf("TabLayout KillTimer\n");
+			}
+
+			Control *pControlLeft = GetItemAt(m_cFadeSwitchLeftId), *pControlRight = GetItemAt(m_cFadeSwitchRightId);
+			RECT rc = GetPos(), rc1 = rc, rc2 = rc;
+			int off = (rc.right - rc.left)*(m_uFadeSwitchPos) / 255, offLeft = 0, offRight = 0;
+
+			if (m_bFadeSwitchRightToLeft)
+			{
+				assert(pControlRight);
+				offRight = off;
+				rc2.left = rc.left + offRight;
+				rc2.right = rc.right + offRight;
+				pControlRight->SetPos(rc2);
+				if (pControlLeft)
+				{
+					offLeft = 255 - off;
+					rc1.left = rc.left - offLeft;
+					rc1.right = rc.right - offLeft;
+					pControlLeft->SetPos(rc1);
+				}
+			}
+			else
+			{
+				assert(pControlLeft);
+				offLeft = off;
+				rc1.left = rc.left - offLeft;
+				rc1.right = rc.right - offLeft;
+				pControlLeft->SetPos(rc1);
+				if (pControlRight)
+				{
+					offRight = 255 - off;
+					rc2.left = rc.left + offRight;
+					rc2.right = rc.right + offRight;
+					pControlRight->SetPos(rc2);
+				}
 			}
 			
 			/*if (m_uFadeSwitchPos < 255 - m_uFadeAlphaDelta)
@@ -227,15 +271,10 @@ namespace dui
 			
 			Invalidate();
 			bHandle = true;
-			printf("m_uFadeSwitchPos:%d\n", m_uFadeSwitchPos);
+			//printf("m_uFadeSwitchPos:%d\n", m_uFadeSwitchPos);
 		}
 
 		return __super::DoEvent(event);
-	}
-
-	bool TabLayout::Paint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
-	{
-		return __super::Paint(hDC, rcPaint, pStopControl);
 	}
 
 	bool TabLayout::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
