@@ -1,18 +1,18 @@
-#ifndef __UIOPTION_H__
-#define __UIOPTION_H__
+#ifndef __UI_OPTION_CONTAINER_H__
+#define __UI_OPTION_CONTAINER_H__
 
 #pragma once
 
-namespace dui
-{
-	class DUILIB_API OptionBtn : public Button
+namespace dui {
+
+	class DUILIB_API OptionContainer : public ButtonContainer
 	{
 	public:
-		OptionBtn();
-		virtual ~OptionBtn();
+		OptionContainer();
+		virtual ~OptionContainer();
 
-		virtual LPCTSTR GetClass() const;
-		virtual LPVOID GetInterface(LPCTSTR pstrName);
+		LPCTSTR GetClass() const;
+		LPVOID GetInterface(LPCTSTR pstrName);
 
 		void SetManager(CPaintManager* pManager, Control* pParent, bool bInit = true);
 
@@ -37,7 +37,7 @@ namespace dui
 		LPCTSTR GetGroup() const;
 		void SetGroup(LPCTSTR pStrGroupName = NULL);
 		bool IsSelected() const;
-		virtual void Selected(bool bSelected, bool bTriggerEvent=true);
+		virtual void Selected(bool bSelected, bool bTriggerEvent = true);
 
 		SIZE EstimateSize(SIZE szAvailable);
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
@@ -56,6 +56,6 @@ namespace dui
 		TDrawInfo		m_diSelectedHot;
 	};
 
-} // namespace dui
+}
 
-#endif // __UIOPTION_H__
+#endif

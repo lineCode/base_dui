@@ -339,10 +339,12 @@ protected:                                                                \
 #define  DUI_CTR_VIRTUALLIST                     (_T("VirtualList"))
 //14
 #define  DUI_CTR_LISTHEADERITEM                  (_T("ListHeaderItem"))
+#define  DUI_CTR_LABELCONTAINER					 (_T("LabelContainer"))
 //15
 #define  DUI_CTR_LISTHBOXELEMENT                 (_T("ListHBoxElement"))
 #define  DUI_CTR_LISTTEXTELEMENT                 (_T("ListTextElement"))
 #define  DUI_CTR_BUTTONCONTAINER				 (_T("ButtonContainer"))
+#define  DUI_CTR_OPTIONCONTAINER				 (_T("OptionContainer"))
 #define  DUI_CTR_SCROLLCONTAINER                 (_T("ScrollContainer"))
 //16
 #define  DUI_CTR_LISTLABELELEMENT                (_T("ListLabelElement"))

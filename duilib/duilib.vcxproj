@@ -267,7 +267,6 @@
     <None Include="Utils\flash11.tlh" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Control\UIButtonContainer.cpp" />
     <ClCompile Include="Control\UIActiveX.cpp" />
     <ClCompile Include="Control\UIButton.cpp" />
     <ClCompile Include="Control\UICheckBox.cpp" />
@@ -294,6 +293,9 @@
     <ClCompile Include="Core\UIManager.cpp" />
     <ClCompile Include="Core\UIMarkup.cpp" />
     <ClCompile Include="Core\UIRender.cpp" />
+    <ClCompile Include="Extend\UIButtonContainer.cpp" />
+    <ClCompile Include="Extend\UILabelContainer.cpp" />
+    <ClCompile Include="Extend\UIOptionContainer.cpp" />
     <ClCompile Include="Layout\UIChildLayout.cpp" />
     <ClCompile Include="Layout\UIHorizontalLayout.cpp" />
     <ClCompile Include="Layout\UITabLayout.cpp" />
@@ -319,7 +321,6 @@
   <ItemGroup>
     <ClInclude Include="Control\UIActiveX.h" />
     <ClInclude Include="Control\UIButton.h" />
-    <ClInclude Include="Control\UIButtonContainer.h" />
     <ClInclude Include="Control\UICheckBox.h" />
     <ClInclude Include="Control\UICombo.h" />
     <ClInclude Include="Control\UIDateTime.h" />
@@ -345,6 +346,9 @@
     <ClInclude Include="Core\UIManager.h" />
     <ClInclude Include="Core\UIMarkup.h" />
     <ClInclude Include="Core\UIRender.h" />
+    <ClInclude Include="Extend\UIButtonContainer.h" />
+    <ClInclude Include="Extend\UILabelContainer.h" />
+    <ClInclude Include="Extend\UIOptionContainer.h" />
     <ClInclude Include="Layout\UIChildLayout.h" />
     <ClInclude Include="Layout\UIHorizontalLayout.h" />
     <ClInclude Include="Layout\UITabLayout.h" />

@@ -336,16 +336,17 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
 					else if (_tcsicmp(pstrClass, DUI_CTR_WEBBROWSER) == 0)       pControl = new WebBrowser;
 					break;
 				case 11:
-					if (_tcsicmp(pstrClass, DUI_CTR_CHILDLAYOUT) == 0)			  pControl = new ChildLayout;
+					if (_tcsicmp(pstrClass, DUI_CTR_CHILDLAYOUT) == 0)			 pControl = new ChildLayout;
 					break;
 				case 14:
-					if (_tcsicmp(pstrClass, DUI_CTR_VLAYOUT) == 0)        pControl = new VerticalLayout;
-					else if (_tcsicmp(pstrClass, DUI_CTR_LISTHEADERITEM) == 0)   pControl = new ListHeaderItem;
+					if (_tcsicmp(pstrClass, DUI_CTR_LISTHEADERITEM) == 0)		pControl = new ListHeaderItem;
+					else if (_tcsicmp(pstrClass, DUI_CTR_LABELCONTAINER) == 0)  pControl = new LabelContainer;
 					break;
 				case 15:
 					if (_tcsicmp(pstrClass, DUI_CTR_LISTTEXTELEMENT) == 0)       pControl = new ListTextElement;
 					else if (_tcsicmp(pstrClass, DUI_CTR_LISTHBOXELEMENT) == 0)  pControl = new ListHBoxElement;
 					else if (_tcsicmp(pstrClass, DUI_CTR_BUTTONCONTAINER) == 0)   pControl = new ButtonContainer;
+					else if (_tcsicmp(pstrClass, DUI_CTR_BUTTONCONTAINER) == 0)   pControl = new OptionContainer;
 					else if (_tcsicmp(pstrClass, DUI_CTR_SCROLLCONTAINER) == 0)   pControl = new ScrollContainer;
 					break;
 				case 16:

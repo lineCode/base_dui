@@ -19,6 +19,9 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{30e2a4c5-9b54-4665-ad48-7b3c8e8c529f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Extend">
+      <UniqueIdentifier>{a4310681-b80c-4d80-9110-0548babc9ca3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Control\UIActiveX.cpp">
@@ -138,8 +141,14 @@
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="StdAfx.cpp" />
     <ClCompile Include="UIlib.cpp" />
-    <ClCompile Include="Control\UIButtonContainer.cpp">
-      <Filter>Control</Filter>
+    <ClCompile Include="Extend\UIButtonContainer.cpp">
+      <Filter>Extend</Filter>
+    </ClCompile>
+    <ClCompile Include="Extend\UILabelContainer.cpp">
+      <Filter>Extend</Filter>
+    </ClCompile>
+    <ClCompile Include="Extend\UIOptionContainer.cpp">
+      <Filter>Extend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -272,8 +281,14 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="UIlib.h" />
-    <ClInclude Include="Control\UIButtonContainer.h">
-      <Filter>Control</Filter>
+    <ClInclude Include="Extend\UIButtonContainer.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="Extend\UILabelContainer.h">
+      <Filter>Extend</Filter>
+    </ClInclude>
+    <ClInclude Include="Extend\UIOptionContainer.h">
+      <Filter>Extend</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

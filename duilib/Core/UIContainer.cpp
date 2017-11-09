@@ -165,7 +165,7 @@ namespace dui
 	{
 		Control* pControl = GetItemAt(iIndex);
 		if (pControl != NULL) {
-			return Container::Remove(pControl, bDoNotDestroy);
+			return (pControl, bDoNotDestroy);
 		}
 
 		return false;

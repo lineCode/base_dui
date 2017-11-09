@@ -123,7 +123,9 @@ typedef std::string String;
 #include "Control/UIFlash.h"
 
 #include "Control/UIMenu.h"			//djj[20170424] : add
-#include "Control/UIButtonContainer.h"
+#include "Extend/UILabelContainer.h"
+#include "Extend/UIButtonContainer.h"
+#include "Extend/UIOptionContainer.h"
 
 #ifdef _DEBUG
 #include "Log.h"

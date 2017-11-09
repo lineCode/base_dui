@@ -1,18 +1,19 @@
-#ifndef __UIBUTTON_H__
-#define __UIBUTTON_H__
+#ifndef __UI_BUTTON_CONTAINER_H__
+#define __UI_BUTTON_CONTAINER_H__
 
 #pragma once
 
-namespace dui
-{
-	class DUILIB_API Button : public Label
+namespace dui {
+
+	class DUILIB_API ButtonContainer : public LabelContainer
 	{
 	public:
-		Button();
-		virtual ~Button();
+		ButtonContainer();
+		virtual ~ButtonContainer();
 
-		LPCTSTR GetClass() const;
-		LPVOID GetInterface(LPCTSTR pstrName);
+		virtual LPCTSTR GetClass() const override;
+		virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+
 		UINT GetControlFlags() const;
 
 		bool Activate();
@@ -58,7 +59,7 @@ namespace dui
 
 	protected:
 		enum
-		{ 
+		{
 			FADE_TIMERID = 11,
 			FADE_ELLAPSE = 30,
 		};
@@ -79,6 +80,6 @@ namespace dui
 		TDrawInfo m_diDisabled;
 	};
 
-}	// namespace dui
+}
 
-#endif // __UIBUTTON_H__
+#endif

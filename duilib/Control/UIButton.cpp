@@ -15,6 +15,9 @@ namespace dui
 		m_uTextStyle = DT_SINGLELINE | DT_VCENTER | DT_CENTER;
 	}
 
+	Button::~Button()
+	{}
+
 	LPCTSTR Button::GetClass() const
 	{
 		return DUI_CTR_BUTTON;

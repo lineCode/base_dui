@@ -1,32 +1,21 @@
-#ifndef __UILABEL_H__
-#define __UILABEL_H__
+#ifndef __UI_LABEL_CONTAINER_H__
+#define __UI_LABEL_CONTAINER_H__
 
 #pragma once
 
-#define _USE_GDIPLUS 0
+namespace dui {
 
-#ifdef _USE_GDIPLUS
-#include <GdiPlus.h>
-#pragma comment( lib, "GdiPlus.lib" )
-using namespace Gdiplus;
-class DUILIB_API Gdiplus::RectF;
-struct DUILIB_API Gdiplus::GdiplusStartupInput;
-#endif
-
-
-namespace dui
-{
-	class DUILIB_API Label : public Control
+	class DUILIB_API LabelContainer : public Container
 	{
 	public:
-		Label();
-		~Label();
+		LabelContainer();
+		virtual ~LabelContainer();
 
-		LPCTSTR GetClass() const;
-		LPVOID GetInterface(LPCTSTR pstrName);
+		virtual LPCTSTR GetClass() const override;
+		virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-        void SetFixedWidth(int cx);
-        void SetFixedHeight(int cy);
+		void SetFixedWidth(int cx);
+		void SetFixedHeight(int cy);
 		void SetText(LPCTSTR pstrText);
 
 		void SetTextStyle(UINT uStyle);
@@ -49,7 +38,6 @@ namespace dui
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
 		void PaintText(HDC hDC);
-
 #ifdef _USE_GDIPLUS
 		void		SetEnabledEffect(bool _EnabledEffect);
 		bool		GetEnabledEffect();
@@ -59,7 +47,7 @@ namespace dui
 		float		GetLuminousFuzzy();
 		void		SetGradientLength(int _GradientLength);
 		int			GetGradientLength();
-		void		SetShadowOffset(int _offset,int _angle);
+		void		SetShadowOffset(int _offset, int _angle);
 		RectF		GetShadowOffset();
 		void		SetTextColor1(DWORD _TextColor1);
 		DWORD		GetTextColor1();
@@ -76,7 +64,7 @@ namespace dui
 		void		SetEnabledShadow(bool _EnabledShadowe);
 		bool		GetEnabledShadow();
 #endif
-	
+
 	protected:
 		LPWSTR  m_pWideText;
 		DWORD	m_dwTextColor;
@@ -85,9 +73,9 @@ namespace dui
 		UINT	m_uTextStyle;
 		RECT	m_rcTextPadding;
 		bool	m_bShowHtml;
-        SIZE    m_szAvailableLast;
-        SIZE    m_cxyFixedLast;
-        bool    m_bNeedEstimateSize;
+		SIZE    m_szAvailableLast;
+		SIZE    m_cxyFixedLast;
+		bool    m_bNeedEstimateSize;
 
 		float					m_fLuminousFuzzy;
 		int						m_GradientLength;
@@ -105,9 +93,9 @@ namespace dui
 #ifdef _USE_GDIPLUS
 		GdiplusStartupInput		m_gdiplusStartupInput;
 #endif
+		
 	};
 
-	Color ARGB2Color(DWORD dwColor);
 }
 
-#endif // __UILABEL_H__
+#endif
