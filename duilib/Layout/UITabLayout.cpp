@@ -19,7 +19,7 @@ namespace dui
 	LPVOID TabLayout::GetInterface(LPCTSTR pstrName)
 	{
 		if( _tcscmp(pstrName, DUI_CTR_TABLAYOUT) == 0 ) return static_cast<TabLayout*>(this);
-		return Container::GetInterface(pstrName);
+		return ScrollContainer::GetInterface(pstrName);
 	}
 
 	void TabLayout::SetFadeSwitch(bool bFadeSwitch)
@@ -34,7 +34,7 @@ namespace dui
 
 	bool TabLayout::Add(Control* pControl)
 	{
-		bool ret = Container::Add(pControl);
+		bool ret = ScrollContainer::Add(pControl);
 		if( !ret ) return ret;
 
 		if(m_iCurSel == -1 && pControl->IsVisible())
@@ -51,7 +51,7 @@ namespace dui
 
 	bool TabLayout::AddAt(Control* pControl, int iIndex)
 	{
-		bool ret = Container::AddAt(pControl, iIndex);
+		bool ret = ScrollContainer::AddAt(pControl, iIndex);
 		if( !ret ) return ret;
 
 		if(m_iCurSel == -1 && pControl->IsVisible())
@@ -75,7 +75,7 @@ namespace dui
 		if( pControl == NULL) return false;
 
 		int index = GetItemIndex(pControl);
-		bool ret = Container::Remove(pControl, bDoNotDestroy);
+		bool ret = ScrollContainer::Remove(pControl, bDoNotDestroy);
 		if( !ret ) return false;
 
 		if( m_iCurSel == index)
@@ -100,7 +100,7 @@ namespace dui
 	void TabLayout::RemoveAll()
 	{
 		m_iCurSel = -1;
-		Container::RemoveAll();
+		ScrollContainer::RemoveAll();
 		NeedParentUpdate();
 	}
 
@@ -163,7 +163,7 @@ namespace dui
 	{
 		if( _tcscmp(pstrName, _T("selectedid")) == 0 ) SelectItem(_ttoi(pstrValue));
 		else if (_tcscmp(pstrName, _T("fadeswitch")) == 0) SetFadeSwitch(_tcscmp(pstrValue, _T("true")) == 0);
-		return Container::SetAttribute(pstrName, pstrValue);
+		return ScrollContainer::SetAttribute(pstrName, pstrValue);
 	}
 
 	void TabLayout::SetPos(RECT rc, bool bNeedInvalidate)

@@ -69,7 +69,7 @@ class IList : public IListOwner
 {
 public:
     virtual ListHeader* GetHeader() const = 0;
-    virtual Container* GetList() const = 0;
+    virtual ScrollContainer* GetList() const = 0;
     virtual IListCallback* GetTextCallback() const = 0;
     virtual void SetTextCallback(IListCallback* pCallback) = 0;
 };
@@ -129,7 +129,7 @@ public:
     void SetChildMargin(int iPadding);
 
     ListHeader* GetHeader() const;  
-    Container* GetList() const;
+    ScrollContainer* GetList() const;
     TListInfo* GetListInfo();
 
     UINT GetItemFixedHeight();
@@ -420,7 +420,7 @@ protected:
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class DUILIB_API ListContainerElement : public Container, public IListItem
+class DUILIB_API ListContainerElement : public ScrollContainer, public IListItem
 {
 public:
     ListContainerElement();

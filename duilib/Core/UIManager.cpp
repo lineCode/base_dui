@@ -3810,15 +3810,15 @@ void CPaintManager::UsedVirtualWnd(bool bUsed)
 	m_bUsedVirtualWnd = bUsed;
 }
 
-Container* CPaintManager::CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback/* = NULL*/, CPaintManager *pManager/* = NULL*/, Control *pParent/* = NULL*/)
+ScrollContainer* CPaintManager::CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback/* = NULL*/, CPaintManager *pManager/* = NULL*/, Control *pParent/* = NULL*/)
 {
 	CDialogBuilder builder;
 
-	Container* pBox = NULL;
+	ScrollContainer* pBox = NULL;
 	
 	Control *pRoot = builder.Create(xmlPath.c_str(), (UINT)0, pCallback, pManager, pParent);
 
-	pBox = dynamic_cast<Container*>(pRoot);
+	pBox = dynamic_cast<ScrollContainer*>(pRoot);
 	ASSERT(pBox);
 	if (pBox == NULL)
 	{
@@ -3830,7 +3830,7 @@ Container* CPaintManager::CreateBox(const std::wstring& xmlPath, IDialogBuilderC
 	return pBox;
 }
 
-bool CPaintManager::FillBox(Container* pFilledContainer, const std::wstring& xmlPath, IDialogBuilderCallback *pCallback/* = NULL*/, CPaintManager *pManager/* = NULL*/, Control *pParent/* = NULL*/)
+bool CPaintManager::FillBox(ScrollContainer* pFilledContainer, const std::wstring& xmlPath, IDialogBuilderCallback *pCallback/* = NULL*/, CPaintManager *pManager/* = NULL*/, Control *pParent/* = NULL*/)
 {
 	if (!pFilledContainer)
 	{

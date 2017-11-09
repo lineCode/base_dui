@@ -3,22 +3,9 @@
   <VLayout padding="" bkcolor="gray" >
     <HLayout height="26" padding="10,20,10" bkcolor="white">
       <Label margin="10" text="122222222222222345" bkcolor="main_blue"/>
-      <Control />
+      
       <Button text="确定" bkcolor="main_blue"/>
     </HLayout>
-    <HLayout height="56" padding="10,00,10" bkcolor="gray">
-      <Button text="确定3" bkcolor="main_blue"/>
-    </HLayout>
-    <Label text="111"/>
-    <Container bkcolor="darkcolor" padding="30,10">
-      <VLayout width="100" height="100" margin="100" bkcolor="white">
-        <Label margin="10" text="122222222222222345" bkcolor="main_blue"/>
-        <Button  margin="0,10,10" text="确定" bkcolor="main_blue"/>
-      </VLayout>
-      <Label width="90" height="30" margin="10" text="122222222222222345" bkcolor="main_blue"/>
-      <Button  width="90" height="30"  margin="0,50" text="确定" bkcolor="main_blue"/>
-    </Container>
-    <Button text="确定2" bkimage="file='btn_style_close.png' source='36,0,108,30'"/>
   </VLayout>
   
 </Window>

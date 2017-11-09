@@ -8,7 +8,7 @@ namespace dui {
 //
 
 class Control;
-class Container;
+class ScrollContainer;
 class IDialogBuilderCallback;
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -364,10 +364,10 @@ public:
     bool PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
 	void UsedVirtualWnd(bool bUsed);
 
-	/*static*/ Container* CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
+	/*static*/ ScrollContainer* CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
 	//static Box* CreateBoxWithCache(const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
 
-	/*static */bool FillBox(Container* pFilledContainer, const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
+	/*static */bool FillBox(ScrollContainer* pFilledContainer, const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
 	//static void FillBoxWithCache(Box* userDefinedBox, const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
 
 private:
@@ -446,7 +446,7 @@ private:
     PtrArray m_aNotifiers;				//save WindowImplBase::INotify* and CMenuWnd::INotify*, add in WindowImplBase::OnCreate, remove in WindowImplBase::OnFinalMessage
     PtrArray m_aTimers;					//TIMERINFO
 	PtrArray m_aPreMessageFilters;		//save WindowImplBase::IMessageFilter*, add in WindowImplBase::OnCreate, remove in WindowImplBase::OnFinalMessage
-    PtrArray m_aMessageFilters;			//save ActiveX::IMessageFilter* and RichEdit::IMessageFilter*, add in WindowImplBase::OnCreate->CPaintManager::InitControls(pControl)->Container::SetManager()->Control::Init()->RichEdit::DoInit(), remove in ~RichEdit()
+    PtrArray m_aMessageFilters;			//save ActiveX::IMessageFilter* and RichEdit::IMessageFilter*, add in WindowImplBase::OnCreate->CPaintManager::InitControls(pControl)->ScrollContainer::SetManager()->Control::Init()->RichEdit::DoInit(), remove in ~RichEdit()
     PtrArray m_aPostPaintControls;
 	PtrArray m_aNativeWindow;
 	PtrArray m_aNativeWindowControl;

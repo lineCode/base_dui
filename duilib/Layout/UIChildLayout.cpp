@@ -13,7 +13,7 @@ namespace dui
 		if (!m_pstrXMLFile.empty())
 		{
 			CDialogBuilder builder;
-			Container* pChildWindow = static_cast<Container*>(builder.Create(m_pstrXMLFile.c_str(), (UINT)0, NULL, m_pManager));
+			ScrollContainer* pChildWindow = static_cast<ScrollContainer*>(builder.Create(m_pstrXMLFile.c_str(), (UINT)0, NULL, m_pManager));
 			if (pChildWindow)
 			{
 				this->Add(pChildWindow);
@@ -30,7 +30,7 @@ namespace dui
 		if( _tcscmp(pstrName, _T("xmlfile")) == 0 )
 			SetChildLayoutXML(pstrValue);
 		else
-			Container::SetAttribute(pstrName,pstrValue);
+			ScrollContainer::SetAttribute(pstrName,pstrValue);
 	}
 
 	void ChildLayout::SetChildLayoutXML( String pXML )

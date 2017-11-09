@@ -8,7 +8,7 @@ CDialogBuilder::CDialogBuilder() : m_pCallback(NULL), m_pstrtype(NULL)
 }
 
 Control* CDialogBuilder::Create(STRINGorID xml, LPCTSTR type, IDialogBuilderCallback* pCallback, 
-	CPaintManager* pManager, Control* pParent, Container *pFilledContainer)
+	CPaintManager* pManager, Control* pParent, ScrollContainer *pFilledContainer)
 {
 	//资源ID为0-65535，两个字节；字符串指针为4个字节
 	//字符串以<开头认为是XML字符串，否则认为是XML文件
@@ -39,7 +39,7 @@ Control* CDialogBuilder::Create(STRINGorID xml, LPCTSTR type, IDialogBuilderCall
 	return Create(pCallback, pManager, pParent, pFilledContainer);
 }
 
-Control* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, CPaintManager* pManager, Control* pParent, Container *pFilledContainer)
+Control* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, CPaintManager* pManager, Control* pParent, ScrollContainer *pFilledContainer)
 {
 	m_pCallback = pCallback;
 	CMarkupNode root = m_xml.GetRoot();
@@ -191,7 +191,7 @@ void CDialogBuilder::GetLastErrorLocation(LPTSTR pstrSource, SIZE_T cchMax) cons
     return m_xml.GetLastErrorLocation(pstrSource, cchMax);
 }
 
-Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintManager* pManager, Container* pFilledContainer)
+Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintManager* pManager, ScrollContainer* pFilledContainer)
 {
     IContainer* pContainer = NULL;
     Control* pReturn = NULL;
@@ -346,6 +346,7 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
 					if (_tcsicmp(pstrClass, DUI_CTR_LISTTEXTELEMENT) == 0)       pControl = new ListTextElement;
 					else if (_tcsicmp(pstrClass, DUI_CTR_LISTHBOXELEMENT) == 0)  pControl = new ListHBoxElement;
 					else if (_tcsicmp(pstrClass, DUI_CTR_BUTTONCONTAINER) == 0)   pControl = new ButtonContainer;
+					else if (_tcsicmp(pstrClass, DUI_CTR_SCROLLCONTAINER) == 0)   pControl = new ScrollContainer;
 					break;
 				case 16:
 					if (_tcsicmp(pstrClass, DUI_CTR_HLAYOUT) == 0)      pControl = new HorizontalLayout;

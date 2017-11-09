@@ -99,7 +99,7 @@ namespace dui
 	{
 		if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
 			if( m_pOwner != NULL ) m_pOwner->DoEvent(event);
-			else Container::DoEvent(event);
+			else ScrollContainer::DoEvent(event);
 			return;
 		}
 
@@ -152,7 +152,7 @@ namespace dui
 			return;
 
 		if( GetParent() ) {
-			Container* pParentContainer = static_cast<Container*>(GetParent()->GetInterface(DUI_CTR_CONTAINER));
+			ScrollContainer* pParentContainer = static_cast<ScrollContainer*>(GetParent()->GetInterface(DUI_CTR_SCROLLCONTAINER));
 			if( pParentContainer ) {
 				RECT rc = pParentContainer->GetPos();
 				RECT rcPadding = pParentContainer->GetPadding();
@@ -183,11 +183,11 @@ namespace dui
 				if( m_pManager != NULL ) m_pManager->Invalidate(invalidateRc);
 			}
 			else {
-				Container::Invalidate();
+				ScrollContainer::Invalidate();
 			}
 		}
 		else {
-			Container::Invalidate();
+			ScrollContainer::Invalidate();
 		}
 	}
 	

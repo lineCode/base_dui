@@ -1098,7 +1098,7 @@ LPCTSTR RichEdit::GetClass() const
 LPVOID RichEdit::GetInterface(LPCTSTR pstrName)
 {
     if( _tcscmp(pstrName, DUI_CTR_RICHEDIT) == 0 ) return static_cast<RichEdit*>(this);
-    return Container::GetInterface(pstrName);
+    return ScrollContainer::GetInterface(pstrName);
 }
 
 UINT RichEdit::GetControlFlags() const
@@ -1984,13 +1984,13 @@ void RichEdit::DoEvent(TEvent& event)
     {
         return;
     }
-    Container::DoEvent(event);
+    ScrollContainer::DoEvent(event);
 }
 
 SIZE RichEdit::EstimateSize(SIZE szAvailable)
 {
     //return CDuiSize(m_rcItem); // 这种方式在第一次设置大小之后就大小不变了
-    return Container::EstimateSize(szAvailable);
+    return ScrollContainer::EstimateSize(szAvailable);
 }
 
 void RichEdit::SetPos(RECT rc, bool bNeedInvalidate)
@@ -2092,7 +2092,7 @@ void RichEdit::SetPos(RECT rc, bool bNeedInvalidate)
 
 void RichEdit::Move(SIZE szOffset, bool bNeedInvalidate)
 {
-	Container::Move(szOffset, bNeedInvalidate);
+	ScrollContainer::Move(szOffset, bNeedInvalidate);
 	if( m_pTwh != NULL ) {
 		RECT rc = m_rcItem;
 		rc.left += m_rcPadding.left;
@@ -2297,7 +2297,7 @@ void RichEdit::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
 		SetTextPadding(rcTextPadding);
 	}
-    else Container::SetAttribute(pstrName, pstrValue);
+    else ScrollContainer::SetAttribute(pstrName, pstrValue);
 }
 
 LRESULT RichEdit::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)

@@ -11,10 +11,10 @@
       <Button name="closebtn" width="25" height="25" normalimage="file='btn_close.png'" pushedimage="file='btn_close_pushed.png'"/>
     </HLayout>
 
-    <Container margin="100,20" mouse="false" width="70" height="70">
+    <ScrollContainer margin="100,20" mouse="false" width="70" height="70">
       <Control width="70" height="70" bkimage="default_head.png" borderround="70,70"/>
       <Control width="70" height="70" bkimage="head_mask.png" />
-    </Container>
+    </ScrollContainer>
     
     <VLayout margin="0,40">
       <HLayout height="30">

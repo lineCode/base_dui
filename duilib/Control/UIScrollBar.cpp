@@ -40,12 +40,12 @@ LPVOID ScrollBar::GetInterface(LPCTSTR pstrName)
 	return Control::GetInterface(pstrName);
 }
 
-Container* ScrollBar::GetOwner() const
+ScrollContainer* ScrollBar::GetOwner() const
 {
 	return m_pOwner;
 }
 
-void ScrollBar::SetOwner(Container* pOwner)
+void ScrollBar::SetOwner(ScrollContainer* pOwner)
 {
 	m_pOwner = pOwner;
 }

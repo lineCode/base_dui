@@ -181,8 +181,8 @@
       <Attribute name="showbutton2" default="" type="" comment=""/>
     </ScrollBar>
     
-    <!--Container begin-->
-    <Container parent="Control" notifies="" comment="">
+    <!--ScrollContainer begin-->
+    <ScrollContainer parent="Control" notifies="" comment="">
       <Attribute name="padding"         default="" type="" comment=""/>
       <Attribute name="mousechild"      default="" type="" comment=""/>
       <Attribute name="vscrollbar"      default="" type="" comment=""/>
@@ -192,30 +192,30 @@
       <Attribute name="childmargin"     default="" type="" comment=""/>
       <Attribute name="childalign"      default="" type="" comment=""/>
       <Attribute name="childvalign"     default="" type="" comment=""/>
-    </Container>
+    </ScrollContainer>
 
-    <ButtonContainer parent="Container" notifies="" comment="同Container">
+    <ButtonContainer parent="ScrollContainer" notifies="" comment="同ScrollContainer">
     </ButtonContainer>
 
-    <OptionContainer parent="Container" notifies="" comment="同Container">
+    <OptionContainer parent="ScrollContainer" notifies="" comment="同ScrollContainer">
     </OptionContainer>
     
-    <HLayout parent="Container" notifies="" comment="">
+    <HLayout parent="ScrollContainer" notifies="" comment="">
       <Attribute name="sepheight"     default="" type="" comment=""/>
       <Attribute name="sepimm"        default="" type="" comment=""/>
     </HLayout>
     
-    <VLayout parent="Container" notifies="" comment="">
+    <VLayout parent="ScrollContainer" notifies="" comment="">
       <Attribute name="sepheight"     default="" type="" comment=""/>
       <Attribute name="sepimm"        default="" type="" comment=""/>
     </VLayout>
     
-    <TabLayout parent="Container" notifies="" comment="fadeswitch 未完成">
+    <TabLayout parent="ScrollContainer" notifies="" comment="fadeswitch 未完成">
       <Attribute name="selectedid"     default="" type="" comment=""/>
       <Attribute name="fadeswitch"     default="false" type="bool" comment="tab切换动画"/>  
     </TabLayout>
 
-    <ListContainerElement parent="Container" notifies="" comment="">
+    <ListContainerElement parent="ScrollContainer" notifies="" comment="">
       <Attribute name="selected"        default="" type="" comment=""/>
       <Attribute name="expandable"      default="" type="" comment=""/>
     </ListContainerElement>
@@ -231,7 +231,7 @@
       <Attribute name="linepadding"     default="" type="" comment=""/>
     </MenuElement>
 
-    <RichEdit parent="Container" notifies="" comment="">
+    <RichEdit parent="ScrollContainer" notifies="" comment="">
       <Attribute name="vscrollbar"        default="" type="" comment=""/>
       <Attribute name="autovscroll"       default="" type="" comment=""/>
       <Attribute name="hscrollbar"        default="" type="" comment=""/>

@@ -13,8 +13,8 @@ namespace dui
 		LPCTSTR GetClass() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
 
-		Container* GetOwner() const;
-		void SetOwner(Container* pOwner);
+		ScrollContainer* GetOwner() const;
+		void SetOwner(ScrollContainer* pOwner);
 
 		void SetVisible(bool bVisible = true);
 		void SetEnabled(bool bEnable = true);
@@ -111,7 +111,7 @@ namespace dui
 		int m_nScrollPos;
 		int m_nLineSize;
         int m_nScrollUnit;
-		Container* m_pOwner;
+		ScrollContainer* m_pOwner;
 		POINT ptLastMouse;
 		int m_nLastScrollPos;
 		int m_nLastScrollOffset;

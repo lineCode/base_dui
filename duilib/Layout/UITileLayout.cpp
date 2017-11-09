@@ -17,7 +17,7 @@ namespace dui
 	LPVOID TileLayout::GetInterface(LPCTSTR pstrName)
 	{
 		if( _tcscmp(pstrName, DUI_CTR_TILELAYOUT) == 0 ) return static_cast<TileLayout*>(this);
-		return Container::GetInterface(pstrName);
+		return ScrollContainer::GetInterface(pstrName);
 	}
 
 	int TileLayout::GetFixedColumns() const
@@ -78,7 +78,7 @@ namespace dui
 		}
 		else if( _tcscmp(pstrName, _T("columns")) == 0 ) SetFixedColumns(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("childvpadding")) == 0 ) SetChildVPadding(_ttoi(pstrValue));
-		else Container::SetAttribute(pstrName, pstrValue);
+		else ScrollContainer::SetAttribute(pstrName, pstrValue);
 	}
 
 	void TileLayout::SetPos(RECT rc, bool bNeedInvalidate)

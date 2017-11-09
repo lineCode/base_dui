@@ -5,7 +5,7 @@
 
 namespace dui
 {
-	class DUILIB_API VerticalLayout : public Container
+	class DUILIB_API VerticalLayout : public ScrollContainer
 	{
 	public:
 		VerticalLayout();

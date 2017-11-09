@@ -17,7 +17,7 @@ namespace dui
 	LPVOID VerticalLayout::GetInterface(LPCTSTR pstrName)
 	{
 		if( _tcscmp(pstrName, DUI_CTR_VLAYOUT) == 0 ) return static_cast<VerticalLayout*>(this);
-		return Container::GetInterface(pstrName);
+		return ScrollContainer::GetInterface(pstrName);
 	}
 
 	UINT VerticalLayout::GetControlFlags() const
@@ -223,7 +223,7 @@ namespace dui
 	{
 		if( _tcscmp(pstrName, _T("sepheight")) == 0 ) SetSepHeight(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("sepimm")) == 0 ) SetSepImmMode(_tcscmp(pstrValue, _T("true")) == 0);
-		else Container::SetAttribute(pstrName, pstrValue);
+		else ScrollContainer::SetAttribute(pstrName, pstrValue);
 	}
 
 	void VerticalLayout::DoEvent(TEvent& event)
@@ -308,7 +308,7 @@ namespace dui
 				}
 			}
 		}
-		Container::DoEvent(event);
+		ScrollContainer::DoEvent(event);
 	}
 
 	RECT VerticalLayout::GetThumbRect(bool bUseNew) const

@@ -343,6 +343,7 @@ protected:                                                                \
 #define  DUI_CTR_LISTHBOXELEMENT                 (_T("ListHBoxElement"))
 #define  DUI_CTR_LISTTEXTELEMENT                 (_T("ListTextElement"))
 #define  DUI_CTR_BUTTONCONTAINER				 (_T("ButtonContainer"))
+#define  DUI_CTR_SCROLLCONTAINER                 (_T("ScrollContainer"))
 //16
 #define  DUI_CTR_LISTLABELELEMENT                (_T("ListLabelElement"))
 //20

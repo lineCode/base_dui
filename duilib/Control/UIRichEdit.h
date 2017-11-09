@@ -7,7 +7,7 @@ namespace dui {
 
 class CTxtWinHost;
 
-class DUILIB_API RichEdit : public Container, public IMessageFilter
+class DUILIB_API RichEdit : public ScrollContainer, public IMessageFilter
 {
 public:
     RichEdit();

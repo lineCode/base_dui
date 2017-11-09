@@ -5,7 +5,7 @@
 
 namespace dui
 {
-	class DUILIB_API TileLayout : public Container
+	class DUILIB_API TileLayout : public ScrollContainer
 	{
 	public:
 		TileLayout();

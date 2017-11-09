@@ -385,7 +385,7 @@ LPVOID Combo::GetInterface(LPCTSTR pstrName)
 {
     if( _tcscmp(pstrName, DUI_CTR_ILISTOWNER) == 0 ) return static_cast<IListOwner*>(this);
 	if( _tcscmp(pstrName, DUI_CTR_COMBO) == 0 ) return static_cast<Combo*>(this);
-    return Container::GetInterface(pstrName);
+    return ScrollContainer::GetInterface(pstrName);
 }
 
 UINT Combo::GetControlFlags() const
@@ -459,7 +459,7 @@ bool Combo::SetItemIndex(Control* pControl, int iNewIndex)
     IListItem* pSelectedListItem = NULL;
     if( m_iCurSel >= 0 ) pSelectedListItem = 
         static_cast<IListItem*>(GetItemAt(m_iCurSel)->GetInterface(DUI_CTR_ILISTITEM));
-    if( !Container::SetItemIndex(pControl, iNewIndex) ) return false;
+    if( !ScrollContainer::SetItemIndex(pControl, iNewIndex) ) return false;
     int iMinIndex = min(iOrginIndex, iNewIndex);
     int iMaxIndex = max(iOrginIndex, iNewIndex);
     for(int i = iMinIndex; i < iMaxIndex + 1; ++i) {
@@ -484,7 +484,7 @@ bool Combo::SetMultiItemIndex(Control* pStartControl, int iCount, int iNewStartI
     IListItem* pSelectedListItem = NULL;
     if( m_iCurSel >= 0 ) pSelectedListItem = 
         static_cast<IListItem*>(GetItemAt(m_iCurSel)->GetInterface(DUI_CTR_ILISTITEM));
-    if( !Container::SetMultiItemIndex(pStartControl, iCount, iNewStartIndex) ) return false;
+    if( !ScrollContainer::SetMultiItemIndex(pStartControl, iCount, iNewStartIndex) ) return false;
     int iMinIndex = min(iStartIndex, iNewStartIndex);
     int iMaxIndex = max(iStartIndex + iCount, iNewStartIndex + iCount);
     for(int i = iMinIndex; i < iMaxIndex + 1; ++i) {
@@ -506,12 +506,12 @@ bool Combo::Add(Control* pControl)
         pListItem->SetOwner(this);
         pListItem->SetIndex(m_items.GetSize());
     }
-    return Container::Add(pControl);
+    return ScrollContainer::Add(pControl);
 }
 
 bool Combo::AddAt(Control* pControl, int iIndex)
 {
-    if (!Container::AddAt(pControl, iIndex)) return false;
+    if (!ScrollContainer::AddAt(pControl, iIndex)) return false;
 
     // The list items should know about us
     IListItem* pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
@@ -536,7 +536,7 @@ bool Combo::Remove(Control* pControl, bool bDoNotDestroy)
     int iIndex = GetItemIndex(pControl);
     if (iIndex == -1) return false;
 
-    if (!Container::RemoveAt(iIndex, bDoNotDestroy)) return false;
+    if (!ScrollContainer::RemoveAt(iIndex, bDoNotDestroy)) return false;
 
     for(int i = iIndex; i < GetCount(); ++i) {
         Control* p = GetItemAt(i);
@@ -557,7 +557,7 @@ bool Combo::Remove(Control* pControl, bool bDoNotDestroy)
 
 bool Combo::RemoveAt(int iIndex, bool bDoNotDestroy)
 {
-    if (!Container::RemoveAt(iIndex, bDoNotDestroy)) return false;
+    if (!ScrollContainer::RemoveAt(iIndex, bDoNotDestroy)) return false;
 
     for(int i = iIndex; i < GetCount(); ++i) {
         Control* p = GetItemAt(i);
@@ -577,14 +577,14 @@ bool Combo::RemoveAt(int iIndex, bool bDoNotDestroy)
 void Combo::RemoveAll()
 {
     m_iCurSel = -1;
-    Container::RemoveAll();
+    ScrollContainer::RemoveAll();
 }
 
 void Combo::DoEvent(TEvent& event)
 {
     if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
         if( m_pParent != NULL ) m_pParent->DoEvent(event);
-        else Container::DoEvent(event);
+        else ScrollContainer::DoEvent(event);
         return;
     }
 
@@ -721,7 +721,7 @@ String Combo::GetText() const
 
 void Combo::SetEnabled(bool bEnable)
 {
-    Container::SetEnabled(bEnable);
+    ScrollContainer::SetEnabled(bEnable);
     if( !IsEnabled() ) m_uButtonState = 0;
 }
 
@@ -1249,7 +1249,7 @@ void Combo::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetItemHLineColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itemshowhtml")) == 0 ) SetItemShowHtml(_tcscmp(pstrValue, _T("true")) == 0);
-    else Container::SetAttribute(pstrName, pstrValue);
+    else ScrollContainer::SetAttribute(pstrName, pstrValue);
 }
 
 bool Combo::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)

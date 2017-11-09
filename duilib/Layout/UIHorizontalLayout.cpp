@@ -17,7 +17,7 @@ namespace dui
 	LPVOID HorizontalLayout::GetInterface(LPCTSTR pstrName)
 	{
 		if( _tcscmp(pstrName, DUI_CTR_HLAYOUT) == 0 ) return static_cast<HorizontalLayout*>(this);
-		return Container::GetInterface(pstrName);
+		return ScrollContainer::GetInterface(pstrName);
 	}
 
 	UINT HorizontalLayout::GetControlFlags() const
@@ -230,7 +230,7 @@ namespace dui
 	{
 		if( _tcscmp(pstrName, _T("sepwidth")) == 0 ) SetSepWidth(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("sepimm")) == 0 ) SetSepImmMode(_tcscmp(pstrValue, _T("true")) == 0);
-		else Container::SetAttribute(pstrName, pstrValue);
+		else ScrollContainer::SetAttribute(pstrName, pstrValue);
 	}
 
 	void HorizontalLayout::DoEvent(TEvent& event)
@@ -315,7 +315,7 @@ namespace dui
 				}
 			}
 		}
-		Container::DoEvent(event);
+		ScrollContainer::DoEvent(event);
 	}
 
 	RECT HorizontalLayout::GetThumbRect(bool bUseNew) const
