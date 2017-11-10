@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClInclude Include="gui\emoji\emoji_info.h" />
     <ClInclude Include="gui\main\control\friend_item.h" />
+    <ClInclude Include="gui\main\control\friend_itemex.h" />
     <ClInclude Include="gui\main\control\session_item.h" />
     <ClInclude Include="gui\modal_wnd\async_do_modal.h" />
     <ClInclude Include="gui\modal_wnd\async_modal_runner.h" />
@@ -106,6 +107,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="gui\main\control\friend_item.cpp" />
+    <ClCompile Include="gui\main\control\friend_itemex.cpp" />
     <ClCompile Include="gui\main\control\session_item.cpp" />
     <ClCompile Include="gui\modal_wnd\async_do_modal.cpp" />
     <ClCompile Include="gui\modal_wnd\async_modal_runner.cpp" />

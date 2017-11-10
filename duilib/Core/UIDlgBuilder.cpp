@@ -233,7 +233,7 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
 			TreeNode* pParentNode	= static_cast<TreeNode*>(pParent->GetInterface(_T("TreeNode")));
 			TreeNode* pNode			= new TreeNode();
 			if(pParentNode){
-				if(!pParentNode->Add(pNode)){
+				if (!pParentNode->AddChildNode(pNode)){
 					delete pNode;
 					continue;
 				}
@@ -346,7 +346,7 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
 					if (_tcsicmp(pstrClass, DUI_CTR_LISTTEXTELEMENT) == 0)       pControl = new ListTextElement;
 					else if (_tcsicmp(pstrClass, DUI_CTR_LISTHBOXELEMENT) == 0)  pControl = new ListHBoxElement;
 					else if (_tcsicmp(pstrClass, DUI_CTR_BUTTONCONTAINER) == 0)   pControl = new ButtonContainer;
-					else if (_tcsicmp(pstrClass, DUI_CTR_BUTTONCONTAINER) == 0)   pControl = new OptionContainer;
+					else if (_tcsicmp(pstrClass, DUI_CTR_OPTIONCONTAINER) == 0)   pControl = new OptionContainer;
 					else if (_tcsicmp(pstrClass, DUI_CTR_SCROLLCONTAINER) == 0)   pControl = new ScrollContainer;
 					break;
 				case 16:
@@ -396,10 +396,10 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
                 pParent->SetCover(pControl);
             }
             else {
-                TreeNode* pContainerNode = static_cast<TreeNode*>(pParent->GetInterface(DUI_CTR_TREENODE));
+               /* TreeNode* pContainerNode = static_cast<TreeNode*>(pParent->GetInterface(DUI_CTR_TREENODE));
                 if(pContainerNode)
                     pContainerNode->GetTreeNodeHoriznotal()->Add(pControl);
-                else
+                else*/
                 {
                     if( pContainer == NULL ) pContainer = static_cast<IContainer*>(pParent->GetInterface(DUI_CTR_ICONTAINER));
                     ASSERT(pContainer);

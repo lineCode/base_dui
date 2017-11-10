@@ -280,6 +280,7 @@ private:
 
 	dui::List		*list_friend_;
 	dui::List		*list_session_;
+	dui::TreeView	*tv_friend_;
 	/*dui::Button*	btn_online_state_;
 	bool			is_busy_;
 

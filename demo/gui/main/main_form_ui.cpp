@@ -2,6 +2,7 @@
 #include "resource.h"
 #include "gui/main/control/friend_item.h"
 #include "gui/main/control/session_item.h"
+#include "gui/main/control/friend_itemex.h"
 
 #include "main_form.h"
 //#include "util/user.h"
@@ -100,7 +101,7 @@ void MainForm::InitWindow()
 		btn_head_->AttachClick(std::bind(OnBtnHeadClicked, std::placeholders::_1));
 	}
 
-	auto OnBtnContainerClicked = [this](void* param, int index){
+	auto OnOptContainerClicked = [this](void* param, int index){
 		TEvent *event = static_cast<TEvent *>(param);
 		printf("MainForm OnBtnContainerClicked, name:%s\n", event->pSender->GetName().c_str());
 
@@ -109,21 +110,21 @@ void MainForm::InitWindow()
 			tab_session_friend_->SelectItem(index);
 		}
 		
-		
-		return false; };
-	ButtonContainer *btnbox_opt_session = dynamic_cast<ButtonContainer *>(m_PaintManager.FindControl(_T("btnbox_opt_session")));
-	ButtonContainer *btnbox_opt_friends = dynamic_cast<ButtonContainer *>(m_PaintManager.FindControl(_T("btnbox_opt_friends")));
-	ButtonContainer *btnbox_opt_groups = dynamic_cast<ButtonContainer *>(m_PaintManager.FindControl(_T("btnbox_opt_groups")));
-	ButtonContainer *btnbox_opt_menu = dynamic_cast<ButtonContainer *>(m_PaintManager.FindControl(_T("btnbox_opt_menu")));
-	btnbox_opt_session->AttachClick(std::bind(OnBtnContainerClicked, std::placeholders::_1, 0));
-	btnbox_opt_friends->AttachClick(std::bind(OnBtnContainerClicked, std::placeholders::_1, 1));
-	btnbox_opt_groups->AttachClick(std::bind(OnBtnContainerClicked, std::placeholders::_1, 2));
-	btnbox_opt_menu->AttachClick(std::bind(OnBtnContainerClicked, std::placeholders::_1, 3));
+		return true; };
+	OptionContainer *optbox_opt_session = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("optbox_opt_session")));
+	OptionContainer *optbox_opt_friends = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("optbox_opt_friends")));
+	OptionContainer *optbox_opt_groups = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("optbox_opt_groups")));
+	OptionContainer *optbox_opt_menu = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("optbox_opt_menu")));
+	optbox_opt_session->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 0));
+	optbox_opt_friends->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 1));
+	optbox_opt_groups->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 2));
+	optbox_opt_menu->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 3));
 #endif
 	tab_session_friend_ = dynamic_cast<TabLayout*>(m_PaintManager.FindControl(_T("tab_session_friend")));
 
 	list_friend_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_friend")));
 	list_session_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_session")));
+	tv_friend_ = dynamic_cast<TreeView*>(m_PaintManager.FindControl(_T("tv_friend")));
 
 	nim_comp::UserManager::GetInstance()->DoLoadFriends(std::bind(&MainForm::OnGetAllFriendInfo, this, std::placeholders::_1));
 	nim_comp::SessionManager::GetInstance()->DoLoadSession(std::bind(&MainForm::OnGetAllSessionInfo, this, std::placeholders::_1, std::placeholders::_2));
@@ -552,7 +553,15 @@ void MainForm::OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list)
 		m_PaintManager.FillBox(item, _T("friend_item.xml"), this, &m_PaintManager, NULL);
 		list_friend_->Add(item);
 	}
-	printf("load friends ui %d ms\n", clock()-ck1);
+	printf("load friends ui(in list) %d ms\n", clock()-ck1);
+
+	for (auto it = list.cbegin(); it != list.cend(); it++)
+	{
+		nim_comp::FriendItemEx *item = new nim_comp::FriendItemEx(*it);
+		m_PaintManager.FillBox(item, _T("friend_item.xml"), this, &m_PaintManager, NULL);
+		tv_friend_->GetRootNode()Add(item);
+	}
+	printf("load friends ui(in treeview) %d ms\n", clock() - ck1);
 }
 
 void MainForm::OnGetAllSessionInfo(int unread_count, const nim_comp::SessionDataList& data_list)

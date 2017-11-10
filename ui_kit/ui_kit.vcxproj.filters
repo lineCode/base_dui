@@ -123,6 +123,9 @@
     <ClInclude Include="module\photo\photo_manager.h">
       <Filter>module\photo</Filter>
     </ClInclude>
+    <ClInclude Include="gui\main\control\friend_itemex.h">
+      <Filter>gui\main\control</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\msgbox\msgbox.cpp">
@@ -176,6 +179,9 @@
     </ClCompile>
     <ClCompile Include="module\photo\photo_manager.cpp">
       <Filter>module\photo</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\main\control\friend_itemex.cpp">
+      <Filter>gui\main\control</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

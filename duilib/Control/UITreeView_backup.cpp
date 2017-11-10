@@ -12,22 +12,48 @@ namespace dui
 	//************************************
 	TreeNode::TreeNode( TreeNode* _ParentNode /*= NULL*/ )
 	{
+		m_dwItemTextColor		= 0x00000000;
+		m_dwItemHotTextColor	= 0;
+		m_dwSelItemTextColor	= 0;
+		m_dwSelItemHotTextColor	= 0;
+
 		pTreeView		= NULL;
 		m_bIsVisable	= true;
+		m_bIsCheckBox	= false;
 		pParentTreeNode	= NULL;
+
+		pHoriz			= new HorizontalLayout();
+		pFolderButton	= new CheckBtn();
+		pDottedLine		= new Label();
+		pCheckBox		= new CheckBtn();
+		pItemButton		= new OptionBtn();
 
 		this->SetFixedHeight(18);
 		this->SetFixedWidth(250);
+		pFolderButton->SetFixedWidth(GetFixedHeight());
+		pDottedLine->SetFixedWidth(2);
+		pCheckBox->SetFixedWidth(GetFixedHeight());
+		pItemButton->SetAttribute(_T("halign"),_T("left"));
+
+		pDottedLine->SetVisible(false);
+		pCheckBox->SetVisible(false);
+		pItemButton->SetMouseEnabled(false);
 
 		if(_ParentNode)
 		{
 			if (_tcsicmp(_ParentNode->GetClass(), DUI_CTR_TREENODE) != 0)
 				return;
 
-			/*pDottedLine->SetVisible(_ParentNode->IsVisible());
-			pDottedLine->SetFixedWidth(_ParentNode->GetDottedLine()->GetFixedWidth()+16);*/
+			pDottedLine->SetVisible(_ParentNode->IsVisible());
+			pDottedLine->SetFixedWidth(_ParentNode->GetDottedLine()->GetFixedWidth()+16);
 			this->SetParentNode(_ParentNode);
 		}
+
+		pHoriz->Add(pDottedLine);
+		pHoriz->Add(pFolderButton);
+		pHoriz->Add(pCheckBox);
+		pHoriz->Add(pItemButton);
+		Add(pHoriz);
 	}
 	
 	//************************************
@@ -87,7 +113,6 @@ namespace dui
 			}
 			return;
 		}
-#if 0
 		if( event.Type == UIEVENT_MOUSEENTER )
 		{
 			if( IsEnabled()) {
@@ -114,8 +139,6 @@ namespace dui
 
 			//return;
 		}
-#endif
-
 	}
 
 	//************************************
@@ -176,11 +199,11 @@ namespace dui
 	//************************************
 	bool TreeNode::Select( bool bSelect /*= true*/,  bool bTriggerEvent)
 	{
-		bool nRet = __super::Select(bSelect, bTriggerEvent);
-		/*if(m_bSelected)
+		bool nRet = ListContainerElement::Select(bSelect, bTriggerEvent);
+		if(m_bSelected)
 			pItemButton->SetTextColor(GetSelItemTextColor());
 		else 
-			pItemButton->SetTextColor(GetItemTextColor());*/
+			pItemButton->SetTextColor(GetItemTextColor());
 
 		return nRet;
 	}
@@ -251,6 +274,48 @@ namespace dui
 	bool TreeNode::GetVisibleTag()
 	{
 		return m_bIsVisable;
+	}
+
+	//************************************
+	// 函数名称: SetItemText
+	// 返回类型: void
+	// 参数信息: LPCTSTR pstrValue
+	// 函数说明: 
+	//************************************
+	void TreeNode::SetItemText( LPCTSTR pstrValue )
+	{
+		pItemButton->SetText(pstrValue);
+	}
+
+	//************************************
+	// 函数名称: GetItemText
+	// 返回类型: UiLib::String
+	// 函数说明: 
+	//************************************
+	String TreeNode::GetItemText()
+	{
+		return pItemButton->GetText();
+	}
+
+	//************************************
+	// 函数名称: CheckBoxSelected
+	// 返回类型: void
+	// 参数信息: bool _Selected
+	// 函数说明: 
+	//************************************
+	void TreeNode::CheckBoxSelected( bool _Selected )
+	{
+		pCheckBox->Selected(_Selected);
+	}
+
+	//************************************
+	// 函数名称: IsCheckBoxSelected
+	// 返回类型: bool
+	// 函数说明: 
+	//************************************
+	bool TreeNode::IsCheckBoxSelected() const
+	{
+		return pCheckBox->IsSelected();
 	}
 
 	//************************************
@@ -380,7 +445,7 @@ namespace dui
 	//************************************
 	void TreeNode::SetAttribute( LPCTSTR pstrName, LPCTSTR pstrValue )
 	{
-		/*if(_tcscmp(pstrName, _T("text")) == 0 )
+		if(_tcscmp(pstrName, _T("text")) == 0 )
 			pItemButton->SetText(pstrValue);
 		else if(_tcscmp(pstrName, _T("horizattr")) == 0 )
 			pHoriz->SetAttributeList(pstrValue);
@@ -432,7 +497,7 @@ namespace dui
 			}
 			SetSelItemHotTextColor(clrColor);
 		}
-		else */ListContainerElement::SetAttribute(pstrName,pstrValue);
+		else ListContainerElement::SetAttribute(pstrName,pstrValue);
 	}
 
 	//************************************
@@ -454,6 +519,48 @@ namespace dui
 	TreeNode* TreeNode::GetChildNode( int _nIndex )
 	{
 		return static_cast<TreeNode*>(mTreeNodes.GetAt(_nIndex));
+	}
+
+	//************************************
+	// 函数名称: SetVisibleFolderBtn
+	// 返回类型: void
+	// 参数信息: bool _IsVisibled
+	// 函数说明: 
+	//************************************
+	void TreeNode::SetVisibleFolderBtn( bool _IsVisibled )
+	{
+		pFolderButton->SetVisible(_IsVisibled);
+	}
+
+	//************************************
+	// 函数名称: GetVisibleFolderBtn
+	// 返回类型: bool
+	// 函数说明: 
+	//************************************
+	bool TreeNode::GetVisibleFolderBtn()
+	{
+		return pFolderButton->IsVisible();
+	}
+
+	//************************************
+	// 函数名称: SetVisibleCheckBtn
+	// 返回类型: void
+	// 参数信息: bool _IsVisibled
+	// 函数说明: 
+	//************************************
+	void TreeNode::SetVisibleCheckBtn( bool _IsVisibled )
+	{
+		pCheckBox->SetVisible(_IsVisibled);
+	}
+
+	//************************************
+	// 函数名称: GetVisibleCheckBtn
+	// 返回类型: bool
+	// 函数说明: 
+	//************************************
+	bool TreeNode::GetVisibleCheckBtn()
+	{
+		return pCheckBox->IsVisible();
 	}
 	
 	//************************************
@@ -495,7 +602,7 @@ namespace dui
 	// 返回类型: TreeNode*
 	// 函数说明:
 	//************************************
-	/*TreeNode* TreeNode::GetLastNode( )
+	TreeNode* TreeNode::GetLastNode( )
 	{
 		if(!IsHasChild())
 			return this;
@@ -516,7 +623,7 @@ namespace dui
 		}
 		
 		return nRetNode;
-	}*/
+	}
 	
 	//************************************
 	// 函数名称: CalLocation
@@ -526,13 +633,101 @@ namespace dui
 	//************************************
 	TreeNode* TreeNode::CalLocation( TreeNode* _pTreeNodeUI )
 	{
-		/*_pTreeNodeUI->GetDottedLine()->SetVisible(true);
+		_pTreeNodeUI->GetDottedLine()->SetVisible(true);
 		_pTreeNodeUI->GetDottedLine()->SetFixedWidth(pDottedLine->GetFixedWidth()+16);
 		_pTreeNodeUI->SetParentNode(this);
 		_pTreeNodeUI->GetItemButton()->SetGroup(pItemButton->GetGroup());
-		_pTreeNodeUI->SetTreeView(pTreeView);*/
+		_pTreeNodeUI->SetTreeView(pTreeView);
 
 		return _pTreeNodeUI;
+	}
+
+	//************************************
+	// 函数名称: SetTextColor
+	// 返回类型: void
+	// 参数信息: DWORD _dwTextColor
+	// 函数说明: 
+	//************************************
+	void TreeNode::SetItemTextColor( DWORD _dwItemTextColor )
+	{
+		m_dwItemTextColor	= _dwItemTextColor;
+		pItemButton->SetTextColor(m_dwItemTextColor);
+	}
+
+	//************************************
+	// 函数名称: GetTextColor
+	// 返回类型: DWORD
+	// 函数说明: 
+	//************************************
+	DWORD TreeNode::GetItemTextColor() const
+	{
+		return m_dwItemTextColor;
+	}
+
+	//************************************
+	// 函数名称: SetTextHotColor
+	// 返回类型: void
+	// 参数信息: DWORD _dwTextHotColor
+	// 函数说明: 
+	//************************************
+	void TreeNode::SetItemHotTextColor( DWORD _dwItemHotTextColor )
+	{
+		m_dwItemHotTextColor = _dwItemHotTextColor;
+		Invalidate();
+	}
+
+	//************************************
+	// 函数名称: GetTextHotColor
+	// 返回类型: DWORD
+	// 函数说明: 
+	//************************************
+	DWORD TreeNode::GetItemHotTextColor() const
+	{
+		return m_dwItemHotTextColor;
+	}
+
+	//************************************
+	// 函数名称: SetSelItemTextColor
+	// 返回类型: void
+	// 参数信息: DWORD _dwSelItemTextColor
+	// 函数说明: 
+	//************************************
+	void TreeNode::SetSelItemTextColor( DWORD _dwSelItemTextColor )
+	{
+		m_dwSelItemTextColor = _dwSelItemTextColor;
+		Invalidate();
+	}
+
+	//************************************
+	// 函数名称: GetSelItemTextColor
+	// 返回类型: DWORD
+	// 函数说明: 
+	//************************************
+	DWORD TreeNode::GetSelItemTextColor() const
+	{
+		return m_dwSelItemTextColor;
+	}
+
+	//************************************
+	// 函数名称: SetSelHotItemTextColor
+	// 返回类型: void
+	// 参数信息: DWORD _dwSelHotItemTextColor
+	// 函数说明: 
+	//************************************
+	void TreeNode::SetSelItemHotTextColor( DWORD _dwSelHotItemTextColor )
+	{
+		m_dwSelItemHotTextColor = _dwSelHotItemTextColor;
+		Invalidate();
+	}
+
+	//************************************
+	// 函数名称: GetSelHotItemTextColor
+	// 返回类型: DWORD
+	// 函数说明: 
+	//************************************
+	DWORD TreeNode::GetSelItemHotTextColor() const
+	{
+		return m_dwSelItemHotTextColor;
 	}
 
 	/*****************************************************************************/
@@ -545,7 +740,7 @@ namespace dui
 	// 参数信息: void
 	// 函数说明: 
 	//************************************
-	TreeView::TreeView( void ) : m_uItemMinWidth(0)
+	TreeView::TreeView( void ) : m_bVisibleFolderBtn(true),m_bVisibleCheckBtn(false),m_uItemMinWidth(0)
 	{
 		this->GetHeader()->SetVisible(false);
 	}
@@ -588,8 +783,8 @@ namespace dui
 		pTreeNode->GetFolderButton()->OnNotify += MakeDelegate(this,&TreeView::OnFolderChanged);
 		pTreeNode->GetCheckBox()->OnNotify += MakeDelegate(this,&TreeView::OnCheckBoxChanged);
 #endif
-		/*pTreeNode->SetVisibleFolderBtn(m_bVisibleFolderBtn);
-		pTreeNode->SetVisibleCheckBtn(m_bVisibleCheckBtn);*/
+		pTreeNode->SetVisibleFolderBtn(m_bVisibleFolderBtn);
+		pTreeNode->SetVisibleCheckBtn(m_bVisibleCheckBtn);
 		if(m_uItemMinWidth > 0)	pTreeNode->SetMinWidth(m_uItemMinWidth);
 
 		List::Add(pTreeNode);
@@ -668,6 +863,8 @@ namespace dui
         pTreeNode->GetFolderButton()->OnNotify += MakeDelegate(this,&TreeView::OnFolderChanged);
         pTreeNode->GetCheckBox()->OnNotify += MakeDelegate(this,&TreeView::OnCheckBoxChanged);
 #endif
+        pTreeNode->SetVisibleFolderBtn(m_bVisibleFolderBtn);
+        pTreeNode->SetVisibleCheckBtn(m_bVisibleCheckBtn);
 
         if(m_uItemMinWidth > 0) pTreeNode->SetMinWidth(m_uItemMinWidth);
 
@@ -771,10 +968,10 @@ namespace dui
 		if(pMsg->sType == DUI_MSGTYPE_ITEMDBCLICK)
 		{
 			TreeNode* pItem		= static_cast<TreeNode*>(pMsg->pSender);
-			//CheckBtn* pFolder	= pItem->GetFolderButton();
-			//pFolder->Selected(!pFolder->IsSelected());
-			//pItem->SetVisibleTag(!pFolder->GetCheck());
-			//SetItemExpand(!pFolder->GetCheck(),pItem);
+			CheckBtn* pFolder	= pItem->GetFolderButton();
+			pFolder->Selected(!pFolder->IsSelected());
+			pItem->SetVisibleTag(!pFolder->GetCheck());
+			SetItemExpand(!pFolder->GetCheck(),pItem);
 			return true;
 		}
 		return false;

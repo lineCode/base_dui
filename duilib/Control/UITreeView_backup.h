@@ -9,6 +9,10 @@ using namespace std;
 namespace dui
 {
 	class TreeView;
+	class CheckBtn;
+	class Label;
+	class OptionBtn;
+
 	class DUILIB_API TreeNode : public ListContainerElement
 	{
 	public:
@@ -22,9 +26,15 @@ namespace dui
 		void	Invalidate();
 		bool	Select(bool bSelect = true, bool bTriggerEvent=true);
 
+		bool	Add(Control* _pTreeNodeUI);
+		bool	AddAt(Control* pControl, int iIndex);
+
 		void	SetVisibleTag(bool _IsVisible);
 		bool	GetVisibleTag();
-
+		void	SetItemText(LPCTSTR pstrValue);
+		String	GetItemText();
+		void	CheckBoxSelected(bool _Selected);
+		bool	IsCheckBoxSelected() const;
 		bool	IsHasChild() const;
 		long	GetTreeLevel() const;
 		bool	AddChildNode(TreeNode* _pTreeNodeUI);
@@ -37,6 +47,16 @@ namespace dui
 		TreeNode* GetChildNode(int _nIndex);
 		void	SetVisibleFolderBtn(bool _IsVisibled);
 		bool	GetVisibleFolderBtn();
+		void	SetVisibleCheckBtn(bool _IsVisibled);
+		bool	GetVisibleCheckBtn();
+		void	SetItemTextColor(DWORD _dwItemTextColor);
+		DWORD	GetItemTextColor() const;
+		void	SetItemHotTextColor(DWORD _dwItemHotTextColor);
+		DWORD	GetItemHotTextColor() const;
+		void	SetSelItemTextColor(DWORD _dwSelItemTextColor);
+		DWORD	GetSelItemTextColor() const;
+		void	SetSelItemHotTextColor(DWORD _dwSelHotItemTextColor);
+		DWORD	GetSelItemHotTextColor() const;
 
 		void	SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
@@ -46,19 +66,33 @@ namespace dui
 		int			 GetNodeIndex();
 
 	private:
-		bool	Add(Control* _pTreeNodeUI);
-		bool	AddAt(Control* pControl, int iIndex);
-
-	private:
 		TreeNode* GetLastNode();
 		TreeNode* CalLocation(TreeNode* _pTreeNodeUI);
+	public:
+		HorizontalLayout*	GetTreeNodeHoriznotal() const {return pHoriz;};
+		CheckBtn*			GetFolderButton() const {return pFolderButton;};
+		Label*				GetDottedLine() const {return pDottedLine;};
+		CheckBtn*			GetCheckBox() const {return pCheckBox;};
+		OptionBtn*				GetItemButton() const {return pItemButton;};
 
 	private:
 		long	m_iTreeLavel;
 		bool	m_bIsVisable;
+		bool	m_bIsCheckBox;
+		DWORD	m_dwItemTextColor;
+		DWORD	m_dwItemHotTextColor;
+		DWORD	m_dwSelItemTextColor;
+		DWORD	m_dwSelItemHotTextColor;
 
 		TreeView*			pTreeView;
+		HorizontalLayout*	pHoriz;
+		CheckBtn*			pFolderButton;
+		Label*				pDottedLine;
+		CheckBtn*			pCheckBox;
+		OptionBtn*				pItemButton;
+
 		TreeNode*			pParentTreeNode;
+
 		PtrArray			mTreeNodes;
 	};
 
@@ -100,8 +134,8 @@ namespace dui
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 	private:
 		UINT m_uItemMinWidth;
-		//bool m_bVisibleFolderBtn;
-		//bool m_bVisibleCheckBtn;
+		bool m_bVisibleFolderBtn;
+		bool m_bVisibleCheckBtn;
 	};
 }
 

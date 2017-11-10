@@ -3,30 +3,25 @@
   <!--<Window size="261,344" roundcorner="4,4" sizebox="4,4,4,4" bkcolor="white" caption="0,0,0,30">-->
   <HLayout bkcolor="white" >
     <VLayout width="60" bkcolor="main_blue">
-      <ScrollContainer width="40" height="40" margin="10,10,10,10" >
+      <Container width="40" height="40" margin="10,10,10,10" >
         <Button name="btn_head" width="40" height="40" borderround="40,40" bkcolor=""/>
         <Control width="40" height="40" bkimage="head_mask.png" mouse="false"/>
-      </ScrollContainer>
-      <ButtonContainer name="btnbox_opt_session" width="40" height="40" margin="10,5,10,0" normalimage="file='icon_01.png' dest='7,7,33,33'" pushedimage="file='icon_01_sel.png' dest='7,7,33,33'" padding="" mousechild="" tooltip="消息">
-        <!--<Option name="opt_session" width="40" height="40" normalimage="file='icon_01.png' dest='7,7,33,33'" pushedimage="file='icon_01_sel.png' dest='7,7,33,33'" group="group_session_friend"  />-->
+      </Container>
+      <OptionContainer name="optbox_opt_session" width="40" height="40" margin="10,5,10,0" group="group_session_friend" normalimage="file='icon_01.png' dest='7,7,33,33'" selectedimage="file='icon_01_sel.png' dest='7,7,33,33'" padding="" mousechild="" tooltip="消息">
+        
         <Button name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>
-      </ButtonContainer>
-      <ButtonContainer name="btnbox_opt_friends" width="40" height="40" margin="10,5,10,0" normalimage="file='icon_02.png' dest='7,7,33,33'" pushedimage="file='icon_02_sel.png' dest='7,7,33,33'" padding="" mousechild="" tooltip="好友">
-        <!--<Option name="opt_friends" width="40" height="40" normalimage="file='icon_02.png' dest='7,7,33,33'" pushedimage="file='icon_02_sel.png' dest='7,7,33,33'" group="group_session_friend"  tooltip="好友"/>-->
-        <!--<Label name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>-->
-      </ButtonContainer>
-      <ButtonContainer name="btnbox_opt_groups" width="40" height="40" margin="10,5,10,0" normalimage="file='icon_03.png' dest='7,7,33,33'" pushedimage="file='icon_03_sel.png' dest='7,7,33,33'" padding="" mousechild="" visible="true" tooltip="群组">
-        <!--<Option name="opt_groups" width="40" height="40" normalimage="file='icon_03.png' dest='7,7,33,33'" pushedimage="file='icon_03_sel.png' dest='7,7,33,33'" group="group_session_friend"  tooltip="群组"/>-->
-        <!--<Label name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>-->
-      </ButtonContainer>
-      <LabelContainer name="labelbox_opt_test" width="40" height="40" margin="10,5,10,0" text="hello" font="3" padding="" mousechild="true" visible="true">
-        <Button name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>
-      </LabelContainer>
+      </OptionContainer>
+      <OptionContainer name="optbox_opt_friends" width="40" height="40" margin="10,5,10,0" group="group_session_friend" normalimage="file='icon_02.png' dest='7,7,33,33'" selectedimage="file='icon_02_sel.png' dest='7,7,33,33'" padding="" mousechild="" tooltip="好友">
+        
+      </OptionContainer>
+      <OptionContainer name="optbox_opt_groups" width="40" height="40" margin="10,5,10,0" group="group_session_friend" normalimage="file='icon_03.png' dest='7,7,33,33'" selectedimage="file='icon_03_sel.png' dest='7,7,33,33'" padding="" mousechild="" visible="true" tooltip="群组">
+       
+      </OptionContainer>
+     
       <Control />
-      <ButtonContainer name="btnbox_opt_menu" width="40" height="40" margin="10,5,10,10" padding="" mousechild="">
-        <Option name="opt_menu" width="40" height="40" normalimage="file='icon_06.png' dest='7,7,33,33'" pushedimage="file='icon_06_sel.png' dest='7,7,33,33'" group="group_session_friend"  tooltip="设置"/>
-        <!--<Label name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>-->
-      </ButtonContainer>
+      <OptionContainer name="optbox_opt_menu" width="40" height="40" group="group_session_friend" normalimage="file='icon_06.png' dest='7,7,33,33'" selectedimage="file='icon_06_sel.png' dest='7,7,33,33'" margin="10,5,10,10" padding="" mousechild="" tooltip="设置">
+        
+      </OptionContainer>
     </VLayout>
     <VLayout width="240" bkcolor="">
       <HLayout height="50">
@@ -35,7 +30,7 @@
       <TabLayout name="tab_session_friend" fadeswitch="true">
         <List class="list" name="list_session" bkcolor="white"/>
         <List class="list" name="list_friend" />
-        <List class="list" name="list_group" bkcolor="main_blue"/>
+        <TreeView class="list" name="tv_friend" bkcolor="white"/>
       </TabLayout>
     </VLayout>
     <Control class="splitline_ver_level1"/>

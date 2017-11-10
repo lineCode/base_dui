@@ -145,7 +145,7 @@ namespace dui
 				GetItemAt(iOldSel)->SetVisible(true);
 			}
 			
-			printf("TabLayout SetTimer\n");
+			//printf("TabLayout SetTimer\n");
 		}
 		return true;
 	}
@@ -224,7 +224,7 @@ namespace dui
 			else {
 				m_uFadeSwitchPos = 0;
 				m_pManager->KillTimer(this, TABLAYOUT_FADESWITCH_TIMERID);
-				printf("TabLayout KillTimer\n");
+				//printf("TabLayout KillTimer\n");
 			}
 
 			Control *pControlLeft = GetItemAt(m_cFadeSwitchLeftId), *pControlRight = GetItemAt(m_cFadeSwitchRightId);
@@ -271,7 +271,7 @@ namespace dui
 			
 			Invalidate();
 			bHandle = true;
-			//printf("m_uFadeSwitchPos:%d\n", m_uFadeSwitchPos);
+			
 		}
 
 		return __super::DoEvent(event);
