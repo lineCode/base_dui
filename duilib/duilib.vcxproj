@@ -284,7 +284,7 @@
     <ClCompile Include="Control\UIScrollBar.cpp" />
     <ClCompile Include="Control\UISlider.cpp" />
     <ClCompile Include="Control\UIText.cpp" />
-    <ClCompile Include="Control\UITreeView.cpp" />
+    <ClCompile Include="Control\UITree.cpp" />
     <ClCompile Include="Control\UIWebBrowser.cpp" />
     <ClCompile Include="Core\UIBase.cpp" />
     <ClCompile Include="Core\UIContainer.cpp" />
@@ -336,7 +336,7 @@
     <ClInclude Include="Control\UIScrollBar.h" />
     <ClInclude Include="Control\UISlider.h" />
     <ClInclude Include="Control\UIText.h" />
-    <ClInclude Include="Control\UITreeView.h" />
+    <ClInclude Include="Control\UITree.h" />
     <ClInclude Include="Control\UIWebBrowser.h" />
     <ClInclude Include="Core\UIBase.h" />
     <ClInclude Include="Core\UIContainer.h" />

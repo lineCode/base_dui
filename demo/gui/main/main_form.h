@@ -280,7 +280,7 @@ private:
 
 	dui::List		*list_friend_;
 	dui::List		*list_session_;
-	dui::TreeView	*tv_friend_;
+	dui::Tree		*tree_friend_;
 	/*dui::Button*	btn_online_state_;
 	bool			is_busy_;
 
@@ -293,6 +293,7 @@ private:
 	bool			is_trayicon_left_double_clicked_;
 
 	AutoUnregister	unregister_cb;*/
+	dui::TreeNode	*group_nodes_[28];
 };
 
 using namespace nbase;

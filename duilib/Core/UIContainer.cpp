@@ -9,10 +9,7 @@ namespace dui
 		m_iChildVAlign(DT_TOP),
 		m_bAutoDestroy(true),
 		m_bDelayedDestroy(true),
-		m_bMouseChildEnabled(true)/*,
-		m_pVerticalScrollBar(NULL),
-		m_pHorizontalScrollBar(NULL),
-		m_bScrollProcess(false)*/
+		m_bMouseChildEnabled(true)
 	{
 		::ZeroMemory(&m_rcPadding, sizeof(m_rcPadding));
 	}
@@ -50,7 +47,7 @@ namespace dui
 			Control* pControl = static_cast<Control*>(m_items[it2]);
 			if (!pControl->IsVisible()) continue;
 			if (pControl->IsFloat()) {
-				//SetFloatPos(it2);
+				SetFloatPos(it2);
 				continue;
 			}
 
@@ -487,6 +484,29 @@ namespace dui
 			Control* pControl = static_cast<Control*>(m_items[it]);
 			if (pControl != NULL && pControl->IsVisible()) pControl->Move(szOffset, false);
 		}
+	}
+
+	void Container::SetFloatPos(int iIndex)
+	{
+		// 因为Control::SetPos对float的操作影响，这里不能对float组件添加滚动条的影响
+		if( iIndex < 0 || iIndex >= m_items.GetSize() ) return;
+
+		Control* pControl = static_cast<Control*>(m_items[iIndex]);
+
+		if( !pControl->IsVisible() ) return;
+		if( !pControl->IsFloat() ) return;
+
+		SIZE szXY = pControl->GetFixedXY();
+		SIZE sz = {pControl->GetFixedWidth(), pControl->GetFixedHeight()};
+		TPercentInfo rcPercent = pControl->GetFloatPercent();
+		LONG width = m_rcItem.right - m_rcItem.left;
+		LONG height = m_rcItem.bottom - m_rcItem.top;
+		RECT rcCtrl = { 0 };
+		rcCtrl.left = (LONG)(width*rcPercent.left) + szXY.cx;
+		rcCtrl.top = (LONG)(height*rcPercent.top) + szXY.cy;
+		rcCtrl.right = (LONG)(width*rcPercent.right) + szXY.cx + sz.cx;
+		rcCtrl.bottom = (LONG)(height*rcPercent.bottom) + szXY.cy + sz.cy;
+		pControl->SetPos(rcCtrl, false);
 	}
 #if 0
 	bool Container::SetSubControlText(LPCTSTR pstrSubControlName, LPCTSTR pstrText)
@@ -1194,29 +1214,6 @@ namespace dui
             }
 		}
         return true;
-	}
-
-	void ScrollContainer::SetFloatPos(int iIndex)
-	{
-		// 因为Control::SetPos对float的操作影响，这里不能对float组件添加滚动条的影响
-		if( iIndex < 0 || iIndex >= m_items.GetSize() ) return;
-
-		Control* pControl = static_cast<Control*>(m_items[iIndex]);
-
-		if( !pControl->IsVisible() ) return;
-		if( !pControl->IsFloat() ) return;
-
-		SIZE szXY = pControl->GetFixedXY();
-		SIZE sz = {pControl->GetFixedWidth(), pControl->GetFixedHeight()};
-		TPercentInfo rcPercent = pControl->GetFloatPercent();
-		LONG width = m_rcItem.right - m_rcItem.left;
-		LONG height = m_rcItem.bottom - m_rcItem.top;
-		RECT rcCtrl = { 0 };
-		rcCtrl.left = (LONG)(width*rcPercent.left) + szXY.cx;
-		rcCtrl.top = (LONG)(height*rcPercent.top) + szXY.cy;
-		rcCtrl.right = (LONG)(width*rcPercent.right) + szXY.cx + sz.cx;
-		rcCtrl.bottom = (LONG)(height*rcPercent.bottom) + szXY.cy + sz.cy;
-		pControl->SetPos(rcCtrl, false);
 	}
 
 	void ScrollContainer::ProcessScrollBar(RECT rc, int cxRequired, int cyRequired)

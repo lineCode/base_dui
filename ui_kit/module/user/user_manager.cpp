@@ -6,11 +6,13 @@ namespace nim_comp
 {
 void UserManager::InvokeRegisterAccount(const std::string &username, const std::string &password, const std::string &nickname, const OnRegisterAccountCallback& cb)
 {
+	assert(0);
 	InvokeRegisterAccount(username, password, nickname, cb);
 }
 
 NIMFriendFlag UserManager::GetUserType(const std::string &id)
 {
+	assert(0);
 	return GetUserType(id);
 }
 
@@ -53,21 +55,25 @@ std::wstring UserManager::GetUserName(const std::string &id, bool alias_prior/* 
 
 std::wstring UserManager::GetFriendAlias(const std::string & id)
 {
+	assert(0);
 	return GetFriendAlias(id);
 }
 
 UnregisterCallback UserManager::RegFriendListChange(const OnFriendListChangeCallback & callback)
 {
+	assert(0);
 	return RegFriendListChange(callback);
 }
 
 UnregisterCallback UserManager::RegUserInfoChange(const OnUserInfoChangeCallback& callback)
 {
+	assert(0);
 	return RegUserInfoChange(callback);
 }
 
 UnregisterCallback UserManager::RegMiscUInfoChange(const OnUserInfoChangeCallback & callback)
 {
+	assert(0);
 	return RegMiscUInfoChange(callback);
 }
 

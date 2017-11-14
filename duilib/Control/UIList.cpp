@@ -2704,7 +2704,7 @@ LPVOID ListContainerElement::GetInterface(LPCTSTR pstrName)
 {
     if( _tcscmp(pstrName, DUI_CTR_ILISTITEM) == 0 ) return static_cast<IListItem*>(this);
 	if( _tcscmp(pstrName, DUI_CTR_LISTCONTAINERELEMENT) == 0 ) return static_cast<ListContainerElement*>(this);
-    return ScrollContainer::GetInterface(pstrName);
+	return __super::GetInterface(pstrName);
 }
 
 IListOwner* ListContainerElement::GetOwner()
@@ -2719,7 +2719,7 @@ void ListContainerElement::SetOwner(Control* pOwner)
 
 void ListContainerElement::SetVisible(bool bVisible)
 {
-    ScrollContainer::SetVisible(bVisible);
+	__super::SetVisible(bVisible);
     if( !IsVisible() && m_bSelected)
     {
         m_bSelected = false;
@@ -2795,17 +2795,17 @@ void ListContainerElement::Invalidate()
             if( m_pManager != NULL ) m_pManager->Invalidate(invalidateRc);
         }
         else {
-            ScrollContainer::Invalidate();
+			__super::Invalidate();
         }
     }
     else {
-        ScrollContainer::Invalidate();
+		__super::Invalidate();
     }
 }
 
 bool ListContainerElement::Activate()
 {
-    if( !ScrollContainer::Activate() ) return false;
+	if (!__super::Activate()) return false;
 #if MODE_EVENTMAP
 	if (OnEvent.find(UIEVENT_ITEMCLICK) != OnEvent.cend()){
 		TEvent event;
@@ -2872,7 +2872,7 @@ void ListContainerElement::DoEvent(TEvent& event)
 {
     if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
         if( m_pOwner != NULL ) m_pOwner->DoEvent(event);
-        else ScrollContainer::DoEvent(event);
+		else __super::DoEvent(event);
         return;
     }
 
@@ -2957,13 +2957,13 @@ void ListContainerElement::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
 	if( _tcscmp(pstrName, _T("selected")) == 0 ) Select();
 	else if( _tcscmp(pstrName, _T("expandable")) == 0 ) SetExpandable(_tcscmp(pstrValue, _T("true")) == 0);
-	else ScrollContainer::SetAttribute(pstrName, pstrValue);
+	else __super::SetAttribute(pstrName, pstrValue);
 }
 
 bool ListContainerElement::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 {
     DrawItemBk(hDC, m_rcItem);
-    return ScrollContainer::DoPaint(hDC, rcPaint, pStopControl);
+	return __super::DoPaint(hDC, rcPaint, pStopControl);
 }
 
 void ListContainerElement::DrawItemText(HDC hDC, const RECT& rcItem)
@@ -3105,7 +3105,7 @@ bool ListHBoxElement::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopContro
             CRenderEngine::DrawLine(hDC, rcLine, pInfo->iVLineSize, GetAdjustColor(pInfo->dwVLineColor));
         }
     }
-    return ScrollContainer::DoPaint(hDC, rcPaint, pStopControl);
+	return __super::DoPaint(hDC, rcPaint, pStopControl);
 }
 
 } // namespace dui

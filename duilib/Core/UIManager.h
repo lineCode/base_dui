@@ -8,7 +8,7 @@ namespace dui {
 //
 
 class Control;
-class ScrollContainer;
+class Container;
 class IDialogBuilderCallback;
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -364,12 +364,9 @@ public:
     bool PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
 	void UsedVirtualWnd(bool bUsed);
 
-	/*static*/ ScrollContainer* CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
-	//static Box* CreateBoxWithCache(const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
+	Container* CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
 
-	/*static */bool FillBox(ScrollContainer* pFilledContainer, const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
-	//static void FillBoxWithCache(Box* userDefinedBox, const std::wstring& xmlPath, CreateControlCallback callback = CreateControlCallback());
-
+	bool FillBox(Container* pFilledContainer, const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
 private:
 	PtrArray* GetFoundControls();
     static Control* CALLBACK __FindControlFromNameHash(Control* pThis, LPVOID pData);

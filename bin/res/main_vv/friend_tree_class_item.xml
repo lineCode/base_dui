@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+  <ListContainerElement class="list_topitem" width="240" height="30" bkcolor="splitline_level1" mouse="false" visible="false">
+    <Label name="label_name" width="50" height="30" textpadding="10" font="2"/>
+  </ListContainerElement>
+</Window>

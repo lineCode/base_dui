@@ -181,23 +181,29 @@
       <Attribute name="showbutton2" default="" type="" comment=""/>
     </ScrollBar>
     
-    <!--ScrollContainer begin-->
-    <ScrollContainer parent="Control" notifies="" comment="">
+    <!--Container begin-->
+    <Container parent="Control" notifies="" comment="">
       <Attribute name="padding"         default="" type="" comment=""/>
       <Attribute name="mousechild"      default="" type="" comment=""/>
+      <Attribute name="childmargin"     default="" type="" comment=""/>
+      <Attribute name="childalign"      default="" type="" comment=""/>
+      <Attribute name="childvalign"     default="" type="" comment=""/>
+    </Container>
+
+    <ScrollContainer parent="Container" notifies="" comment="">
       <Attribute name="vscrollbar"      default="" type="" comment=""/>
       <Attribute name="vscrollbarstyle" default="" type="" comment=""/>
       <Attribute name="hscrollbar"      default="" type="" comment=""/>
       <Attribute name="hscrollbarstyle" default="" type="" comment=""/>
-      <Attribute name="childmargin"     default="" type="" comment=""/>
-      <Attribute name="childalign"      default="" type="" comment=""/>
-      <Attribute name="childvalign"     default="" type="" comment=""/>
     </ScrollContainer>
 
-    <ButtonContainer parent="ScrollContainer" notifies="" comment="同ScrollContainer">
+    <LabelContainer parent="Container"        notifies="" comment="同Label">
+    </LabelContainer>
+    
+    <ButtonContainer parent="LabelContainer"  notifies="" comment="同Button">
     </ButtonContainer>
 
-    <OptionContainer parent="ScrollContainer" notifies="" comment="同ScrollContainer">
+    <OptionContainer parent="ButtonContainer" notifies="" comment="同Option">
     </OptionContainer>
     
     <HLayout parent="ScrollContainer" notifies="" comment="">
@@ -215,7 +221,7 @@
       <Attribute name="fadeswitch"     default="false" type="bool" comment="tab切换动画"/>  
     </TabLayout>
 
-    <ListContainerElement parent="ScrollContainer" notifies="" comment="">
+    <ListContainerElement parent="Container" notifies="" comment="">
       <Attribute name="selected"        default="" type="" comment=""/>
       <Attribute name="expandable"      default="" type="" comment=""/>
     </ListContainerElement>

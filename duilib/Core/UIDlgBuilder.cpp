@@ -8,7 +8,7 @@ CDialogBuilder::CDialogBuilder() : m_pCallback(NULL), m_pstrtype(NULL)
 }
 
 Control* CDialogBuilder::Create(STRINGorID xml, LPCTSTR type, IDialogBuilderCallback* pCallback, 
-	CPaintManager* pManager, Control* pParent, ScrollContainer *pFilledContainer)
+	CPaintManager* pManager, Control* pParent, Container *pFilledContainer)
 {
 	//资源ID为0-65535，两个字节；字符串指针为4个字节
 	//字符串以<开头认为是XML字符串，否则认为是XML文件
@@ -39,7 +39,7 @@ Control* CDialogBuilder::Create(STRINGorID xml, LPCTSTR type, IDialogBuilderCall
 	return Create(pCallback, pManager, pParent, pFilledContainer);
 }
 
-Control* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, CPaintManager* pManager, Control* pParent, ScrollContainer *pFilledContainer)
+Control* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, CPaintManager* pManager, Control* pParent, Container *pFilledContainer)
 {
 	m_pCallback = pCallback;
 	CMarkupNode root = m_xml.GetRoot();
@@ -191,7 +191,7 @@ void CDialogBuilder::GetLastErrorLocation(LPTSTR pstrSource, SIZE_T cchMax) cons
     return m_xml.GetLastErrorLocation(pstrSource, cchMax);
 }
 
-Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintManager* pManager, ScrollContainer* pFilledContainer)
+Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintManager* pManager, Container* pFilledContainer)
 {
     IContainer* pContainer = NULL;
     Control* pReturn = NULL;
@@ -273,10 +273,10 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
 			}
 
 			if(!pParentNode){
-				TreeView* pTreeView = static_cast<TreeView*>(pParent->GetInterface(_T("TreeView")));
-				ASSERT(pTreeView);
-				if( pTreeView == NULL ) return NULL;
-				if( !pTreeView->Add(pNode) ) {
+				Tree* pTree = static_cast<Tree*>(pParent->GetInterface(_T("TreeView")));
+				ASSERT(pTree);
+				if (pTree == NULL) return NULL;
+				if (!pTree->AddChildNode(pNode)) {
 					delete pNode;
 					continue;
 				}
@@ -297,7 +297,7 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
 					if (_tcsicmp(pstrClass, DUI_CTR_EDIT) == 0)                  pControl = new Edit;
 					else if (_tcsicmp(pstrClass, DUI_CTR_LIST) == 0)             pControl = new List;
 					else if (_tcsicmp(pstrClass, DUI_CTR_TEXT) == 0)             pControl = new CTextUI;
-					else if (_tcsicmp(pstrClass, DUI_CTR_TREE) == 0)             pControl = new TreeView;
+					else if (_tcsicmp(pstrClass, DUI_CTR_TREE) == 0)             pControl = new Tree;
 					break;
 				case 5:
 					if (_tcsicmp(pstrClass, DUI_CTR_COMBO) == 0)                 pControl = new Combo;
@@ -322,7 +322,7 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
 					else if (_tcsicmp(pstrClass, DUI_CTR_CHECKBOX) == 0)		  pControl = new CheckBtn;
 					else if (_tcsicmp(pstrClass, DUI_CTR_COMBOBOX) == 0)		  pControl = new Combo;
 					else if (_tcsicmp(pstrClass, DUI_CTR_DATETIME) == 0)		  pControl = new DateTime;
-					else if (_tcsicmp(pstrClass, DUI_CTR_TREEVIEW) == 0)         pControl = new TreeView;
+					//else if (_tcsicmp(pstrClass, DUI_CTR_TREEVIEW) == 0)         pControl = new TreeView;
 					else if (_tcsicmp(pstrClass, DUI_CTR_TREENODE) == 0)		  pControl = new TreeNode;
 					break;
 				case 9:

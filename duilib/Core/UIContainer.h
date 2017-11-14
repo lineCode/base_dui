@@ -85,6 +85,8 @@ public:
 	const String GetSubControlUserData(LPCTSTR pstrSubControlName); 
 #endif
 
+	virtual void SetFloatPos(int iIndex);
+
 protected:
 	PtrArray m_items;
 	RECT m_rcPadding;
@@ -143,7 +145,6 @@ public:
     virtual ScrollBar* GetHorizontalScrollBar() const;
 
 protected:
-    virtual void SetFloatPos(int iIndex);
     virtual void ProcessScrollBar(RECT rc, int cxRequired, int cyRequired);
 
 protected:

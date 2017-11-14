@@ -420,7 +420,7 @@ protected:
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class DUILIB_API ListContainerElement : public ScrollContainer, public IListItem
+class DUILIB_API ListContainerElement : public Container, public IListItem
 {
 public:
     ListContainerElement();

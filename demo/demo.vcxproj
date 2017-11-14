@@ -109,6 +109,7 @@
     <Xml Include="..\bin\res\login\login.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\bin\res\main_vv\friend_tree_class_item.xml" />
     <Xml Include="..\bin\res\main_vv\main.xml">
       <SubType>Designer</SubType>
     </Xml>

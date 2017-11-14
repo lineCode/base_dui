@@ -1,20 +1,11 @@
 #include "stdafx.h"
 #include "resource.h"
+#include "shared/pin_yin_helper.h"
 #include "gui/main/control/friend_item.h"
 #include "gui/main/control/session_item.h"
 #include "gui/main/control/friend_itemex.h"
 
 #include "main_form.h"
-//#include "util/user.h"
-//#include "callback/team/team_callback.h"
-//#include "module/config/config_helper.h"
-//#include "gui/about/about_form.h"
-//#include "gui/msglogmanage/msglog_manage_form.h"
-//#include "gui/contact_select_form/contact_select_form.h"
-//#include "gui/chatroom_frontpage.h"
-//#include "cef/cef_module/cef_manager.h"
-//#include "gui/cef/cef_form.h"
-//#include "gui/cef/cef_native_form.h"
 
 using namespace dui;
 
@@ -124,7 +115,46 @@ void MainForm::InitWindow()
 
 	list_friend_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_friend")));
 	list_session_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_session")));
-	tv_friend_ = dynamic_cast<TreeView*>(m_PaintManager.FindControl(_T("tv_friend")));
+	tree_friend_ = dynamic_cast<Tree*>(m_PaintManager.FindControl(_T("tv_friend")));
+	for (size_t i = 0; i < 26; i++)
+	{
+		TreeNode *node = new TreeNode;
+		m_PaintManager.FillBox(node, _T("friend_tree_class_item.xml"), NULL, &m_PaintManager, NULL);
+		Label *label = static_cast<Label *>(node->FindSubControl(_T("label_name")));
+		if (label)
+		{
+			TCHAR text[2] = {};
+			text[0] = 'A' + i;
+			label->SetText(text);
+		}
+
+		tree_friend_->AddChildNode(node);
+		group_nodes_[i + 2] = node;
+	}
+
+	TreeNode *node = new TreeNode;
+	m_PaintManager.FillBox(node, _T("friend_tree_class_item.xml"), NULL, &m_PaintManager, NULL);
+	Label *label = static_cast<Label *>(node->FindSubControl(_T("label_name")));
+	if (label)
+	{
+		TCHAR text[2] = {};
+		text[0] = '*';
+		label->SetText(text);
+	}
+	tree_friend_->AddChildNodeAt(node, 0);
+	group_nodes_[0] = node;
+
+	node = new TreeNode;
+	m_PaintManager.FillBox(node, _T("friend_tree_class_item.xml"), NULL, &m_PaintManager, NULL);
+	label = static_cast<Label *>(node->FindSubControl(_T("label_name")));
+	if (label)
+	{
+		TCHAR text[2] = {};
+		text[0] = '#';
+		label->SetText(text);
+	}
+	tree_friend_->AddChildNodeAt(node, 1);
+	group_nodes_[1] = node;
 
 	nim_comp::UserManager::GetInstance()->DoLoadFriends(std::bind(&MainForm::OnGetAllFriendInfo, this, std::placeholders::_1));
 	nim_comp::SessionManager::GetInstance()->DoLoadSession(std::bind(&MainForm::OnGetAllSessionInfo, this, std::placeholders::_1, std::placeholders::_2));
@@ -554,14 +584,30 @@ void MainForm::OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list)
 		list_friend_->Add(item);
 	}
 	printf("load friends ui(in list) %d ms\n", clock()-ck1);
-
+#if 1
 	for (auto it = list.cbegin(); it != list.cend(); it++)
 	{
 		nim_comp::FriendItemEx *item = new nim_comp::FriendItemEx(*it);
 		m_PaintManager.FillBox(item, _T("friend_item.xml"), this, &m_PaintManager, NULL);
-		tv_friend_->GetRootNode()Add(item);
+
+		wstring wname = nbase::UTF8ToUTF16(it->GetName());
+		const char *piny = shared::PinYinHelper::GetInstance()->ConvertToFullSpell(wname);
+		
+		int index = piny[0] - 'a' + 2;
+		if (index > 1 && index < 28);
+		{
+			group_nodes_[index]->AddChildNode(item);
+		}
+	}
+	for (int i = 0; i < 28; i++)
+	{
+		if (group_nodes_[i]->HasChild())
+		{
+			group_nodes_[i]->SetVisible();
+		}
 	}
 	printf("load friends ui(in treeview) %d ms\n", clock() - ck1);
+#endif
 }
 
 void MainForm::OnGetAllSessionInfo(int unread_count, const nim_comp::SessionDataList& data_list)

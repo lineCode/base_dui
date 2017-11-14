@@ -30,7 +30,7 @@
       <TabLayout name="tab_session_friend" fadeswitch="true">
         <List class="list" name="list_session" bkcolor="white"/>
         <List class="list" name="list_friend" />
-        <TreeView class="list" name="tv_friend" bkcolor="white"/>
+        <Tree class="list" name="tv_friend" bkcolor="white"/>
       </TabLayout>
     </VLayout>
     <Control class="splitline_ver_level1"/>
