@@ -17,7 +17,7 @@ namespace dui
 	LPVOID VerticalLayout::GetInterface(LPCTSTR pstrName)
 	{
 		if( _tcscmp(pstrName, DUI_CTR_VLAYOUT) == 0 ) return static_cast<VerticalLayout*>(this);
-		return ScrollContainer::GetInterface(pstrName);
+		return __super::GetInterface(pstrName);
 	}
 
 	UINT VerticalLayout::GetControlFlags() const

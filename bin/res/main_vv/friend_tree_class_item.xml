@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window>
-  <ListContainerElement class="list_topitem" width="240" height="30" bkcolor="splitline_level1" mouse="false" visible="false">
-    <Label name="label_name" width="50" height="30" textpadding="10" font="2"/>
+  <ListContainerElement width="240" height="30" bkcolor="splitline_level1" mouse="false" visible="false">
+    <HLayout width="240" height="30">
+      <Label name="label_name" width="50" height="30" textpadding="10" font="2"/>
+      <Button name="btn_expand" width="16" height="16" margin="150,7" bkimage="treenode_open_16x16.png"/>
+    </HLayout>
   </ListContainerElement>
 </Window>

@@ -110,7 +110,7 @@ namespace dui
 		return nRet;
 	}
 
-	void TreeNode::SetExpanded(bool bExpand)
+	/*void TreeNode::SetExpanded(bool bExpand)
 	{
 		m_bExpand = bExpand;
 	}
@@ -118,7 +118,7 @@ namespace dui
 	bool TreeNode::GetExpanded()
 	{
 		return m_bExpand;
-	}
+	}*/
 
 	bool TreeNode::Add(Control* pControl)
 	{
@@ -478,23 +478,23 @@ namespace dui
 	void Tree::SetItemExpand(TreeNode* node, bool bExpanded)
 	{
 #if 1
-		if (!node || node->GetExpanded() == bExpanded)
+		/*if (!node || node->GetExpanded() == bExpanded)
 		{
 
-		}
+		}*/
 #else
-		if(_TreeNode)
+		if (node)
 		{
-			if(_TreeNode->GetChildCount() > 0)
+			if (node->GetChildCount() > 0)
 			{
-				int nCount = _TreeNode->GetChildCount();
+				int nCount = node->GetChildCount();
 				for(int iIndex = 0;iIndex < nCount;iIndex++)
 				{
-					TreeNode* pItem = _TreeNode->GetChildNode(iIndex);
-					pItem->SetVisible(_Expanded);
+					TreeNode* pItem = node->GetChildNode(iIndex);
+					pItem->SetVisible(bExpanded);
 
-					if(pItem->GetChildCount() && !pItem->GetFolderButton()->IsSelected())
-						SetItemExpand(_Expanded,pItem);
+					if(pItem->GetChildCount() /*&& !pItem->GetFolderButton()->IsSelected()*/)
+						SetItemExpand(bExpanded, pItem);
 				}
 			}
 		}
@@ -506,10 +506,10 @@ namespace dui
 			{
 				TreeNode* pItem = (TreeNode*)GetItemAt(iIndex);
 
-				pItem->SetVisible(_Expanded);
+				pItem->SetVisible(bExpanded);
 
-				if(pItem->GetChildCount() && !pItem->GetFolderButton()->IsSelected())
-					SetItemExpand(_Expanded,pItem);
+				if(pItem->GetChildCount() /*&& !pItem->GetFolderButton()->IsSelected()*/)
+					SetItemExpand(bExpanded, pItem);
 
 				iIndex++;
 			}

@@ -24,8 +24,8 @@ namespace dui
 		void	Invalidate();
 		bool	Select(bool bSelect = true, bool bTriggerEvent = true);
 
-		void SetExpanded(bool bExpand);
-		bool GetExpanded();
+		/*void SetExpanded(bool bExpand);
+		bool GetExpanded();*/
 		void SetParentNode(TreeNode* parent_node);
 		TreeNode* GetParentNode();
 		void	SetVisibleTag(bool visible);

@@ -121,11 +121,22 @@ void MainForm::InitWindow()
 		TreeNode *node = new TreeNode;
 		m_PaintManager.FillBox(node, _T("friend_tree_class_item.xml"), NULL, &m_PaintManager, NULL);
 		Label *label = static_cast<Label *>(node->FindSubControl(_T("label_name")));
+		Button *btn_expand = static_cast<Button *>(node->FindSubControl(_T("btn_expand")));
 		if (label)
 		{
 			TCHAR text[2] = {};
 			text[0] = 'A' + i;
 			label->SetText(text);
+		}
+		if (btn_expand)
+		{
+			auto cb = [node](void *param){
+				TEvent *event = (TEvent *)param;
+				node->Expand(false);
+				printf("123");
+				return false;
+			};
+			btn_expand->AttachClick(cb);
 		}
 
 		tree_friend_->AddChildNode(node);
