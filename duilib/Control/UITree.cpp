@@ -6,8 +6,8 @@ namespace dui
 {
 	TreeNode::TreeNode( TreeNode* parent_node /*= NULL*/ )
 	{
-		m_bIsVisable = true;
-		m_bExpand = true;
+		//m_bIsVisable = true;
+		m_bNodeExpanded = true;
 		m_pTreeView		= NULL;
 		m_pParentTreeNode = NULL;
 
@@ -110,15 +110,23 @@ namespace dui
 		return nRet;
 	}
 
-	/*void TreeNode::SetExpanded(bool bExpand)
+	void TreeNode::SetNodeExpand(bool bExpanded)
 	{
-		m_bExpand = bExpand;
+		m_bNodeExpanded = bExpanded;
+
+		int nCount = GetChildCount();
+		for (int iIndex = 0; iIndex < nCount; iIndex++)
+		{
+			TreeNode* pItem = GetChildNode(iIndex);
+			pItem->SetVisible(bExpanded);
+			pItem->SetNodeExpand(bExpanded);
+		}
 	}
 
-	bool TreeNode::GetExpanded()
+	bool TreeNode::GetNodeExpand()
 	{
-		return m_bExpand;
-	}*/
+		return m_bNodeExpanded;
+	}
 
 	bool TreeNode::Add(Control* pControl)
 	{
@@ -154,7 +162,7 @@ namespace dui
 		return true;
 	}
 
-	void TreeNode::SetVisibleTag( bool visible )
+	/*void TreeNode::SetVisibleTag( bool visible )
 	{
 		m_bIsVisable = visible;
 	}
@@ -162,7 +170,7 @@ namespace dui
 	bool TreeNode::GetVisibleTag()
 	{
 		return m_bIsVisable;
-	}
+	}*/
 
 	bool TreeNode::HasChild() const
 	{
@@ -314,14 +322,20 @@ namespace dui
 	/*****************************************************************************/
 	/***********************************Tree**********************************/
 	/*****************************************************************************/
-	Tree::Tree( void )
+	Tree::Tree(void) :m_pVirtualRoot(NULL)
 	{
 		this->GetHeader()->SetVisible(false);
+		m_pVirtualRoot = new TreeNode;
+		m_pVirtualRoot->SetTreeView(this);
 	}
 	
 	Tree::~Tree( void )
 	{
-		
+		if (m_pVirtualRoot)
+		{
+			delete m_pVirtualRoot;
+			m_pVirtualRoot = NULL;
+		}
 	}
 
 	LPCTSTR Tree::GetClass() const
@@ -341,12 +355,10 @@ namespace dui
 
         TreeNode* pTreeNode = static_cast<TreeNode*>(pControl->GetInterface(DUI_CTR_TREENODE));
         if (pTreeNode == NULL) return false;
-#if !MODE_EVENTMAP
-		pTreeNode->OnNotify += MakeDelegate(this,&Tree::OnDBClickItem);
-		pTreeNode->GetFolderButton()->OnNotify += MakeDelegate(this,&Tree::OnFolderChanged);
-		pTreeNode->GetCheckBox()->OnNotify += MakeDelegate(this,&Tree::OnCheckBoxChanged);
-#endif
 
+#if 0
+		return m_pVirtualRoot->AddChildNode(pTreeNode);
+#else
 		List::Add(pTreeNode);
 
 		if(pTreeNode->GetChildCount() > 0)
@@ -361,6 +373,7 @@ namespace dui
 
 		pTreeNode->SetTreeView(this);
 		return true;
+#endif
 	}
 
     bool Tree::AddAt(Control* pControl, int iIndex)
@@ -475,49 +488,6 @@ namespace dui
 		
 	}
 
-	void Tree::SetItemExpand(TreeNode* node, bool bExpanded)
-	{
-#if 1
-		/*if (!node || node->GetExpanded() == bExpanded)
-		{
-
-		}*/
-#else
-		if (node)
-		{
-			if (node->GetChildCount() > 0)
-			{
-				int nCount = node->GetChildCount();
-				for(int iIndex = 0;iIndex < nCount;iIndex++)
-				{
-					TreeNode* pItem = node->GetChildNode(iIndex);
-					pItem->SetVisible(bExpanded);
-
-					if(pItem->GetChildCount() /*&& !pItem->GetFolderButton()->IsSelected()*/)
-						SetItemExpand(bExpanded, pItem);
-				}
-			}
-		}
-		else
-		{
-			int iIndex = 0;
-			int nCount = GetCount();
-			while(iIndex < nCount)
-			{
-				TreeNode* pItem = (TreeNode*)GetItemAt(iIndex);
-
-				pItem->SetVisible(bExpanded);
-
-				if(pItem->GetChildCount() /*&& !pItem->GetFolderButton()->IsSelected()*/)
-					SetItemExpand(bExpanded, pItem);
-
-				iIndex++;
-			}
-		}
-#endif
-	}
-
-	
 	void Tree::SetAttribute( LPCTSTR pstrName, LPCTSTR pstrValue )
 	{
 		List::SetAttribute(pstrName,pstrValue);

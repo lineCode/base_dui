@@ -5,13 +5,13 @@
 #include "Layout/UIVerticalLayout.h"
 #include "Layout/UIHorizontalLayout.h"
 
-namespace DuiLib {
+namespace dui {
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
 typedef int (CALLBACK *PULVCompareFunc)(UINT_PTR, UINT_PTR, UINT_PTR);
 
-class CListHeaderUI;
+class ListHeader;
 
 #define UILIST_MAX_COLUMNS 64
 
@@ -42,47 +42,47 @@ typedef struct tagTListInfoUI
     DWORD dwVLineColor;
     bool bShowHtml;
     bool bMultiExpandable;
-} TListInfoUI;
+} TListInfo;
 
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class IListCallbackUI
+class IListCallback
 {
 public:
-    virtual LPCTSTR GetItemText(CControlUI* pList, int iItem, int iSubItem) = 0;
+    virtual LPCTSTR GetItemText(Control* pList, int iItem, int iSubItem) = 0;
 };
 
-class IListOwnerUI
+class IListOwner
 {
 public:
-    virtual TListInfoUI* GetListInfo() = 0;
+    virtual TListInfo* GetListInfo() = 0;
     virtual int GetCurSel() const = 0;
     virtual bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent=true) = 0;
-    virtual void DoEvent(TEventUI& event) = 0;
+    virtual void DoEvent(TEvent& event) = 0;
     virtual bool ExpandItem(int iIndex, bool bExpand = true) = 0;
     virtual int GetExpandedItem() const = 0;
 };
 
-class IListUI : public IListOwnerUI
+class IList : public IListOwner
 {
 public:
-    virtual CListHeaderUI* GetHeader() const = 0;
-    virtual CContainerUI* GetList() const = 0;
-    virtual IListCallbackUI* GetTextCallback() const = 0;
-    virtual void SetTextCallback(IListCallbackUI* pCallback) = 0;
+    virtual ListHeader* GetHeader() const = 0;
+    virtual ScrollContainer* GetList() const = 0;
+    virtual IListCallback* GetTextCallback() const = 0;
+    virtual void SetTextCallback(IListCallback* pCallback) = 0;
 };
 
-class IListItemUI
+class IListItem
 {
 public:
     virtual int GetIndex() const = 0;
     virtual void SetIndex(int iIndex) = 0;
     virtual int GetDrawIndex() const = 0;
     virtual void SetDrawIndex(int iIndex) = 0;
-    virtual IListOwnerUI* GetOwner() = 0;
-    virtual void SetOwner(CControlUI* pOwner) = 0;
+    virtual IListOwner* GetOwner() = 0;
+    virtual void SetOwner(Control* pOwner) = 0;
     virtual bool IsSelected() const = 0;
     virtual bool Select(bool bSelect = true, bool bTriggerEvent=true) = 0;
     virtual bool IsExpanded() const = 0;
@@ -94,13 +94,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class CListBodyUI;
-class CListHeaderUI;
+class ListBody;
+class ListHeader;
 
-class DUILIB_API CListUI : public CVerticalLayoutUI, public IListUI
+class DUILIB_API List : public VerticalLayout, public IList
 {
 public:
-    CListUI();
+    List();
 
     LPCTSTR GetClass() const;
     UINT GetControlFlags() const;
@@ -111,26 +111,26 @@ public:
     int GetCurSel() const;
     bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent=true);
 
-    CControlUI* GetItemAt(int iIndex) const;
-    int GetItemIndex(CControlUI* pControl) const;
-    bool SetItemIndex(CControlUI* pControl, int iIndex);
-    bool SetMultiItemIndex(CControlUI* pStartControl, int iCount, int iNewStartIndex);
+    Control* GetItemAt(int iIndex) const;
+    int GetItemIndex(Control* pControl) const;
+    bool SetItemIndex(Control* pControl, int iIndex);
+    bool SetMultiItemIndex(Control* pStartControl, int iCount, int iNewStartIndex);
     int GetCount() const;
-    bool Add(CControlUI* pControl);
-    bool AddAt(CControlUI* pControl, int iIndex);
-    bool Remove(CControlUI* pControl, bool bDoNotDestroy=false);
+    bool Add(Control* pControl);
+    bool AddAt(Control* pControl, int iIndex);
+    bool Remove(Control* pControl, bool bDoNotDestroy=false);
     bool RemoveAt(int iIndex, bool bDoNotDestroy=false);
     void RemoveAll();
 
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);
 
-    int GetChildPadding() const;
-    void SetChildPadding(int iPadding);
+    int GetChildMargin() const;
+    void SetChildMargin(int iPadding);
 
-    CListHeaderUI* GetHeader() const;  
-    CContainerUI* GetList() const;
-    TListInfoUI* GetListInfo();
+    ListHeader* GetHeader() const;  
+    ScrollContainer* GetList() const;
+    TListInfo* GetListInfo();
 
     UINT GetItemFixedHeight();
     void SetItemFixedHeight(UINT nHeight);
@@ -183,11 +183,11 @@ public:
 
 	void SetPos(RECT rc, bool bNeedInvalidate = true);
 	void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    void DoEvent(TEventUI& event);
+    void DoEvent(TEvent& event);
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
-    IListCallbackUI* GetTextCallback() const;
-    void SetTextCallback(IListCallbackUI* pCallback);
+    IListCallback* GetTextCallback() const;
+    void SetTextCallback(IListCallback* pCallback);
 
     SIZE GetScrollPos() const;
     SIZE GetScrollRange() const;
@@ -205,27 +205,27 @@ public:
     void HomeLeft();
     void EndRight();
     void EnableScrollBar(bool bEnableVertical = true, bool bEnableHorizontal = false);
-    virtual CScrollBarUI* GetVerticalScrollBar() const;
-    virtual CScrollBarUI* GetHorizontalScrollBar() const;
+    virtual ScrollBar* GetVerticalScrollBar() const;
+    virtual ScrollBar* GetHorizontalScrollBar() const;
     bool SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData);
 
 protected:
     bool m_bScrollSelect;
     int m_iCurSel;
     int m_iExpandedItem;
-    IListCallbackUI* m_pCallback;
-    CListBodyUI* m_pList;
-    CListHeaderUI* m_pHeader;
-    TListInfoUI m_ListInfo;
+    IListCallback* m_pCallback;
+    ListBody* m_pList;
+    ListHeader* m_pHeader;
+    TListInfo m_ListInfo;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class DUILIB_API CListHeaderUI : public CHorizontalLayoutUI
+class DUILIB_API ListHeader : public HorizontalLayout
 {
 public:
-    CListHeaderUI();
+    ListHeader();
 
     LPCTSTR GetClass() const;
     LPVOID GetInterface(LPCTSTR pstrName);
@@ -237,10 +237,10 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class DUILIB_API CListHeaderItemUI : public CControlUI
+class DUILIB_API ListHeaderItem : public Control
 {
 public:
-    CListHeaderItemUI();
+    ListHeaderItem();
 
     LPCTSTR GetClass() const;
     LPVOID GetInterface(LPCTSTR pstrName);
@@ -274,7 +274,7 @@ public:
     LPCTSTR GetSepImage() const;
     void SetSepImage(LPCTSTR pStrImage);
 
-    void DoEvent(TEventUI& event);
+    void DoEvent(TEvent& event);
     SIZE EstimateSize(SIZE szAvailable);
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
     RECT GetThumbRect() const;
@@ -304,10 +304,10 @@ protected:
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class DUILIB_API CListElementUI : public CControlUI, public IListItemUI
+class DUILIB_API ListElement : public Control, public IListItem
 {
 public:
-    CListElementUI();
+    ListElement();
 
     LPCTSTR GetClass() const;
     UINT GetControlFlags() const;
@@ -320,8 +320,8 @@ public:
     int GetDrawIndex() const;
     void SetDrawIndex(int iIndex);
 
-    IListOwnerUI* GetOwner();
-    void SetOwner(CControlUI* pOwner);
+    IListOwner* GetOwner();
+    void SetOwner(Control* pOwner);
     void SetVisible(bool bVisible = true);
 
     bool IsSelected() const;
@@ -332,7 +332,7 @@ public:
     void Invalidate(); // 直接CControl::Invalidate会导致滚动条刷新，重写减少刷新区域
     bool Activate();
 
-    void DoEvent(TEventUI& event);
+    void DoEvent(TEvent& event);
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
     void DrawItemBk(HDC hDC, const RECT& rcItem);
@@ -342,30 +342,30 @@ protected:
     int m_iDrawIndex;
     bool m_bSelected;
     UINT m_uButtonState;
-    IListOwnerUI* m_pOwner;
+    IListOwner* m_pOwner;
 };
 
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class DUILIB_API CListLabelElementUI : public CListElementUI
+class DUILIB_API ListLabelElement : public ListElement
 {
 public:
-    CListLabelElementUI();
+    ListLabelElement();
 
     LPCTSTR GetClass() const;
     LPVOID GetInterface(LPCTSTR pstrName);
 
-    void SetOwner(CControlUI* pOwner);
+    void SetOwner(Control* pOwner);
 
     void SetFixedWidth(int cx);
     void SetFixedHeight(int cy);
     void SetText(LPCTSTR pstrText);
 
-    void DoEvent(TEventUI& event);
+    void DoEvent(TEvent& event);
     SIZE EstimateSize(SIZE szAvailable);
-    bool DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl);
+    bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
 
     void DrawItemText(HDC hDC, const RECT& rcItem);
 
@@ -384,11 +384,11 @@ protected:
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class DUILIB_API CListTextElementUI : public CListLabelElementUI
+class DUILIB_API ListTextElement : public ListLabelElement
 {
 public:
-    CListTextElementUI();
-    ~CListTextElementUI();
+    ListTextElement();
+    ~ListTextElement();
 
     LPCTSTR GetClass() const;
     LPVOID GetInterface(LPCTSTR pstrName);
@@ -397,10 +397,10 @@ public:
     LPCTSTR GetText(int iIndex) const;
     void SetText(int iIndex, LPCTSTR pstrText);
 
-    void SetOwner(CControlUI* pOwner);
-    CDuiString* GetLinkContent(int iIndex);
+    void SetOwner(Control* pOwner);
+    String* GetLinkContent(int iIndex);
 
-    void DoEvent(TEventUI& event);
+    void DoEvent(TEvent& event);
     SIZE EstimateSize(SIZE szAvailable);
 
     void DrawItemText(HDC hDC, const RECT& rcItem);
@@ -409,21 +409,21 @@ protected:
     enum { MAX_LINK = 8 };
     int m_nLinks;
     RECT m_rcLinks[MAX_LINK];
-    CDuiString m_sLinks[MAX_LINK];
+    String m_sLinks[MAX_LINK];
     int m_nHoverLink;
-    IListUI* m_pOwner;
-    CDuiPtrArray m_aTexts;
+    IList* m_pOwner;
+    PtrArray m_aTexts;
 
-    CDuiString m_sTextLast;
+    String m_sTextLast;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class DUILIB_API CListContainerElementUI : public CContainerUI, public IListItemUI
+class DUILIB_API ListContainerElement : public Container, public IListItem
 {
 public:
-    CListContainerElementUI();
+    ListContainerElement();
 
     LPCTSTR GetClass() const;
     UINT GetControlFlags() const;
@@ -434,8 +434,8 @@ public:
     int GetDrawIndex() const;
     void SetDrawIndex(int iIndex);
 
-    IListOwnerUI* GetOwner();
-    void SetOwner(CControlUI* pOwner);
+    IListOwner* GetOwner();
+    void SetOwner(Control* pOwner);
     void SetVisible(bool bVisible = true);
     void SetEnabled(bool bEnable = true);
 
@@ -449,15 +449,21 @@ public:
     void Invalidate(); // 直接CControl::Invalidate会导致滚动条刷新，重写减少刷新区域
     bool Activate();
 
-    void DoEvent(TEventUI& event);
+    void DoEvent(TEvent& event);
 	void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-	bool DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl);
+	bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
 
     void DrawItemText(HDC hDC, const RECT& rcItem);    
     void DrawItemBk(HDC hDC, const RECT& rcItem);
 
     SIZE EstimateSize(SIZE szAvailable);
 
+#if MODE_EVENTMAP
+	void AttachItemClick(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_ITEMCLICK] += callback;
+	}
+#endif
 protected:
     int m_iIndex;
     int m_iDrawIndex;
@@ -465,24 +471,24 @@ protected:
     bool m_bExpandable;
     bool m_bExpand;
     UINT m_uButtonState;
-    IListOwnerUI* m_pOwner;
+    IListOwner* m_pOwner;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-class DUILIB_API CListHBoxElementUI : public CListContainerElementUI
+class DUILIB_API ListHBoxElement : public ListContainerElement
 {
 public:
-    CListHBoxElementUI();
+    ListHBoxElement();
 
     LPCTSTR GetClass() const;
     LPVOID GetInterface(LPCTSTR pstrName);
 
     void SetPos(RECT rc, bool bNeedInvalidate = true);
-    bool DoPaint(HDC hDC, const RECT& rcPaint, CControlUI* pStopControl);
+    bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
 };
 
-} // namespace DuiLib
+} // namespace dui
 
 #endif // __UILIST_H__

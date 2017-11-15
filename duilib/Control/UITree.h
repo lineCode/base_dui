@@ -24,12 +24,12 @@ namespace dui
 		void	Invalidate();
 		bool	Select(bool bSelect = true, bool bTriggerEvent = true);
 
-		/*void SetExpanded(bool bExpand);
-		bool GetExpanded();*/
+		void SetNodeExpand(bool bExpanded);
+		bool GetNodeExpand();
 		void SetParentNode(TreeNode* parent_node);
 		TreeNode* GetParentNode();
-		void	SetVisibleTag(bool visible);
-		bool	GetVisibleTag();
+		/*void	SetVisibleTag(bool visible);
+		bool	GetVisibleTag();*/
 		void	SetTreeView(Tree* tree);
 		Tree* GetTreeView();
 		PtrArray GetTreeNodes();
@@ -51,8 +51,8 @@ namespace dui
 		TreeNode* CalLocation(TreeNode* node);
 	protected:
 		long	m_iTreeLavel;
-		bool	m_bIsVisable;		//internal visible?
-		bool	m_bExpanded;		//是否展开
+		//bool	m_bIsVisable;		//internal visible?
+		bool	m_bNodeExpanded;	//是否展开
 
 		Tree*			m_pTreeView;
 		TreeNode*		m_pParentTreeNode;
@@ -69,9 +69,9 @@ namespace dui
 		virtual LPCTSTR GetClass() const;
 		virtual LPVOID	GetInterface(LPCTSTR pstrName);
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-
-		virtual void SetItemExpand(TreeNode* node, bool bExpanded);
 		virtual void Notify(TNotify& msg);
+
+		//void SetNodeExpand(TreeNode* node, bool bExpanded);
 
 		bool AddChildNode(TreeNode* pNode);
         bool AddChildNodeAt(TreeNode* pNode, int iIndex);
@@ -83,6 +83,9 @@ namespace dui
 		virtual bool Remove(Control* pControl, bool bDoNotDestroy = false);
 		virtual bool RemoveAt(int iIndex, bool bDoNotDestroy = false);
 		virtual void RemoveAll();
+
+	protected:
+		TreeNode *m_pVirtualRoot;
 
 	};
 }

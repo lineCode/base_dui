@@ -132,8 +132,7 @@ void MainForm::InitWindow()
 		{
 			auto cb = [node](void *param){
 				TEvent *event = (TEvent *)param;
-				node->Expand(false);
-				printf("123");
+				node->SetNodeExpand(!node->GetNodeExpand());
 				return false;
 			};
 			btn_expand->AttachClick(cb);
