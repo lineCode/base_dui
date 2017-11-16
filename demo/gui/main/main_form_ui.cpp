@@ -4,6 +4,7 @@
 #include "gui/main/control/friend_item.h"
 #include "gui/main/control/session_item.h"
 #include "gui/main/control/friend_itemex.h"
+#include "gui/session/session_box.h"
 
 #include "main_form.h"
 
@@ -165,6 +166,13 @@ void MainForm::InitWindow()
 	}
 	tree_friend_->AddChildNodeAt(node, 1);
 	group_nodes_[1] = node;
+	//--------------------------------tab session-------------------------------
+	tab_session_ = dynamic_cast<TabLayout*>(m_PaintManager.FindControl(_T("tab_session")));
+	nim_comp::SessionBox *session = new nim_comp::SessionBox("1", nim_comp::kNIMSessionTypeP2P);
+	m_PaintManager.FillBox(session, _T("session.xml"), this, &m_PaintManager);
+	tab_session_->Add(session);
+
+	tab_session_->SelectItem(0);
 
 	nim_comp::UserManager::GetInstance()->DoLoadFriends(std::bind(&MainForm::OnGetAllFriendInfo, this, std::placeholders::_1));
 	nim_comp::SessionManager::GetInstance()->DoLoadSession(std::bind(&MainForm::OnGetAllSessionInfo, this, std::placeholders::_1, std::placeholders::_2));

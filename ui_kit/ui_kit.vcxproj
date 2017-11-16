@@ -86,6 +86,7 @@
     <ClInclude Include="gui\modal_wnd\file_dialog_ex.h" />
     <ClInclude Include="gui\modal_wnd\modal_wnd_base.h" />
     <ClInclude Include="gui\msgbox\msgbox.h" />
+    <ClInclude Include="gui\session\session_box.h" />
     <ClInclude Include="gui\window\window_ex.h" />
     <ClInclude Include="kit_define.h" />
     <ClInclude Include="module\db\user_db.h" />
@@ -113,6 +114,10 @@
     <ClCompile Include="gui\modal_wnd\async_modal_runner.cpp" />
     <ClCompile Include="gui\modal_wnd\file_dialog_ex.cpp" />
     <ClCompile Include="gui\msgbox\msgbox.cpp" />
+    <ClCompile Include="gui\session\session_box.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="gui\session\session_box_ui.cpp" />
     <ClCompile Include="gui\window\window_ex.cpp" />
     <ClCompile Include="module\db\user_db.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
@@ -136,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\bin\res\main_vv\friend_item.xml" />
+    <Xml Include="..\bin\res\main_vv\session.xml" />
     <Xml Include="..\bin\res\main_vv\session_item.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

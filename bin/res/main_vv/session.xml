@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<VLayout>
-  <List>
-
-  </List>
-  <HLayout height="20" bkcolor="gray">
-
-  </HLayout>
-
-  <HLayout height="100" >
-    <!--<RichEdit />-->
-  </HLayout>
-  <HLayout height="45" >
-    <Label width="80" margin="20" font="2" text="按Enter发送"/>
-    <Control />
-    <Button class="btn_global_blue" width="80" height="30" margin="0,10,10" font="3" normaltextcolor="white" text="发送" />
-  </HLayout>
-</VLayout>
+<Window>
+  <VLayout>
+    <List>
+    </List>
+    <Control class="splitline_hor_level1"/>
+    <HLayout height="30" bkcolor="" padding="5,3">
+      <CheckBox name="chk_face" width="25" height="25" valign="center" margin="0" tooltiptext="表情"
+                                  foreimage="file='../session/btn_face.png' dest='2,2,22,22'" 
+                                  hotimage="../session/icon_hover.png" pushedimage="../session/icon_pushed.png" selectednormalimage="../session/icon_pushed.png"
+                                  selectedforenormalimage="file='../session/btn_face.png' dest='2,2,22,22'" selectedforedisabledimage="file='../session/btn_face_disable.png' dest='2,2,22,22' fade='80'"/>
+      <Button name="btn_image" width="25" height="25" valign="center" margin="4" tooltiptext="图片"
+              foreimage="file='../session/btn_image.png' dest='2,2,22,22'" 
+              hotimage="../session/icon_hover.png" pushedimage="../session/icon_pushed.png"/>
+      <Button name="btn_file" width="25" height="25" valign="center" margin="4" tooltiptext="文件"
+              foreimage="file='../session/btn_file.png' dest='2,2,22,22'" 
+              hotimage="../session/icon_hover.png" pushedimage="../session/icon_pushed.png"/>
+      <Button name="btn_jsb" width="25" height="25" valign="center" margin="4" tooltiptext="石头剪刀布"
+              foreimage="../session/jsb.png" 
+              hotimage="../session/icon_hover.png" pushedimage="../session/icon_pushed.png"/>
+      <Button name="btn_clip" width="25" height="25" valign="center" margin="4" tooltiptext="截图"
+              foreimage="file='../session/btn_clip.png' dest='2,2,22,22'" 
+              hotimage="../session/icon_hover.png" pushedimage="../session/icon_pushed.png"/>
+      <Control />
+      <Button name="btn_msg_record" width="65" margin="0,0,10" valign="center" normaltextcolor="main_blue" text="云消息记录"/>
+    </HLayout>
+    <HLayout height="100" >
+      <RichEdit class="prompt" name="input_edit" minheight="86" maxheight="300" multiline="true" vscrollbar="true" autovscroll="true" readonly="false" font="2" normaltextcolor="darkcolor" margin="2,2,2,2" padding="8,0,0,0" wantreturnmsg="true" rich="true"/>
+    </HLayout>
+    <HLayout height="45" >
+      <Label width="80" margin="20" font="2" text="按Enter发送"/>
+      <Control />
+      <Button class="btn_global_blue" name="btn_send" width="80" height="30" margin="0,10,10" font="3" normaltextcolor="white" text="发送" />
+    </HLayout>
+  </VLayout>
+</Window>

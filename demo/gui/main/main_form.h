@@ -294,6 +294,8 @@ private:
 
 	AutoUnregister	unregister_cb;*/
 	dui::TreeNode	*group_nodes_[28];
+
+	dui::TabLayout	*tab_session_;
 };
 
 using namespace nbase;

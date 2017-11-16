@@ -12,6 +12,10 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	HRESULT hr = ::OleInitialize(NULL);
+	if (FAILED(hr))
+		return 0;
+
 	nim_comp::InitManager::GetInstance()->Init();
 
 	shared::MainThreadEventCallBack init_event_cb = [](){
@@ -23,6 +27,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	shared::MainThread main_thread;
 	main_thread.RegMainThreadEvent(init_event_cb, nullptr, nullptr);
 	main_thread.RunOnCurrentThreadWithLoop(nbase::MessageLoop::kUIMessageLoop);
+
+	::OleUninitialize();
 
 	return 0;
 }

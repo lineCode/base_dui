@@ -56,6 +56,9 @@
     <Filter Include="module\photo">
       <UniqueIdentifier>{d7f910b1-57af-4e4a-896f-db5102b23be1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="gui\session">
+      <UniqueIdentifier>{d058ebe2-cbe3-4cbf-b11c-60f2bfd1521c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gui\msgbox\msgbox.h">
@@ -126,6 +129,9 @@
     <ClInclude Include="gui\main\control\friend_itemex.h">
       <Filter>gui\main\control</Filter>
     </ClInclude>
+    <ClInclude Include="gui\session\session_box.h">
+      <Filter>gui\session</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\msgbox\msgbox.cpp">
@@ -183,6 +189,12 @@
     <ClCompile Include="gui\main\control\friend_itemex.cpp">
       <Filter>gui\main\control</Filter>
     </ClCompile>
+    <ClCompile Include="gui\session\session_box.cpp">
+      <Filter>gui\session</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\session\session_box_ui.cpp">
+      <Filter>gui\session</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\bin\res\main_vv\friend_item.xml">
@@ -190,6 +202,9 @@
     </Xml>
     <Xml Include="..\bin\res\main_vv\session_item.xml">
       <Filter>gui\main\control</Filter>
+    </Xml>
+    <Xml Include="..\bin\res\main_vv\session.xml">
+      <Filter>gui\session</Filter>
     </Xml>
   </ItemGroup>
 </Project>
