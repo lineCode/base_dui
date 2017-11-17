@@ -71,7 +71,7 @@ void LoginForm::InitWindow()
 	//re_pwd_->SetText(L"dingjunjie");
 }
 
-void LoginForm::Notify(dui::TNotify& msg)
+void LoginForm::Notify(dui::TEvent& msg)
 {
 	bool bHandle = false;
 	/*Control *pControl = msg.pSender;
@@ -80,10 +80,10 @@ void LoginForm::Notify(dui::TNotify& msg)
 		bHandle = true;
 		wprintf(_T("LoginForm::Notify Name:%s MSG:%s\n"), pControl->GetName().c_str(), DUI_MSGTYPE_WINDOWINIT);
 	}
-	else if (pControl && msg.sType == DUI_MSGTYPE_ITEMCLICK)
+	else if (pControl && msg.sType == UIEVENT_ITEMCLICK)
 	{
 		bHandle = true;
-		wprintf(_T("LoginForm::Notify Name:%s MSG:%s\n"), pControl->GetName().c_str(), DUI_MSGTYPE_ITEMCLICK);
+		wprintf(_T("LoginForm::Notify Name:%s MSG:%s\n"), pControl->GetName().c_str(), UIEVENT_ITEMCLICK);
 		ImportDataToDB();
 	}*/
 	if (!bHandle)
@@ -92,7 +92,7 @@ void LoginForm::Notify(dui::TNotify& msg)
 	}
 }
 
-void LoginForm::OnClick(TNotify& msg)
+void LoginForm::OnClick(TEvent& msg)
 {
 	bool bHandle = false;
 	//std::wstring name = msg.pSender->GetName();

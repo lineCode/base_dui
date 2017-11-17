@@ -29,7 +29,7 @@ namespace dui {
 	typedef std::map<EVENTTYPE_UI, CEventSource> EventMap;
 #endif
 #if MODE_EVENTMAP
-	typedef std::function<bool(void*)> EventCallback;
+	typedef std::function<bool(TEvent*)> EventCallback;
 
 	class DUILIB_API CEventSource
 	{
@@ -41,7 +41,7 @@ namespace dui {
 		void operator+= (FnType pFn);
 		void operator-= (const EventCallback& d);
 		void operator-= (FnType pFn);
-		bool operator() (void* param);
+		bool operator() (TEvent* param);
 
 	protected:
 		PtrArray m_aDelegates;

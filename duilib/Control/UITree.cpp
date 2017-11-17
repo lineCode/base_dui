@@ -52,7 +52,7 @@ namespace dui
 		if( event.Type == UIEVENT_DBLCLICK )
 		{
 			if( IsEnabled() ) {
-				m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMDBCLICK);
+				m_pManager->SendNotify(this, UIEVENT_DBLCLICK);
 				Invalidate();
 			}
 			return;
@@ -483,7 +483,7 @@ namespace dui
 		return Remove(pNode);
 	}
 
-	void Tree::Notify( TNotify& msg )
+	void Tree::Notify( TEvent& msg )
 	{
 		
 	}

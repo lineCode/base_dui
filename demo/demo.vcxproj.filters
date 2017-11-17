@@ -59,9 +59,6 @@
     <Xml Include="..\bin\res\main_vv\main.xml">
       <Filter>gui\main</Filter>
     </Xml>
-    <Xml Include="..\bin\res\main_vv\session.xml">
-      <Filter>gui\main</Filter>
-    </Xml>
     <Xml Include="..\bin\res\main_vv\friend_tree_class_item.xml">
       <Filter>gui\main</Filter>
     </Xml>

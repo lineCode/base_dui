@@ -140,7 +140,7 @@ void ScrollBar::SetScrollPos(int nPos, bool bTriggerEvent)
 	SetPos(m_rcItem, true);
 
 	if(bTriggerEvent && m_pManager != NULL) 
-		m_pManager->SendNotify(this, DUI_MSGTYPE_SCROLL, m_nScrollPos, iOldScrollPos, true, false);
+		m_pManager->SendNotify(this, UIEVENT_SCROLL, m_nScrollPos, iOldScrollPos, true, false);
 }
 
 int ScrollBar::GetLineSize() const

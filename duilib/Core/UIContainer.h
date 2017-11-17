@@ -73,17 +73,6 @@ public:
 	virtual int FindSelectable(int iIndex, bool bForward = true) const;
 
 	void Move(SIZE szOffset, bool bNeedInvalidate);
-#if 0
-	bool SetSubControlText(LPCTSTR pstrSubControlName, LPCTSTR pstrText);
-	bool SetSubControlFixedHeight(LPCTSTR pstrSubControlName, int cy);
-	bool SetSubControlFixedWdith(LPCTSTR pstrSubControlName, int cx);
-	bool SetSubControlUserData(LPCTSTR pstrSubControlName, LPCTSTR pstrText);
-
-	String GetSubControlText(LPCTSTR pstrSubControlName);
-	int GetSubControlFixedHeight(LPCTSTR pstrSubControlName);
-	int GetSubControlFixedWdith(LPCTSTR pstrSubControlName);
-	const String GetSubControlUserData(LPCTSTR pstrSubControlName); 
-#endif
 
 	virtual void SetFloatPos(int iIndex);
 
@@ -100,67 +89,7 @@ protected:
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-class ScrollBar;
 
-class DUILIB_API ScrollContainer : public Container
-{
-public:
-    ScrollContainer();
-    virtual ~ScrollContainer();
-
-public:
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-
-	virtual void DoEvent(TEvent& event) override;
-	virtual void SetMouseEnabled(bool bEnable = true) override;
-
-	RECT GetClientPos() const;
-	void SetPos(RECT rc, bool bNeedInvalidate = true);
-	void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
-
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-
-    void SetManager(CPaintManager* pManager, Control* pParent, bool bInit = true);
-    Control* FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags);
-
-    virtual SIZE GetScrollPos() const;
-    virtual SIZE GetScrollRange() const;
-    virtual void SetScrollPos(SIZE szPos);
-    virtual void LineUp();
-    virtual void LineDown();
-    virtual void PageUp();
-    virtual void PageDown();
-    virtual void HomeUp();
-    virtual void EndDown();
-    virtual void LineLeft();
-    virtual void LineRight();
-    virtual void PageLeft();
-    virtual void PageRight();
-    virtual void HomeLeft();
-    virtual void EndRight();
-    virtual void EnableScrollBar(bool bEnableVertical = true, bool bEnableHorizontal = false);
-    virtual ScrollBar* GetVerticalScrollBar() const;
-    virtual ScrollBar* GetHorizontalScrollBar() const;
-
-protected:
-    virtual void ProcessScrollBar(RECT rc, int cxRequired, int cyRequired);
-
-protected:
-  /*  PtrArray m_items;
-    RECT m_rcPadding;
-    int m_iChildMargin;
-	UINT m_iChildAlign;
-	UINT m_iChildVAlign;
-    bool m_bAutoDestroy;
-    bool m_bDelayedDestroy;
-    bool m_bMouseChildEnabled;*/
-    bool m_bScrollProcess; // ∑¿÷πSetPos—≠ª∑µ˜”√
-
-    ScrollBar* m_pVerticalScrollBar;
-    ScrollBar* m_pHorizontalScrollBar;
-};
 
 } // namespace dui
 

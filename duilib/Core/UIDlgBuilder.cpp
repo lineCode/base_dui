@@ -343,15 +343,10 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
 					else if (_tcsicmp(pstrClass, DUI_CTR_LABELCONTAINER) == 0)  pControl = new LabelContainer;
 					break;
 				case 15:
-					if (_tcsicmp(pstrClass, DUI_CTR_LISTTEXTELEMENT) == 0)       pControl = new ListTextElement;
-					else if (_tcsicmp(pstrClass, DUI_CTR_LISTHBOXELEMENT) == 0)  pControl = new ListHBoxElement;
+					if (_tcsicmp(pstrClass, DUI_CTR_LISTHBOXELEMENT) == 0)  pControl = new ListHBoxElement;
 					else if (_tcsicmp(pstrClass, DUI_CTR_BUTTONCONTAINER) == 0)   pControl = new ButtonContainer;
 					else if (_tcsicmp(pstrClass, DUI_CTR_OPTIONCONTAINER) == 0)   pControl = new OptionContainer;
 					else if (_tcsicmp(pstrClass, DUI_CTR_SCROLLCONTAINER) == 0)   pControl = new ScrollContainer;
-					break;
-				case 16:
-					if (_tcsicmp(pstrClass, DUI_CTR_HLAYOUT) == 0)      pControl = new HorizontalLayout;
-					else if (_tcsicmp(pstrClass, DUI_CTR_LISTLABELELEMENT) == 0) pControl = new ListLabelElement;
 					break;
 				case 20:
 					if (_tcsicmp(pstrClass, DUI_CTR_LISTCONTAINERELEMENT) == 0)  pControl = new ListContainerElement;

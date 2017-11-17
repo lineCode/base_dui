@@ -20,7 +20,7 @@ public:
 	virtual LPCTSTR GetWindowId() const override;
 	virtual UINT GetClassStyle() const override;
 
-	virtual void Notify(dui::TNotify& msg) override;
+	virtual void Notify(dui::TEvent& msg) override;
 	
 	/**
 	* 处理窗口销毁消息
@@ -36,7 +36,7 @@ public:
 
 private:
 	/* @return bool true 继续传递控件消息，false 停止传递控件消息*/
-	virtual void OnClick(dui::TNotify& msg) override;
+	virtual void OnClick(dui::TEvent& msg) override;
 #if 1
 	void OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list);
 	void OnGetAllSessionInfo(int unread_count, const nim_comp::SessionDataList& data_list);

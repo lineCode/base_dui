@@ -9,7 +9,7 @@ namespace dui {
 
 class CComboWnd;
 
-class DUILIB_API Combo : public ScrollContainer, public IListOwner
+class DUILIB_API Combo : public Container
 {
     friend class CComboWnd;
 public:

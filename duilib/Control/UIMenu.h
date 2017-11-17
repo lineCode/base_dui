@@ -297,7 +297,7 @@ public:
 		DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top);
     LPCTSTR GetWindowClassName() const;
     void OnFinalMessage(HWND hWnd);
-	void Notify(TNotify& msg);
+	void Notify(TEvent& msg);
 	Control* CreateControl(LPCTSTR pstrClassName);
 
 	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);

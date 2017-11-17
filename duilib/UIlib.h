@@ -86,6 +86,7 @@ typedef std::string String;
 #include "Core/UIBase.h"
 #include "Core/UIControl.h"
 #include "Core/UIContainer.h"
+#include "Core/UIScrollContainer.h"
 #include "Core/UIMarkup.h"
 #include "Core/UIDlgBuilder.h"
 #include "Core/UIRender.h"

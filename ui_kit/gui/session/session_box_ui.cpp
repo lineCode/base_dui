@@ -98,9 +98,8 @@ void SessionBox::InitRichEdit()
 	//::RegisterDragDrop(nim_comp::WindowsManager::GetInstance()->GetWindow(L"MainForm", L"MainForm")->GetHWND(), this);
 }
 
-bool SessionBox::OnClicked(void* param)
+bool SessionBox::OnClicked(dui::TEvent *event)
 {
-	TEvent *event = static_cast<TEvent *>(param);
 	if (event)
 	{
 		wprintf(L"SessionBox::OnClicked %s\n", event->pSender->GetName().c_str());

@@ -90,7 +90,7 @@ namespace dui{
 		if (event.Type == UIEVENT_CONTEXTMENU)
 		{
 			if (IsContextMenuUsed() && IsEnabled()) {
-				m_pManager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
+				m_pManager->SendNotify(this, UIEVENT_CONTEXTMENU, event.wParam, event.lParam);
 			}
 			return;
 		}
@@ -167,7 +167,7 @@ namespace dui{
 			}
 		}
 #endif
-		if (m_pManager != NULL) m_pManager->SendNotify(this, DUI_MSGTYPE_CLICK);
+		if (m_pManager != NULL) m_pManager->SendNotify(this, UIEVENT_CLICK);
 		return true;
 	}
 

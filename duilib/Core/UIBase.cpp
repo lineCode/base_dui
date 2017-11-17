@@ -95,14 +95,15 @@ LPCTSTR DUI__TraceMsg(UINT uMsg)
 DUI_BASE_BEGIN_MESSAGE_MAP(CNotifyPump)
 DUI_END_MESSAGE_MAP()
 
-static const DUI_MSGMAP_ENTRY* DuiFindMessageEntry(const DUI_MSGMAP_ENTRY* lpEntry,TNotify& msg )
+static const DUI_MSGMAP_ENTRY* DuiFindMessageEntry(const DUI_MSGMAP_ENTRY* lpEntry,TEvent& msg )
 {
-	String sMsgType = msg.sType;
+	EVENTTYPE_UI MsgType = msg.Type;
+	//String sMsgType = msg.sType;
 	String sCtrlName = msg.pSender->GetName();
 	const DUI_MSGMAP_ENTRY* pMsgTypeEntry = NULL;
 	while (lpEntry->nSig != DuiSig_end)
 	{
-		if(lpEntry->sMsgType==sMsgType)
+		if(lpEntry->MsgType==MsgType)
 		{
 			if(!lpEntry->sCtrlName.empty())
 			{
@@ -141,7 +142,7 @@ bool CNotifyPump::RemoveVirtualWnd(String strName)
 	return false;
 }
 
-bool CNotifyPump::LoopDispatch(TNotify& msg)
+bool CNotifyPump::LoopDispatch(TEvent& msg)
 {
 	const DUI_MSGMAP_ENTRY* lpEntry = NULL;
 	const DUI_MSGMAP* pMessageMap = NULL;
@@ -188,7 +189,7 @@ LDispatch:
 	return bRet;
 }
 
-void CNotifyPump::NotifyPump(TNotify& msg)
+void CNotifyPump::NotifyPump(TEvent& msg)
 {
 	///±éÀúÐéÄâ´°¿Ú
 	if( !msg.sVirtualWnd.empty() ){

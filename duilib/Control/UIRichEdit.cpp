@@ -1732,7 +1732,7 @@ HRESULT RichEdit::TxSendMessage(UINT msg, WPARAM wparam, LPARAM lparam, LRESULT 
     if( m_pTwh ) {
         if( msg == WM_KEYDOWN && TCHAR(wparam) == VK_RETURN ) {
             if( !m_bWantReturn || (::GetKeyState(VK_CONTROL) < 0 && !m_bWantCtrlReturn) ) {
-                if( m_pManager != NULL ) m_pManager->SendNotify((Control*)this, DUI_MSGTYPE_RETURN);
+				if (m_pManager != NULL) m_pManager->SendNotify((Control*)this, UIEVENT_RETURN);
                 return S_OK;
             }
         }
@@ -1765,10 +1765,8 @@ void RichEdit::OnTxNotify(DWORD iNotify, void *pv)
 {
 	switch(iNotify)
 	{ 
-	case EN_CHANGE:
-		{
-			GetManager()->SendNotify(this, DUI_MSGTYPE_TEXTCHANGED);
-		}
+	case EN_CHANGE:	
+		GetManager()->SendNotify(this, UIEVENT_TEXTCHANGE);
 		break;
 	case EN_DROPFILES:   
 	case EN_MSGFILTER:   

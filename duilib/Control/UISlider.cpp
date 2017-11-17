@@ -164,7 +164,7 @@ namespace dui
 					else if( event.ptMouse.y <= m_rcItem.top + m_szThumb.cy / 2  ) m_nValue = m_nMax;
 					else m_nValue = m_nMin + (m_nMax - m_nMin) * (m_rcItem.bottom - event.ptMouse.y - m_szThumb.cy / 2 ) / (m_rcItem.bottom - m_rcItem.top - m_szThumb.cy);
 				}
-				m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+				m_pManager->SendNotify(this, UIEVENT_VALUECHANGE);
 				m_uButtonState &= ~UISTATE_CAPTURED;
 				Invalidate();
 			}
@@ -179,11 +179,11 @@ namespace dui
 			switch( LOWORD(event.wParam) ) {
 			case SB_LINEUP:
 				SetValue(GetValue() + GetChangeStep());
-				m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+				m_pManager->SendNotify(this, UIEVENT_VALUECHANGE);
 				return;
 			case SB_LINEDOWN:
 				SetValue(GetValue() - GetChangeStep());
-				m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+				m_pManager->SendNotify(this, UIEVENT_VALUECHANGE);
 			    return;
 			}
 		}
@@ -200,7 +200,7 @@ namespace dui
 					else if( event.ptMouse.y <= m_rcItem.top + m_szThumb.cy / 2  ) m_nValue = m_nMax;
 					else m_nValue = m_nMin + (m_nMax - m_nMin) * (m_rcItem.bottom - event.ptMouse.y - m_szThumb.cy / 2 ) / (m_rcItem.bottom - m_rcItem.top - m_szThumb.cy);
 				}
-				if( m_bImmMode ) m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+				if (m_bImmMode) m_pManager->SendNotify(this, UIEVENT_VALUECHANGE);
 				Invalidate();
 			}
 			return;

@@ -24,10 +24,10 @@ namespace dui
 		virtual ~WindowImplBase(){};
 		virtual void InitWindow(){};
 		virtual void OnFinalMessage( HWND hWnd );
-		virtual void Notify(TNotify& msg);
+		virtual void Notify(TEvent& msg);
 
 		DUI_DECLARE_MESSAGE_MAP()
-		virtual void OnClick(TNotify& msg);
+		virtual void OnClick(TEvent& msg);
 
 	protected:
 		virtual String GetSkinFolder() = 0;

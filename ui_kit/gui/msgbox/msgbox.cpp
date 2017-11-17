@@ -118,7 +118,7 @@ void MsgBox::InitWindow()
 	btn_no_ = (Button*)m_PaintManager.FindControl(L"btn_no");
 }
 
-void MsgBox::OnClick(dui::TNotify& msg)
+void MsgBox::OnClick(dui::TEvent& msg)
 {
 	bool bHandle = false;
 	std::wstring name = msg.pSender->GetName();

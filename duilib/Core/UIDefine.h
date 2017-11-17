@@ -17,18 +17,20 @@ enum DuiSig
 {
 	DuiSig_end = 0, // [marks end of message map]
 	DuiSig_lwl,     // LRESULT (WPARAM, LPARAM)
-	DuiSig_vn,      // void (TNotify)
+	DuiSig_vn,      // void (TEvent)
 };
 
 typedef enum EVENTTYPE_UI
 {
 	UIEVENT__FIRST = 1,
+
 	UIEVENT__KEYBEGIN,			//2
 	UIEVENT_KEYDOWN,
 	UIEVENT_KEYUP,
 	UIEVENT_CHAR,
 	UIEVENT_SYSKEY,
 	UIEVENT__KEYEND,			//7
+
 	UIEVENT__MOUSEBEGIN,		//8
 	UIEVENT_MOUSEMOVE,
 	UIEVENT_MOUSELEAVE,
@@ -41,41 +43,54 @@ typedef enum EVENTTYPE_UI
 	UIEVENT_CONTEXTMENU,
 	UIEVENT_SCROLLWHEEL,
 	UIEVENT__MOUSEEND,			//19
+
 	UIEVENT_KILLFOCUS,
 	UIEVENT_SETFOCUS,
+	UIEVENT_WINDOWINIT,
 	UIEVENT_WINDOWSIZE,
 	UIEVENT_SETCURSOR,
 #if MODE_EVENTMAP		
 	UIEVENT_CLICK,
 	UIEVENT_ITEMCLICK,
-	UIEVENT_SELECT,
+	UIEVENT_SELECTCHANGE,
 	UIEVENT_UNSELECT,
 	UIEVENT_TEXTCHANGE,
 	UIEVENT_CUSTOMLINKCLICK,
 
-	UIEVENT_SCROLLCHANGE,
+	UIEVENT_SCROLL,
 
 	UIEVENT_VALUECHANGE,
 	UIEVENT_RETURN,
-	UIEVENT_TAB,
+	UIEVENT_TABSELECT,
 	UIEVENT_WINDOWCLOSE,
 
 	UIEVENT_RESIZE,
 #endif
+	UIEVENT_MENU,
 	UIEVENT_TIMER,
 	UIEVENT_NOTIFY,
 	UIEVENT_COMMAND,
+	//---------
+	UIEVENT_ITEMSELECT,
+	UIEVENT_ITEMEXPAND,
+	UIEVENT_ITEMCOLLAPSE,
+	UIEVENT_LINK,
+	UIEVENT_DROPDOWN,
+	UIEVENT_SHOWACTIVEX,
+	UIEVENT_LISTHEADERCLICK,
+
 	UIEVENT__LAST,
 };
 
-
+//////////////////////////////////////////////////////////////////////////
 class Control;
 
-// Structure for notifications from the system
-// to the control implementation.
+// Structure for notifications to the outside world
 typedef struct tagTEventUI
 {
 	EVENTTYPE_UI Type;
+	//String sType;
+	String sVirtualWnd;
 	Control* pSender;
 	DWORD dwTimestamp;
 	POINT ptMouse;
@@ -84,76 +99,19 @@ typedef struct tagTEventUI
 	WPARAM wParam;
 	LPARAM lParam;
 	tagTEventUI(){
-		Type = UIEVENT__FIRST; pSender = NULL; ptMouse = {}; dwTimestamp = chKey = wKeyState = wParam = lParam = 0;
+		Type = UIEVENT__FIRST;  pSender = NULL; ptMouse = {}; dwTimestamp = chKey = wKeyState = wParam = lParam = 0;
 	}
 } TEvent;
 
-// Structure for notifications to the outside world
-typedef struct tagTNotifyUI 
-{
-	String sType;
-	String sVirtualWnd;
-	Control* pSender;
-	DWORD dwTimestamp;
-	POINT ptMouse;
-	WPARAM wParam;
-	LPARAM lParam;
-	tagTNotifyUI(){
-		pSender = NULL; ptMouse = {}; dwTimestamp = wParam = lParam = 0;
-	}
-} TNotify;
-
 class CNotifyPump;
-typedef void (CNotifyPump::*DUI_PMSG)(TNotify& msg);  //指针类型
+typedef void (CNotifyPump::*DUI_PMSG)(TEvent& msg);  //指针类型
 
 union DuiMessageMapFunctions
 {
 	DUI_PMSG pfn;   // generic member function pointer
-	LRESULT (CNotifyPump::*pfn_Notify_lwl)(WPARAM, LPARAM);
-	void (CNotifyPump::*pfn_Notify_vn)(TNotify&);
+	LRESULT(CNotifyPump::*pfn_Notify_lwl)(WPARAM, LPARAM);
+	void (CNotifyPump::*pfn_Notify_vn)(TEvent&);
 };
-
-//定义所有消息类型
-//////////////////////////////////////////////////////////////////////////
-
-#define DUI_MSGTYPE_MENU                   (_T("menu"))
-#define DUI_MSGTYPE_LINK                   (_T("link"))
-
-#define DUI_MSGTYPE_TIMER                  (_T("timer"))
-#define DUI_MSGTYPE_CLICK                  (_T("click"))
-
-#define DUI_MSGTYPE_RETURN                 (_T("return"))
-#define DUI_MSGTYPE_SCROLL                 (_T("scroll"))
-
-#define DUI_MSGTYPE_DROPDOWN               (_T("dropdown"))
-#define DUI_MSGTYPE_SETFOCUS               (_T("setfocus"))
-
-#define DUI_MSGTYPE_KILLFOCUS              (_T("killfocus"))
-#define DUI_MSGTYPE_ITEMCLICK 		   	   (_T("itemclick"))
-#define DUI_MSGTYPE_TABSELECT              (_T("tabselect"))
-
-#define DUI_MSGTYPE_ITEMSELECT 		   	   (_T("itemselect"))
-#define DUI_MSGTYPE_ITEMEXPAND             (_T("itemexpand"))
-
-#define DUI_MSGTYPE_WINDOWINIT             (_T("windowinit"))
-#define DUI_MSGTYPE_BUTTONDOWN 		   	   (_T("buttondown"))
-#define DUI_MSGTYPE_MOUSEENTER			   (_T("mouseenter"))
-#define DUI_MSGTYPE_MOUSELEAVE			   (_T("mouseleave"))
-
-#define DUI_MSGTYPE_TEXTCHANGED            (_T("textchanged"))
-#define DUI_MSGTYPE_HEADERCLICK            (_T("headerclick"))
-#define DUI_MSGTYPE_ITEMDBCLICK            (_T("itemdbclick"))
-#define DUI_MSGTYPE_SHOWACTIVEX            (_T("showactivex"))
-
-#define DUI_MSGTYPE_ITEMCOLLAPSE           (_T("itemcollapse"))
-//#define DUI_MSGTYPE_ITEMACTIVATE           (_T("itemactivate"))
-#define DUI_MSGTYPE_VALUECHANGED           (_T("valuechanged"))
-
-#define DUI_MSGTYPE_SELECTCHANGED 		   (_T("selectchanged"))
-
-
-//////////////////////////////////////////////////////////////////////////
-
 
 
 struct DUI_MSGMAP_ENTRY;
@@ -170,7 +128,8 @@ struct DUI_MSGMAP
 //结构定义
 struct DUI_MSGMAP_ENTRY //定义一个结构体，来存放消息信息
 {
-	String sMsgType;          // DUI消息类型
+	EVENTTYPE_UI MsgType;
+	//String sMsgType;          // DUI消息类型
 	String sCtrlName;         // 控件名称
 	UINT       nSig;              // 标记函数指针类型
 	DUI_PMSG   pfn;               // 指向函数的指针
@@ -247,7 +206,7 @@ protected:                                                                \
 
 //声明结束
 #define DUI_END_MESSAGE_MAP()                                             \
-	{ _T(""), _T(""), DuiSig_end, (DUI_PMSG)0 }                           \
+	{ UIEVENT__FIRST, _T(""), DuiSig_end, (DUI_PMSG)0 }                   \
 };                                                                        \
 
 
@@ -263,29 +222,29 @@ protected:                                                                \
 
 //定义click消息的控件名称--执行函数宏
 #define DUI_ON_CLICK_CTRNAME(ctrname,memberFxn)                           \
-	{ DUI_MSGTYPE_CLICK, ctrname, DuiSig_vn, (DUI_PMSG)&memberFxn },      \
+	{ UIEVENT_CLICK, ctrname, DuiSig_vn, (DUI_PMSG)&memberFxn },		  \
 
 
 //定义selectchanged消息的控件名称--执行函数宏
 #define DUI_ON_SELECTCHANGED_CTRNAME(ctrname,memberFxn)                   \
-    { DUI_MSGTYPE_SELECTCHANGED,ctrname,DuiSig_vn,(DUI_PMSG)&memberFxn }, \
+	{ UIEVENT_SELECTCHANGED, ctrname, DuiSig_vn, (DUI_PMSG)&memberFxn },  \
 
 
 //定义killfocus消息的控件名称--执行函数宏
 #define DUI_ON_KILLFOCUS_CTRNAME(ctrname,memberFxn)                       \
-	{ DUI_MSGTYPE_KILLFOCUS,ctrname,DuiSig_vn,(DUI_PMSG)&memberFxn },     \
+	{ UIEVENT_KILLFOCUS, ctrname, DuiSig_vn, (DUI_PMSG)&memberFxn },	  \
 
 
 //定义menu消息的控件名称--执行函数宏
 #define DUI_ON_MENU_CTRNAME(ctrname,memberFxn)                            \
-	{ DUI_MSGTYPE_MENU,ctrname,DuiSig_vn,(DUI_PMSG)&memberFxn },          \
+	{ UIEVENT_MENU, ctrname, DuiSig_vn, (DUI_PMSG)&memberFxn },			  \
 
 
 //定义与控件名称无关的消息宏
 
   //定义timer消息--执行函数宏
 #define DUI_ON_TIMER()                                                    \
-	{ DUI_MSGTYPE_TIMER, _T(""), DuiSig_vn,(DUI_PMSG)&OnTimer },          \
+	{ UIEVENT_TIMER, _T(""), DuiSig_vn, (DUI_PMSG)&OnTimer },			  \
 
 
 ///
@@ -329,7 +288,6 @@ protected:                                                                \
 #define  DUI_CTR_SCROLLBAR                       (_T("ScrollBar"))
 //10
 #define  DUI_CTR_ICONTAINER                      (_T("IContainer"))
-#define  DUI_CTR_ILISTOWNER                      (_T("IListOwner"))
 #define  DUI_CTR_LISTHEADER                      (_T("ListHeader"))
 #define  DUI_CTR_TILELAYOUT                      (_T("TileLayout"))
 #define  DUI_CTR_WEBBROWSER                      (_T("WebBrowser"))
@@ -342,12 +300,9 @@ protected:                                                                \
 #define  DUI_CTR_LABELCONTAINER					 (_T("LabelContainer"))
 //15
 #define  DUI_CTR_LISTHBOXELEMENT                 (_T("ListHBoxElement"))
-#define  DUI_CTR_LISTTEXTELEMENT                 (_T("ListTextElement"))
 #define  DUI_CTR_BUTTONCONTAINER				 (_T("ButtonContainer"))
 #define  DUI_CTR_OPTIONCONTAINER				 (_T("OptionContainer"))
 #define  DUI_CTR_SCROLLCONTAINER                 (_T("ScrollContainer"))
-//16
-#define  DUI_CTR_LISTLABELELEMENT                (_T("ListLabelElement"))
 //20
 #define  DUI_CTR_LISTCONTAINERELEMENT            (_T("ListContainerElement"))
 

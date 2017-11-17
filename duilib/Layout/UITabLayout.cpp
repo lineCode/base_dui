@@ -129,7 +129,7 @@ namespace dui
 
 		if( m_pManager != NULL ) {
 			m_pManager->SetNextTabControl();
-			if (bTriggerEvent) m_pManager->SendNotify(this, DUI_MSGTYPE_TABSELECT, m_iCurSel, iOldSel);
+			if (bTriggerEvent) m_pManager->SendNotify(this, UIEVENT_TABSELECT, m_iCurSel, iOldSel);
 		}
 		//fadeswitch
 		if (GetFadeSwitch() /*&& iOldSel >= 0*/) {

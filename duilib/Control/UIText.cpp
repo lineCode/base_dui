@@ -65,7 +65,7 @@ namespace dui
 		if( event.Type == UIEVENT_BUTTONUP && IsEnabled() ) {
 			for( int i = 0; i < m_nLinks; i++ ) {
 				if( ::PtInRect(&m_rcLinks[i], event.ptMouse) ) {
-					m_pManager->SendNotify(this, DUI_MSGTYPE_LINK, i);
+					m_pManager->SendNotify(this, UIEVENT_LINK, i);
 					return;
 				}
 			}

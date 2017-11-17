@@ -49,7 +49,12 @@ Control::~Control()
     }
 
 	RemoveAllCustomAttribute();
-    if( OnDestroy ) OnDestroy(this);
+	if (OnDestroy)
+	{
+		TEvent event;
+		event.pSender = this;
+		OnDestroy(&event);
+	}
     if( m_pManager != NULL ) m_pManager->ReapObjects(this);
 }
 
@@ -337,7 +342,9 @@ void Control::SetPos(RECT rc, bool bNeedInvalidate)
 #if MODE_EVENTMAP
 		if (OnEvent.find(UIEVENT_RESIZE) != OnEvent.cend())
 		{
-			OnEvent.find(UIEVENT_RESIZE)->second(this);
+			TEvent event;
+			event.pSender = this;
+			OnEvent.find(UIEVENT_RESIZE)->second(&event);
 		}
 #else
         if( OnSize ) 
@@ -871,13 +878,13 @@ void Control::DoEvent(TEvent& event)
     }
     if( event.Type == UIEVENT_TIMER )
     {
-        m_pManager->SendNotify(this, DUI_MSGTYPE_TIMER, event.wParam, event.lParam);
+		m_pManager->SendNotify(this, UIEVENT_TIMER, event.wParam, event.lParam);
         return;
     }
     if( event.Type == UIEVENT_CONTEXTMENU )
     {
         if( IsContextMenuUsed() ) {
-            m_pManager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
+			m_pManager->SendNotify(this, UIEVENT_CONTEXTMENU, event.wParam, event.lParam);
             return;
         }
     }
@@ -1123,7 +1130,9 @@ bool Control::Paint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 	if (pStopControl == this) return false;
 	if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return true;
 	if( OnPaint ) {
-		if( !OnPaint(this) ) return true;
+		TEvent event;
+		event.pSender = this;
+		if (!OnPaint(&event)) return true;
 	}
 	if (!DoPaint(hDC, rcPaint, pStopControl)) return false;
     if( m_pCover != NULL ) return m_pCover->Paint(hDC, rcPaint);
@@ -1253,7 +1262,12 @@ void Control::PaintBorder(HDC hDC)
 
 void Control::DoPostPaint(HDC hDC, const RECT& rcPaint)
 {
-	if( OnPostPaint ) OnPostPaint(this);
+	if (OnPostPaint)
+	{
+		TEvent event;
+		event.pSender = this;
+		OnPostPaint(&event);
+	}
 }
 
 int Control::GetBorderStyle() const

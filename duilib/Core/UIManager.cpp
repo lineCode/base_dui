@@ -181,7 +181,7 @@ CPaintManager::~CPaintManager()
 {
     // Delete the control-tree structures
     for( int i = 0; i < m_aDelayedCleanup.GetSize(); i++ ) static_cast<Control*>(m_aDelayedCleanup[i])->Delete();
-    for( int i = 0; i < m_aAsyncNotify.GetSize(); i++ ) delete static_cast<TNotify*>(m_aAsyncNotify[i]);
+    for( int i = 0; i < m_aAsyncNotify.GetSize(); i++ ) delete static_cast<TEvent*>(m_aAsyncNotify[i]);
     m_mNameHash.Resize(0);
     if( m_pRoot != NULL ) m_pRoot->Delete();
 
@@ -902,8 +902,8 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
         {
 			m_bAsyncNotifyPosted = false;
 
-			TNotify* pMsg = NULL;
-			while( pMsg = static_cast<TNotify*>(m_aAsyncNotify.GetAt(0)) ) {
+			TEvent* pMsg = NULL;
+			while( pMsg = static_cast<TEvent*>(m_aAsyncNotify.GetAt(0)) ) {
 				m_aAsyncNotify.Remove(0);
 				if( pMsg->pSender != NULL ) {
 					if( pMsg->pSender->OnNotify ) pMsg->pSender->OnNotify(pMsg);
@@ -1029,7 +1029,7 @@ bool CPaintManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRES
                     // to submit swipes/animations.
 					if( m_bFirstLayout ) {
 						m_bFirstLayout = false;
-						SendNotify(m_pRoot, DUI_MSGTYPE_WINDOWINIT,  0, 0, false);
+						SendNotify(m_pRoot, UIEVENT_WINDOWINIT, 0, 0, false);
 						if( m_bLayered && m_bLayeredChanged ) {
 							Invalidate();
 							SetPainting(false);
@@ -1743,7 +1743,7 @@ bool CPaintManager::AttachDialog(Control* pControl)
     if( m_pRoot != NULL ) {
         for( int i = 0; i < m_aDelayedCleanup.GetSize(); i++ ) static_cast<Control*>(m_aDelayedCleanup[i])->Delete();
         m_aDelayedCleanup.Empty();
-        for( int i = 0; i < m_aAsyncNotify.GetSize(); i++ ) delete static_cast<TNotify*>(m_aAsyncNotify[i]);
+        for( int i = 0; i < m_aAsyncNotify.GetSize(); i++ ) delete static_cast<TEvent*>(m_aAsyncNotify[i]);
         m_aAsyncNotify.Empty();
         m_mNameHash.Resize(0);
         m_aPostPaintControls.Empty();
@@ -1797,7 +1797,7 @@ void CPaintManager::ReapObjects(Control* pControl)
 		if (pControl == FindControl(sName.c_str())) m_mNameHash.Remove(sName.c_str());
     }
     for( int i = 0; i < m_aAsyncNotify.GetSize(); i++ ) {
-        TNotify* pMsg = static_cast<TNotify*>(m_aAsyncNotify[i]);
+        TEvent* pMsg = static_cast<TEvent*>(m_aAsyncNotify[i]);
         if( pMsg->pSender == pControl ) pMsg->pSender = NULL;
     }    
 }
@@ -1909,7 +1909,7 @@ void CPaintManager::SetFocus(Control* pControl, bool bFocusWnd)
         event.pSender = pControl;
         event.dwTimestamp = ::GetTickCount();
         m_pFocus->Event(event);
-        SendNotify(m_pFocus, DUI_MSGTYPE_KILLFOCUS);
+		SendNotify(m_pFocus, UIEVENT_KILLFOCUS);
         m_pFocus = NULL;
     }
     if( pControl == NULL ) return;
@@ -1925,7 +1925,7 @@ void CPaintManager::SetFocus(Control* pControl, bool bFocusWnd)
         event.pSender = pControl;
         event.dwTimestamp = ::GetTickCount();
         m_pFocus->Event(event);
-        SendNotify(m_pFocus, DUI_MSGTYPE_SETFOCUS);
+		SendNotify(m_pFocus, UIEVENT_SETFOCUS);
     }
 }
 
@@ -1939,7 +1939,7 @@ void CPaintManager::SetFocusNeeded(Control* pControl)
         event.pSender = pControl;
         event.dwTimestamp = ::GetTickCount();
         m_pFocus->Event(event);
-        SendNotify(m_pFocus, DUI_MSGTYPE_KILLFOCUS);
+		SendNotify(m_pFocus, UIEVENT_KILLFOCUS);
         m_pFocus = NULL;
     }
     FINDTABINFO info = { 0 };
@@ -2248,17 +2248,28 @@ bool CPaintManager::RemoveMouseLeaveNeeded(Control* pControl)
     return false;
 }
 
-void CPaintManager::SendNotify(Control* pControl, LPCTSTR pstrMessage, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/, bool bAsync /*= false*/, bool bEnableRepeat /*= true*/)
+//void CPaintManager::SendNotify(Control* pControl, LPCTSTR pstrMessage, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/, bool bAsync /*= false*/, bool bEnableRepeat /*= true*/)
+//{
+//    TEvent Msg;
+//    Msg.pSender = pControl;
+//    Msg.sType = pstrMessage;
+//    Msg.wParam = wParam;
+//    Msg.lParam = lParam;
+//    SendNotify(Msg, bAsync, bEnableRepeat);
+//}
+
+void CPaintManager::SendNotify(Control* pControl, EVENTTYPE_UI type, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/, bool bAsync /*= false*/, bool bEnableRepeat /*= true*/)
 {
-    TNotify Msg;
-    Msg.pSender = pControl;
-    Msg.sType = pstrMessage;
-    Msg.wParam = wParam;
-    Msg.lParam = lParam;
-    SendNotify(Msg, bAsync, bEnableRepeat);
+	TEvent Msg;
+	Msg.pSender = pControl;
+	Msg.Type = type;
+	Msg.wParam = wParam;
+	Msg.lParam = lParam;
+	SendNotify(Msg, bAsync, bEnableRepeat);
 }
 
-void CPaintManager::SendNotify(TNotify& Msg, bool bAsync /*= false*/, bool bEnableRepeat /*= true*/)
+
+void CPaintManager::SendNotify(TEvent& Msg, bool bAsync /*= false*/, bool bEnableRepeat /*= true*/)
 {
     Msg.ptMouse = m_ptLastMousePos;
     Msg.dwTimestamp = ::GetTickCount();
@@ -2279,8 +2290,8 @@ void CPaintManager::SendNotify(TNotify& Msg, bool bAsync /*= false*/, bool bEnab
     else {
 		if( !bEnableRepeat ) {
 			for( int i = 0; i < m_aAsyncNotify.GetSize(); i++ ) {
-				TNotify* pMsg = static_cast<TNotify*>(m_aAsyncNotify[i]);
-				if( pMsg->pSender == Msg.pSender && pMsg->sType == Msg.sType) {
+				TEvent* pMsg = static_cast<TEvent*>(m_aAsyncNotify[i]);
+				if( pMsg->pSender == Msg.pSender && pMsg->Type == Msg.Type) {
                     if (m_bUsedVirtualWnd) pMsg->sVirtualWnd = Msg.sVirtualWnd;
 					pMsg->wParam = Msg.wParam;
 					pMsg->lParam = Msg.lParam;
@@ -2291,10 +2302,10 @@ void CPaintManager::SendNotify(TNotify& Msg, bool bAsync /*= false*/, bool bEnab
 			}
 		}
 
-		TNotify *pMsg = new TNotify;
+		TEvent *pMsg = new TEvent;
         if (m_bUsedVirtualWnd) pMsg->sVirtualWnd = Msg.sVirtualWnd;
 		pMsg->pSender = Msg.pSender;
-		pMsg->sType = Msg.sType;
+		pMsg->Type = Msg.Type;
 		pMsg->wParam = Msg.wParam;
 		pMsg->lParam = Msg.lParam;
 		pMsg->ptMouse = Msg.ptMouse;

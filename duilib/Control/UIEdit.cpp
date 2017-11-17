@@ -151,7 +151,7 @@ namespace dui
 			}
 		}
 		else if( uMsg == WM_KEYDOWN && TCHAR(wParam) == VK_RETURN ) {
-			m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_RETURN);
+			m_pOwner->GetManager()->SendNotify(m_pOwner, UIEVENT_RETURN);
 		}
 		else if( uMsg == OCM__BASE + WM_CTLCOLOREDIT  || uMsg == OCM__BASE + WM_CTLCOLORSTATIC ) {
 			if (m_pOwner->GetManager()->IsLayered() && !m_pOwner->GetManager()->IsPainting()) {
@@ -233,7 +233,7 @@ namespace dui
 		if( pstr == NULL ) return 0;
 		::GetWindowText(m_hWnd, pstr, cchLen);
 		m_pOwner->m_sText = pstr;
-		m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_TEXTCHANGED);
+		m_pOwner->GetManager()->SendNotify(m_pOwner, UIEVENT_TEXTCHANGE);
 		if( m_pOwner->GetManager()->IsLayered() ) m_pOwner->Invalidate();
 		return 0;
 	}

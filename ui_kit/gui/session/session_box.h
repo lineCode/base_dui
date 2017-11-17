@@ -14,7 +14,7 @@ namespace nim_comp
 		void InitRichEdit();
 
 		//virtual bool Notify(void* param) override;
-		bool OnClicked(void* param);
+		bool OnClicked(dui::TEvent *event);
 #if 0
 		std::string	GetSessionID(){return session_id_;};
 		nim::NIMSessionType GetSessionType(){ return session_type_; };

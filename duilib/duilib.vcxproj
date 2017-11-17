@@ -293,6 +293,7 @@
     <ClCompile Include="Core\UIManager.cpp" />
     <ClCompile Include="Core\UIMarkup.cpp" />
     <ClCompile Include="Core\UIRender.cpp" />
+    <ClCompile Include="Core\UIScrollContainer.cpp" />
     <ClCompile Include="Extend\UIButtonContainer.cpp" />
     <ClCompile Include="Extend\UILabelContainer.cpp" />
     <ClCompile Include="Extend\UIOptionContainer.cpp" />
@@ -346,6 +347,7 @@
     <ClInclude Include="Core\UIManager.h" />
     <ClInclude Include="Core\UIMarkup.h" />
     <ClInclude Include="Core\UIRender.h" />
+    <ClInclude Include="Core\UIScrollContainer.h" />
     <ClInclude Include="Extend\UIButtonContainer.h" />
     <ClInclude Include="Extend\UILabelContainer.h" />
     <ClInclude Include="Extend\UIOptionContainer.h" />

@@ -69,7 +69,7 @@ namespace dui
 		virtual LPCTSTR GetClass() const;
 		virtual LPVOID	GetInterface(LPCTSTR pstrName);
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-		virtual void Notify(TNotify& msg);
+		virtual void Notify(TEvent& msg);
 
 		//void SetNodeExpand(TreeNode* node, bool bExpanded);
 

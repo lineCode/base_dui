@@ -204,18 +204,18 @@ LPCTSTR CMenuWnd::GetWindowClassName() const
 }
 
 
-void CMenuWnd::Notify(TNotify& msg)
+void CMenuWnd::Notify(TEvent& msg)
 {
 #if MENUWND_OBSERVER
 	if( CMenuWnd::GetGlobalContextMenuObserver().GetManager() != NULL) 
 	{
-		if (msg.sType == DUI_MSGTYPE_CLICK || msg.sType == DUI_MSGTYPE_ITEMCLICK/* || msg.sType == _T("valuechanged")*/)
+		if (msg.sType == DUI_MSGTYPE_CLICK || msg.sType == UIEVENT_ITEMCLICK/* || msg.sType == _T("valuechanged")*/)
 		{
 			CMenuWnd::GetGlobalContextMenuObserver().GetManager()->SendNotify(msg, false);
 		}
 	}
 #else
-	if (msg.sType == DUI_MSGTYPE_ITEMCLICK)
+	if (msg.Type == UIEVENT_ITEMCLICK)
 	{
 		if (m_pParentManager)
 		{

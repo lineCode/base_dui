@@ -106,7 +106,7 @@ namespace dui {
 		(*this) -= std::bind(pFn, std::placeholders::_1);
 	}
 
-	bool CEventSource::operator() (void* param)
+	bool CEventSource::operator() (TEvent* param)
 	{
 		bool bReturn = true;
 		for( int i = 0; i < m_aDelegates.GetSize(); i++ ) {

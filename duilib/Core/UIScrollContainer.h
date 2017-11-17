@@ -18,19 +18,19 @@ namespace dui
 		LPCTSTR GetClass() const;
 		LPVOID GetInterface(LPCTSTR pstrName);
 
-		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+		virtual void DoEvent(TEvent& event) override;
 		virtual void SetMouseEnabled(bool bEnable = true) override;
 
-		void SetManager(CPaintManager* pManager, Control* pParent, bool bInit = true);
-		Control* FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags);
-
-		virtual void DoEvent(TEvent& event) override;
-		bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
-
-		virtual int FindSelectable(int iIndex, bool bForward = true) const;
 		RECT GetClientPos() const;
 		void SetPos(RECT rc, bool bNeedInvalidate = true);
 		void Move(SIZE szOffset, bool bNeedInvalidate = true);
+		bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
+
+		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+		void SetScrollBarFloat(bool bFloat);
+
+		void SetManager(CPaintManager* pManager, Control* pParent, bool bInit = true);
+		Control* FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags);
 
 		virtual SIZE GetScrollPos() const;
 		virtual SIZE GetScrollRange() const;
@@ -52,16 +52,13 @@ namespace dui
 		virtual ScrollBar* GetHorizontalScrollBar() const;
 
 	protected:
-		virtual void SetFloatPos(int iIndex);
 		virtual void ProcessScrollBar(RECT rc, int cxRequired, int cyRequired);
 
 	protected:
-
-		bool m_bScrollProcess; // 防止SetPos循环调用
-
+		bool m_bScrollProcess;		// 防止SetPos循环调用
+		bool m_bScrollBarFloat;		//是否悬浮，true-不占用listitem位置
 		ScrollBar* m_pVerticalScrollBar;
 		ScrollBar* m_pHorizontalScrollBar;
-
 	};
 }
 

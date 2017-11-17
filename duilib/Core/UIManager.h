@@ -122,7 +122,7 @@ typedef struct DUILIB_API tagTResInfo
 class DUILIB_API INotify
 {
 public:
-    virtual void Notify(TNotify& msg) = 0;
+    virtual void Notify(TEvent& msg) = 0;
 };
 
 // MessageFilter interface
@@ -321,8 +321,9 @@ public:
 
     bool AddNotifier(INotify* pControl);
     bool RemoveNotifier(INotify* pControl);   
-    void SendNotify(TNotify& Msg, bool bAsync = false, bool bEnableRepeat = true);
-    void SendNotify(Control* pControl, LPCTSTR pstrMessage, WPARAM wParam = 0, LPARAM lParam = 0, bool bAsync = false, bool bEnableRepeat = true);
+    void SendNotify(TEvent& Msg, bool bAsync = false, bool bEnableRepeat = true);
+    //void SendNotify(Control* pControl, LPCTSTR pstrMessage, WPARAM wParam = 0, LPARAM lParam = 0, bool bAsync = false, bool bEnableRepeat = true);
+	void SendNotify(Control* pControl, EVENTTYPE_UI type, WPARAM wParam = 0, LPARAM lParam = 0, bool bAsync = false, bool bEnableRepeat = true);
 
     bool AddPreMessageFilter(IMessageFilter* pFilter);
     bool RemovePreMessageFilter(IMessageFilter* pFilter);

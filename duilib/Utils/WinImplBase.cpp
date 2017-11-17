@@ -8,7 +8,7 @@ namespace dui
 LPBYTE WindowImplBase::m_lpResourceZIPBuffer=NULL;
 
 DUI_BEGIN_MESSAGE_MAP(WindowImplBase,CNotifyPump)
-	DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK,OnClick)
+	DUI_ON_MSGTYPE(UIEVENT_CLICK, OnClick)
 DUI_END_MESSAGE_MAP()
 
 void WindowImplBase::OnFinalMessage( HWND hWnd )
@@ -432,7 +432,7 @@ LONG WindowImplBase::GetStyle()
 	return styleValue;
 }
 
-void WindowImplBase::OnClick(TNotify& msg)
+void WindowImplBase::OnClick(TEvent& msg)
 {
 	String sCtrlName = msg.pSender->GetName();
 	if( sCtrlName == _T("closebtn") )
@@ -458,7 +458,7 @@ void WindowImplBase::OnClick(TNotify& msg)
 	return;
 }
 
-void WindowImplBase::Notify(TNotify& msg)
+void WindowImplBase::Notify(TEvent& msg)
 {
 	return CNotifyPump::NotifyPump(msg);
 }

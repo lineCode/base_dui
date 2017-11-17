@@ -150,6 +150,9 @@
     <ClCompile Include="Control\UITree.cpp">
       <Filter>Control</Filter>
     </ClCompile>
+    <ClCompile Include="Core\UIScrollContainer.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Control\UIActiveX.h">
@@ -289,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="Control\UITree.h">
       <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\UIScrollContainer.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

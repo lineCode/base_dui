@@ -76,7 +76,6 @@ LPVOID List::GetInterface(LPCTSTR pstrName)
 {
 	if( _tcscmp(pstrName, DUI_CTR_LIST) == 0 ) return static_cast<List*>(this);
     if( _tcscmp(pstrName, DUI_CTR_ILIST) == 0 ) return static_cast<IList*>(this);
-    if( _tcscmp(pstrName, DUI_CTR_ILISTOWNER) == 0 ) return static_cast<IListOwner*>(this);
     return VerticalLayout::GetInterface(pstrName);
 }
 
@@ -489,7 +488,7 @@ bool List::SelectItem(int iIndex, bool bTakeFocus, bool bTriggerEvent)
     EnsureVisible(m_iCurSel);
     if( bTakeFocus ) pControl->SetFocus();
     if( m_pManager != NULL && bTriggerEvent ) {
-        m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMSELECT, m_iCurSel, iOldSel);
+		m_pManager->SendNotify(this, UIEVENT_ITEMSELECT, m_iCurSel, iOldSel);
     }
 
     return true;
@@ -996,6 +995,10 @@ void List::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetItemHLineColor(clrColor);
     }
     else if( _tcscmp(pstrName, _T("itemshowhtml")) == 0 ) SetItemShowHtml(_tcscmp(pstrValue, _T("true")) == 0);
+	else if (_tcscmp(pstrName, _T("scrollbarfloat")) == 0) {
+		if (m_pList)
+			m_pList->SetScrollBarFloat(_tcscmp(pstrValue, _T("true")) == 0);
+	}
     else VerticalLayout::SetAttribute(pstrName, pstrValue);
 }
 
@@ -1210,8 +1213,8 @@ void ListBody::SetPos(RECT rc, bool bNeedInvalidate)
     rc.top += m_rcPadding.top;
     rc.right -= m_rcPadding.right;
     rc.bottom -= m_rcPadding.bottom;
-    if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
-    if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
+    if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() && !m_bScrollBarFloat) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
+	if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() && !m_bScrollBarFloat) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 
     // Determine the minimum size
     SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
@@ -1372,8 +1375,8 @@ bool ListBody::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
         rc.top += m_rcPadding.top;
         rc.right -= m_rcPadding.right;
         rc.bottom -= m_rcPadding.bottom;
-        if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
-        if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
+		if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() && !m_bScrollBarFloat) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
+		if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() && !m_bScrollBarFloat) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 
         if( !::IntersectRect(&rcTemp, &rcPaint, &rc) ) {
             for( int it = 0; it < m_items.GetSize(); it++ ) {
@@ -1783,7 +1786,7 @@ void ListHeaderItem::DoEvent(TEvent& event)
         }
         else {
             m_uButtonState |= UISTATE_PUSHED;
-            m_pManager->SendNotify(this, DUI_MSGTYPE_HEADERCLICK);
+			m_pManager->SendNotify(this, UIEVENT_LISTHEADERCLICK);
             Invalidate();
         }
         return;
@@ -1955,14 +1958,14 @@ LPVOID ListElement::GetInterface(LPCTSTR pstrName)
     return Control::GetInterface(pstrName);
 }
 
-IListOwner* ListElement::GetOwner()
+IList* ListElement::GetOwner()
 {
     return m_pOwner;
 }
 
 void ListElement::SetOwner(Control* pOwner)
 {
-    if (pOwner != NULL) m_pOwner = static_cast<IListOwner*>(pOwner->GetInterface(DUI_CTR_ILISTOWNER));
+    if (pOwner != NULL) m_pOwner = static_cast<IList*>(pOwner->GetInterface(DUI_CTR_ILIST));
 }
 
 void ListElement::SetVisible(bool bVisible)
@@ -2054,7 +2057,7 @@ void ListElement::Invalidate()
 bool ListElement::Activate()
 {
     if( !Control::Activate() ) return false;
-    if( m_pManager != NULL ) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
+	if (m_pManager != NULL) m_pManager->SendNotify(this, UIEVENT_ITEMCLICK);
     return true;
 }
 
@@ -2164,521 +2167,6 @@ void ListElement::DrawItemBk(HDC hDC, const RECT& rcItem)
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
-
-ListLabelElement::ListLabelElement() : m_bNeedEstimateSize(true), m_uFixedHeightLast(0),
-    m_nFontLast(-1), m_uTextStyleLast(0)
-{
-    m_szAvailableLast.cx = m_szAvailableLast.cy = 0;
-    m_cxyFixedLast.cx = m_cxyFixedLast.cy = 0;
-    ::ZeroMemory(&m_rcTextPaddingLast, sizeof(m_rcTextPaddingLast));
-}
-
-LPCTSTR ListLabelElement::GetClass() const
-{
-    return DUI_CTR_LISTLABELELEMENT;
-}
-
-LPVOID ListLabelElement::GetInterface(LPCTSTR pstrName)
-{
-    if( _tcscmp(pstrName, DUI_CTR_LISTLABELELEMENT) == 0 ) return static_cast<ListLabelElement*>(this);
-    return ListElement::GetInterface(pstrName);
-}
-
-void ListLabelElement::SetOwner(Control* pOwner)
-{
-    m_bNeedEstimateSize = true;
-    ListElement::SetOwner(pOwner);
-}
-
-void ListLabelElement::SetFixedWidth(int cx)
-{
-    m_bNeedEstimateSize = true;
-    Control::SetFixedWidth(cx);
-}
-
-void ListLabelElement::SetFixedHeight(int cy)
-{
-    m_bNeedEstimateSize = true;
-    Control::SetFixedHeight(cy);
-}
-
-void ListLabelElement::SetText(LPCTSTR pstrText)
-{
-    m_bNeedEstimateSize = true;
-    Control::SetText(pstrText);
-}
-
-void ListLabelElement::DoEvent(TEvent& event)
-{
-    if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
-        if( m_pOwner != NULL ) m_pOwner->DoEvent(event);
-        else ListElement::DoEvent(event);
-        return;
-    }
-
-    if( event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_RBUTTONDOWN )
-    {
-        if( IsEnabled() ) {
-            m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
-            Select();
-            Invalidate();
-        }
-        return;
-    }
-    if( event.Type == UIEVENT_MOUSEMOVE ) 
-    {
-        return;
-    }
-    if( event.Type == UIEVENT_BUTTONUP )
-    {
-        return;
-    }
-    if( event.Type == UIEVENT_MOUSEENTER )
-    {
-        if( ::PtInRect(&m_rcItem, event.ptMouse ) ) {
-            if( IsEnabled() ) {
-                if( (m_uButtonState & UISTATE_HOT) == 0  ) {
-                    m_uButtonState |= UISTATE_HOT;
-                    Invalidate();
-                }
-            }
-        }
-    }
-    if( event.Type == UIEVENT_MOUSELEAVE )
-    {
-        if( !::PtInRect(&m_rcItem, event.ptMouse ) ) {
-            if( IsEnabled() ) {
-                if( (m_uButtonState & UISTATE_HOT) != 0  ) {
-                    m_uButtonState &= ~UISTATE_HOT;
-                    Invalidate();
-                }
-            }
-            if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
-        }
-        else {
-            if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
-            return;
-        }
-    }
-    ListElement::DoEvent(event);
-}
-
-SIZE ListLabelElement::EstimateSize(SIZE szAvailable)
-{
-    if( m_pOwner == NULL ) return CDuiSize(0, 0);
-    TListInfo* pInfo = m_pOwner->GetListInfo();
-    if (pInfo == NULL) return CDuiSize(0, 0);
-    if (m_cxyFixed.cx > 0) {
-        if (m_cxyFixed.cy > 0) return m_cxyFixed;
-        else if (pInfo->uFixedHeight > 0) return CDuiSize(m_cxyFixed.cx, pInfo->uFixedHeight);
-    }
-
-    if ((pInfo->uTextStyle & DT_SINGLELINE) == 0 && 
-        (szAvailable.cx != m_szAvailableLast.cx || szAvailable.cy != m_szAvailableLast.cy)) {
-            m_bNeedEstimateSize = true;
-    }
-    if (m_uFixedHeightLast != pInfo->uFixedHeight || m_nFontLast != pInfo->nFont ||
-        m_uTextStyleLast != pInfo->uTextStyle ||
-        m_rcTextPaddingLast.left != pInfo->rcTextPadding.left || m_rcTextPaddingLast.right != pInfo->rcTextPadding.right ||
-        m_rcTextPaddingLast.top != pInfo->rcTextPadding.top || m_rcTextPaddingLast.bottom != pInfo->rcTextPadding.bottom) {
-            m_bNeedEstimateSize = true;
-    }
-
-    if (m_bNeedEstimateSize) {
-        m_bNeedEstimateSize = false;
-        m_szAvailableLast = szAvailable;
-        m_uFixedHeightLast = pInfo->uFixedHeight;
-        m_nFontLast = pInfo->nFont;
-        m_uTextStyleLast = pInfo->uTextStyle;
-        m_rcTextPaddingLast = pInfo->rcTextPadding;
-        
-        m_cxyFixedLast = m_cxyFixed;
-        if (m_cxyFixedLast.cy == 0) {
-            m_cxyFixedLast.cy = pInfo->uFixedHeight;
-        }
-
-        if ((pInfo->uTextStyle & DT_SINGLELINE) != 0) {
-            if( m_cxyFixedLast.cy == 0 ) {
-                m_cxyFixedLast.cy = m_pManager->GetFontInfo(pInfo->nFont)->tm.tmHeight + 8;
-                m_cxyFixedLast.cy += pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
-            }
-            if (m_cxyFixedLast.cx == 0) {
-                RECT rcText = { 0, 0, 9999, m_cxyFixedLast.cy };
-                if( pInfo->bShowHtml ) {
-                    int nLinks = 0;
-					CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText.c_str(), 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
-                }
-                else {
-					CRenderEngine::DrawText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText.c_str(), 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
-                }
-                m_cxyFixedLast.cx = rcText.right - rcText.left + pInfo->rcTextPadding.left + pInfo->rcTextPadding.right;
-            }
-        }
-        else {
-            if( m_cxyFixedLast.cx == 0 ) {
-                m_cxyFixedLast.cx = szAvailable.cx;
-            }
-            RECT rcText = { 0, 0, m_cxyFixedLast.cx, 9999 };
-            rcText.left += pInfo->rcTextPadding.left;
-            rcText.right -= pInfo->rcTextPadding.right;
-            if( pInfo->bShowHtml ) {
-                int nLinks = 0;
-				CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText.c_str(), 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
-            }
-            else {
-				CRenderEngine::DrawText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText.c_str(), 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
-            }
-            m_cxyFixedLast.cy = rcText.bottom - rcText.top + pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
-        }
-    }
-    return m_cxyFixedLast;
-}
-
-bool ListLabelElement::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
-{
-    DrawItemBk(hDC, m_rcItem);
-    DrawItemText(hDC, m_rcItem);
-	PaintStatusImage(hDC);
-    return true;
-}
-
-void ListLabelElement::DrawItemText(HDC hDC, const RECT& rcItem)
-{
-	if (m_sText.empty()) return;
-
-    if( m_pOwner == NULL ) return;
-    TListInfo* pInfo = m_pOwner->GetListInfo();
-    if( pInfo == NULL ) return;
-    DWORD iTextColor = pInfo->dwTextColor;
-    if( (m_uButtonState & UISTATE_HOT) != 0 ) {
-        iTextColor = pInfo->dwHotTextColor;
-    }
-    if( IsSelected() ) {
-        iTextColor = pInfo->dwSelectedTextColor;
-    }
-    if( !IsEnabled() ) {
-        iTextColor = pInfo->dwDisabledTextColor;
-    }
-    int nLinks = 0;
-    RECT rcText = rcItem;
-    rcText.left += pInfo->rcTextPadding.left;
-    rcText.right -= pInfo->rcTextPadding.right;
-    rcText.top += pInfo->rcTextPadding.top;
-    rcText.bottom -= pInfo->rcTextPadding.bottom;
-
-    if( pInfo->bShowHtml )
-		CRenderEngine::DrawHtmlText(hDC, m_pManager, rcText, m_sText.c_str(), iTextColor, \
-        NULL, NULL, nLinks, pInfo->nFont, pInfo->uTextStyle);
-    else
-		CRenderEngine::DrawText(hDC, m_pManager, rcText, m_sText.c_str(), iTextColor, \
-        pInfo->nFont, pInfo->uTextStyle);
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-//
-
-ListTextElement::ListTextElement() : m_nLinks(0), m_nHoverLink(-1), m_pOwner(NULL)
-{
-    ::ZeroMemory(&m_rcLinks, sizeof(m_rcLinks));
-}
-
-ListTextElement::~ListTextElement()
-{
-    String* pText;
-    for( int it = 0; it < m_aTexts.GetSize(); it++ ) {
-        pText = static_cast<String*>(m_aTexts[it]);
-        if( pText ) delete pText;
-    }
-    m_aTexts.Empty();
-}
-
-LPCTSTR ListTextElement::GetClass() const
-{
-    return DUI_CTR_LISTTEXTELEMENT;
-}
-
-LPVOID ListTextElement::GetInterface(LPCTSTR pstrName)
-{
-    if( _tcscmp(pstrName, DUI_CTR_LISTTEXTELEMENT) == 0 ) return static_cast<ListTextElement*>(this);
-    return ListLabelElement::GetInterface(pstrName);
-}
-
-UINT ListTextElement::GetControlFlags() const
-{
-    return UIFLAG_WANTRETURN | ( (IsEnabled() && m_nLinks > 0) ? UIFLAG_SETCURSOR : 0);
-}
-
-LPCTSTR ListTextElement::GetText(int iIndex) const
-{
-    String* pText = static_cast<String*>(m_aTexts.GetAt(iIndex));
-    if( pText ) return pText->c_str();
-    return NULL;
-}
-
-void ListTextElement::SetText(int iIndex, LPCTSTR pstrText)
-{
-    if( m_pOwner == NULL ) return;
-    TListInfo* pInfo = m_pOwner->GetListInfo();
-    if( iIndex < 0 || iIndex >= pInfo->nColumns ) return;
-    m_bNeedEstimateSize = true;
-    
-    while( m_aTexts.GetSize() < pInfo->nColumns ) { m_aTexts.Add(NULL); }
-
-    String* pText = static_cast<String*>(m_aTexts[iIndex]);
-    if( (pText == NULL && pstrText == NULL) || (pText && *pText == pstrText) ) return;
-
-	if ( pText ) //by cddjr 2011/10/20
-		pText->assign(pstrText);
-	else
-		m_aTexts.SetAt(iIndex, new String(pstrText));
-    Invalidate();
-}
-
-void ListTextElement::SetOwner(Control* pOwner)
-{
-    if (pOwner != NULL) {
-        m_bNeedEstimateSize = true;
-        ListElement::SetOwner(pOwner);
-        m_pOwner = static_cast<IList*>(pOwner->GetInterface(DUI_CTR_ILIST));
-    }
-}
-
-String* ListTextElement::GetLinkContent(int iIndex)
-{
-    if( iIndex >= 0 && iIndex < m_nLinks ) return &m_sLinks[iIndex];
-    return NULL;
-}
-
-void ListTextElement::DoEvent(TEvent& event)
-{
-    if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
-        if( m_pOwner != NULL ) m_pOwner->DoEvent(event);
-        else ListLabelElement::DoEvent(event);
-        return;
-    }
-
-    // When you hover over a link
-    if( event.Type == UIEVENT_SETCURSOR ) {
-        for( int i = 0; i < m_nLinks; i++ ) {
-            if( ::PtInRect(&m_rcLinks[i], event.ptMouse) ) {
-                ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_HAND)));
-                return;
-            }
-        }      
-    }
-    if( event.Type == UIEVENT_BUTTONUP && IsEnabled() ) {
-        for( int i = 0; i < m_nLinks; i++ ) {
-            if( ::PtInRect(&m_rcLinks[i], event.ptMouse) ) {
-                m_pManager->SendNotify(this, DUI_MSGTYPE_LINK, i);
-                return;
-            }
-        }
-    }
-    if( m_nLinks > 0 && event.Type == UIEVENT_MOUSEMOVE ) {
-        int nHoverLink = -1;
-        for( int i = 0; i < m_nLinks; i++ ) {
-            if( ::PtInRect(&m_rcLinks[i], event.ptMouse) ) {
-                nHoverLink = i;
-                break;
-            }
-        }
-
-        if(m_nHoverLink != nHoverLink) {
-            Invalidate();
-            m_nHoverLink = nHoverLink;
-        }
-    }
-    if( m_nLinks > 0 && event.Type == UIEVENT_MOUSELEAVE ) {
-        if(m_nHoverLink != -1) {
-            if( !::PtInRect(&m_rcLinks[m_nHoverLink], event.ptMouse) ) {
-                m_nHoverLink = -1;
-                Invalidate();
-                if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
-            }
-            else {
-                if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
-                return;
-            }
-        }
-    }
-    ListLabelElement::DoEvent(event);
-}
-
-SIZE ListTextElement::EstimateSize(SIZE szAvailable)
-{
-    if( m_pOwner == NULL ) return CDuiSize(0, 0);
-    TListInfo* pInfo = m_pOwner->GetListInfo();
-    if (pInfo == NULL) return CDuiSize(0, 0);
-    SIZE cxyFixed = m_cxyFixed;
-    if (cxyFixed.cx == 0 && pInfo->nColumns > 0) {
-        cxyFixed.cx = pInfo->rcColumn[pInfo->nColumns - 1].right - pInfo->rcColumn[0].left;
-        if (m_cxyFixedLast.cx != cxyFixed.cx) m_bNeedEstimateSize = true;
-    }
-    if (cxyFixed.cx > 0) {
-        if (cxyFixed.cy > 0) return cxyFixed;
-        else if (pInfo->uFixedHeight > 0) return CDuiSize(cxyFixed.cx, pInfo->uFixedHeight);
-    }
-    
-    if ((pInfo->uTextStyle & DT_SINGLELINE) == 0 && 
-        (szAvailable.cx != m_szAvailableLast.cx || szAvailable.cy != m_szAvailableLast.cy)) {
-            m_bNeedEstimateSize = true;
-    }
-    if (m_uFixedHeightLast != pInfo->uFixedHeight || m_nFontLast != pInfo->nFont ||
-        m_uTextStyleLast != pInfo->uTextStyle ||
-        m_rcTextPaddingLast.left != pInfo->rcTextPadding.left || m_rcTextPaddingLast.right != pInfo->rcTextPadding.right ||
-        m_rcTextPaddingLast.top != pInfo->rcTextPadding.top || m_rcTextPaddingLast.bottom != pInfo->rcTextPadding.bottom) {
-            m_bNeedEstimateSize = true;
-    }
-
-    String strText;
-    IListCallback* pCallback = m_pOwner->GetTextCallback();
-    if( pCallback ) strText = pCallback->GetItemText(this, m_iIndex, 0);
-	else if (m_aTexts.GetSize() > 0) strText.assign(GetText(0));
-    else strText = m_sText;
-    if (m_sTextLast != strText) m_bNeedEstimateSize = true;
-
-    if (m_bNeedEstimateSize) {
-        m_bNeedEstimateSize = false;
-        m_szAvailableLast = szAvailable;
-        m_uFixedHeightLast = pInfo->uFixedHeight;
-        m_nFontLast = pInfo->nFont;
-        m_uTextStyleLast = pInfo->uTextStyle;
-        m_rcTextPaddingLast = pInfo->rcTextPadding;
-        m_sTextLast = strText;
-
-        m_cxyFixedLast = m_cxyFixed;
-        if (m_cxyFixedLast.cx == 0 && pInfo->nColumns > 0) {
-            m_cxyFixedLast.cx = pInfo->rcColumn[pInfo->nColumns - 1].right - pInfo->rcColumn[0].left;
-        }
-        if (m_cxyFixedLast.cy == 0) {
-            m_cxyFixedLast.cy = pInfo->uFixedHeight;
-        }
-
-        if ((pInfo->uTextStyle & DT_SINGLELINE) != 0) {
-            if( m_cxyFixedLast.cy == 0 ) {
-                m_cxyFixedLast.cy = m_pManager->GetFontInfo(pInfo->nFont)->tm.tmHeight + 8;
-                m_cxyFixedLast.cy += pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
-            }
-            if (m_cxyFixedLast.cx == 0) {
-                RECT rcText = { 0, 0, 9999, m_cxyFixedLast.cy };
-                if( pInfo->bShowHtml ) {
-                    int nLinks = 0;
-					CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, strText.c_str(), 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
-                }
-                else {
-					CRenderEngine::DrawText(m_pManager->GetPaintDC(), m_pManager, rcText, strText.c_str(), 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
-                }
-                m_cxyFixedLast.cx = rcText.right - rcText.left + pInfo->rcTextPadding.left + pInfo->rcTextPadding.right;
-            }
-        }
-        else {
-            if( m_cxyFixedLast.cx == 0 ) {
-                m_cxyFixedLast.cx = szAvailable.cx;
-            }
-            RECT rcText = { 0, 0, m_cxyFixedLast.cx, 9999 };
-            rcText.left += pInfo->rcTextPadding.left;
-            rcText.right -= pInfo->rcTextPadding.right;
-            if( pInfo->bShowHtml ) {
-                int nLinks = 0;
-				CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, strText.c_str(), 0, NULL, NULL, nLinks, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
-            }
-            else {
-				CRenderEngine::DrawText(m_pManager->GetPaintDC(), m_pManager, rcText, strText.c_str(), 0, pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
-            }
-            m_cxyFixedLast.cy = rcText.bottom - rcText.top + pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
-        }
-    }
-    return m_cxyFixedLast;
-}
-
-void ListTextElement::PaintStatusImage(HDC hDC)
-{
-	DrawImage(hDC, m_diFore);
-}
-
-void ListTextElement::DrawItemText(HDC hDC, const RECT& rcItem)
-{
-    if( m_pOwner == NULL ) return;
-    TListInfo* pInfo = m_pOwner->GetListInfo();
-    if (pInfo == NULL) return;
-    DWORD iTextColor = pInfo->dwTextColor;
-
-    if( (m_uButtonState & UISTATE_HOT) != 0 ) {
-        iTextColor = pInfo->dwHotTextColor;
-    }
-    if( IsSelected() ) {
-        iTextColor = pInfo->dwSelectedTextColor;
-    }
-    if( !IsEnabled() ) {
-        iTextColor = pInfo->dwDisabledTextColor;
-    }
-    IListCallback* pCallback = m_pOwner->GetTextCallback();
-
-    m_nLinks = 0;
-    int nLinks = lengthof(m_rcLinks);
-    if (pInfo->nColumns > 0) {
-        for( int i = 0; i < pInfo->nColumns; i++ )
-        {
-            RECT rcItem = { pInfo->rcColumn[i].left, m_rcItem.top, pInfo->rcColumn[i].right, m_rcItem.bottom };
-            if (pInfo->iVLineSize > 0 && i < pInfo->nColumns - 1) {
-                RECT rcLine = { rcItem.right - pInfo->iVLineSize / 2, rcItem.top, rcItem.right - pInfo->iVLineSize / 2, rcItem.bottom};
-                CRenderEngine::DrawLine(hDC, rcLine, pInfo->iVLineSize, GetAdjustColor(pInfo->dwVLineColor));
-                rcItem.right -= pInfo->iVLineSize;
-            }
-
-			rcItem.left += pInfo->rcTextPadding.left;
-			rcItem.right -= pInfo->rcTextPadding.right;
-			rcItem.top += pInfo->rcTextPadding.top;
-			rcItem.bottom -= pInfo->rcTextPadding.bottom;
-
-            String strText;//不使用LPCTSTR，否则限制太多 by cddjr 2011/10/20
-            if( pCallback ) strText = pCallback->GetItemText(this, m_iIndex, i);
-			else strText.assign(GetText(i));
-            if( pInfo->bShowHtml )
-                CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.c_str(), iTextColor, \
-                &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], nLinks, pInfo->nFont, pInfo->uTextStyle);
-            else
-                CRenderEngine::DrawText(hDC, m_pManager, rcItem, strText.c_str(), iTextColor, \
-                pInfo->nFont, pInfo->uTextStyle);
-
-            m_nLinks += nLinks;
-            nLinks = lengthof(m_rcLinks) - m_nLinks; 
-        }
-    }
-    else {
-        RECT rcItem = m_rcItem;
-        rcItem.left += pInfo->rcTextPadding.left;
-        rcItem.right -= pInfo->rcTextPadding.right;
-        rcItem.top += pInfo->rcTextPadding.top;
-        rcItem.bottom -= pInfo->rcTextPadding.bottom;
-
-        String strText;
-        if( pCallback ) strText = pCallback->GetItemText(this, m_iIndex, 0);
-		else if (m_aTexts.GetSize() > 0) strText.assign(GetText(0));
-        else strText = m_sText;
-        if( pInfo->bShowHtml )
-            CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.c_str(), iTextColor, \
-            &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], nLinks, pInfo->nFont, pInfo->uTextStyle);
-        else
-            CRenderEngine::DrawText(hDC, m_pManager, rcItem, strText.c_str(), iTextColor, \
-            pInfo->nFont, pInfo->uTextStyle);
-
-        m_nLinks += nLinks;
-        nLinks = lengthof(m_rcLinks) - m_nLinks; 
-    }
-
-    for( int i = m_nLinks; i < lengthof(m_rcLinks); i++ ) {
-        ::ZeroMemory(m_rcLinks + i, sizeof(RECT));
-		((String*)(m_sLinks + i))->clear();
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-//
-
 ListContainerElement::ListContainerElement() : 
 m_iIndex(-1),
 m_iDrawIndex(0),
@@ -2707,14 +2195,14 @@ LPVOID ListContainerElement::GetInterface(LPCTSTR pstrName)
 	return __super::GetInterface(pstrName);
 }
 
-IListOwner* ListContainerElement::GetOwner()
+IList* ListContainerElement::GetOwner()
 {
     return m_pOwner;
 }
 
 void ListContainerElement::SetOwner(Control* pOwner)
 {
-    if (pOwner != NULL) m_pOwner = static_cast<IListOwner*>(pOwner->GetInterface(DUI_CTR_ILISTOWNER));
+    if (pOwner != NULL) m_pOwner = static_cast<IList*>(pOwner->GetInterface(DUI_CTR_ILIST));
 }
 
 void ListContainerElement::SetVisible(bool bVisible)
@@ -2816,7 +2304,7 @@ bool ListContainerElement::Activate()
 		}
 	}
 #endif
-	if (m_pManager != NULL) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
+	if (m_pManager != NULL) m_pManager->SendNotify(this, UIEVENT_ITEMCLICK);
     return true;
 }
 
@@ -2860,8 +2348,8 @@ bool ListContainerElement::Expand(bool bExpand)
     if( m_bExpandable ) {
         if( !m_pOwner->ExpandItem(m_iIndex, bExpand) ) return false;
         if( m_pManager != NULL ) {
-            if( bExpand ) m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMEXPAND, false);
-            else m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCOLLAPSE, false);
+			if (bExpand) m_pManager->SendNotify(this, UIEVENT_ITEMEXPAND, false);
+			else m_pManager->SendNotify(this, UIEVENT_ITEMCOLLAPSE, false);
         }
     }
 
@@ -2904,7 +2392,7 @@ void ListContainerElement::DoEvent(TEvent& event)
 #if MODE_EVENTMAP
 			Activate();
 #else
-            m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
+			m_pManager->SendNotify(this, UIEVENT_ITEMCLICK);
 #endif	
             Select();
             Invalidate();

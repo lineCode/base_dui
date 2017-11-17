@@ -85,16 +85,14 @@ void MainForm::InitWindow()
 #if MODE_EVENTMAP
 	if (btn_head_)
 	{
-		auto OnBtnHeadClicked = [this](void* param){
-			TEvent *event = static_cast<TEvent *>(param);
+		auto OnBtnHeadClicked = [this](TEvent *event){
 			printf("MainForm OnBtnHeadClicked, name:%s\n", event->pSender->GetName().c_str());
 			return false; };
 
 		btn_head_->AttachClick(std::bind(OnBtnHeadClicked, std::placeholders::_1));
 	}
 
-	auto OnOptContainerClicked = [this](void* param, int index){
-		TEvent *event = static_cast<TEvent *>(param);
+	auto OnOptContainerClicked = [this](TEvent *event, int index){
 		printf("MainForm OnBtnContainerClicked, name:%s\n", event->pSender->GetName().c_str());
 
 		if (index < 3)
@@ -131,8 +129,7 @@ void MainForm::InitWindow()
 		}
 		if (btn_expand)
 		{
-			auto cb = [node](void *param){
-				TEvent *event = (TEvent *)param;
+			auto cb = [node](TEvent *event){
 				node->SetNodeExpand(!node->GetNodeExpand());
 				return false;
 			};
@@ -178,14 +175,14 @@ void MainForm::InitWindow()
 	nim_comp::SessionManager::GetInstance()->DoLoadSession(std::bind(&MainForm::OnGetAllSessionInfo, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-void MainForm::Notify(dui::TNotify& msg)
+void MainForm::Notify(dui::TEvent& msg)
 {
 	bool bHandle = false;
 
 	Control *pControl = msg.pSender;
 	String name = pControl->GetName();
 	//wprintf(L"MainForm::Notify name:%s, msgtype:%s\n", name.c_str(), msg.sType.c_str());
-	if (msg.sType == DUI_MSGTYPE_ITEMCLICK )
+	if (msg.Type == UIEVENT_ITEMCLICK)
 	{
 		bHandle = true;
 	}
@@ -195,7 +192,7 @@ void MainForm::Notify(dui::TNotify& msg)
 	}
 }
 
-void MainForm::OnClick(dui::TNotify& msg)
+void MainForm::OnClick(dui::TEvent& msg)
 {
 	bool bHandle = false;
 

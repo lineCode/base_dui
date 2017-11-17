@@ -80,11 +80,11 @@ namespace dui
 							pControl->Selected(false, bTriggerEvent);
 						}
 					}
-					if (bTriggerEvent) m_pManager->SendNotify(this, DUI_MSGTYPE_SELECTCHANGED);
+					if (bTriggerEvent) m_pManager->SendNotify(this, UIEVENT_SELECTCHANGE);
 				}
 			}
 			else {
-				if (bTriggerEvent) m_pManager->SendNotify(this, DUI_MSGTYPE_SELECTCHANGED);
+				if (bTriggerEvent) m_pManager->SendNotify(this, UIEVENT_SELECTCHANGE);
 			}
 		}
 

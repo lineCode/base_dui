@@ -36,8 +36,8 @@ namespace dui
 		rc.top += m_rcPadding.top;
 		rc.right -= m_rcPadding.right;
 		rc.bottom -= m_rcPadding.bottom;
-		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
-		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
+		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() && !m_bScrollBarFloat) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
+		if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() && !m_bScrollBarFloat) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 
 		if( m_items.GetSize() == 0) {
 			ProcessScrollBar(rc, 0, 0);

@@ -54,20 +54,15 @@ public:
     virtual LPCTSTR GetItemText(Control* pList, int iItem, int iSubItem) = 0;
 };
 
-class IListOwner
+class IList
 {
 public:
-    virtual TListInfo* GetListInfo() = 0;
-    virtual int GetCurSel() const = 0;
-    virtual bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent=true) = 0;
-    virtual void DoEvent(TEvent& event) = 0;
-    virtual bool ExpandItem(int iIndex, bool bExpand = true) = 0;
-    virtual int GetExpandedItem() const = 0;
-};
-
-class IList : public IListOwner
-{
-public:
+	virtual TListInfo* GetListInfo() = 0;
+	virtual int GetCurSel() const = 0;
+	virtual bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent = true) = 0;
+	virtual void DoEvent(TEvent& event) = 0;
+	virtual bool ExpandItem(int iIndex, bool bExpand = true) = 0;
+	virtual int GetExpandedItem() const = 0;
     virtual ListHeader* GetHeader() const = 0;
     virtual ScrollContainer* GetList() const = 0;
     virtual IListCallback* GetTextCallback() const = 0;
@@ -81,7 +76,7 @@ public:
     virtual void SetIndex(int iIndex) = 0;
     virtual int GetDrawIndex() const = 0;
     virtual void SetDrawIndex(int iIndex) = 0;
-    virtual IListOwner* GetOwner() = 0;
+    virtual IList* GetOwner() = 0;
     virtual void SetOwner(Control* pOwner) = 0;
     virtual bool IsSelected() const = 0;
     virtual bool Select(bool bSelect = true, bool bTriggerEvent=true) = 0;
@@ -320,7 +315,7 @@ public:
     int GetDrawIndex() const;
     void SetDrawIndex(int iIndex);
 
-    IListOwner* GetOwner();
+    IList* GetOwner();
     void SetOwner(Control* pOwner);
     void SetVisible(bool bVisible = true);
 
@@ -342,83 +337,8 @@ protected:
     int m_iDrawIndex;
     bool m_bSelected;
     UINT m_uButtonState;
-    IListOwner* m_pOwner;
-};
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-
-class DUILIB_API ListLabelElement : public ListElement
-{
-public:
-    ListLabelElement();
-
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-
-    void SetOwner(Control* pOwner);
-
-    void SetFixedWidth(int cx);
-    void SetFixedHeight(int cy);
-    void SetText(LPCTSTR pstrText);
-
-    void DoEvent(TEvent& event);
-    SIZE EstimateSize(SIZE szAvailable);
-    bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
-
-    void DrawItemText(HDC hDC, const RECT& rcItem);
-
-protected:
-    SIZE    m_cxyFixedLast;
-    bool    m_bNeedEstimateSize;
-
-    SIZE    m_szAvailableLast;
-    UINT    m_uFixedHeightLast; 
-    int     m_nFontLast;
-    UINT    m_uTextStyleLast;
-    RECT    m_rcTextPaddingLast;
-};
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-
-class DUILIB_API ListTextElement : public ListLabelElement
-{
-public:
-    ListTextElement();
-    ~ListTextElement();
-
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    UINT GetControlFlags() const;
-
-    LPCTSTR GetText(int iIndex) const;
-    void SetText(int iIndex, LPCTSTR pstrText);
-
-    void SetOwner(Control* pOwner);
-    String* GetLinkContent(int iIndex);
-
-    void DoEvent(TEvent& event);
-    SIZE EstimateSize(SIZE szAvailable);
-
-    void DrawItemText(HDC hDC, const RECT& rcItem);
-	virtual void PaintStatusImage(HDC hDC);
-protected:
-    enum { MAX_LINK = 8 };
-    int m_nLinks;
-    RECT m_rcLinks[MAX_LINK];
-    String m_sLinks[MAX_LINK];
-    int m_nHoverLink;
     IList* m_pOwner;
-    PtrArray m_aTexts;
-
-    String m_sTextLast;
 };
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
 
 class DUILIB_API ListContainerElement : public Container, public IListItem
 {
@@ -434,7 +354,7 @@ public:
     int GetDrawIndex() const;
     void SetDrawIndex(int iIndex);
 
-    IListOwner* GetOwner();
+    IList* GetOwner();
     void SetOwner(Control* pOwner);
     void SetVisible(bool bVisible = true);
     void SetEnabled(bool bEnable = true);
@@ -471,7 +391,7 @@ protected:
     bool m_bExpandable;
     bool m_bExpand;
     UINT m_uButtonState;
-    IListOwner* m_pOwner;
+    IList* m_pOwner;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////

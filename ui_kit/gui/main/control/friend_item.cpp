@@ -22,8 +22,7 @@ namespace nim_comp
 	void FriendItem::Init()
 	{
 #if MODE_EVENTMAP
-		auto OnItemClick = [this](void *param){
-			TEvent *event = static_cast<TEvent *>(param);
+		auto OnItemClick = [this](TEvent *event){
 			printf("FriendItem OnItemClick, name:%s, phone:%s\n", event->pSender->GetName().c_str(), info_.GetMobile().c_str());
 			return false;
 		};
@@ -48,8 +47,7 @@ namespace nim_comp
 		btn_head_ = dynamic_cast<dui::Button *>(FindSubControl(L"btn_friend_head"));
 		if (btn_head_)
 		{
-			auto OnFriendHeadClicked = [this](void* param){
-				TEvent *event = static_cast<TEvent *>(param);
+			auto OnFriendHeadClicked = [this](TEvent *event){
 				printf("FriendItem OnFriendHeadClicked, name:%s, phone:%s\n", event->pSender->GetName().c_str(), info_.GetMobile().c_str());
 				return false; };
 

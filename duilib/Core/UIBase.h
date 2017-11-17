@@ -51,8 +51,8 @@ class DUILIB_API CNotifyPump
 public:
 	bool AddVirtualWnd(String strName,CNotifyPump* pObject);
 	bool RemoveVirtualWnd(String strName);
-	void NotifyPump(TNotify& msg);
-	bool LoopDispatch(TNotify& msg);
+	void NotifyPump(TEvent& msg);
+	bool LoopDispatch(TEvent& msg);
 	DUI_DECLARE_MESSAGE_MAP()
 private:
 	StringPtrMap m_VirtualWndMap;
