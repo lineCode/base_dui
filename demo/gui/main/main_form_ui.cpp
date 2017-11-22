@@ -5,6 +5,8 @@
 #include "gui/main/control/session_item.h"
 #include "gui/main/control/friend_itemex.h"
 #include "gui/session/session_box.h"
+#include "module/tray/tray_manager.h"
+#include "module/login/login_manager.h"
 
 #include "main_form.h"
 
@@ -61,8 +63,8 @@ void MainForm::OnEsc( BOOL &bHandled )
 
 void MainForm::OnFinalMessage(HWND hWnd)
 {
-	/*TrayIcon::GetInstance()->Destroy();
-	nim_ui::SessionListManager::GetInstance()->AttachListBox(nullptr);
+	nim_comp::TrayManager::GetInstance()->Destroy();
+	/*nim_ui::SessionListManager::GetInstance()->AttachListBox(nullptr);
 	nim_ui::ContactsListManager::GetInstance()->AttachFriendListBox(nullptr);
 	nim_ui::ContactsListManager::GetInstance()->AttachGroupListBox(nullptr);*/
 
@@ -81,6 +83,11 @@ void MainForm::InitWindow()
 	SetIcon(IDI_ICON1);
 	SetTaskbarTitle(L"微微");
 
+	nim_comp::TrayManager::GetInstance()->Init();
+	nim_comp::TrayManager::GetInstance()->SetTrayIcon(::LoadIconW(nbase::win32::GetCurrentModuleHandle(), MAKEINTRESOURCE(IDI_ICON1)), L"微微");
+	nim_comp::TrayManager::GetInstance()->RegEventCallback(std::bind(&MainForm::TrayLeftClick, this), nim_comp::TrayEventType_LeftClick);
+	nim_comp::TrayManager::GetInstance()->RegEventCallback(std::bind(&MainForm::TrayRightClick, this), nim_comp::TrayEventType_RightClick);
+
 	btn_head_ = dynamic_cast<Button*>(m_PaintManager.FindControl(_T("btn_head")));
 #if MODE_EVENTMAP
 	if (btn_head_)
@@ -95,7 +102,7 @@ void MainForm::InitWindow()
 	auto OnOptContainerClicked = [this](TEvent *event, int index){
 		printf("MainForm OnBtnContainerClicked, name:%s\n", event->pSender->GetName().c_str());
 
-		if (index < 3)
+		//if (index < 3)
 		{
 			tab_session_friend_->SelectItem(index);
 		}
@@ -115,6 +122,16 @@ void MainForm::InitWindow()
 	list_friend_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_friend")));
 	list_session_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_session")));
 	tree_friend_ = dynamic_cast<Tree*>(m_PaintManager.FindControl(_T("tv_friend")));
+	list_menu_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_menu")));
+	{
+		ListContainerElement *menu_dpi = dynamic_cast<ListContainerElement*>(list_menu_->FindSubControl(_T("menu_dpi")));
+		auto cb = std::bind([this](TEvent *event){
+			printf("menu_dpi item click\n");
+			return false;
+		}, std::placeholders::_1);
+		menu_dpi->AttachItemClick(cb);
+	}
+	
 	for (size_t i = 0; i < 26; i++)
 	{
 		TreeNode *node = new TreeNode;
@@ -184,6 +201,14 @@ void MainForm::Notify(dui::TEvent& msg)
 	//wprintf(L"MainForm::Notify name:%s, msgtype:%s\n", name.c_str(), msg.sType.c_str());
 	if (msg.Type == UIEVENT_ITEMCLICK)
 	{
+		if (name == _T("menu_logoff"))
+		{
+			MenuLogoffClick(&msg);
+		}
+		else if (name == _T("menu_logout"))
+		{
+			MenuLogoutClick(&msg);
+		}
 		bHandle = true;
 	}
 	if (!bHandle)
@@ -217,6 +242,24 @@ void MainForm::OnClick(dui::TEvent& msg)
 		__super::OnClick(msg);
 	}
 }
+
+void MainForm::TrayLeftClick()
+{
+	printf("MainForm::TrayLeftClick\n");
+	this->ActiveWindow();
+	::SetForegroundWindow(m_hWnd);
+	::BringWindowToTop(m_hWnd);
+	nim_comp::TrayManager::GetInstance()->StopTrayIconAnimate();
+}
+
+void MainForm::TrayRightClick()
+{
+	printf("MainForm::TrayRightClick\n");
+	POINT point;
+	::GetCursorPos(&point);
+	PopupTrayMenu(point);
+}
+
 #if 0
 bool MainForm::MainMenuButtonClick(ui::EventArgs* param)
 {
@@ -569,21 +612,18 @@ void MainForm::SetOnlineState()
 #endif
 void MainForm::PopupTrayMenu(POINT point)
 {
-	//创建菜单窗口
-	//CMenuWnd* pMenu = new CMenuWnd(NULL);
-	//STRINGorID xml(L"tray_menu.xml");
-	//pMenu->Init(xml, _T("xml"), point, CMenuWnd::RIGHT_TOP);
-	////注册回调
-	//CMenuElementUI* display_session_list = (CMenuElementUI*)pMenu->FindControl(L"display_session_list");
-	//display_session_list->AttachSelect(nbase::Bind(&MainForm::SessionListMenuItemClick, this, std::placeholders::_1));
+#if 1
+	dui::CMenuWnd* pMenu = new dui::CMenuWnd;
+	STRINGorID xml(L"tray_menu.xml");
+	pMenu->Init(NULL, xml, _T("menu"), point, &m_PaintManager, NULL, eMenuAlignment_Left | eMenuAlignment_Bottom);
 
-	//CMenuElementUI* logoff = (CMenuElementUI*)pMenu->FindControl(L"logoff");
-	//logoff->AttachSelect(nbase::Bind(&MainForm::LogoffMenuItemClick, this, std::placeholders::_1));
+	/*MenuElement* logoff = (MenuElement*)pMenu-> FindControl(L"menu_logoff");
+	logoff->AttachSelect(nbase::Bind(&MainForm::MenuLogoffClick, this, std::placeholders::_1));
+	MenuElement* logout = (MenuElement*)pMenu->FindControl(L"menu_logout");
+	logout->AttachSelect(nbase::Bind(&MainForm::MenuLogoutClick, this, std::placeholders::_1));*/
 
-	//CMenuElementUI* quit = (CMenuElementUI*)pMenu->FindControl(L"quit");
-	//quit->AttachSelect(nbase::Bind(&MainForm::QuitMenuItemClick, this, std::placeholders::_1));
-	////显示
-	//pMenu->Show();
+	//pMenu->ShowWindow();
+#endif
 }
 
 void MainForm::OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list)
@@ -638,5 +678,30 @@ void MainForm::OnGetAllSessionInfo(int unread_count, const nim_comp::SessionData
 		list_session_->Add(item);
 	}
 	printf("load Session ui %d ms\n", clock() - ck1);
+}
+
+bool MainForm::MenuLogoffClick(dui::TEvent* param)
+{
+#if 0
+	QCommand::Set(kCmdRestart, L"true");
+	std::wstring wacc = nbase::UTF8ToUTF16(nim_ui::LoginManager::GetInstance()->GetVVUser());
+	QCommand::Set(kCmdAccount, wacc);
+	nim_ui::LoginManager::GetInstance()->DoLogout(false, nim::kNIMLogoutChangeAccout);
+
+	wstring neteaseid_w;
+	std::string neteaseid = nim_comp::LoginManager::GetInstance()->GetAccount();
+	nbase::win32::MBCSToUnicode(neteaseid, neteaseid_w);
+
+	std::wstring mydoc_dir = QPath::GeMyDocDir();
+	std::wstring appconfig_file2 = mydoc_dir + L"\\vv\\user\\" + neteaseid_w + +L"\\app.config";
+	::WritePrivateProfileString(L"Login", L"AutoLogin", L"0", appconfig_file2.c_str());		//自动登录
+#endif
+	return true;
+}
+
+bool MainForm::MenuLogoutClick(dui::TEvent* param)
+{
+	nim_comp::LoginManager::GetInstance()->DoLogout(false);
+	return true;
 }
 

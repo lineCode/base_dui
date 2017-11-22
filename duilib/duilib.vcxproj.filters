@@ -153,6 +153,9 @@
     <ClCompile Include="Core\UIScrollContainer.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\DPI.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Control\UIActiveX.h">
@@ -295,6 +298,12 @@
     </ClInclude>
     <ClInclude Include="Core\UIScrollContainer.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\DPI.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\VersionHelpers.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

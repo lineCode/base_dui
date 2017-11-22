@@ -59,6 +59,9 @@
     <Filter Include="gui\session">
       <UniqueIdentifier>{d058ebe2-cbe3-4cbf-b11c-60f2bfd1521c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="module\tray">
+      <UniqueIdentifier>{5075c986-2883-413f-9fe5-2e9b2ff20920}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gui\msgbox\msgbox.h">
@@ -132,6 +135,9 @@
     <ClInclude Include="gui\session\session_box.h">
       <Filter>gui\session</Filter>
     </ClInclude>
+    <ClInclude Include="module\tray\tray_manager.h">
+      <Filter>module\tray</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\msgbox\msgbox.cpp">
@@ -194,6 +200,9 @@
     </ClCompile>
     <ClCompile Include="gui\session\session_box_ui.cpp">
       <Filter>gui\session</Filter>
+    </ClCompile>
+    <ClCompile Include="module\tray\tray_manager.cpp">
+      <Filter>module\tray</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

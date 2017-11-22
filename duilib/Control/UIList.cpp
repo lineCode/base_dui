@@ -33,10 +33,11 @@ protected:
 
 List::List() : m_pCallback(NULL), m_bScrollSelect(false), m_iCurSel(-1), m_iExpandedItem(-1)
 {
-    m_pList = new ListBody(this);
     m_pHeader = new ListHeader;
-
     Add(m_pHeader);
+	m_pHeader->SetVisible(false);
+
+	m_pList = new ListBody(this);
     VerticalLayout::Add(m_pList);
 
     m_ListInfo.nColumns = 0;

@@ -6,7 +6,6 @@
 #include "../Utils/observer_impl_base.hpp"
 
 #define MENUWND_OBSERVER	0
-#define MENU_EQUAL_LIST		1
 namespace dui {
 
 struct ContextMenuParam
@@ -239,9 +238,7 @@ protected:
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-#if MENU_EQUAL_LIST
-typedef List Menu;
-#else
+
 class List;
 class DUILIB_API Menu : public List
 {
@@ -265,7 +262,7 @@ public:
 
 	void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) ;
 };
-#endif
+
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
@@ -280,16 +277,12 @@ public:
 		return s_context_menu_observer;
 	}
 #else
-class DUILIB_API CMenuWnd : public WindowImplBase
+class DUILIB_API CMenuWnd : public CWindowWnd, public INotify, public IDialogBuilderCallback
 {
 #endif
 public:
 	CMenuWnd();
-	virtual ~CMenuWnd();
-
-	virtual String GetSkinFolder() override;
-	virtual String GetSkinFile() override;
-	virtual LPCTSTR GetWindowClassName(void) const override;
+	~CMenuWnd();
 
 	/*
 	 *	@pOwner 一级菜单不要指定这个参数，这是菜单内部使用的
@@ -302,6 +295,7 @@ public:
 	void Init(MenuElement* pOwner, STRINGorID xml, String folder, POINT point,
 		CPaintManager* pMainPaintManager, std::map<String,bool>* pMenuCheckInfo = NULL,
 		DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top/*, bool isLayeredWindow = true*/);
+    LPCTSTR GetWindowClassName() const;
     void OnFinalMessage(HWND hWnd);
 	void Notify(TEvent& msg);
 	Control* CreateControl(LPCTSTR pstrClassName);
@@ -323,17 +317,14 @@ public:
 	void ResizeSubMenu();
 
 private:
-	String			m_folder;
-	String			m_xmlfile;
-
 	POINT			m_BasedPoint;
 	STRINGorID		m_xml;
-    MenuElement*	m_pOwner;
-    Menu*			m_pLayout;
-	DWORD			m_dwAlignment;	//菜单对齐方式
+    MenuElement* m_pOwner;
+    Menu*	m_pLayout;
+	DWORD		m_dwAlignment;	//菜单对齐方式
 
 	CPaintManager* m_pParentManager;
-	//CPaintManager m_pm;
+	CPaintManager m_pm;
 	
 };
 

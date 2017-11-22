@@ -4,18 +4,12 @@
 #pragma once
 
 namespace dui {
-/////////////////////////////////////////////////////////////////////////////////////
-//
+
+#define WM_USER_SET_DPI WM_USER + 200
 
 class Control;
 class Container;
 class IDialogBuilderCallback;
-/////////////////////////////////////////////////////////////////////////////////////
-//
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
 
 // Flags for Control::GetControlFlags()
 #define UIFLAG_TABSTOP       0x00000001
@@ -143,6 +137,7 @@ public:
 //
 typedef Control* (*LPCREATECONTROL)(LPCTSTR pstrType);
 
+class CDPI;
 class DUILIB_API CPaintManager
 {
 public:
@@ -322,7 +317,6 @@ public:
     bool AddNotifier(INotify* pControl);
     bool RemoveNotifier(INotify* pControl);   
     void SendNotify(TEvent& Msg, bool bAsync = false, bool bEnableRepeat = true);
-    //void SendNotify(Control* pControl, LPCTSTR pstrMessage, WPARAM wParam = 0, LPARAM lParam = 0, bool bAsync = false, bool bEnableRepeat = true);
 	void SendNotify(Control* pControl, EVENTTYPE_UI type, WPARAM wParam = 0, LPARAM lParam = 0, bool bAsync = false, bool bEnableRepeat = true);
 
     bool AddPreMessageFilter(IMessageFilter* pFilter);
@@ -368,6 +362,13 @@ public:
 	Container* CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
 
 	bool FillBox(Container* pFilledContainer, const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
+	//----------dpi-----------
+	CDPI* GetDPIObj();
+	void ResetDPIAssets();
+	void RebuildFont(TFontInfo* pFontInfo);
+	void SetDPI(int iDPI);
+	static void SetAllDPI(int iDPI);
+
 private:
 	PtrArray* GetFoundControls();
     static Control* CALLBACK __FindControlFromNameHash(Control* pThis, LPVOID pData);
@@ -383,9 +384,6 @@ private:
 	static void AdjustSharedImagesHSL();
 	void AdjustImagesHSL();
 	void PostAsyncNotify();
-
-	
-	
 
 private:
 	String m_sName;
@@ -406,6 +404,8 @@ private:
     bool m_bNoActivate;
     bool m_bShowUpdateRect;
 	CShadowUI m_shadow;
+
+	CDPI* m_pDPI;
     //
     Control* m_pRoot;
     Control* m_pFocus;

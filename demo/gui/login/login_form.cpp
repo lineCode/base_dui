@@ -22,7 +22,7 @@ void LoginForm::StartLogin()
 	}
 	if (!nim_comp::LoginManager::GetInstance()->CheckSingletonRun(re_account_->GetText()))
 	{
-		ShowMsgBox(this->GetHWND(), MsgboxCallback(), _T("同一账号不允许重复登录!"), false, _T("提示"), false, _T("确定"), false, _T("取消"), false);
+		ShowMsgBox(this->GetHWND(), MsgboxCallback(), _T("同一账号不允许重复登录!"), _T("提示"), _T("确定"), _T("取消"));
 		return;
 	}
 

@@ -6,27 +6,30 @@
 using namespace dui;
 
 void ShowMsgBox(HWND hParentWnd, MsgboxCallback cb,
-	const std::wstring &content, bool content_is_id,
-	const std::wstring &title, bool title_is_id,
-	const std::wstring &yes, bool btn_yes_is_id,
-	const std::wstring &no, bool btn_no_is_id)
+	const std::wstring &content, 
+	const std::wstring &title, 
+	const std::wstring &yes, 
+	const std::wstring &no,
+	bool modal/* = false*/)
 {
 	MsgBox* msgbox = new MsgBox(cb);
 	HWND hWnd = msgbox->Create(hParentWnd, L"", WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX, 0);
 	if(hWnd == NULL)
 		return;
-#if 1
 	msgbox->SetTitle(title);
 	msgbox->SetContent(content);
 	msgbox->SetButton(yes, no);
-	msgbox->Show();
-#else
-	MutiLanSupport *multilan = MutiLanSupport::GetInstance();
-	msgbox->SetTitle(title_is_id ? multilan->GetStringViaID(title) : title);
-	msgbox->SetContent(content_is_id ? multilan->GetStringViaID(content) : content);
-	msgbox->SetButton(btn_yes_is_id ? multilan->GetStringViaID(yes) : yes, btn_no_is_id ? multilan->GetStringViaID(no) : no);
-	msgbox->Show(hwnd, cb);
-#endif
+	if (modal)
+	{
+		//×¢²á»Øµ÷cb
+		msgbox->CenterWindow();
+		msgbox->ShowModal();
+	}
+	else
+	{
+		/*msgbox->Show(hParentWnd, cb);*/
+		msgbox->Show();
+	}
 }
 
 const LPCTSTR MsgBox::kClassName = L"MsgBox";

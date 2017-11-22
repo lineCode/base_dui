@@ -97,6 +97,7 @@
     <ClInclude Include="module\session\session_define.h" />
     <ClInclude Include="module\session\session_manager.h" />
     <ClInclude Include="module\session\session_util.h" />
+    <ClInclude Include="module\tray\tray_manager.h" />
     <ClInclude Include="module\user\user_define.h" />
     <ClInclude Include="module\user\user_manager.h" />
     <ClInclude Include="module\window\windows_manager.h" />
@@ -129,6 +130,7 @@
     <ClCompile Include="module\photo\photo_manager.cpp" />
     <ClCompile Include="module\session\session_manager.cpp" />
     <ClCompile Include="module\session\session_util.cpp" />
+    <ClCompile Include="module\tray\tray_manager.cpp" />
     <ClCompile Include="module\user\user_manager.cpp" />
     <ClCompile Include="module\window\windows_manager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

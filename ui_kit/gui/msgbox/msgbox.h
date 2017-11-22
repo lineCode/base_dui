@@ -13,10 +13,11 @@ class MsgBox : public dui::WindowImplBase	//WindowEx
 {
 public:
 	friend void ShowMsgBox(HWND hParentWnd, MsgboxCallback cb,
-		const std::wstring &content = L"", bool content_is_id = true,
-		const std::wstring &title = L"STRING_TIPS", bool title_is_id = true,
-		const std::wstring &yes = L"STRING_OK", bool btn_yes_is_id = true,
-		const std::wstring &no = L"", bool btn_no_is_id = false);
+		const std::wstring &content = L"",
+		const std::wstring &title = L"STRING_TIPS", 
+		const std::wstring &yes = L"STRING_OK", 
+		const std::wstring &no = L"",
+		bool modal = false);
 public:
 	MsgBox(MsgboxCallback cb = nullptr);
 	virtual ~MsgBox();

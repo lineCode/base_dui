@@ -37,6 +37,9 @@ public:
 private:
 	/* @return bool true 继续传递控件消息，false 停止传递控件消息*/
 	virtual void OnClick(dui::TEvent& msg) override;
+
+	void TrayLeftClick();
+	void TrayRightClick();
 #if 1
 	void OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list);
 	void OnGetAllSessionInfo(int unread_count, const nim_comp::SessionDataList& data_list);
@@ -239,6 +242,9 @@ private:
 	* @return void	无返回值
 	*/
 	void PopupTrayMenu(POINT point);
+
+	bool MainForm::MenuLogoffClick(dui::TEvent* param);
+	bool MainForm::MenuLogoutClick(dui::TEvent* param);
 #if 0
 private:
 	/**
@@ -281,6 +287,7 @@ private:
 	dui::List		*list_friend_;
 	dui::List		*list_session_;
 	dui::Tree		*tree_friend_;
+	dui::List		*list_menu_;
 	/*dui::Button*	btn_online_state_;
 	bool			is_busy_;
 

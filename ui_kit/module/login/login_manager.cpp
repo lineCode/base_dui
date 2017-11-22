@@ -3,7 +3,9 @@
 //#include "shared/xml_util.h"
 //#include "login_callback.h"
 #include "util/user_path.h"
+#include "gui/msgbox/msgbox.h"
 #include "module/db/user_db.h"
+#include "module/window/windows_manager.h"
 
 namespace nim_comp
 {
@@ -205,7 +207,39 @@ bool LoginManager::IsLoginFormValid()
 
 void LoginManager::DoLogout(bool over, NIMLogoutType type )
 {
-	//LoginCallbackObject::DoLogout(over, type);
+	QLOG_APP(L"DoLogout: {0} {1}") << over << type;
+
+	LoginStatus status = LoginManager::GetInstance()->GetLoginStatus();
+	if (status == LoginStatus_EXIT)
+		return;
+	LoginManager::GetInstance()->SetLoginStatus(LoginStatus_EXIT);
+
+	WindowsManager::GetInstance()->SetStopRegister(true);
+	WindowsManager::GetInstance()->DestroyAllWindows();
+
+	if (status == LoginStatus_NONE)
+	{
+		//UILogoutCallback();
+		::PostQuitMessage(0);
+		return;
+	}
+
+	if (over)
+	{
+		if (type == kNIMLogoutRelogin)
+		{
+			/*QCommand::Set(kCmdAccount, nbase::UTF8ToUTF16(LoginManager::GetInstance()->GetVVUser()));
+			QCommand::Set(kCmdRestart, L"true");
+			std::wstring param = nbase::StringPrintf(L"%d", type);
+			QCommand::Set(kCmdExitWhy, param);*/
+		}
+		else if (type == kNIMLogoutKickout)
+		{
+			ShowMsgBox(NULL, nullptr, L"您的账号在其他设备登录!", L"提示", L"确定", L"");
+		}
+		//UILogoutCallback();
+		::PostQuitMessage(0);
+	}
 }
 
 void LoginManager::DoLogin(std::string user, std::string pass, LoginCallback cb)

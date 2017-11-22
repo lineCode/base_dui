@@ -1,9 +1,8 @@
 #include "StdAfx.h"
 #include <zmouse.h>
 #include <stdlib.h>
-//#include "Core\UIDlgBuilder.h"
 
-//#include "base/util/string_util.h"
+#include "Utils/DPI.h"
 
 DECLARE_HANDLE(HZIP);	// An HZIP identifies a zip file that has been opened
 typedef DWORD ZRESULT;
@@ -127,7 +126,8 @@ m_bAsyncNotifyPosted(false),
 m_bForceUseSharedRes(false),
 m_nOpacity(0xFF),
 m_bLayered(false),
-m_bLayeredChanged(false)
+m_bLayeredChanged(false),
+m_pDPI(NULL)
 {
 	if (m_SharedResInfo.m_DefaultFontInfo.sFontName.empty())
 	{
@@ -2248,16 +2248,6 @@ bool CPaintManager::RemoveMouseLeaveNeeded(Control* pControl)
     return false;
 }
 
-//void CPaintManager::SendNotify(Control* pControl, LPCTSTR pstrMessage, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/, bool bAsync /*= false*/, bool bEnableRepeat /*= true*/)
-//{
-//    TEvent Msg;
-//    Msg.pSender = pControl;
-//    Msg.sType = pstrMessage;
-//    Msg.wParam = wParam;
-//    Msg.lParam = lParam;
-//    SendNotify(Msg, bAsync, bEnableRepeat);
-//}
-
 void CPaintManager::SendNotify(Control* pControl, EVENTTYPE_UI type, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/, bool bAsync /*= false*/, bool bEnableRepeat /*= true*/)
 {
 	TEvent Msg;
@@ -2267,7 +2257,6 @@ void CPaintManager::SendNotify(Control* pControl, EVENTTYPE_UI type, WPARAM wPar
 	Msg.lParam = lParam;
 	SendNotify(Msg, bAsync, bEnableRepeat);
 }
-
 
 void CPaintManager::SendNotify(TEvent& Msg, bool bAsync /*= false*/, bool bEnableRepeat /*= true*/)
 {
@@ -3859,6 +3848,90 @@ bool CPaintManager::FillBox(Container* pFilledContainer, const std::wstring& xml
 	}
 
 	return true;
+}
+
+CDPI * CPaintManager::GetDPIObj()
+{
+	if (m_pDPI == NULL) {
+		m_pDPI = new CDPI;
+	}
+	return m_pDPI;
+}
+
+void CPaintManager::SetDPI(int iDPI)
+{
+	int scale1 = GetDPIObj()->GetScale();
+	GetDPIObj()->SetScale(iDPI);
+	int scale2 = GetDPIObj()->GetScale();
+	ResetDPIAssets();
+	RECT rcWnd = { 0 };
+	::GetWindowRect(GetPaintWindow(), &rcWnd);
+	RECT*  prcNewWindow = &rcWnd;
+	if (!::IsZoomed(GetPaintWindow())) {
+		RECT rc = rcWnd;
+		rc.right = rcWnd.left + (rcWnd.right - rcWnd.left) * scale2 / scale1;
+		rc.bottom = rcWnd.top + (rcWnd.bottom - rcWnd.top) * scale2 / scale1;
+		prcNewWindow = &rc;
+	}
+	SetWindowPos(GetPaintWindow(), NULL, prcNewWindow->left, prcNewWindow->top, prcNewWindow->right - prcNewWindow->left, prcNewWindow->bottom - prcNewWindow->top, SWP_NOZORDER | SWP_NOACTIVATE);
+	if (GetRoot() != NULL) GetRoot()->NeedUpdate();
+	::PostMessage(GetPaintWindow(), WM_USER_SET_DPI, 0, 0);
+}
+
+void CPaintManager::SetAllDPI(int iDPI)
+{
+	for (int i = 0; i < m_aPreMessages.GetSize(); i++) {
+		CPaintManager* pManager = static_cast<CPaintManager*>(m_aPreMessages[i]);
+		pManager->SetDPI(iDPI);
+	}
+}
+
+void CPaintManager::ResetDPIAssets()
+{
+	//RemoveAllDrawInfos();		//comment by djj 20171121
+	RemoveAllImages();
+
+	for (int it = 0; it < m_ResInfo.m_CustomFonts.GetSize(); it++) {
+		TFontInfo* pFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(m_ResInfo.m_CustomFonts[it]));
+		RebuildFont(pFontInfo);
+	}
+	RebuildFont(&m_ResInfo.m_DefaultFontInfo);
+
+	for (int it = 0; it < m_SharedResInfo.m_CustomFonts.GetSize(); it++) {
+		TFontInfo* pFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(m_SharedResInfo.m_CustomFonts[it]));
+		RebuildFont(pFontInfo);
+	}
+	RebuildFont(&m_SharedResInfo.m_DefaultFontInfo);
+
+	PtrArray *richEditList = FindSubControlsByClass(GetRoot(), _T("RichEditUI"));
+	for (int i = 0; i < richEditList->GetSize(); i++)
+	{
+		RichEdit* pT = static_cast<RichEdit*>((*richEditList)[i]);
+		pT->SetFont(pT->GetFont());
+
+	}
+}
+
+void CPaintManager::RebuildFont(TFontInfo * pFontInfo)
+{
+	::DeleteObject(pFontInfo->hFont);
+	LOGFONT lf = { 0 };
+	::GetObject(::GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &lf);
+	_tcsncpy(lf.lfFaceName, pFontInfo->sFontName.c_str(), LF_FACESIZE);
+	lf.lfCharSet = DEFAULT_CHARSET;
+	lf.lfHeight = -GetDPIObj()->Scale(pFontInfo->iSize);
+	lf.lfQuality = CLEARTYPE_QUALITY;
+	if (pFontInfo->bBold) lf.lfWeight += FW_BOLD;
+	if (pFontInfo->bUnderline) lf.lfUnderline = TRUE;
+	if (pFontInfo->bItalic) lf.lfItalic = TRUE;
+	HFONT hFont = ::CreateFontIndirect(&lf);
+	pFontInfo->hFont = hFont;
+	::ZeroMemory(&(pFontInfo->tm), sizeof(pFontInfo->tm));
+	if (m_hDcPaint) {
+		HFONT hOldFont = (HFONT) ::SelectObject(m_hDcPaint, hFont);
+		::GetTextMetrics(m_hDcPaint, &pFontInfo->tm);
+		::SelectObject(m_hDcPaint, hOldFont);
+	}
 }
 
 } // namespace dui
