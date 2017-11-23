@@ -363,7 +363,7 @@ namespace dui{
 
 	SIZE ButtonContainer::EstimateSize(SIZE szAvailable)
 	{
-		if (m_cxyFixed.cy == 0) return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
+		if (m_cxyFixed.cy == 0 && m_cxyFixed.cx >= 0) return CDuiSize(m_pManager->GetDPIObj()->Scale(m_cxyFixed.cx), m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
 		return Control::EstimateSize(szAvailable);
 	}
 
@@ -437,10 +437,12 @@ namespace dui{
 		if (m_sText.empty()) return;
 		int nLinks = 0;
 		RECT rc = m_rcItem;
-		rc.left += m_rcTextPadding.left;
-		rc.right -= m_rcTextPadding.right;
-		rc.top += m_rcTextPadding.top;
-		rc.bottom -= m_rcTextPadding.bottom;
+		RECT rcTextPadding = m_rcTextPadding;
+		GetManager()->GetDPIObj()->Scale(&rcTextPadding);
+		rc.left += rcTextPadding.left;
+		rc.right -= rcTextPadding.right;
+		rc.top += rcTextPadding.top;
+		rc.bottom -= rcTextPadding.bottom;
 
 		DWORD clrColor = IsEnabled() ? m_dwTextColor : m_dwDisabledTextColor;
 

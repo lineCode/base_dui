@@ -592,7 +592,7 @@ namespace dui
 
 	SIZE Edit::EstimateSize(SIZE szAvailable)
 	{
-		if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
+		if (m_cxyFixed.cy == 0 && m_cxyFixed.cx == 0) return CDuiSize(m_pManager->GetDPIObj()->Scale(m_cxyFixed.cx), m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
 		return Control::EstimateSize(szAvailable);
 	}
 

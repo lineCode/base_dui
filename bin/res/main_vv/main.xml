@@ -3,9 +3,9 @@
   <!--<Window size="261,344" roundcorner="4,4" sizebox="4,4,4,4" bkcolor="white" caption="0,0,0,30">-->
   <HLayout bkcolor="white" >
     <VLayout width="60" bkcolor="main_blue">
-      <Container width="40" height="40" margin="10,10,10,10" >
-        <Button name="btn_head" width="40" height="40" borderround="40,40" bkcolor=""/>
-        <Control width="40" height="40" bkimage="head_mask.png" mouse="false"/>
+      <Container height="40" margin="10,10,10,10" >
+        <Button name="btn_head" borderround="40,40" bkcolor=""/>
+        <Control bkimage="head_mask.png" mouse="false"/>
       </Container>
       <OptionContainer name="optbox_opt_session" width="40" height="40" margin="10,5,10,0" group="group_session_friend" normalimage="file='icon_01.png' dest='7,7,33,33'" selectedimage="file='icon_01_sel.png' dest='7,7,33,33'" padding="" mousechild="" selected="true" tooltip="消息">
         <Button name="label_session_unread" width="24" height="18" margin="16,2,0,0" halign="center" bkimage="file='icon_number.png' corner='8,7,8,7'" normaltextcolor="white" text="1"/>

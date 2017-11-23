@@ -279,8 +279,9 @@ void List::RemoveAll()
 void List::SetPos(RECT rc, bool bNeedInvalidate)
 {
 	if( m_pHeader != NULL ) { // 设置header各子元素x坐标,因为有些listitem的setpos需要用到(临时修复)
-		int iLeft = rc.left + m_rcPadding.left;
-		int iRight = rc.right - m_rcPadding.right;
+		RECT rcPadding = GetPadding();
+		int iLeft = rc.left + rcPadding.left;
+		int iRight = rc.right - rcPadding.right;
 
 		m_ListInfo.nColumns = MIN(m_pHeader->GetCount(), UILIST_MAX_COLUMNS);
 
@@ -317,10 +318,11 @@ void List::SetPos(RECT rc, bool bNeedInvalidate)
 	if( m_pHeader == NULL ) return;
 
 	rc = m_rcItem;
-	rc.left += m_rcPadding.left;
-	rc.top += m_rcPadding.top;
-	rc.right -= m_rcPadding.right;
-	rc.bottom -= m_rcPadding.bottom;
+	RECT rcPadding = GetPadding();
+	rc.left += rcPadding.left;
+	rc.top += rcPadding.top;
+	rc.right -= rcPadding.right;
+	rc.bottom -= rcPadding.bottom;
 
 	if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) {
 		rc.top -= m_pVerticalScrollBar->GetScrollPos();
@@ -363,6 +365,7 @@ void List::SetPos(RECT rc, bool bNeedInvalidate)
 		}
 		m_pHeader->SetInternVisible(false);
 	}
+	m_pList->SetPos(m_pList->GetPos(), bNeedInvalidate);
 }
 
 void List::Move(SIZE szOffset, bool bNeedInvalidate)
@@ -1210,10 +1213,11 @@ void ListBody::SetPos(RECT rc, bool bNeedInvalidate)
     rc = m_rcItem;
 
     // Adjust for padding
-    rc.left += m_rcPadding.left;
-    rc.top += m_rcPadding.top;
-    rc.right -= m_rcPadding.right;
-    rc.bottom -= m_rcPadding.bottom;
+	RECT rcPadding = GetPadding();
+	rc.left += rcPadding.left;
+	rc.top += rcPadding.top;
+	rc.right -= rcPadding.right;
+	rc.bottom -= rcPadding.bottom;
     if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() && !m_bScrollBarFloat) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
 	if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() && !m_bScrollBarFloat) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 
@@ -2498,19 +2502,19 @@ void ListContainerElement::DrawItemBk(HDC hDC, const RECT& rcItem)
 	}
 }
 
-SIZE ListContainerElement::EstimateSize(SIZE szAvailable)
-{
-    TListInfo* pInfo = NULL;
-    if( m_pOwner ) pInfo = m_pOwner->GetListInfo();
-
-    SIZE cXY = m_cxyFixed;
-
-    if( cXY.cy == 0 ) {
-        cXY.cy = pInfo->uFixedHeight;
-    }
-
-    return cXY;
-}
+//SIZE ListContainerElement::EstimateSize(SIZE szAvailable)
+//{
+//    TListInfo* pInfo = NULL;
+//    if( m_pOwner ) pInfo = m_pOwner->GetListInfo();
+//
+//    SIZE cXY = m_cxyFixed;
+//
+//    if( cXY.cy == 0 ) {
+//        cXY.cy = pInfo->uFixedHeight;
+//    }
+//
+//    return cXY;
+//}
 
 /////////////////////////////////////////////////////////////////////////////////////
 //

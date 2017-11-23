@@ -172,10 +172,11 @@ namespace dui
 		rc = m_rcItem;
 
 		// Adjust for padding
-		rc.left += m_rcPadding.left;
-		rc.top += m_rcPadding.top;
-		rc.right -= m_rcPadding.right;
-		rc.bottom -= m_rcPadding.bottom;
+		RECT rcPadding = GetPadding();
+		rc.left += rcPadding.left;
+		rc.top += rcPadding.top;
+		rc.right -= rcPadding.right;
+		rc.bottom -= rcPadding.bottom;
 
 		for( int it = 0; it < m_items.GetSize(); it++ ) {
 			Control* pControl = static_cast<Control*>(m_items[it]);
@@ -240,7 +241,7 @@ namespace dui
 				pControlRight->SetPos(rc2);
 				if (pControlLeft)
 				{
-					offLeft = 255 - off;
+					offLeft = rc.right - off;
 					rc1.left = rc.left - offLeft;
 					rc1.right = rc.right - offLeft;
 					pControlLeft->SetPos(rc1);
@@ -255,7 +256,7 @@ namespace dui
 				pControlLeft->SetPos(rc1);
 				if (pControlRight)
 				{
-					offRight = 255 - off;
+					offRight = rc.right - off;
 					rc2.left = rc.left + offRight;
 					rc2.right = rc.right + offRight;
 					pControlRight->SetPos(rc2);

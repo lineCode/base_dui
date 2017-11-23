@@ -695,8 +695,8 @@ void Combo::DoEvent(TEvent& event)
 
 SIZE Combo::EstimateSize(SIZE szAvailable)
 {
-    if( m_cxyFixed.cy == 0 ) return CDuiSize(m_cxyFixed.cx, m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8);
-    return Control::EstimateSize(szAvailable);
+	if (m_cxyFixed.cy == 0 && m_cxyFixed.cx == 0) return CDuiSize(m_pManager->GetDPIObj()->Scale(m_cxyFixed.cx), m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8);
+	return Control::EstimateSize(szAvailable);
 }
 
 bool Combo::Activate()

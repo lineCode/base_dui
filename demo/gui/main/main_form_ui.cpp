@@ -126,10 +126,17 @@ void MainForm::InitWindow()
 	{
 		ListContainerElement *menu_dpi = dynamic_cast<ListContainerElement*>(list_menu_->FindSubControl(_T("menu_dpi")));
 		auto cb = std::bind([this](TEvent *event){
-			printf("menu_dpi item click\n");
+			CPaintManager::SetAllDPI(120);
 			return false;
 		}, std::placeholders::_1);
 		menu_dpi->AttachItemClick(cb);
+
+		ListContainerElement *menu_about = dynamic_cast<ListContainerElement*>(list_menu_->FindSubControl(_T("menu_about")));
+		auto cb2 = std::bind([this](TEvent *event){
+			CPaintManager::SetAllDPI(96);
+			return false;
+		}, std::placeholders::_1);
+		menu_about->AttachItemClick(cb2);
 	}
 	
 	for (size_t i = 0; i < 26; i++)

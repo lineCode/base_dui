@@ -34,14 +34,17 @@ namespace dui
 
 	void Container::SetPos(RECT rc, bool bNeedInvalidate)
 	{
-		__super::SetPos(rc, bNeedInvalidate);
+		Control::SetPos(rc, bNeedInvalidate);
 		rc = m_rcItem;
 		if (m_items.IsEmpty()) return;
 
-		rc.left += m_rcPadding.left;
-		rc.top += m_rcPadding.top;
-		rc.right -= m_rcPadding.right;
-		rc.bottom -= m_rcPadding.bottom;
+		RECT rcPadding = GetPadding();
+		rc.left += rcPadding.left;
+		rc.top += rcPadding.top;
+		rc.right -= rcPadding.right;
+		rc.bottom -= rcPadding.bottom;
+
+		SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
 
 		for (int it2 = 0; it2 < m_items.GetSize(); it2++) {
 			Control* pControl = static_cast<Control*>(m_items[it2]);
@@ -51,9 +54,18 @@ namespace dui
 				continue;
 			}
 
+			RECT rcMargin = pControl->GetMargin();
+
 			int iControlFixedWidth = pControl->GetFixedWidth();
 			int iControlFixedHeight = pControl->GetFixedHeight();
-			RECT rcMargin = pControl->GetMargin();
+			if (iControlFixedWidth <= 0)
+				iControlFixedWidth = szAvailable.cx - rcMargin.left - rcMargin.right;
+			if (iControlFixedHeight <= 0)
+				iControlFixedHeight = szAvailable.cx - rcMargin.top - rcMargin.bottom;
+
+			if (iControlFixedWidth <= 0 || iControlFixedWidth > szAvailable.cx) iControlFixedWidth = szAvailable.cx;
+			if (iControlFixedHeight <= 0 || iControlFixedWidth > szAvailable.cy) iControlFixedHeight = szAvailable.cy;
+
 			SIZE sz = { iControlFixedWidth, iControlFixedHeight };
 
 			int iPosX = rc.left;
@@ -248,6 +260,7 @@ namespace dui
 
 	RECT Container::GetPadding() const
 	{
+		if (m_pManager) return m_pManager->GetDPIObj()->Scale(m_rcPadding);
 		return m_rcPadding;
 	}
 
@@ -259,6 +272,7 @@ namespace dui
 
 	int Container::GetChildMargin() const
 	{
+		if (m_pManager) return m_pManager->GetDPIObj()->Scale(m_iChildMargin);
 		return m_iChildMargin;
 	}
 

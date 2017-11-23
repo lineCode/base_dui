@@ -376,7 +376,7 @@ public:
     void DrawItemText(HDC hDC, const RECT& rcItem);    
     void DrawItemBk(HDC hDC, const RECT& rcItem);
 
-    SIZE EstimateSize(SIZE szAvailable);
+    //SIZE EstimateSize(SIZE szAvailable);
 
 #if MODE_EVENTMAP
 	void AttachItemClick(const EventCallback& callback)

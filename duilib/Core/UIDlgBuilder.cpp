@@ -116,7 +116,7 @@ Control* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, CPaintManager
                 }
                 if( id >= 0 && pFontName ) {
                     pManager->AddFont(id, pFontName, size, bold, underline, italic, shared);
-                    if( defaultfont ) pManager->SetDefaultFont(pFontName, size, bold, underline, italic, shared);
+					if (defaultfont) pManager->SetDefaultFont(pFontName, pManager->GetDPIObj()->Scale(size), bold, underline, italic, shared);
                 }
             }
             else if( _tcsicmp(pstrClass, _T("Default")) == 0 ) {

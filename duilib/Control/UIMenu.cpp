@@ -295,6 +295,7 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 			rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
 
 		m_PaintManager.Init(m_hWnd);
+		m_PaintManager.GetDPIObj()->SetScale(m_pOwner->GetManager()->GetDPIObj()->GetDPI());
 		// The trick is to add the items to the new container. Their owner gets
 		// reassigned by this operation - which is why it is important to reassign
 		// the items back to the righfull owner/manager when the window closes.
@@ -326,6 +327,8 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 	}
 	else {
 		m_PaintManager.Init(m_hWnd);
+		if (m_pParentManager)
+			m_PaintManager.GetDPIObj()->SetScale(m_pParentManager->GetDPIObj()->GetDPI());
 
 		CDialogBuilder builder;
 
@@ -794,6 +797,8 @@ SIZE MenuElement::EstimateSize(SIZE szAvailable)
 
 	m_cxyFixed.cy = cXY.cy;
 	m_cxyFixed.cx = cXY.cx;
+	
+	if (m_pManager) return m_pManager->GetDPIObj()->Scale(cXY);
 	return cXY;
 }
 

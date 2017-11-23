@@ -32,10 +32,11 @@ namespace dui
 		rc = m_rcItem;
 
 		// Adjust for padding
-		rc.left += m_rcPadding.left;
-		rc.top += m_rcPadding.top;
-		rc.right -= m_rcPadding.right;
-		rc.bottom -= m_rcPadding.bottom;
+		RECT rcPadding = GetPadding();
+		rc.left += rcPadding.left;
+		rc.top += rcPadding.top;
+		rc.right -= rcPadding.right;
+		rc.bottom -= rcPadding.bottom;
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
 		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 
@@ -52,9 +53,9 @@ namespace dui
 			szAvailable.cy += m_pVerticalScrollBar->GetScrollRange();
 
 		int cyNeeded = 0;
-		int nAdjustables = 0;
+		int nAdjustables = 0;	//未确定长或宽的Control个数
 		int cxFixed = 0;
-		int nEstimateNum = 0;
+		int nEstimateNum = 0;	//已确定长或宽的Control个数
 		SIZE szControlAvailable;
 		int iControlMaxWidth = 0;
 		int iControlMaxHeight = 0;

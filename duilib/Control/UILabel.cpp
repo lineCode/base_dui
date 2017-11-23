@@ -185,7 +185,7 @@ namespace dui
 
 	SIZE Label::EstimateSize(SIZE szAvailable)
 	{
-        if (m_cxyFixed.cx > 0 && m_cxyFixed.cy > 0) return m_cxyFixed;
+		if (m_cxyFixed.cx > 0 && m_cxyFixed.cy > 0) return __super::EstimateSize(szAvailable);
 
         if ((m_uTextStyle & DT_SINGLELINE) == 0 && 
             (szAvailable.cx != m_szAvailableLast.cx || szAvailable.cy != m_szAvailableLast.cy)) {
@@ -230,6 +230,7 @@ namespace dui
                 m_cxyFixedLast.cy = rcText.bottom - rcText.top + m_rcTextPadding.top + m_rcTextPadding.bottom;
             }
         }
+		if (m_pManager) return m_pManager->GetDPIObj()->Scale(m_cxyFixedLast);
         return m_cxyFixedLast;
 	}
 
@@ -377,10 +378,12 @@ namespace dui
 		if( m_dwDisabledTextColor == 0 ) m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
 
 		RECT rc = m_rcItem;
-		rc.left += m_rcTextPadding.left;
-		rc.right -= m_rcTextPadding.right;
-		rc.top += m_rcTextPadding.top;
-		rc.bottom -= m_rcTextPadding.bottom;
+		RECT rcTextPadding = m_rcTextPadding;
+		GetManager()->GetDPIObj()->Scale(&rcTextPadding);
+		rc.left += rcTextPadding.left;
+		rc.right -= rcTextPadding.right;
+		rc.top += rcTextPadding.top;
+		rc.bottom -= rcTextPadding.bottom;
 
 		if(!GetEnabledEffect())
 		{

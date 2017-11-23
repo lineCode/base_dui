@@ -84,14 +84,15 @@ namespace dui
 		if( m_nValue < m_nMin ) m_nValue = m_nMin;
 
 		RECT rc = {0};
+		RECT rcItem = m_pManager->GetDPIObj()->Scale(m_rcItem);
 		if( m_bHorizontal ) {
-			rc.right = (m_nValue - m_nMin) * (m_rcItem.right - m_rcItem.left) / (m_nMax - m_nMin);
-			rc.bottom = m_rcItem.bottom - m_rcItem.top;
+			rc.right = (m_nValue - m_nMin) * (rcItem.right - rcItem.left) / (m_nMax - m_nMin);
+			rc.bottom = rcItem.bottom - rcItem.top;
 		}
 		else {
-			rc.top = (m_rcItem.bottom - m_rcItem.top) * (m_nMax - m_nValue) / (m_nMax - m_nMin);
-			rc.right = m_rcItem.right - m_rcItem.left;
-			rc.bottom = m_rcItem.bottom - m_rcItem.top;
+			rc.top = (rcItem.bottom - rcItem.top) * (m_nMax - m_nValue) / (m_nMax - m_nMin);
+			rc.right = rcItem.right - rcItem.left;
+			rc.bottom = rcItem.bottom - rcItem.top;
 		}
 		m_diFore.rcDestOffset = rc;
 		if( DrawImage(hDC, m_diFore) ) return;

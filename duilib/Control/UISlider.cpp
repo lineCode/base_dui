@@ -51,15 +51,19 @@ namespace dui
 
 	RECT Slider::GetThumbRect() const
 	{
+		RECT rcThumb = { 0 };
+		SIZE szThumb = m_szThumb;
+		if (GetManager() != NULL) GetManager()->GetDPIObj()->Scale(&szThumb);
+
 		if( m_bHorizontal ) {
-			int left = m_rcItem.left + (m_rcItem.right - m_rcItem.left - m_szThumb.cx) * (m_nValue - m_nMin) / (m_nMax - m_nMin);
-			int top = (m_rcItem.bottom + m_rcItem.top - m_szThumb.cy) / 2;
-			return CDuiRect(left, top, left + m_szThumb.cx, top + m_szThumb.cy); 
+			int left = m_rcItem.left + (m_rcItem.right - m_rcItem.left - szThumb.cx) * (m_nValue - m_nMin) / (m_nMax - m_nMin);
+			int top = (m_rcItem.bottom + m_rcItem.top - szThumb.cy) / 2;
+			return CDuiRect(left, top, left + szThumb.cx, top + szThumb.cy);
 		}
 		else {
-			int left = (m_rcItem.right + m_rcItem.left - m_szThumb.cx) / 2;
-			int top = m_rcItem.bottom - m_szThumb.cy - (m_rcItem.bottom - m_rcItem.top - m_szThumb.cy) * (m_nValue - m_nMin) / (m_nMax - m_nMin);
-			return CDuiRect(left, top, left + m_szThumb.cx, top + m_szThumb.cy); 
+			int left = (m_rcItem.right + m_rcItem.left - szThumb.cx) / 2;
+			int top = m_rcItem.bottom - szThumb.cy - (m_rcItem.bottom - m_rcItem.top - szThumb.cy) * (m_nValue - m_nMin) / (m_nMax - m_nMin);
+			return CDuiRect(left, top, left + szThumb.cx, top + szThumb.cy);
 		}
 	}
 
@@ -272,6 +276,8 @@ namespace dui
 		rcThumb.top -= m_rcItem.top;
 		rcThumb.right -= m_rcItem.left;
 		rcThumb.bottom -= m_rcItem.top;
+		GetManager()->GetDPIObj()->ScaleBack(&rcThumb);
+
 		if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) {
 			m_diThumbPushed.rcDestOffset = rcThumb;
 			if( DrawImage(hDC, m_diThumbPushed) ) return;

@@ -206,6 +206,15 @@ CPaintManager::~CPaintManager()
     if( m_hbmpBackground != NULL ) ::DeleteObject(m_hbmpBackground);
     if( m_hDcPaint != NULL ) ::ReleaseDC(m_hWndPaint, m_hDcPaint);
     m_aPreMessages.Remove(m_aPreMessages.Find(this));
+
+	//卸载GDIPlus
+	/*Gdiplus::GdiplusShutdown(m_gdiplusToken);
+	delete m_pGdiplusStartupInput;*/
+	// DPI管理对象
+	if (m_pDPI != NULL) {
+		delete m_pDPI;
+		m_pDPI = NULL;
+	}
 }
 
 void CPaintManager::Init(HWND hWnd, LPCTSTR pstrName)
@@ -3334,7 +3343,7 @@ void CPaintManager::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         LPTSTR pstr = NULL;
         int cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
         int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr); 
-        SetInitSize(cx, cy);
+		SetInitSize(GetDPIObj()->Scale(cx),GetDPIObj()->Scale(cy));
     } 
     else if( _tcsicmp(pstrName, _T("sizebox")) == 0 ) {
         RECT rcSizeBox = { 0 };

@@ -485,18 +485,23 @@ void ScrollBar::SetBkDisabledImage(LPCTSTR pStrImage)
 void ScrollBar::SetPos(RECT rc, bool bNeedInvalidate)
 {
 	Control::SetPos(rc, bNeedInvalidate);
+	
+	SIZE cxyFixed = m_cxyFixed;
+	if (m_pManager != NULL) 
+		GetManager()->GetDPIObj()->Scale(&cxyFixed);
+
 	rc = m_rcItem;
 
 	if( m_bHorizontal ) {
 		int cx = rc.right - rc.left;
-		if( m_bShowButton1 ) cx -= m_cxyFixed.cy;
-		if( m_bShowButton2 ) cx -= m_cxyFixed.cy;
-		if( cx > m_cxyFixed.cy ) {
+		if (m_bShowButton1) cx -= cxyFixed.cy;
+		if (m_bShowButton2) cx -= cxyFixed.cy;
+		if (cx > cxyFixed.cy) {
 			m_rcButton1.left = rc.left;
 			m_rcButton1.top = rc.top;
 			if( m_bShowButton1 ) {
-				m_rcButton1.right = rc.left + m_cxyFixed.cy;
-				m_rcButton1.bottom = rc.top + m_cxyFixed.cy;
+				m_rcButton1.right = rc.left + cxyFixed.cy;
+				m_rcButton1.bottom = rc.top + cxyFixed.cy;
 			}
 			else {
 				m_rcButton1.right = m_rcButton1.left;
@@ -506,8 +511,8 @@ void ScrollBar::SetPos(RECT rc, bool bNeedInvalidate)
 			m_rcButton2.top = rc.top;
 			m_rcButton2.right = rc.right;
 			if( m_bShowButton2 ) {
-				m_rcButton2.left = rc.right - m_cxyFixed.cy;
-				m_rcButton2.bottom = rc.top + m_cxyFixed.cy;
+				m_rcButton2.left = rc.right - cxyFixed.cy;
+				m_rcButton2.bottom = rc.top + cxyFixed.cy;
 			}
 			else {
 				m_rcButton2.left = m_rcButton2.right;
@@ -515,10 +520,10 @@ void ScrollBar::SetPos(RECT rc, bool bNeedInvalidate)
 			}
 
 			m_rcThumb.top = rc.top;
-			m_rcThumb.bottom = rc.top + m_cxyFixed.cy;
+			m_rcThumb.bottom = rc.top + cxyFixed.cy;
 			if( m_nRange > 0 ) {
 				int cxThumb = cx * (rc.right - rc.left) / (m_nRange + rc.right - rc.left);
-				if( cxThumb < m_cxyFixed.cy ) cxThumb = m_cxyFixed.cy;
+				if( cxThumb < cxyFixed.cy ) cxThumb = cxyFixed.cy;
 
 				m_rcThumb.left = m_nScrollPos * (cx - cxThumb) / m_nRange + m_rcButton1.right;
 				m_rcThumb.right = m_rcThumb.left + cxThumb;
@@ -534,12 +539,12 @@ void ScrollBar::SetPos(RECT rc, bool bNeedInvalidate)
 		}
 		else {
 			int cxButton = (rc.right - rc.left) / 2;
-			if( cxButton > m_cxyFixed.cy ) cxButton = m_cxyFixed.cy;
+			if( cxButton > cxyFixed.cy ) cxButton = cxyFixed.cy;
 			m_rcButton1.left = rc.left;
 			m_rcButton1.top = rc.top;
 			if( m_bShowButton1 ) {
 				m_rcButton1.right = rc.left + cxButton;
-				m_rcButton1.bottom = rc.top + m_cxyFixed.cy;
+				m_rcButton1.bottom = rc.top + cxyFixed.cy;
 			}
 			else {
 				m_rcButton1.right = m_rcButton1.left;
@@ -550,7 +555,7 @@ void ScrollBar::SetPos(RECT rc, bool bNeedInvalidate)
 			m_rcButton2.right = rc.right;
 			if( m_bShowButton2 ) {
 				m_rcButton2.left = rc.right - cxButton;
-				m_rcButton2.bottom = rc.top + m_cxyFixed.cy;
+				m_rcButton2.bottom = rc.top + cxyFixed.cy;
 			}
 			else {
 				m_rcButton2.left = m_rcButton2.right;
@@ -979,14 +984,15 @@ void ScrollBar::PaintButton1(HDC hDC)
 	else m_uButton1State &= ~ UISTATE_DISABLED;
 
 	RECT rc = { 0 };
-	rc.left = m_rcButton1.left - m_rcItem.left;
-	rc.top = m_rcButton1.top - m_rcItem.top;
-	rc.right = m_rcButton1.right - m_rcItem.left;
-	rc.bottom = m_rcButton1.bottom - m_rcItem.top;
+	RECT rcButtuon1 = m_pManager->GetDPIObj()->Scale(m_rcButton1);
+	rc.left = rcButtuon1.left - m_rcItem.left;
+	rc.top = rcButtuon1.top - m_rcItem.top;
+	rc.right = rcButtuon1.right - m_rcItem.left;
+	rc.bottom = rcButtuon1.bottom - m_rcItem.top;
 
 	if( m_dwButton1Color != 0 ) {
-		if( m_dwButton1Color >= 0xFF000000 ) CRenderEngine::DrawColor(hDC, m_rcButton1, GetAdjustColor(m_dwButton1Color));
-		else CRenderEngine::DrawColor(hDC, m_rcButton1, GetAdjustColor(m_dwButton1Color));
+		if (m_dwButton1Color >= 0xFF000000) CRenderEngine::DrawColor(hDC, rcButtuon1, GetAdjustColor(m_dwButton1Color));
+		else CRenderEngine::DrawColor(hDC, rcButtuon1, GetAdjustColor(m_dwButton1Color));
 	}
 
 	if( (m_uButton1State & UISTATE_DISABLED) != 0 ) {
@@ -1014,14 +1020,15 @@ void ScrollBar::PaintButton2(HDC hDC)
 	else m_uButton2State &= ~ UISTATE_DISABLED;
 
 	RECT rc = { 0 };
-	rc.left = m_rcButton2.left - m_rcItem.left;
-	rc.top = m_rcButton2.top - m_rcItem.top;
-	rc.right = m_rcButton2.right - m_rcItem.left;
-	rc.bottom = m_rcButton2.bottom - m_rcItem.top;
+	RECT rcButtuon2 = m_pManager->GetDPIObj()->Scale(m_rcButton2);
+	rc.left = rcButtuon2.left - m_rcItem.left;
+	rc.top = rcButtuon2.top - m_rcItem.top;
+	rc.right = rcButtuon2.right - m_rcItem.left;
+	rc.bottom = rcButtuon2.bottom - m_rcItem.top;
 
 	if( m_dwButton2Color != 0 ) {
-		if( m_dwButton2Color >= 0xFF000000 ) CRenderEngine::DrawColor(hDC, m_rcButton2, GetAdjustColor(m_dwButton2Color));
-		else CRenderEngine::DrawColor(hDC, m_rcButton2, GetAdjustColor(m_dwButton2Color));
+		if (m_dwButton2Color >= 0xFF000000) CRenderEngine::DrawColor(hDC, rcButtuon2, GetAdjustColor(m_dwButton2Color));
+		else CRenderEngine::DrawColor(hDC, rcButtuon2, GetAdjustColor(m_dwButton2Color));
 	}
 
 	if( (m_uButton2State & UISTATE_DISABLED) != 0 ) {
@@ -1048,14 +1055,15 @@ void ScrollBar::PaintThumb(HDC hDC)
 	else m_uThumbState &= ~ UISTATE_DISABLED;
 
 	RECT rc = { 0 };
-	rc.left = m_rcThumb.left - m_rcItem.left;
-	rc.top = m_rcThumb.top - m_rcItem.top;
-	rc.right = m_rcThumb.right - m_rcItem.left;
-	rc.bottom = m_rcThumb.bottom - m_rcItem.top;
+	RECT rcThumb = m_pManager->GetDPIObj()->Scale(m_rcThumb);
+	rc.left = rcThumb.left - m_rcItem.left;
+	rc.top = rcThumb.top - m_rcItem.top;
+	rc.right = rcThumb.right - m_rcItem.left;
+	rc.bottom = rcThumb.bottom - m_rcItem.top;
 
 	if( m_dwThumbColor != 0 ) {
-		if( m_dwThumbColor >= 0xFF000000 ) CRenderEngine::DrawColor(hDC, m_rcThumb, GetAdjustColor(m_dwThumbColor));
-		else CRenderEngine::DrawColor(hDC, m_rcThumb, GetAdjustColor(m_dwThumbColor));
+		if (m_dwThumbColor >= 0xFF000000) CRenderEngine::DrawColor(hDC, rcThumb, GetAdjustColor(m_dwThumbColor));
+		else CRenderEngine::DrawColor(hDC, rcThumb, GetAdjustColor(m_dwThumbColor));
 	}
 
 	if( (m_uThumbState & UISTATE_DISABLED) != 0 ) {
@@ -1081,17 +1089,18 @@ void ScrollBar::PaintRail(HDC hDC)
 	else m_uThumbState &= ~ UISTATE_DISABLED;
 
 	RECT rc = { 0 };
+	RECT rcThumb = m_pManager->GetDPIObj()->Scale(m_rcThumb);
 	if( !m_bHorizontal ) {
-		rc.left = m_rcThumb.left - m_rcItem.left;
-		rc.top = (m_rcThumb.top + m_rcThumb.bottom) / 2 - m_rcItem.top - m_cxyFixed.cx / 2;
-		rc.right = m_rcThumb.right - m_rcItem.left;
-		rc.bottom = (m_rcThumb.top + m_rcThumb.bottom) / 2 - m_rcItem.top + m_cxyFixed.cx - m_cxyFixed.cx / 2;
+		rc.left = rcThumb.left - m_rcItem.left;
+		rc.top = (rcThumb.top + rcThumb.bottom) / 2 - m_rcItem.top - EstimateSize({}).cx / 2;
+		rc.right = rcThumb.right - m_rcItem.left;
+		rc.bottom = (rcThumb.top + rcThumb.bottom) / 2 - m_rcItem.top + EstimateSize({}).cx - EstimateSize({}).cx / 2;
 	}
 	else {
-		rc.left = (m_rcThumb.left + m_rcThumb.right) / 2 - m_rcItem.left - m_cxyFixed.cy / 2;
-		rc.top = m_rcThumb.top - m_rcItem.top;
-		rc.right = (m_rcThumb.left + m_rcThumb.right) / 2 - m_rcItem.left + m_cxyFixed.cy - m_cxyFixed.cy / 2;
-		rc.bottom = m_rcThumb.bottom - m_rcItem.top;
+		rc.left = (rcThumb.left + rcThumb.right) / 2 - m_rcItem.left - EstimateSize({}).cy / 2;
+		rc.top = rcThumb.top - m_rcItem.top;
+		rc.right = (rcThumb.left + rcThumb.right) / 2 - m_rcItem.left + EstimateSize({}).cy - EstimateSize({}).cy / 2;
+		rc.bottom = rcThumb.bottom - m_rcItem.top;
 	}
 
 	if( (m_uThumbState & UISTATE_DISABLED) != 0 ) {

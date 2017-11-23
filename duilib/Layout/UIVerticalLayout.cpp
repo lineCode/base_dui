@@ -32,10 +32,11 @@ namespace dui
 		rc = m_rcItem;
 
 		// Adjust for padding
-		rc.left += m_rcPadding.left;
-		rc.top += m_rcPadding.top;
-		rc.right -= m_rcPadding.right;
-		rc.bottom -= m_rcPadding.bottom;
+		RECT rcPadding = GetPadding();
+		rc.left += rcPadding.left;
+		rc.top += rcPadding.top;
+		rc.right -= rcPadding.right;
+		rc.bottom -= rcPadding.bottom;
 		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() && !m_bScrollBarFloat) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
 		if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() && !m_bScrollBarFloat) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 

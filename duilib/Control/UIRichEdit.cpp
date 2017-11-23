@@ -1996,10 +1996,11 @@ void RichEdit::SetPos(RECT rc, bool bNeedInvalidate)
     Control::SetPos(rc, bNeedInvalidate);
     rc = m_rcItem;
 
-    rc.left += m_rcPadding.left;
-    rc.top += m_rcPadding.top;
-    rc.right -= m_rcPadding.right;
-    rc.bottom -= m_rcPadding.bottom;
+	RECT rcPadding = GetPadding();
+	rc.left += rcPadding.left;
+	rc.top += rcPadding.top;
+	rc.right -= rcPadding.right;
+	rc.bottom -= rcPadding.bottom;
 
     RECT rcScrollView = rc;
 

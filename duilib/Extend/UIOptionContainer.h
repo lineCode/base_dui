@@ -39,7 +39,7 @@ namespace dui {
 		bool IsSelected() const;
 		virtual void Selected(bool bSelected, bool bTriggerEvent = true);
 
-		SIZE EstimateSize(SIZE szAvailable);
+		//SIZE EstimateSize(SIZE szAvailable);
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
 		void PaintStatusImage(HDC hDC);
