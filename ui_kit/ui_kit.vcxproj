@@ -49,7 +49,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../;./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -77,6 +77,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="gui\emoji\emoji_form.h" />
     <ClInclude Include="gui\emoji\emoji_info.h" />
     <ClInclude Include="gui\main\control\friend_item.h" />
     <ClInclude Include="gui\main\control\friend_itemex.h" />
@@ -105,8 +106,9 @@
     <ClInclude Include="util\user_path.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="gui\emoji\emoji_form.cpp" />
     <ClCompile Include="gui\emoji\emoji_info.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="gui\main\control\friend_item.cpp" />
     <ClCompile Include="gui\main\control\friend_itemex.cpp" />
@@ -142,6 +144,8 @@
     <ClCompile Include="util\user_path.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\bin\res\emoji\emoji_form.xml" />
+    <Xml Include="..\bin\res\emoji\emoji_item.xml" />
     <Xml Include="..\bin\res\main_vv\friend_item.xml" />
     <Xml Include="..\bin\res\main_vv\session.xml" />
     <Xml Include="..\bin\res\main_vv\session_item.xml" />

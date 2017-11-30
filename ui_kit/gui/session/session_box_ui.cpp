@@ -1,5 +1,8 @@
 ﻿#include "stdafx.h"
 #include "session_box.h"
+#include "shared/threads.h"
+#include "gui/emoji/emoji_info.h"
+#include "gui/emoji/emoji_form.h"
 //#include "gui/link/link_form.h"
 //#include "gui/invoke_chat_form/invoke_chat_form.h"
 //#include "gui/team_info/team_info.h"
@@ -100,13 +103,86 @@ void SessionBox::InitRichEdit()
 
 bool SessionBox::OnClicked(dui::TEvent *event)
 {
+	wstring name = event->pSender->GetName();
 	if (event)
 	{
-		wprintf(L"SessionBox::OnClicked %s\n", event->pSender->GetName().c_str());
+		wprintf(L"SessionBox::OnClicked %s\n", name.c_str());
+	}
+
+	if (name == L"btn_clip")
+	{
+		//if (CaptureManager::GetInstance()->IsCaptureTracking())
+		//{
+		//	return;
+		//}
+
+		////::ShowWindow( m_hWnd, SW_SHOWMINIMIZED );
+		//StdClosure callback = nbase::Bind(&SessionBox::DoClip, this);
+		//nbase::ThreadManager::PostDelayedTask(shared::kThreadUI, callback, nbase::TimeDelta::FromMilliseconds(500));
+	}
+	else if (name == L"chk_face")
+	{
+		CheckBtn *chk_face = (CheckBtn*)FindSubControl(L"chk_face");
+		RECT rc = chk_face->GetPos();
+		POINT pt_offset = { 150, 350 };
+		//DpiManager::GetInstance()->ScalePoint(pt_offset);
+		POINT pt = { rc.left - pt_offset.x, rc.top - pt_offset.y };
+		::ClientToScreen(m_pManager->GetPaintWindow(), &pt);
+
+		OnSelectEmotion sel = std::bind(&SessionBox::OnEmotionSelected, this, std::placeholders::_1);
+		OnSelectSticker sel2 = std::bind(&SessionBox::OnEmotionSelectedSticker, this, std::placeholders::_1, std::placeholders::_2);
+		OnEmotionClose  cls = std::bind(&SessionBox::OnEmotionClosed, this);
+
+		EmojiForm* emoji_form = new EmojiForm;
+		emoji_form->ShowEmoj(pt, sel, sel2, cls);
 	}
 	
 	return false;
 }
+
+void SessionBox::OnEmotionSelected(std::wstring emo)
+{
+	std::wstring file;
+	if (GetEmojiFileByTag(emo, file))
+	{
+		//InsertFaceToEdit(input_edit_, file, emo);
+	}
+}
+
+void SessionBox::OnEmotionSelectedSticker(const std::wstring &catalog, const std::wstring &name)
+{
+	//SendSticker(nbase::UTF16ToUTF8(catalog), nbase::UTF16ToUTF8(name));
+}
+
+void SessionBox::OnEmotionClosed()
+{
+	CheckBtn *chk_face = (CheckBtn*)FindSubControl(L"chk_face");
+	chk_face->Selected(false, false);
+
+	input_edit_->SetFocus();
+}
+
+void SessionBox::DoClip()
+{
+	/*std::wstring send_info;
+	CaptureManager::CaptureCallback callback = nbase::Bind(&SessionBox::OnClipCallback, this, std::placeholders::_1, std::placeholders::_2);
+	std::string acc = LoginManager::GetInstance()->GetAccount();
+	assert(!acc.empty());
+	std::wstring app_data_audio_path = QPath::GetUserAppDataDir(acc);
+	if (CaptureManager::GetInstance()->StartCapture(callback, app_data_audio_path, send_info) == false)
+	{
+		OnClipCallback(FALSE, L"");
+	}*/
+}
+
+void SessionBox::OnClipCallback(bool ret, const std::wstring& file_path)
+{
+	//if (ret)
+	//{
+	//	emoji::InsertImageToEdit(input_edit_, file_path);
+	//	//	SendImage(file_path);
+	//}
+};
 
 
 #if 0

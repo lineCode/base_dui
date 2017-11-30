@@ -288,6 +288,7 @@
       <Attribute name="itemhlinesize"             default="" type="" comment=""/>
       <Attribute name="itemhlinecolor"            default="" type="" comment=""/>
       <Attribute name="itemshowhtml"              default="" type="" comment=""/>
+      <Attribute name="scrollbarfloat"              default="" type="" comment=""/>
     </List>
 
     <Menu parent="List" notifies="" comment="同List">

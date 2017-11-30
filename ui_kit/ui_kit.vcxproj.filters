@@ -138,6 +138,9 @@
     <ClInclude Include="module\tray\tray_manager.h">
       <Filter>module\tray</Filter>
     </ClInclude>
+    <ClInclude Include="gui\emoji\emoji_form.h">
+      <Filter>gui\emoji</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\msgbox\msgbox.cpp">
@@ -204,6 +207,9 @@
     <ClCompile Include="module\tray\tray_manager.cpp">
       <Filter>module\tray</Filter>
     </ClCompile>
+    <ClCompile Include="gui\emoji\emoji_form.cpp">
+      <Filter>gui\emoji</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\bin\res\main_vv\friend_item.xml">
@@ -214,6 +220,12 @@
     </Xml>
     <Xml Include="..\bin\res\main_vv\session.xml">
       <Filter>gui\session</Filter>
+    </Xml>
+    <Xml Include="..\bin\res\emoji\emoji_form.xml">
+      <Filter>gui\emoji</Filter>
+    </Xml>
+    <Xml Include="..\bin\res\emoji\emoji_item.xml">
+      <Filter>gui\emoji</Filter>
     </Xml>
   </ItemGroup>
 </Project>

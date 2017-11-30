@@ -63,7 +63,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../libs/;../libs/thread_part_libs;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>base_d.lib;shared_d.lib;duilib_d.lib;db_d.lib;wxsqlite3_d.lib;jsoncpp_d.lib;ui_kit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>base_d.lib;shared_d.lib;duilib_d.lib;db_d.lib;wxsqlite3_d.lib;jsoncpp_d.lib;tinyxml_d.lib;ui_kit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

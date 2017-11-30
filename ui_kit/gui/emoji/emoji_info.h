@@ -1,13 +1,11 @@
 ﻿#pragma once
-
-#include "shared/util.h"
-#include "callback/richedit/richedit_util.h"
-#include "callback/richedit/richedit_olecallback.h"
+//
+//#include "shared/util.h"
+//#include "callback/richedit/richedit_util.h"
+//#include "callback/richedit/richedit_olecallback.h"
 
 namespace nim_comp
 {
-	namespace emoji
-	{
 		struct Emoticon
 		{
 			std::wstring  tag;  //such as "[大笑]"
@@ -35,6 +33,4 @@ namespace nim_comp
 		* @return bool true 获取成功，false 获取失败
 		*/
 		bool GetEmojiFileByTag(const std::wstring tag, std::wstring& file);
-
-	}
 }

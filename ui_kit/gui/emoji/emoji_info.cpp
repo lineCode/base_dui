@@ -1,6 +1,7 @@
 ﻿#include "StdAfx.h"
+#include "third_party/tinyxml/tinyxml.h"
 #include "emoji_info.h"
-#include "callback/richedit/richedit_util.h"
+//#include "callback/richedit/richedit_util.h"
 
 
 #define EMOTICON_EMOTICON_TAG	"Tag"
@@ -8,8 +9,6 @@
 
 namespace nim_comp
 {
-	namespace emoji
-	{
 		std::vector<Emoticon> g_emoticon; //for display
 		std::map<std::wstring, std::wstring> g_emoticon_pair; //for find
 
@@ -23,7 +22,7 @@ namespace nim_comp
 			std::string file = element->Attribute(EMOTICON_EMOTICON_FILE);
 			emoticon.file = nbase::UTF8ToUTF16(file);
 
-			emoticon.path = dir + L"res\\emoji\\" + emoticon.file;
+			emoticon.path = dir + L"res\\emoji\\img\\" + emoticon.file;
 		}
 
 		void ParseEmoji(const TiXmlElement* element, bool for_display)
@@ -49,7 +48,7 @@ namespace nim_comp
 		void LoadEmoji()
 		{
 			std::wstring xml_file = QPath::GetAppPath();
-			xml_file.append(L"res\\emoji.xml");
+			xml_file.append(L"res\\emoji\\img\\emoji.xml");
 
 			std::unique_ptr<FILE, nbase::DeleterFileClose> fp;
 			FILE* fp_file = nullptr;
@@ -100,6 +99,4 @@ namespace nim_comp
 				return true;
 			}
 		}
-
-	}
 }
