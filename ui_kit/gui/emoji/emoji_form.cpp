@@ -126,13 +126,12 @@ void EmojiForm::ShowEmoj(POINT pt, OnSelectEmotion sel, OnSelectSticker sel_stic
 	close_cb_ = close_cb;
 	only_emoj_ = only_emoj;
 
-	HWND hwnd = WindowEx::Create(NULL, L"", WS_POPUP, WS_EX_TOOLWINDOW);
+	HWND hwnd = WindowEx::Create(NULL, EmojiForm::kClassName, WS_POPUP, 0);
 	if (hwnd == NULL)
 		return;
 
-	CDuiRect rc(pt.x, pt.y, 0, 0);
-	SetWindowPos(m_hWnd, HWND_TOPMOST, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_SHOWWINDOW);
-	//this->SetPos(rc, false, SWP_NOSIZE | SWP_SHOWWINDOW, HWND_TOPMOST);
+	SetWindowPos(m_hWnd, HWND_TOPMOST, pt.x, pt.y, 0, 0, SWP_NOSIZE);
+	ShowWindow();
 }
 
 void EmojiForm::AddSticker(std::wstring name, int num)

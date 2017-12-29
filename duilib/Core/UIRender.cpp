@@ -429,7 +429,7 @@ TImageInfo* CRenderEngine::LoadImage(STRINGorID bitmap, CPaintManager* pManager,
 	}
 	if (!pData)
 	{
-		//::MessageBox(0, _T("读取图片数据失败！"), _T("抓BUG"), MB_OK);
+		::MessageBox(0, _T("CRenderEngine::LoadImage CreateFile err！"), _T("抓BUG"), MB_OK);
 		return NULL;
 	}
 
@@ -439,7 +439,7 @@ TImageInfo* CRenderEngine::LoadImage(STRINGorID bitmap, CPaintManager* pManager,
         pImage = stbi_load_from_memory(pData, dwSize, &x, &y, &n, 4);
         delete[] pData;
         if( !pImage ) {
-            //::MessageBox(0, _T("解析图片失败"), _T("抓BUG"), MB_OK);
+			::MessageBox(0, _T("CRenderEngine::LoadImage stbi_load_from_memory err！"), _T("抓BUG"), MB_OK);
             return NULL;
         }
     }
@@ -457,7 +457,7 @@ TImageInfo* CRenderEngine::LoadImage(STRINGorID bitmap, CPaintManager* pManager,
     LPBYTE pDest = NULL;
     HBITMAP hBitmap = ::CreateDIBSection(NULL, &bmi, DIB_RGB_COLORS, (void**)&pDest, NULL, 0);
 	if( !hBitmap ) {
-		//::MessageBox(0, _T("CreateDIBSection失败"), _T("抓BUG"), MB_OK);
+		::MessageBox(0, _T("CRenderEngine::LoadImage CreateDIBSection err！"), _T("抓BUG"), MB_OK);
 		return NULL;
 	}
 

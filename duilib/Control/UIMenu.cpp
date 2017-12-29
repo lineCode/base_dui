@@ -117,7 +117,7 @@ void Menu::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 CMenuWnd::CMenuWnd():
 m_pOwner(NULL),
 m_pLayout(NULL),
-m_xml(_T("")),
+//m_xml(_T("")),
 m_pParentManager(NULL)
 {
 	m_dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top;
@@ -171,28 +171,21 @@ BOOL CMenuWnd::Receive(ContextMenuParam param)
 	return TRUE;
 }
 #endif
-void CMenuWnd::Init(MenuElement* pOwner, STRINGorID xml, String folder, POINT point,
+void CMenuWnd::Init(MenuElement* pOwner, String xml, String folder, POINT point,
 					CPaintManager* pMainPaintManager, std::map<String,bool>* pMenuCheckInfo/* = NULL*/,
-					DWORD dwAlignment/* = eMenuAlignment_Left | eMenuAlignment_Top*//*, bool isLayeredWindow = true*/)
+					DWORD dwAlignment/* = eMenuAlignment_Left | eMenuAlignment_Top*/, bool isLayeredWindow/* = true*/)
 {
 	m_BasedPoint = point;
     m_pOwner = pOwner;
     m_pLayout = NULL;
-	m_xml = xml;
+	m_xmlfile = xml;
+	m_folder = folder;
 	m_dwAlignment = dwAlignment;
 	m_pParentManager = pMainPaintManager;
+	m_bLayeredWindow = isLayeredWindow;
 
 	wprintf(L"CMenuWnd::Init ParentManager name:%s\n", m_pParentManager->GetName());	//菜单退出有时候会崩溃
 
-	String strResourcePath = m_PaintManager.GetGlobalResDir();
-	ASSERT(!strResourcePath.empty());
-	if (!strResourcePath.empty() && !folder.empty()){
-		if (folder.back() != _T('\\') && folder.back() != _T('/')){
-			folder += _T('\\');
-		}
-		strResourcePath += folder;
-		m_PaintManager.SetThisResPath(strResourcePath.c_str());
-	}
 #if MENUWND_OBSERVER
 	// 如果是一级菜单的创建
 	if (pOwner == NULL)
@@ -205,26 +198,20 @@ void CMenuWnd::Init(MenuElement* pOwner, STRINGorID xml, String folder, POINT po
 
 	CMenuWnd::GetGlobalContextMenuObserver().AddReceiver(this);
 #endif
-	/*if (isLayeredWindow)	//no m_PaintManager
+	if (m_bLayeredWindow)
 	{
 		m_PaintManager.GetShadow()->ShowShadow(true);
 		m_PaintManager.GetShadow()->SetImage(_T("../public/bk/bk_shadow.png"));
 		m_PaintManager.GetShadow()->SetSize(14);
 		m_PaintManager.GetShadow()->SetShadowCorner({ 14, 14, 14, 14 });
-	}*/
+	}
 #if 1	//mod by djj 20171121
 	//when destroy parent wnd using clicking this menu item, the parent wnd destroys its child wnds, which include this menu wnd,and then throw exception;
 	//so set parent wnd handle NULL;
-	Create(NULL, NULL, WS_POPUP , WS_EX_TOOLWINDOW | WS_EX_TOPMOST, CDuiRect());	
+	Create(NULL, L"MainTrayMenu", WS_POPUP , 0, CDuiRect(0,0,152,80));	
 #else
 	Create((m_pOwner == NULL) ? pMainPaintManager->GetPaintWindow() : m_pOwner->GetManager()->GetPaintWindow(), NULL, WS_POPUP , WS_EX_TOOLWINDOW | WS_EX_TOPMOST, CDuiRect());
 #endif
-	// HACK: Don't deselect the parent's caption
-    HWND hWndParent = m_hWnd;
-    while( ::GetParent(hWndParent) != NULL ) hWndParent = ::GetParent(hWndParent);
-
-    ::ShowWindow(m_hWnd, SW_SHOW);
-    ::SendMessage(hWndParent, WM_NCACTIVATE, TRUE, 0L);
 }
 
 void CMenuWnd::Notify(TEvent& msg)
@@ -283,123 +270,193 @@ void CMenuWnd::OnFinalMessage(HWND hWnd)
     //delete this;
 }
 
-LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	if( m_pOwner != NULL) {
-		LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
-		styleValue &= ~WS_CAPTION;
-		::SetWindowLong(*this, GWL_STYLE, styleValue | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
-		RECT rcClient;
-		::GetClientRect(*this, &rcClient);
-		::SetWindowPos(*this, NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, \
-			rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
-
-		m_PaintManager.Init(m_hWnd);
-		m_PaintManager.GetDPIObj()->SetScale(m_pOwner->GetManager()->GetDPIObj()->GetDPI());
-		// The trick is to add the items to the new container. Their owner gets
-		// reassigned by this operation - which is why it is important to reassign
-		// the items back to the righfull owner/manager when the window closes.
-		m_pLayout = new Menu();
-		//m_PaintManager.UseParentResource(m_pOwner->GetManager());	//djj[20170425] : not defined.
-		m_pLayout->SetManager(&m_PaintManager, NULL, true);
-		LPCTSTR pDefaultAttributes = m_pOwner->GetManager()->GetDefaultAttributeList(_T("Menu"));
-		if( pDefaultAttributes ) {
-			m_pLayout->SetAttributeList(pDefaultAttributes);
-		}
-		m_pLayout->SetAutoDestroy(false);
-
-		for( int i = 0; i < m_pOwner->GetCount(); i++ ) {
-			if(m_pOwner->GetItemAt(i)->GetInterface(_T("MenuElement")) != NULL ){
-				(static_cast<MenuElement*>(m_pOwner->GetItemAt(i)))->SetOwner(m_pLayout);
-				m_pLayout->Add(static_cast<Control*>(m_pOwner->GetItemAt(i)));
-			}
-		}
-
-		CShadowUI *pShadow = m_pOwner->GetManager()->GetShadow();
-		pShadow->CopyShadow(m_PaintManager.GetShadow());
-
-		pShadow->ShowShadow(false);
-
-		m_PaintManager.AttachDialog(m_pLayout);
-		m_PaintManager.AddNotifier(this);
-		
-		ResizeSubMenu();
-	}
-	else {
-		m_PaintManager.Init(m_hWnd);
-		if (m_pParentManager)
-			m_PaintManager.GetDPIObj()->SetScale(m_pParentManager->GetDPIObj()->GetDPI());
-
-		CDialogBuilder builder;
-
-		Control* pRoot = builder.Create(m_xml,UINT(0), this, &m_PaintManager);
-		//m_PaintManager.GetShadow()->ShowShadow(false);
-		m_PaintManager.AttachDialog(pRoot);
-		m_PaintManager.AddNotifier(this);
-
-		ResizeMenu();
-	}
-#if 0		
-	m_PaintManager.GetShadow()->ShowShadow(true);
-	m_PaintManager.GetShadow()->Create(&m_PaintManager);
-#endif
-	return 0;
-}
+//LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+//{
+//	if( m_pOwner != NULL) {
+//		LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
+//		styleValue &= ~WS_CAPTION;
+//		::SetWindowLong(*this, GWL_STYLE, styleValue | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
+//		RECT rcClient;
+//		::GetClientRect(*this, &rcClient);
+//		::SetWindowPos(*this, NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, \
+//			rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
+//
+//		m_PaintManager.Init(m_hWnd);
+//		m_PaintManager.GetDPIObj()->SetScale(m_pOwner->GetManager()->GetDPIObj()->GetDPI());
+//		// The trick is to add the items to the new container. Their owner gets
+//		// reassigned by this operation - which is why it is important to reassign
+//		// the items back to the righfull owner/manager when the window closes.
+//		m_pLayout = new Menu();
+//		//m_PaintManager.UseParentResource(m_pOwner->GetManager());	//djj[20170425] : not defined.
+//		m_pLayout->SetManager(&m_PaintManager, NULL, true);
+//		LPCTSTR pDefaultAttributes = m_pOwner->GetManager()->GetDefaultAttributeList(_T("Menu"));
+//		if( pDefaultAttributes ) {
+//			m_pLayout->SetAttributeList(pDefaultAttributes);
+//		}
+//		m_pLayout->SetAutoDestroy(false);
+//
+//		for( int i = 0; i < m_pOwner->GetCount(); i++ ) {
+//			if(m_pOwner->GetItemAt(i)->GetInterface(_T("MenuElement")) != NULL ){
+//				(static_cast<MenuElement*>(m_pOwner->GetItemAt(i)))->SetOwner(m_pLayout);
+//				m_pLayout->Add(static_cast<Control*>(m_pOwner->GetItemAt(i)));
+//			}
+//		}
+//
+//		CShadowUI *pShadow = m_pOwner->GetManager()->GetShadow();
+//		pShadow->CopyShadow(m_PaintManager.GetShadow());
+//
+//		pShadow->ShowShadow(false);
+//
+//		m_PaintManager.AttachDialog(m_pLayout);
+//		m_PaintManager.AddNotifier(this);
+//		
+//		ResizeSubMenu();
+//	}
+//	else {
+//		m_PaintManager.Init(m_hWnd);
+//		if (m_pParentManager)
+//			m_PaintManager.GetDPIObj()->SetScale(m_pParentManager->GetDPIObj()->GetDPI());
+//
+//		CDialogBuilder builder;
+//
+//		Control* pRoot = builder.Create(m_xml,UINT(0), this, &m_PaintManager);
+//		//m_PaintManager.GetShadow()->ShowShadow(false);
+//		m_PaintManager.AttachDialog(pRoot);
+//		m_PaintManager.AddNotifier(this);
+//
+//		ResizeMenu();
+//	}
+//#if 1		
+//	/*m_PaintManager.GetShadow()->ShowShadow(true);
+//	m_PaintManager.GetShadow()->Create(&m_PaintManager);*/
+//#endif
+//	return 0;
+//}
 
 Menu* CMenuWnd::GetMenuUI()
 {
 	return static_cast<Menu*>(m_PaintManager.GetRoot());
 }
 
-void CMenuWnd::ResizeMenu()
+//void CMenuWnd::ResizeMenu()
+//{
+//	Control* pRoot = m_PaintManager.GetRoot();
+//
+//#if defined(WIN32) && !defined(UNDER_CE)
+//	MONITORINFO oMonitor = {}; 
+//	oMonitor.cbSize = sizeof(oMonitor);
+//	::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
+//	CDuiRect rcWork = oMonitor.rcWork;
+//#else
+//	CDuiRect rcWork;
+//	GetWindowRect(m_pOwner->GetManager()->GetPaintWindow(), &rcWork);
+//#endif
+//	SIZE szAvailable = { rcWork.right - rcWork.left, rcWork.bottom - rcWork.top };
+//	szAvailable = pRoot->EstimateSize(szAvailable);
+//	m_PaintManager.SetInitSize(szAvailable.cx, szAvailable.cy);
+//
+//	//必须是Menu标签作为xml的根节点
+//	Menu *pMenuRoot = static_cast<Menu*>(pRoot);
+//	ASSERT(pMenuRoot);
+//
+//	SIZE szInit = m_PaintManager.GetInitSize();
+//	CDuiRect rc;
+//	CDuiPoint point = m_BasedPoint;
+//	rc.left = point.x;
+//	rc.top = point.y;
+//	rc.right = rc.left + szInit.cx;
+//	rc.bottom = rc.top + szInit.cy;
+//
+//	int nWidth = rc.GetWidth();
+//	int nHeight = rc.GetHeight();
+//
+//	if (m_dwAlignment & eMenuAlignment_Right)
+//	{
+//		rc.right = point.x;
+//		rc.left = rc.right - nWidth;
+//	}
+//
+//	if (m_dwAlignment & eMenuAlignment_Bottom)
+//	{
+//		rc.bottom = point.y;
+//		rc.top = rc.bottom - nHeight;
+//	}
+//#if 1
+//	SetForegroundWindow(m_hWnd);
+//	MoveWindow(m_hWnd, rc.left, rc.top, rc.GetWidth(), rc.GetHeight(), FALSE);
+//	SetWindowPos(m_hWnd, HWND_TOPMOST, rc.left, rc.top,
+//		rc.GetWidth(), rc.GetHeight() + pMenuRoot->GetPadding().bottom + pMenuRoot->GetPadding().top,
+//		SWP_SHOWWINDOW);
+//#else
+//	SetWindowPos(m_hWnd, HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_SHOWWINDOW|SWP_NOSIZE);
+//#endif
+//	ShowWindow();
+//}
+
+void CMenuWnd::Show()
 {
-	Control* pRoot = m_PaintManager.GetRoot();
-
-#if defined(WIN32) && !defined(UNDER_CE)
-	MONITORINFO oMonitor = {}; 
+	assert(m_hWnd != NULL);
+	MONITORINFO oMonitor = {};
 	oMonitor.cbSize = sizeof(oMonitor);
-	::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
+	::GetMonitorInfo(::MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
 	CDuiRect rcWork = oMonitor.rcWork;
-#else
-	CDuiRect rcWork;
-	GetWindowRect(m_pOwner->GetManager()->GetPaintWindow(), &rcWork);
+	CDuiRect monitor_rect = oMonitor.rcMonitor;
+	CDuiSize szInit = { rcWork.right - rcWork.left, rcWork.bottom - rcWork.top };
+	szInit = m_PaintManager.GetRoot()->EstimateSize(szInit);
+#if 0
+	if (m_bLayeredWindow)
+	{
+		assert(m_PaintManager.GetShadow());
+		CShadowUI *shadow = m_PaintManager.GetShadow();
+		szInit.cx += shadow->GetShadowCorner().left /*+ shadow->GetShadowCorner().right*/;
+		szInit.cy += shadow->GetShadowCorner().top /*+ shadow->GetShadowCorner().bottom*/;
+	}
 #endif
-	SIZE szAvailable = { rcWork.right - rcWork.left, rcWork.bottom - rcWork.top };
-	szAvailable = pRoot->EstimateSize(szAvailable);
-	m_PaintManager.SetInitSize(szAvailable.cx, szAvailable.cy);
-
-	//必须是Menu标签作为xml的根节点
-	Menu *pMenuRoot = static_cast<Menu*>(pRoot);
-	ASSERT(pMenuRoot);
-
-	SIZE szInit = m_PaintManager.GetInitSize();
+	if (m_dwAlignment & eMenuAlignment_Bottom)
+	{
+		if (m_BasedPoint.y + szInit.cy > monitor_rect.bottom)
+		{
+			m_BasedPoint.y -= szInit.cy;
+		}
+	}
+	else if (m_dwAlignment & eMenuAlignment_Top)
+	{
+		if (m_BasedPoint.y - szInit.cy >= monitor_rect.top)
+		{
+			m_BasedPoint.y -= szInit.cy;
+		}
+	}
+	else
+	{
+		ASSERT(FALSE);
+	}
 	CDuiRect rc;
-	CDuiPoint point = m_BasedPoint;
-	rc.left = point.x;
-	rc.top = point.y;
+	rc.left = m_BasedPoint.x;
+	rc.top = m_BasedPoint.y;
+	if (rc.top < monitor_rect.top)
+	{
+		rc.top = monitor_rect.top;
+	}
+
+	//判断是否超出屏幕
+	if (rc.left > monitor_rect.right - szInit.cx)
+	{
+		rc.left = monitor_rect.right - szInit.cx;
+	}
+	if (rc.left < monitor_rect.left)
+	{
+		rc.left = monitor_rect.left;
+	}
 	rc.right = rc.left + szInit.cx;
 	rc.bottom = rc.top + szInit.cy;
 
-	int nWidth = rc.GetWidth();
-	int nHeight = rc.GetHeight();
+	//HACK: Don't deselect the parent's caption
+	HWND hWndParent = m_hWnd;
+	while (::GetParent(hWndParent) != NULL) hWndParent = ::GetParent(hWndParent);
+	::SendMessage(hWndParent, WM_NCACTIVATE, TRUE, 0L);
 
-	if (m_dwAlignment & eMenuAlignment_Right)
-	{
-		rc.right = point.x;
-		rc.left = rc.right - nWidth;
-	}
-
-	if (m_dwAlignment & eMenuAlignment_Bottom)
-	{
-		rc.bottom = point.y;
-		rc.top = rc.bottom - nHeight;
-	}
-
-	SetForegroundWindow(m_hWnd);
-	MoveWindow(m_hWnd, rc.left, rc.top, rc.GetWidth(), rc.GetHeight(), FALSE);
-	SetWindowPos(m_hWnd, HWND_TOPMOST, rc.left, rc.top,
-		rc.GetWidth(), rc.GetHeight() + pMenuRoot->GetPadding().bottom + pMenuRoot->GetPadding().top,
-		SWP_SHOWWINDOW);
+	::SetWindowPos(m_hWnd, HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE);
+	ShowWindow();
 }
 
 void CMenuWnd::ResizeSubMenu()
@@ -537,21 +594,21 @@ LRESULT CMenuWnd::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 #endif
 	return 0;
 }
-LRESULT CMenuWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	SIZE szRoundCorner = m_PaintManager.GetRoundCorner();
-	if( !::IsIconic(*this) ) {
-		CDuiRect rcWnd;
-		::GetWindowRect(*this, &rcWnd);
-		rcWnd.Offset(-rcWnd.left, -rcWnd.top);
-		rcWnd.right++; rcWnd.bottom++;
-		HRGN hRgn = ::CreateRoundRectRgn(rcWnd.left, rcWnd.top, rcWnd.right, rcWnd.bottom, szRoundCorner.cx, szRoundCorner.cy);
-		::SetWindowRgn(*this, hRgn, TRUE);
-		::DeleteObject(hRgn);
-	}
-	bHandled = FALSE;
-	return 0;
-}
+//LRESULT CMenuWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+//{
+//	SIZE szRoundCorner = m_PaintManager.GetRoundCorner();
+//	if( !::IsIconic(*this) ) {
+//		CDuiRect rcWnd;
+//		::GetWindowRect(*this, &rcWnd);
+//		rcWnd.Offset(-rcWnd.left, -rcWnd.top);
+//		rcWnd.right++; rcWnd.bottom++;
+//		HRGN hRgn = ::CreateRoundRectRgn(rcWnd.left, rcWnd.top, rcWnd.right, rcWnd.bottom, szRoundCorner.cx, szRoundCorner.cy);
+//		::SetWindowRgn(*this, hRgn, TRUE);
+//		::DeleteObject(hRgn);
+//	}
+//	bHandled = FALSE;
+//	return 0;
+//}
 
 LRESULT CMenuWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {

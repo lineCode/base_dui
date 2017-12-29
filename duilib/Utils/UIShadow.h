@@ -31,6 +31,7 @@ namespace dui
 		bool SetImage(LPCTSTR szImage);
 		bool SetShadowCorner(RECT rcCorner);	// 九宫格方式描述阴影
 
+		RECT GetShadowCorner(){ return m_rcShadowCorner; };
 		// 把自己的阴影样式复制到传入参数
 		bool CopyShadow(CShadowUI* pShadow);
 
@@ -99,7 +100,7 @@ namespace dui
 
 		// 图片阴影成员变量
 		String	m_sShadowImage;
-		RECT		m_rcShadowCorner;
+		RECT	m_rcShadowCorner;
 	};
 }
 

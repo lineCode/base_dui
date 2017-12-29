@@ -299,16 +299,16 @@ public:
 	 *	@pMenuCheckInfo	保存菜单的单选和复选信息结构指针
 	 *	@dwAlignment		菜单的出现位置，默认出现在鼠标的右下侧。
 	 */
-	void Init(MenuElement* pOwner, STRINGorID xml, String folder, POINT point,
+	void Init(MenuElement* pOwner, String xml, String folder, POINT point,
 		CPaintManager* pMainPaintManager, std::map<String,bool>* pMenuCheckInfo = NULL,
-		DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top/*, bool isLayeredWindow = true*/);
+		DWORD dwAlignment = eMenuAlignment_Left | eMenuAlignment_Top, bool isLayeredWindow = true);
     void OnFinalMessage(HWND hWnd);
 	void Notify(TEvent& msg);
 	Control* CreateControl(LPCTSTR pstrClassName);
 
-	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	//LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	//LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 #if MENUWND_OBSERVER
 	BOOL Receive(ContextMenuParam param);
@@ -317,23 +317,25 @@ public:
 	Menu* GetMenuUI();
 
 	// 重新调整菜单的大小
-	void ResizeMenu();
+	//void ResizeMenu();
 
 	// 重新调整子菜单的大小
 	void ResizeSubMenu();
 
+	void Show();
 private:
 	String			m_folder;
 	String			m_xmlfile;
 
 	POINT			m_BasedPoint;
-	STRINGorID		m_xml;
+	//STRINGorID		m_xml;
     MenuElement*	m_pOwner;
     Menu*			m_pLayout;
 	DWORD			m_dwAlignment;	//菜单对齐方式
 
 	CPaintManager* m_pParentManager;
-	//CPaintManager m_pm;
+	
+	bool			m_bLayeredWindow;
 	
 };
 

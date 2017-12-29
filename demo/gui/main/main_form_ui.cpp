@@ -64,9 +64,9 @@ void MainForm::OnEsc( BOOL &bHandled )
 void MainForm::OnFinalMessage(HWND hWnd)
 {
 	nim_comp::TrayManager::GetInstance()->Destroy();
-	/*nim_ui::SessionListManager::GetInstance()->AttachListBox(nullptr);
-	nim_ui::ContactsListManager::GetInstance()->AttachFriendListBox(nullptr);
-	nim_ui::ContactsListManager::GetInstance()->AttachGroupListBox(nullptr);*/
+	/*nim_comp::SessionListManager::GetInstance()->AttachListBox(nullptr);
+	nim_comp::ContactsListManager::GetInstance()->AttachFriendListBox(nullptr);
+	nim_comp::ContactsListManager::GetInstance()->AttachGroupListBox(nullptr);*/
 
 	__super::OnFinalMessage(hWnd);
 }
@@ -621,7 +621,7 @@ void MainForm::PopupTrayMenu(POINT point)
 {
 #if 1
 	dui::CMenuWnd* pMenu = new dui::CMenuWnd;
-	STRINGorID xml(L"tray_menu.xml");
+	String xml(L"tray_menu.xml");
 	pMenu->Init(NULL, xml, _T("menu"), point, &m_PaintManager, NULL, eMenuAlignment_Left | eMenuAlignment_Bottom);
 
 	/*MenuElement* logoff = (MenuElement*)pMenu-> FindControl(L"menu_logoff");
@@ -629,7 +629,7 @@ void MainForm::PopupTrayMenu(POINT point)
 	MenuElement* logout = (MenuElement*)pMenu->FindControl(L"menu_logout");
 	logout->AttachSelect(nbase::Bind(&MainForm::MenuLogoutClick, this, std::placeholders::_1));*/
 
-	//pMenu->ShowWindow();
+	pMenu->Show();
 #endif
 }
 
