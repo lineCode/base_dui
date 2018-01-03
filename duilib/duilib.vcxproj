@@ -281,6 +281,8 @@
     <ClCompile Include="Control\UIOption.cpp" />
     <ClCompile Include="Control\UIProgress.cpp" />
     <ClCompile Include="Control\UIRichEdit.cpp" />
+    <ClCompile Include="Control\UIRichEdit_olecallback.cpp" />
+    <ClCompile Include="Control\UIRichEdit_util.cpp" />
     <ClCompile Include="Control\UIScrollBar.cpp" />
     <ClCompile Include="Control\UISlider.cpp" />
     <ClCompile Include="Control\UIText.cpp" />
@@ -297,6 +299,8 @@
     <ClCompile Include="Extend\UIButtonContainer.cpp" />
     <ClCompile Include="Extend\UILabelContainer.cpp" />
     <ClCompile Include="Extend\UIOptionContainer.cpp" />
+    <ClCompile Include="Help\file.cpp" />
+    <ClCompile Include="Help\image.cpp" />
     <ClCompile Include="Layout\UIChildLayout.cpp" />
     <ClCompile Include="Layout\UIHorizontalLayout.cpp" />
     <ClCompile Include="Layout\UITabLayout.cpp" />
@@ -308,6 +312,9 @@
     </ClCompile>
     <ClCompile Include="UIlib.cpp" />
     <ClCompile Include="Utils\DPI.cpp" />
+    <ClCompile Include="Utils\image_ole_i.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Utils\stb_image.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -352,6 +359,8 @@
     <ClInclude Include="Extend\UIButtonContainer.h" />
     <ClInclude Include="Extend\UILabelContainer.h" />
     <ClInclude Include="Extend\UIOptionContainer.h" />
+    <ClInclude Include="Help\file.h" />
+    <ClInclude Include="Help\image.h" />
     <ClInclude Include="Layout\UIChildLayout.h" />
     <ClInclude Include="Layout\UIHorizontalLayout.h" />
     <ClInclude Include="Layout\UITabLayout.h" />
@@ -363,6 +372,7 @@
     <ClInclude Include="Utils\downloadmgr.h" />
     <ClInclude Include="Utils\DPI.h" />
     <ClInclude Include="Utils\FlashEventHandler.h" />
+    <ClInclude Include="Utils\image_ole_i.h" />
     <ClInclude Include="Utils\observer_impl_base.hpp" />
     <ClInclude Include="Utils\stb_image.h" />
     <ClInclude Include="Utils\UIDelegate.h" />

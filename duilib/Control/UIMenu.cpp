@@ -270,128 +270,10 @@ void CMenuWnd::OnFinalMessage(HWND hWnd)
     //delete this;
 }
 
-//LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-//{
-//	if( m_pOwner != NULL) {
-//		LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
-//		styleValue &= ~WS_CAPTION;
-//		::SetWindowLong(*this, GWL_STYLE, styleValue | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
-//		RECT rcClient;
-//		::GetClientRect(*this, &rcClient);
-//		::SetWindowPos(*this, NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, \
-//			rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
-//
-//		m_PaintManager.Init(m_hWnd);
-//		m_PaintManager.GetDPIObj()->SetScale(m_pOwner->GetManager()->GetDPIObj()->GetDPI());
-//		// The trick is to add the items to the new container. Their owner gets
-//		// reassigned by this operation - which is why it is important to reassign
-//		// the items back to the righfull owner/manager when the window closes.
-//		m_pLayout = new Menu();
-//		//m_PaintManager.UseParentResource(m_pOwner->GetManager());	//djj[20170425] : not defined.
-//		m_pLayout->SetManager(&m_PaintManager, NULL, true);
-//		LPCTSTR pDefaultAttributes = m_pOwner->GetManager()->GetDefaultAttributeList(_T("Menu"));
-//		if( pDefaultAttributes ) {
-//			m_pLayout->SetAttributeList(pDefaultAttributes);
-//		}
-//		m_pLayout->SetAutoDestroy(false);
-//
-//		for( int i = 0; i < m_pOwner->GetCount(); i++ ) {
-//			if(m_pOwner->GetItemAt(i)->GetInterface(_T("MenuElement")) != NULL ){
-//				(static_cast<MenuElement*>(m_pOwner->GetItemAt(i)))->SetOwner(m_pLayout);
-//				m_pLayout->Add(static_cast<Control*>(m_pOwner->GetItemAt(i)));
-//			}
-//		}
-//
-//		CShadowUI *pShadow = m_pOwner->GetManager()->GetShadow();
-//		pShadow->CopyShadow(m_PaintManager.GetShadow());
-//
-//		pShadow->ShowShadow(false);
-//
-//		m_PaintManager.AttachDialog(m_pLayout);
-//		m_PaintManager.AddNotifier(this);
-//		
-//		ResizeSubMenu();
-//	}
-//	else {
-//		m_PaintManager.Init(m_hWnd);
-//		if (m_pParentManager)
-//			m_PaintManager.GetDPIObj()->SetScale(m_pParentManager->GetDPIObj()->GetDPI());
-//
-//		CDialogBuilder builder;
-//
-//		Control* pRoot = builder.Create(m_xml,UINT(0), this, &m_PaintManager);
-//		//m_PaintManager.GetShadow()->ShowShadow(false);
-//		m_PaintManager.AttachDialog(pRoot);
-//		m_PaintManager.AddNotifier(this);
-//
-//		ResizeMenu();
-//	}
-//#if 1		
-//	/*m_PaintManager.GetShadow()->ShowShadow(true);
-//	m_PaintManager.GetShadow()->Create(&m_PaintManager);*/
-//#endif
-//	return 0;
-//}
-
 Menu* CMenuWnd::GetMenuUI()
 {
 	return static_cast<Menu*>(m_PaintManager.GetRoot());
 }
-
-//void CMenuWnd::ResizeMenu()
-//{
-//	Control* pRoot = m_PaintManager.GetRoot();
-//
-//#if defined(WIN32) && !defined(UNDER_CE)
-//	MONITORINFO oMonitor = {}; 
-//	oMonitor.cbSize = sizeof(oMonitor);
-//	::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
-//	CDuiRect rcWork = oMonitor.rcWork;
-//#else
-//	CDuiRect rcWork;
-//	GetWindowRect(m_pOwner->GetManager()->GetPaintWindow(), &rcWork);
-//#endif
-//	SIZE szAvailable = { rcWork.right - rcWork.left, rcWork.bottom - rcWork.top };
-//	szAvailable = pRoot->EstimateSize(szAvailable);
-//	m_PaintManager.SetInitSize(szAvailable.cx, szAvailable.cy);
-//
-//	//必须是Menu标签作为xml的根节点
-//	Menu *pMenuRoot = static_cast<Menu*>(pRoot);
-//	ASSERT(pMenuRoot);
-//
-//	SIZE szInit = m_PaintManager.GetInitSize();
-//	CDuiRect rc;
-//	CDuiPoint point = m_BasedPoint;
-//	rc.left = point.x;
-//	rc.top = point.y;
-//	rc.right = rc.left + szInit.cx;
-//	rc.bottom = rc.top + szInit.cy;
-//
-//	int nWidth = rc.GetWidth();
-//	int nHeight = rc.GetHeight();
-//
-//	if (m_dwAlignment & eMenuAlignment_Right)
-//	{
-//		rc.right = point.x;
-//		rc.left = rc.right - nWidth;
-//	}
-//
-//	if (m_dwAlignment & eMenuAlignment_Bottom)
-//	{
-//		rc.bottom = point.y;
-//		rc.top = rc.bottom - nHeight;
-//	}
-//#if 1
-//	SetForegroundWindow(m_hWnd);
-//	MoveWindow(m_hWnd, rc.left, rc.top, rc.GetWidth(), rc.GetHeight(), FALSE);
-//	SetWindowPos(m_hWnd, HWND_TOPMOST, rc.left, rc.top,
-//		rc.GetWidth(), rc.GetHeight() + pMenuRoot->GetPadding().bottom + pMenuRoot->GetPadding().top,
-//		SWP_SHOWWINDOW);
-//#else
-//	SetWindowPos(m_hWnd, HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_SHOWWINDOW|SWP_NOSIZE);
-//#endif
-//	ShowWindow();
-//}
 
 void CMenuWnd::Show()
 {
@@ -719,7 +601,6 @@ void MenuElement::DrawItemIcon(HDC hDC, const RECT& rcItem)
 	{
 		if (!(m_bCheckItem && !GetChecked()))
 		{
-#if 1
 			TCHAR cImage[526] = {};
 			wsprintf(cImage, _T("file='%s' dest='%d,%d,%d,%d'"), m_strIcon.c_str(), 
 				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx)/2,
@@ -729,17 +610,7 @@ void MenuElement::DrawItemIcon(HDC hDC, const RECT& rcItem)
 			TDrawInfo drawinfo;
 			drawinfo.sDrawString = cImage;
 			drawinfo.rcDestOffset = rcItem;
-#else
-			String pStrImage;
-			pStrImage.Format(_T("file='%s' dest='%d,%d,%d,%d'"), m_strIcon.c_str(), 
-				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx)/2,
-				(m_cxyFixed.cy - m_szIconSize.cy)/2,
-				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx)/2 + m_szIconSize.cx,
-				(m_cxyFixed.cy - m_szIconSize.cy)/2 + m_szIconSize.cy);
-			TDrawInfo drawinfo;
-			drawinfo.sDrawString = pStrImage;
-			drawinfo.rcDestOffset = rcItem;
-#endif
+
 			CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, drawinfo);
 		}			
 	}
@@ -751,7 +622,7 @@ void MenuElement::DrawItemExpland(HDC hDC, const RECT& rcItem)
 	{
 		String strExplandIcon;
 		strExplandIcon = GetManager()->GetDefaultAttributeList(_T("ExplandIcon"));
-#if 1
+
 		TCHAR cImage[526] = {};
 		wsprintf(cImage, _T("file='%s' dest='%d,%d,%d,%d'"), strExplandIcon.c_str(),
 			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2,
@@ -761,17 +632,7 @@ void MenuElement::DrawItemExpland(HDC hDC, const RECT& rcItem)
 		TDrawInfo drawinfo;
 		drawinfo.sDrawString = cImage;
 		drawinfo.rcDestOffset = rcItem;
-#else
-		String strBkImage;
-		strBkImage.Format(_T("file='%s' dest='%d,%d,%d,%d'"), strExplandIcon.c_str(), 
-			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2,
-			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2,
-			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE,
-			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE)/2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE);
-		TDrawInfo drawinfo;
-		drawinfo.sDrawString = strBkImage;
-		drawinfo.rcDestOffset = rcItem;
-#endif
+
 		CRenderEngine::DrawImage(hDC, m_pManager, m_rcItem, m_rcPaint, drawinfo);
 	}
 }

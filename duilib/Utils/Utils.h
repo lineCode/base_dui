@@ -69,80 +69,6 @@ namespace dui
 		void Union(CDuiRect& rc);
 	};
 
-    /////////////////////////////////////////////////////////////////////////////////////
-    //
-#if 0
-    class DUILIB_API String		//CDuiString
-    {
-    public:
-        enum { MAX_LOCAL_STRING_LEN = 63 };
-
-        String();
-        String(const TCHAR ch);
-        String(const String& src);
-        String(LPCTSTR lpsz, int nLen = -1);
-        ~String();
-        String ToString();
-
-        void Empty();
-        int GetLength() const;
-        bool empty() const;
-        TCHAR GetAt(int nIndex) const;
-        void Append(LPCTSTR pstr);
-        void Assign(LPCTSTR pstr, int nLength = -1);
-        LPCTSTR GetData() const;
-
-        void SetAt(int nIndex, TCHAR ch);
-        operator LPCTSTR() const;
-		operator std::wstring() const;
-
-        TCHAR operator[] (int nIndex) const;
-        const String& operator=(const String& src);
-        const String& operator=(const TCHAR ch);
-        const String& operator=(LPCTSTR pstr);
-#ifdef _UNICODE
-        const String& String::operator=(LPCSTR lpStr);
-        const String& String::operator+=(LPCSTR lpStr);
-#else
-        const String& String::operator=(LPCWSTR lpwStr);
-        const String& String::operator+=(LPCWSTR lpwStr);
-#endif
-        String operator+(const String& src) const;
-        String operator+(LPCTSTR pstr) const;
-        const String& operator+=(const String& src);
-        const String& operator+=(LPCTSTR pstr);
-        const String& operator+=(const TCHAR ch);
-
-        bool operator == (LPCTSTR str) const;
-        bool operator != (LPCTSTR str) const;
-        bool operator <= (LPCTSTR str) const;
-        bool operator <  (LPCTSTR str) const;
-        bool operator >= (LPCTSTR str) const;
-        bool operator >  (LPCTSTR str) const;
-
-        int Compare(LPCTSTR pstr) const;
-        int CompareNoCase(LPCTSTR pstr) const;
-
-        void MakeUpper();
-        void MakeLower();
-
-        String Left(int nLength) const;
-        String Mid(int iPos, int nLength = -1) const;
-        String Right(int nLength) const;
-
-        int Find(TCHAR ch, int iPos = 0) const;
-        int Find(LPCTSTR pstr, int iPos = 0) const;
-        int ReverseFind(TCHAR ch) const;
-        int Replace(LPCTSTR pstrFrom, LPCTSTR pstrTo);
-
-        int __cdecl Format(LPCTSTR pstrFormat, ...);
-        int __cdecl SmallFormat(LPCTSTR pstrFormat, ...);
-
-    protected:
-        LPTSTR m_pstr;
-        TCHAR m_szBuffer[MAX_LOCAL_STRING_LEN + 1];
-    };
-#endif
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 
@@ -280,6 +206,12 @@ namespace dui
 		}
 	};
 #endif
+
+
+	bool CreateImageObject(void **ppv);
+	String GetIconByFile(String file);
+	bool FilePathExtension(const String &filepath_in, String &extension_out);
+	
 }// namespace dui
 
 #endif // __UTILS_H__

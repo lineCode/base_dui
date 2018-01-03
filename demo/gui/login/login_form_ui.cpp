@@ -25,9 +25,9 @@ String LoginForm::GetSkinFile()
 	return L"login.xml";
 }
 
-//ui::UILIB_RESOURCETYPE LoginForm::GetResourceType() const
+//dui::UILIB_RESOURCETYPE LoginForm::GetResourceType() const
 //{
-//	return ui::UILIB_FILE;
+//	return dui::UILIB_FILE;
 //}
 //
 //std::wstring LoginForm::GetZIPFileName() const
@@ -52,7 +52,7 @@ UINT LoginForm::GetClassStyle() const
 
 void LoginForm::InitWindow()
 {
-	//m_PaintManager.AttachEvent(ui::kEventClick, nbase::Bind(&LoginForm::OnClicked, this, std::placeholders::_1));
+	//m_PaintManager.AttachEvent(dui::kEventClick, nbase::Bind(&LoginForm::OnClicked, this, std::placeholders::_1));
 	SetIcon(IDI_ICON1);
 	SetTaskbarTitle(L"µÇÂ¼");
 

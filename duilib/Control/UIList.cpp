@@ -2299,7 +2299,7 @@ void ListContainerElement::Invalidate()
 bool ListContainerElement::Activate()
 {
 	if (!__super::Activate()) return false;
-#if MODE_EVENTMAP
+
 	if (OnEvent.find(UIEVENT_ITEMCLICK) != OnEvent.cend()){
 		TEvent event;
 		event.Type = UIEVENT_ITEMCLICK;
@@ -2308,7 +2308,7 @@ bool ListContainerElement::Activate()
 			return false;
 		}
 	}
-#endif
+
 	if (m_pManager != NULL) m_pManager->SendNotify(this, UIEVENT_ITEMCLICK);
     return true;
 }
@@ -2394,11 +2394,7 @@ void ListContainerElement::DoEvent(TEvent& event)
     if( event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_RBUTTONDOWN )
     {
         if( IsEnabled() ) {
-#if MODE_EVENTMAP
 			Activate();
-#else
-			m_pManager->SendNotify(this, UIEVENT_ITEMCLICK);
-#endif	
             Select();
             Invalidate();
         }

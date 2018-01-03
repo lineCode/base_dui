@@ -3397,39 +3397,7 @@ void CPaintManager::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetLayered(true);
         SetLayeredImage(pstrValue);
     } 
-#if 0
-    else if( _tcsicmp(pstrName, _T("disabledfontcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDefaultDisabledColor(clrColor);
-    } 
-    else if( _tcsicmp(pstrName, _T("defaultfontcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDefaultFontColor(clrColor);
-    }
-    else if( _tcsicmp(pstrName, _T("linkfontcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDefaultLinkFontColor(clrColor);
-    } 
-    else if( _tcsicmp(pstrName, _T("linkhoverfontcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDefaultLinkHoverFontColor(clrColor);
-    } 
-    else if( _tcsicmp(pstrName, _T("selectedcolor")) == 0 ) {
-        if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDefaultSelectedBkColor(clrColor);
-    } 
-#endif
-#if 1	//UIShadow
+	//UIShadow
 	else if (_tcscmp(pstrName, _T("showshadow")) == 0) {
 		GetShadow()->ShowShadow(_tcscmp(pstrValue, _T("true")) == 0);
 	}
@@ -3470,7 +3438,6 @@ void CPaintManager::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr); 
 		GetShadow()->SetPosition(cx, cy);
 	}
-#endif
     else 
         AddWindowCustomAttribute(pstrName, pstrValue);
 }

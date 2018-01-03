@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "shared/threads.h"
+#include "shared/util.h"
 #include "gui/login/login_form.h"
 #include "gui/main/main_form.h"
 #include "module/init/init_manager.h"
@@ -10,8 +11,30 @@
 
 using namespace std;
 
+void AddDllPath()
+{
+	TCHAR path_envirom[4096] = { 0 };
+	GetEnvironmentVariable(L"path", path_envirom, 4096);
+
+	std::wstring path = QPath::GetAppPath();
+
+	path += L"dll";
+
+	if (!nbase::FilePathIsExist(path, true))
+	{
+		MessageBox(NULL, L"AddDllPath faile!", L"ÌבÊ¾", MB_OK);
+		exit(0);
+	}
+	std::wstring new_envirom = path_envirom;
+	new_envirom.append(L";");
+	new_envirom.append(path);
+	SetEnvironmentVariable(L"path", new_envirom.c_str());
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
+	AddDllPath();
+
 	HRESULT hr = ::OleInitialize(NULL);
 	if (FAILED(hr))
 		return 0;

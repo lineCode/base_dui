@@ -436,7 +436,7 @@ namespace dui
 
         TreeNode* pParent = static_cast<TreeNode*>(GetItemAt(iIndex - 1));
 		if (!pParent) return false;
-#if !MODE_EVENTMAP
+#if 0
         pTreeNode->OnNotify += MakeDelegate(this,&Tree::OnDBClickItem);
         pTreeNode->GetFolderButton()->OnNotify += MakeDelegate(this,&Tree::OnFolderChanged);
         pTreeNode->GetCheckBox()->OnNotify += MakeDelegate(this,&Tree::OnCheckBoxChanged);

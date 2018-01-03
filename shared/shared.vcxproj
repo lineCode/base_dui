@@ -79,8 +79,11 @@
   <ItemGroup>
     <ClInclude Include="auto_unregister.h" />
     <ClInclude Include="closure.h" />
-    <ClInclude Include="image_ole_i.h" />
     <ClInclude Include="log.h" />
+    <ClInclude Include="modal_wnd\async_do_modal.h" />
+    <ClInclude Include="modal_wnd\async_modal_runner.h" />
+    <ClInclude Include="modal_wnd\file_dialog_ex.h" />
+    <ClInclude Include="modal_wnd\modal_wnd_base.h" />
     <ClInclude Include="pin_yin_helper.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="threads.h" />
@@ -91,10 +94,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="closure.cpp" />
-    <ClCompile Include="image_ole_i.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="log.cpp" />
+    <ClCompile Include="modal_wnd\async_do_modal.cpp" />
+    <ClCompile Include="modal_wnd\async_modal_runner.cpp" />
+    <ClCompile Include="modal_wnd\file_dialog_ex.cpp" />
     <ClCompile Include="pin_yin_helper.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

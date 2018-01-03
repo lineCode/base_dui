@@ -30,42 +30,18 @@ namespace shared
 		PreMessageLoop();
 
 		std::wstring theme_dir = QPath::GetAppPath();
-#if 1
+
 		if (init_event_cb_)
 		{
 			init_event_cb_();
 		}
-#else
-		dui::GlobalManager::Startup(theme_dir + L"themes\\default", dui::CreateControlCallback());
-
-		nim_ui::UserConfig::GetInstance()->SetIcon(IDI_ICON);
-
-		std::wstring app_crash = QCommand::Get(kCmdAppCrash);
-		if (app_crash.empty())
-		{
-			nim_ui::WindowsManager::SingletonShow<LoginForm>(LoginForm::kClassName);
-		}
-		else
-		{
-			std::wstring content(L"程序崩溃了，崩溃日志：");
-			content.append(app_crash);
-
-			MsgboxCallback cb = nbase::Bind(&MainThread::OnMsgBoxCallback, this, std::placeholders::_1);
-			ShowMsgBox(NULL, content, cb, L"提示", L"打开", L"取消");
-		}
-#endif
 	}
 
 	void MainThread::Cleanup()
 	{
-		//dui::GlobalManager::Shutdown();
-
 		PostMessageLoop();
 		SetThreadWasQuitProperly(true);
 		nbase::ThreadManager::UnregisterThread();
-#if 0
-		nim_chatroom::ChatRoom::Cleanup();
-#endif
 	}
 
 	void MainThread::PreMessageLoop()
@@ -91,18 +67,4 @@ namespace shared
 		db_thread_->Stop();
 		db_thread_.reset(NULL);
 	}
-#if MODE_COMMENT
-	void MainThread::OnMsgBoxCallback(MsgBoxRet ret)
-	{
-		if (ret == MB_YES)
-		{
-#if 0
-			std::wstring dir = QPath::GetNimAppDataDir();
-			QCommand::AppStartWidthCommand(dir, L"");
-#endif
-		}
-
-		nim_comp::WindowsManager::SingletonShow<LoginForm>(LoginForm::kClassName);
-	}
-#endif
 }

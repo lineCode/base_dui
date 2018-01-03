@@ -22,6 +22,9 @@
     <Filter Include="Extend">
       <UniqueIdentifier>{a4310681-b80c-4d80-9110-0548babc9ca3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Help">
+      <UniqueIdentifier>{57691f73-c6ef-463c-a395-9c960414a615}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Control\UIActiveX.cpp">
@@ -155,6 +158,21 @@
     </ClCompile>
     <ClCompile Include="Utils\DPI.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIRichEdit_util.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\image_ole_i.c">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIRichEdit_olecallback.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Help\image.cpp">
+      <Filter>Help</Filter>
+    </ClCompile>
+    <ClCompile Include="Help\file.cpp">
+      <Filter>Help</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -304,6 +322,15 @@
     </ClInclude>
     <ClInclude Include="Utils\VersionHelpers.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\image_ole_i.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Help\image.h">
+      <Filter>Help</Filter>
+    </ClInclude>
+    <ClInclude Include="Help\file.h">
+      <Filter>Help</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

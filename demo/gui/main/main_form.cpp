@@ -3,7 +3,7 @@
 
 using namespace dui;
 #if 0
-bool MainForm::SearchEditChange(ui::EventArgs* param)
+bool MainForm::SearchEditChange(dui::EventArgs* param)
 {
 	UTF8String search_key = search_edit_->GetUTF8Text();
 	bool has_serch_key = !search_key.empty();
@@ -18,7 +18,7 @@ bool MainForm::SearchEditChange(ui::EventArgs* param)
 	return true;
 }
 
-bool MainForm::OnClearInputBtnClicked(ui::EventArgs* param)
+bool MainForm::OnClearInputBtnClicked(dui::EventArgs* param)
 {
 	search_edit_->SetText(L"");
 	return true;

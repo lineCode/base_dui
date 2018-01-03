@@ -21,13 +21,11 @@ namespace nim_comp
 
 	void FriendItem::Init()
 	{
-#if MODE_EVENTMAP
 		auto OnItemClick = [this](TEvent *event){
 			printf("FriendItem OnItemClick, name:%s, phone:%s\n", event->pSender->GetName().c_str(), info_.GetMobile().c_str());
 			return false;
 		};
 		this->AttachItemClick(std::bind(OnItemClick, std::placeholders::_1));
-#endif
 
 		contact_ = (Label*) this->FindSubControl(L"contact");
 		post_ = (Label*) this->FindSubControl(L"post");
@@ -43,7 +41,7 @@ namespace nim_comp
 			post_->SetVisible(true);
 			post_->SetText(wmobile.c_str());
 		}
-#if MODE_EVENTMAP
+
 		btn_head_ = dynamic_cast<dui::Button *>(FindSubControl(L"btn_friend_head"));
 		if (btn_head_)
 		{
@@ -53,7 +51,7 @@ namespace nim_comp
 
 			btn_head_->AttachClick(std::bind(OnFriendHeadClicked, std::placeholders::_1));
 		}
-#endif
+
 		wstring photopath = PhotoManager::GetInstance()->GetUserPhoto(info_.GetAccId());
 		btn_head_->SetBkImage(photopath.c_str());
 
@@ -87,7 +85,7 @@ namespace nim_comp
 		//{
 		//	head_ctrl->SetBkImage(PhotoManager::GetInstance()->GetTeamPhoto(id_, false));
 		//	head_ctrl->SetMouseEnabled(false); //群头像不响应点击
-		//	head_ctrl->SetCursorType(ui::CursorType::kCursorArrow);
+		//	head_ctrl->SetCursorType(dui::CursorType::kCursorArrow);
 		//}
 		//else
 		//{
@@ -127,7 +125,7 @@ namespace nim_comp
 		return false;
 	}*/
 #if 0
-	bool FriendItem::OnClicked(ui::EventArgs* arg)
+	bool FriendItem::OnClicked(dui::EventArgs* arg)
 	{
 		SessionBox *session = SessionManager::GetInstance()->OpenSessionBox(UserService::GetInstance()->GetFriendnetEaseId(id_), is_team_ ? nim::kNIMSessionTypeTeam : nim::kNIMSessionTypeP2P);
 		if (session)

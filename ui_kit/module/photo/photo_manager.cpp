@@ -28,7 +28,6 @@ std::wstring PhotoManager::GetUserPhoto(const std::string &accid)
 		return default_photo;
 	}
 
-#if 1
 	UserNameCard info;
 	if (!UserManager::GetInstance()->GetUserInfo(accid, info))
 	{
@@ -40,50 +39,6 @@ std::wstring PhotoManager::GetUserPhoto(const std::string &accid)
 		return default_photo;
 	}
 	return photo_path;
-#else
-	UserNameCard info;
-	UserManager::GetInstance()->GetUserInfo(accid, info);
-	std::wstring name_photo = GetPhotoDir(kDefault) + nbase::UTF8ToUTF16(accid);
-	if (!info.ExistValue(nim_comp::kUserNameCardKeyIconUrl) || info.GetIconUrl().empty() || info.GetIconUrl() == "0")
-	{
-		if (!CheckPhotoOK(name_photo))
-		{
-			if (info.GetName() != accid)
-			{
-				CreateHead(info.GetName(), name_photo);
-				if (CheckPhotoOK(name_photo))
-					return name_photo;
-				else
-					return default_photo;
-			}
-
-		}
-		return name_photo;
-
-	}
-	// ¼ì²éÍ¼Æ¬ÊÇ·ñ´æÔÚ
-	std::wstring photo_path = GetPhotoDir(kUser) + nbase::UTF8ToUTF16(info.GetIconUrl());
-	int nLen = (int)photo_path.length();
-	std::string path = Wstr2Str(photo_path);
-
-	if (!CheckPhotoOK(photo_path))
-	{		
-		HRESULT ret = DownloadPhoto(info.GetIconUrl(),path);
-		if (ret == S_OK)
-			return photo_path;
-		else if (CheckPhotoOK(name_photo))
-			return name_photo;
-		else
-		{
-			CreateHead(info.GetName(), name_photo);
-			if (CheckPhotoOK(name_photo))
-				return name_photo;
-		}
-		return default_photo;
-	}
-	return photo_path;
-#endif
-	
 }
 
 std::wstring PhotoManager::GetMyPhoto(const std::string &iconurl)

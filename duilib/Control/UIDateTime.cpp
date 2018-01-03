@@ -267,18 +267,10 @@ namespace dui
 			SetText(_T(""));
 		else if (m_nDTUpdateFlag == DT_UPDATE)
 		{
-#if 1
 			TCHAR cText[64] = {};
 			::wsprintf(cText, m_sFormat.c_str(), 
 				m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay, m_sysTime.wHour, m_sysTime.wMinute);
 			SetText(cText);
-#else
-			String sText;
-			sText.SmallFormat(/*_T("%4d-%02d-%02d"),*/
-				m_sFormat,		//djj:format string.[20170421]
-				m_sysTime.wYear, m_sysTime.wMonth, m_sysTime.wDay, m_sysTime.wHour, m_sysTime.wMinute);
-			SetText(sText.c_str());
-#endif
 		}
 	}
 

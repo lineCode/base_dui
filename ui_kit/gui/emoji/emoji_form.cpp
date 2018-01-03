@@ -78,14 +78,13 @@ void EmojiForm::InitWindow()
 	{
 		ButtonContainer* box = new ButtonContainer;
 		m_PaintManager.FillBox(box, L"emoji_item.xml", nullptr, &m_PaintManager);
-		//GlobalManager::FillBoxWithCache(box, L"emoji/emoji_item.xml");
 		emoj_->Add(box);
 
 		box->SetKeyboardEnabled(false);
 		box->AttachClick(std::bind(&EmojiForm::OnEmojiClicked, this, std::placeholders::_1));
 		std::wstring tag = it->tag;
 		assert(tag.size() > 2);
-		//box->SetToolTipText( tag.substr(1, tag.size() - 2) );
+		box->SetToolTip(tag.substr(1, tag.size() - 2).c_str());
 
 		Control* c = box->FindSubControl(L"ctrl_emoj");
 		c->SetBkImage(it->path.c_str());
@@ -178,10 +177,10 @@ bool EmojiForm::OnSelChanged(dui::TEvent* param)
 
 bool EmojiForm::OnEmojiClicked(dui::TEvent* arg)
 {
-	/*if (is_closing_)
+	if (is_closing_)
 		return false;
 
-	std::wstring tip = arg->pSender->GetToolTipText();
+	std::wstring tip = arg->pSender->GetToolTip();
 	if( tip.empty() )
 	{
 		this->Close();
@@ -191,10 +190,10 @@ bool EmojiForm::OnEmojiClicked(dui::TEvent* arg)
 	if( sel_cb_ )
 	{
 		std::wstring face_tag = L"[" + tip + L"]";
-		Post2UI( nbase::Bind(sel_cb_, face_tag) );
+		shared::Post2UI( nbase::Bind(sel_cb_, face_tag) );
 	}
 
-	this->Close();*/
+	this->Close();
 	return false;
 }
 

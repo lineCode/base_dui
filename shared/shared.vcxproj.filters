@@ -5,6 +5,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="modal_wnd">
+      <UniqueIdentifier>{204d751c-834d-4e74-92d5-9fbb78648c0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="threads.h" />
@@ -14,10 +17,21 @@
     <ClInclude Include="log.h" />
     <ClInclude Include="utf8_file_util.h" />
     <ClInclude Include="tool.h" />
-    <ClInclude Include="image_ole_i.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="auto_unregister.h" />
     <ClInclude Include="pin_yin_helper.h" />
+    <ClInclude Include="modal_wnd\async_do_modal.h">
+      <Filter>modal_wnd</Filter>
+    </ClInclude>
+    <ClInclude Include="modal_wnd\async_modal_runner.h">
+      <Filter>modal_wnd</Filter>
+    </ClInclude>
+    <ClInclude Include="modal_wnd\file_dialog_ex.h">
+      <Filter>modal_wnd</Filter>
+    </ClInclude>
+    <ClInclude Include="modal_wnd\modal_wnd_base.h">
+      <Filter>modal_wnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="closure.cpp" />
@@ -26,9 +40,17 @@
     <ClCompile Include="log.cpp" />
     <ClCompile Include="utf8_file_util.cpp" />
     <ClCompile Include="tool.cpp" />
-    <ClCompile Include="image_ole_i.c" />
     <ClCompile Include="threads.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="pin_yin_helper.cpp" />
+    <ClCompile Include="modal_wnd\async_do_modal.cpp">
+      <Filter>modal_wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="modal_wnd\async_modal_runner.cpp">
+      <Filter>modal_wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="modal_wnd\file_dialog_ex.cpp">
+      <Filter>modal_wnd</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

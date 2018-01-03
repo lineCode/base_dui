@@ -11,8 +11,6 @@ namespace dui
 
 #define SCROLLBAR_LINESIZE      8
 
-#define MODE_EVENTMAP	1
-
 enum DuiSig
 {
 	DuiSig_end = 0, // [marks end of message map]
@@ -49,7 +47,7 @@ typedef enum EVENTTYPE_UI
 	UIEVENT_WINDOWINIT,
 	UIEVENT_WINDOWSIZE,
 	UIEVENT_SETCURSOR,
-#if MODE_EVENTMAP		
+	//-------add for EVENTMAP--------		
 	UIEVENT_CLICK,
 	UIEVENT_ITEMCLICK,
 	UIEVENT_SELECTCHANGE,
@@ -65,7 +63,7 @@ typedef enum EVENTTYPE_UI
 	UIEVENT_WINDOWCLOSE,
 
 	UIEVENT_RESIZE,
-#endif
+	//-------end EVENTMAP--------	
 	UIEVENT_MENU,
 	UIEVENT_TIMER,
 	UIEVENT_NOTIFY,

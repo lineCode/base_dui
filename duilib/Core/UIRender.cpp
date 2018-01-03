@@ -1566,12 +1566,8 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManager* pManager, RECT& rc, LPC
                                 sFontAttr += *pstrText++;
                             }
                         }
-#if 1
 						transform(sFontAttr.begin(), sFontAttr.end(), sFontAttr.begin(), toupper);
-#else
-                        sFontAttr.MakeLower();
-#endif
-						
+		
                         if( sFontAttr.find(_T("bold")) >= 0 ) bBold = true;
 						if (sFontAttr.find(_T("underline")) >= 0) bUnderline = true;
 						if (sFontAttr.find(_T("italic")) >= 0) bItalic = true;
@@ -1749,13 +1745,10 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManager* pManager, RECT& rc, LPC
 					}
 
 					UINT iVAlign = DT_BOTTOM;
-#if 1
+
 					if (wcsicmp(sVAlignStyle.c_str(), _T("center")) == 0) iVAlign = DT_VCENTER;
 					else if (wcsicmp(sVAlignStyle.c_str(), _T("top")) == 0) iVAlign = DT_TOP;
-#else
-					if (sVAlignStyle.CompareNoCase(_T("center")) == 0) iVAlign = DT_VCENTER;
-					else if (sVAlignStyle.CompareNoCase(_T("top")) == 0) iVAlign = DT_TOP;
-#endif
+
 					aVAlignArray.Add((LPVOID)iVAlign);
 				}
 				break;

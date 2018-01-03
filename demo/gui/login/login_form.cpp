@@ -105,7 +105,6 @@ void LoginForm::OnLoginError(int error)
 
 void LoginForm::OnCancelLogin()
 {
-#if 1
 	re_account_->SetEnabled(true);
 	re_pwd_->SetEnabled(true);
 
@@ -115,7 +114,6 @@ void LoginForm::OnCancelLogin()
 	btn_cancel_login_->SetVisible(false);
 	btn_cancel_login_->SetText(L"È¡ÏûµÇÂ¼");
 	btn_cancel_login_->SetEnabled(true);
-#endif
 }
 
 bool LoginForm::ImportDataToDB()

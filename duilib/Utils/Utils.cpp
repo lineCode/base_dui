@@ -1,4 +1,9 @@
 #include "stdafx.h"
+#include <atlbase.h>
+#include <textserv.h>
+
+#include "image_ole_i.h"
+
 #include "Utils.h"
 
 namespace dui
@@ -52,15 +57,9 @@ namespace dui
 
     String CDuiPoint::ToString()
     {
-#if 1
 		TCHAR cPoint[64] = {};
 		::wsprintf(cPoint, _T("%ld,%ld"), x, y);
 		return String(cPoint);
-#else
-        String sPoint;
-        sPoint.SmallFormat(_T("%ld,%ld"), x, y);
-        return sPoint;
-#endif
     }
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -100,15 +99,9 @@ namespace dui
 
     String CDuiSize::ToString()
     {
-#if 1
 		TCHAR cSize[64] = {};
 		::wsprintf(cSize, _T("%ld,%ld"), cx, cy);
 		return String(cSize);
-#else
-        String sSize;
-        sSize.SmallFormat(_T("%ld,%ld"), cx, cy);
-        return sSize;
-#endif
     }
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -148,15 +141,9 @@ namespace dui
 
     String CDuiRect::ToString()
     {
-#if 1
 		TCHAR cRect[64] = {};
 		::wsprintf(cRect, _T("%ld,%ld,%ld,%ld"), left, top, right, bottom);
 		return String(cRect);
-#else
-        String sRect;
-        sRect.SmallFormat(_T("%ld,%ld,%ld,%ld"), left, top, right, bottom);
-        return sRect;
-#endif
     }
 
 	int CDuiRect::GetWidth() const
@@ -425,400 +412,6 @@ namespace dui
 		return m_pVoid + (iIndex * m_iElementSize);
 	}
 
-
-	/////////////////////////////////////////////////////////////////////////////////////
-	//
-	//
-#if 0
-	String::String() : m_pstr(m_szBuffer)
-	{
-		m_szBuffer[0] = _T('\0');
-	}
-
-	String::String(const TCHAR ch) : m_pstr(m_szBuffer)
-	{
-		m_szBuffer[0] = ch;
-		m_szBuffer[1] = _T('\0');
-	}
-
-	String::String(LPCTSTR lpsz, int nLen) : m_pstr(m_szBuffer)
-	{      
-		ASSERT(!::IsBadStringPtr(lpsz,-1) || lpsz==NULL);
-		m_szBuffer[0] = _T('\0');
-		Assign(lpsz, nLen);
-	}
-
-	String::String(const String& src) : m_pstr(m_szBuffer)
-	{
-		m_szBuffer[0] = _T('\0');
-		Assign(src.m_pstr);
-	}
-
-	String::~String()
-	{
-		if( m_pstr != m_szBuffer ) free(m_pstr);
-	}
-
-    String String::ToString()
-    {
-        return m_pstr;
-    }
-
-	int String::GetLength() const
-	{ 
-		return (int) _tcslen(m_pstr); 
-	}
-
-	String::operator LPCTSTR() const 
-	{ 
-		return m_pstr; 
-	}
-
-	String::operator std::wstring() const
-	{
-		return std::wstring(m_pstr);
-	}
-
-	void String::Append(LPCTSTR pstr)
-	{
-		int nNewLength = GetLength() + (int) _tcslen(pstr);
-		if( nNewLength >= MAX_LOCAL_STRING_LEN ) {
-			if( m_pstr == m_szBuffer ) {
-				m_pstr = static_cast<LPTSTR>(malloc((nNewLength + 1) * sizeof(TCHAR)));
-				_tcscpy(m_pstr, m_szBuffer);
-				_tcscat(m_pstr, pstr);
-			}
-			else {
-				m_pstr = static_cast<LPTSTR>(realloc(m_pstr, (nNewLength + 1) * sizeof(TCHAR)));
-				_tcscat(m_pstr, pstr);
-			}
-		}
-		else {
-			if( m_pstr != m_szBuffer ) {
-				free(m_pstr);
-				m_pstr = m_szBuffer;
-			}
-			_tcscat(m_szBuffer, pstr);
-		}
-	}
-
-	void String::Assign(LPCTSTR pstr, int cchMax)
-	{
-		if( pstr == NULL ) pstr = _T("");
-		cchMax = (cchMax < 0 ? (int) _tcslen(pstr) : cchMax);
-		if( cchMax < MAX_LOCAL_STRING_LEN ) {
-			if( m_pstr != m_szBuffer ) {
-				free(m_pstr);
-				m_pstr = m_szBuffer;
-			}
-		}
-		else if( cchMax > GetLength() || m_pstr == m_szBuffer ) {
-			if( m_pstr == m_szBuffer ) m_pstr = NULL;
-			m_pstr = static_cast<LPTSTR>(realloc(m_pstr, (cchMax + 1) * sizeof(TCHAR)));
-		}
-		_tcsncpy(m_pstr, pstr, cchMax);
-		m_pstr[cchMax] = _T('\0');
-	}
-
-	bool String::empty() const 
-	{ 
-		return m_pstr[0] == _T('\0'); 
-	}
-
-	void String::Empty() 
-	{ 
-		if( m_pstr != m_szBuffer ) free(m_pstr);
-		m_pstr = m_szBuffer;
-		m_szBuffer[0] = _T('\0'); 
-	}
-
-	LPCTSTR String::GetData() const
-	{
-		return m_pstr;
-	}
-
-	TCHAR String::GetAt(int nIndex) const
-	{
-		return m_pstr[nIndex];
-	}
-
-	TCHAR String::operator[] (int nIndex) const
-	{ 
-		return m_pstr[nIndex];
-	}   
-
-	const String& String::operator=(const String& src)
-	{      
-		Assign(src);
-		return *this;
-	}
-
-	const String& String::operator=(LPCTSTR lpStr)
-	{      
-		if ( lpStr )
-		{
-			ASSERT(!::IsBadStringPtr(lpStr,-1));
-			Assign(lpStr);
-		}
-		else
-		{
-			Empty();
-		}
-		return *this;
-	}
-
-#ifdef _UNICODE
-
-	const String& String::operator=(LPCSTR lpStr)
-	{
-		if ( lpStr )
-		{
-			ASSERT(!::IsBadStringPtrA(lpStr,-1));
-			int cchStr = (int) strlen(lpStr) + 1;
-			LPWSTR pwstr = (LPWSTR) _alloca(cchStr);
-			if( pwstr != NULL ) ::MultiByteToWideChar(::GetACP(), 0, lpStr, -1, pwstr, cchStr) ;
-			Assign(pwstr);
-		}
-		else
-		{
-			Empty();
-		}
-		return *this;
-	}
-
-	const String& String::operator+=(LPCSTR lpStr)
-	{
-		if ( lpStr )
-		{
-			ASSERT(!::IsBadStringPtrA(lpStr,-1));
-			int cchStr = (int) strlen(lpStr) + 1;
-			LPWSTR pwstr = (LPWSTR) _alloca(cchStr);
-			if( pwstr != NULL ) ::MultiByteToWideChar(::GetACP(), 0, lpStr, -1, pwstr, cchStr) ;
-			Append(pwstr);
-		}
-		
-		return *this;
-	}
-
-#else
-
-	const String& String::operator=(LPCWSTR lpwStr)
-	{      
-		if ( lpwStr )
-		{
-			ASSERT(!::IsBadStringPtrW(lpwStr,-1));
-			int cchStr = ((int) wcslen(lpwStr) * 2) + 1;
-			LPSTR pstr = (LPSTR) _alloca(cchStr);
-			if( pstr != NULL ) ::WideCharToMultiByte(::GetACP(), 0, lpwStr, -1, pstr, cchStr, NULL, NULL);
-			Assign(pstr);
-		}
-		else
-		{
-			Empty();
-		}
-		
-		return *this;
-	}
-
-	const String& String::operator+=(LPCWSTR lpwStr)
-	{
-		if ( lpwStr )
-		{
-			ASSERT(!::IsBadStringPtrW(lpwStr,-1));
-			int cchStr = ((int) wcslen(lpwStr) * 2) + 1;
-			LPSTR pstr = (LPSTR) _alloca(cchStr);
-			if( pstr != NULL ) ::WideCharToMultiByte(::GetACP(), 0, lpwStr, -1, pstr, cchStr, NULL, NULL);
-			Append(pstr);
-		}
-		
-		return *this;
-	}
-
-#endif // _UNICODE
-
-	const String& String::operator=(const TCHAR ch)
-	{
-		Empty();
-		m_szBuffer[0] = ch;
-		m_szBuffer[1] = _T('\0');
-		return *this;
-	}
-
-	String String::operator+(const String& src) const
-	{
-		String sTemp = *this;
-		sTemp.Append(src);
-		return sTemp;
-	}
-
-	String String::operator+(LPCTSTR lpStr) const
-	{
-		if ( lpStr )
-		{
-			ASSERT(!::IsBadStringPtr(lpStr,-1));
-			String sTemp = *this;
-			sTemp.Append(lpStr);
-			return sTemp;
-		}
-
-		return *this;
-	}
-
-	const String& String::operator+=(const String& src)
-	{      
-		Append(src);
-		return *this;
-	}
-
-	const String& String::operator+=(LPCTSTR lpStr)
-	{      
-		if ( lpStr )
-		{
-			ASSERT(!::IsBadStringPtr(lpStr,-1));
-			Append(lpStr);
-		}
-		
-		return *this;
-	}
-
-	const String& String::operator+=(const TCHAR ch)
-	{      
-		TCHAR str[] = { ch, _T('\0') };
-		Append(str);
-		return *this;
-	}
-
-	bool String::operator == (LPCTSTR str) const { return (Compare(str) == 0); };
-	bool String::operator != (LPCTSTR str) const { return (Compare(str) != 0); };
-	bool String::operator <= (LPCTSTR str) const { return (Compare(str) <= 0); };
-	bool String::operator <  (LPCTSTR str) const { return (Compare(str) <  0); };
-	bool String::operator >= (LPCTSTR str) const { return (Compare(str) >= 0); };
-	bool String::operator >  (LPCTSTR str) const { return (Compare(str) >  0); };
-
-	void String::SetAt(int nIndex, TCHAR ch)
-	{
-		ASSERT(nIndex>=0 && nIndex<GetLength());
-		m_pstr[nIndex] = ch;
-	}
-
-	int String::Compare(LPCTSTR lpsz) const 
-	{ 
-		return _tcscmp(m_pstr, lpsz); 
-	}
-
-	int String::CompareNoCase(LPCTSTR lpsz) const 
-	{ 
-		return _tcsicmp(m_pstr, lpsz); 
-	}
-
-	void String::MakeUpper() 
-	{ 
-		_tcsupr(m_pstr); 
-	}
-
-	void String::MakeLower() 
-	{ 
-		_tcslwr(m_pstr); 
-	}
-
-	String String::Left(int iLength) const
-	{
-		if( iLength < 0 ) iLength = 0;
-		if( iLength > GetLength() ) iLength = GetLength();
-		return String(m_pstr, iLength);
-	}
-
-	String String::Mid(int iPos, int iLength) const
-	{
-		if( iLength < 0 ) iLength = GetLength() - iPos;
-		if( iPos + iLength > GetLength() ) iLength = GetLength() - iPos;
-		if( iLength <= 0 ) return String();
-		return String(m_pstr + iPos, iLength);
-	}
-
-	String String::Right(int iLength) const
-	{
-		int iPos = GetLength() - iLength;
-		if( iPos < 0 ) {
-			iPos = 0;
-			iLength = GetLength();
-		}
-		return String(m_pstr + iPos, iLength);
-	}
-
-	int String::Find(TCHAR ch, int iPos /*= 0*/) const
-	{
-		ASSERT(iPos>=0 && iPos<=GetLength());
-		if( iPos != 0 && (iPos < 0 || iPos >= GetLength()) ) return -1;
-		LPCTSTR p = _tcschr(m_pstr + iPos, ch);
-		if( p == NULL ) return -1;
-		return (int)(p - m_pstr);
-	}
-
-	int String::Find(LPCTSTR pstrSub, int iPos /*= 0*/) const
-	{
-		ASSERT(!::IsBadStringPtr(pstrSub,-1));
-		ASSERT(iPos>=0 && iPos<=GetLength());
-		if( iPos != 0 && (iPos < 0 || iPos > GetLength()) ) return -1;
-		LPCTSTR p = _tcsstr(m_pstr + iPos, pstrSub);
-		if( p == NULL ) return -1;
-		return (int)(p - m_pstr);
-	}
-
-	int String::ReverseFind(TCHAR ch) const
-	{
-		LPCTSTR p = _tcsrchr(m_pstr, ch);
-		if( p == NULL ) return -1;
-		return (int)(p - m_pstr);
-	}
-
-	int String::Replace(LPCTSTR pstrFrom, LPCTSTR pstrTo)
-	{
-		String sTemp;
-		int nCount = 0;
-		int iPos = Find(pstrFrom);
-		if( iPos < 0 ) return 0;
-		int cchFrom = (int) _tcslen(pstrFrom);
-		int cchTo = (int) _tcslen(pstrTo);
-		while( iPos >= 0 ) {
-			sTemp = Left(iPos);
-			sTemp += pstrTo;
-			sTemp += Mid(iPos + cchFrom);
-			Assign(sTemp);
-			iPos = Find(pstrFrom, iPos + cchTo);
-			nCount++;
-		}
-		return nCount;
-	}
-
-	int String::Format(LPCTSTR pstrFormat, ...)
-	{
-		LPTSTR szSprintf = NULL;
-		va_list argList;
-        int nLen;
-		va_start(argList, pstrFormat);
-        nLen = _vsntprintf(NULL, 0, pstrFormat, argList);
-        szSprintf = (TCHAR*)malloc((nLen + 1) * sizeof(TCHAR));
-        ZeroMemory(szSprintf, (nLen + 1) * sizeof(TCHAR));
-		int iRet = _vsntprintf(szSprintf, nLen + 1, pstrFormat, argList);
-		va_end(argList);
-		Assign(szSprintf);
-        free(szSprintf);
-		return iRet;
-	}
-
-	int String::SmallFormat(LPCTSTR pstrFormat, ...)
-	{
-		String sFormat = pstrFormat;
-		TCHAR szBuffer[64] = { 0 };
-		va_list argList;
-		va_start(argList, pstrFormat);
-		int iRet = ::wvsprintf(szBuffer, sFormat, argList);
-		va_end(argList);
-		Assign(szBuffer);
-		return iRet;
-	}
-#endif
 	/////////////////////////////////////////////////////////////////////////////
 	//
 	//
@@ -1032,6 +625,126 @@ namespace dui
 	CWaitCursor::~CWaitCursor()
 	{
 		::SetCursor(m_hOrigCursor);
+	}
+
+	//------------------------------add by djj------------------------------------
+#define IMAGE_OLE_NAME	L"image_ole.dll"
+
+	static HMODULE image_ole_module_ = NULL;
+
+	typedef HRESULT(WINAPI* DLLGETCLASSOBJECTFUNC) (REFCLSID rclsid, REFIID riid, LPVOID* ppv);
+
+	void FreeImageoleModule()
+	{
+		if (image_ole_module_)
+		{
+			FreeLibrary(image_ole_module_);
+			image_ole_module_ = NULL;
+		}
+	}
+
+	bool CreateImageObject(void **ppv)
+	{
+		*ppv = NULL;
+		if (image_ole_module_ == NULL)
+		{
+			std::wstring dll_path = CPaintManager::GetInstancePath();
+			dll_path.append(_T("dll\\"));
+			dll_path.append(IMAGE_OLE_NAME);
+			image_ole_module_ = LoadLibrary(dll_path.c_str());
+		}
+		if (image_ole_module_ == NULL)
+		{
+			return false;
+		}
+
+		DLLGETCLASSOBJECTFUNC pFunc = (DLLGETCLASSOBJECTFUNC)GetProcAddress(image_ole_module_, "DllGetClassObject");
+		if (pFunc == NULL)
+		{
+			FreeImageoleModule();
+			return false;
+		}
+		CComPtr<IClassFactory> pFactory;
+		HRESULT hr = (*pFunc)(CLSID_ImageOle/*ÄãµÄ×é¼þCLSID*/, IID_IClassFactory, (void**)&pFactory);
+		if (hr == S_OK)
+			hr = pFactory->CreateInstance(0, IID_IImageOle, ppv);
+
+		if (hr != S_OK || *ppv == NULL)
+		{
+			FreeImageoleModule();
+			return false;
+		}
+		return true;
+	}
+
+	String GetIconByFile(String file)
+	{
+		std::wstring app_w_path = /*QPath::GetAppPath()*/CPaintManager::GetInstancePath();
+		std::wstring image_path = app_w_path + L"res\\icons\\";
+
+		std::wstring file_exten;
+		std::wstring ext;
+		FilePathExtension(file, ext);
+		if (ext.size() > 1)
+		{
+			file_exten = ext.substr(1);
+		}
+		if (file_exten == L"doc" || file_exten == L"docx")
+		{
+			image_path += L"file_doc.png";
+		}
+		else if (file_exten == L"ppt" || file_exten == L"pptx")
+		{
+			image_path += L"file_ppt.png";
+		}
+		else if (file_exten == L"xls" || file_exten == L"xlsx")
+		{
+			image_path += L"file_excel.png";
+		}
+		else if (file_exten == L"mp3")
+		{
+			image_path += L"file_mp3.png";
+		}
+		else if (file_exten == L"htm" || file_exten == L"html")
+		{
+			image_path += L"file_html.png";
+		}
+		else if (file_exten == L"txt" || file_exten == L"text")
+		{
+			image_path += L"file_txt.png";
+		}
+		else if (file_exten == L"pdf")
+		{
+			image_path += L"file_pdf.png";
+		}
+		else if (file_exten == L"zip")
+		{
+			image_path += L"file_zip.png";
+		}
+		else if (file_exten == L"rar")
+		{
+			image_path += L"file_rar.png";
+		}
+		else if (file_exten == L"zip")
+		{
+			image_path += L"file_zip.png";
+		}
+		else
+		{
+			image_path += L"file_default.png";
+		}
+		return image_path;
+	}
+
+	bool FilePathExtension(const String &filepath_in, String &extension_out)
+	{
+		if (filepath_in.size() == 0)
+			return false;
+		size_t pos = filepath_in.rfind(_T('.'));
+		if (pos == String::npos)
+			return false;
+		extension_out = filepath_in.substr(pos, String::npos);
+		return true;
 	}
 
 } // namespace dui

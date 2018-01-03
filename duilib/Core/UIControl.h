@@ -171,7 +171,7 @@ public:
 	//ÐéÄâ´°¿Ú²ÎÊý
 	void SetVirtualWnd(LPCTSTR pstrValue);
 	String GetVirtualWnd() const;
-#if MODE_EVENTMAP
+
 	void AttachMouseEnter(const EventCallback& callback)
 	{
 		OnEvent[UIEVENT_MOUSEENTER] += callback;
@@ -216,25 +216,13 @@ public:
 	{
 		OnEvent[UIEVENT_RESIZE] += callback;
 	}
-#endif
 public:
-#if !MODE_EVENTMAP
 	CEventSource OnInit;
 	CEventSource OnDestroy;
-	CEventSource OnSize;
-	CEventSource OnNotify;
-	CEventSource OnPaint;
-	CEventSource OnPostPaint;
-	CEventSource OnEvent;
-#else
-	CEventSource OnInit;
-	CEventSource OnDestroy;
-	//CEventSource OnSize;
 	CEventSource OnNotify;
 	CEventSource OnPaint;
 	CEventSource OnPostPaint;
 	EventMap	OnEvent;
-#endif
 protected:
     CPaintManager* m_pManager;
     Control* m_pParent;

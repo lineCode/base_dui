@@ -44,7 +44,7 @@ public:
 		return this->info_.GetAccId() == elment2.info_.GetAccId();
 	}
 
-	/*bool OnClicked(ui::EventArgs* arg);
+	/*bool OnClicked(dui::EventArgs* arg);
 private:
 	void OnTeamNameChange(const nim::TeamInfo& user_info);
 	void OnUserPhotoReady(PhotoType type, const std::string& tid, const std::wstring &photo_path);*/

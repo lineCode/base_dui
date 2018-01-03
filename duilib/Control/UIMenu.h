@@ -6,7 +6,7 @@
 #include "../Utils/observer_impl_base.hpp"
 
 #define MENUWND_OBSERVER	0
-#define MENU_EQUAL_LIST		1
+#define MENU_EQUAL_LIST		1	//List´úÌæMenu
 namespace dui {
 
 struct ContextMenuParam

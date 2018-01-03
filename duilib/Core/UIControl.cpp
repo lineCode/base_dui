@@ -341,17 +341,12 @@ void Control::SetPos(RECT rc, bool bNeedInvalidate)
 
     if( !m_bSetPos ) {
         m_bSetPos = true;
-#if MODE_EVENTMAP
 		if (OnEvent.find(UIEVENT_RESIZE) != OnEvent.cend())
 		{
 			TEvent event;
 			event.pSender = this;
 			OnEvent.find(UIEVENT_RESIZE)->second(&event);
 		}
-#else
-        if( OnSize ) 
-			OnSize(this);
-#endif
         m_bSetPos = false;
     }
     
@@ -559,13 +554,7 @@ String Control::GetToolTip() const
 
 void Control::SetToolTip(LPCTSTR pstrText)
 {
-#if 1
 	m_sToolTip = pstrText;
-#else
-	String strTemp(pstrText);
-	strTemp.Replace(_T("<n>"),_T("\r\n"));
-	m_sToolTip=strTemp;
-#endif
 }
 
 void Control::SetToolTipWidth( int nWidth )
@@ -828,7 +817,7 @@ DWORD Control::GetAdjustColor(DWORD dwColor)
 void Control::Init()
 {
     DoInit();
-#if MODE_EVENTMAP
+#if 1
 	
 #else
     if( OnInit ) 
@@ -843,15 +832,11 @@ void Control::DoInit()
 
 void Control::Event(TEvent& event)
 {
-#if MODE_EVENTMAP
 	auto it = OnEvent.find(event.Type);
 	if (it == OnEvent.cend() || it->second(&event))
 	{
 		DoEvent(event);
 	}
-#else
-    if( OnEvent(&event) ) DoEvent(event);
-#endif
 }
 
 void Control::DoEvent(TEvent& event)

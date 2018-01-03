@@ -4,6 +4,8 @@
 //#include "util/user.h"
 //#include "module/emoji/richedit_util.h"
 
+#define EMOJI_SIZE	24
+
 namespace nim_comp
 {
 //SessionType GetSessionType(const nim::IMMessage &msg)
@@ -282,5 +284,49 @@ bool CheckIfShowTime(const long long old_timestamp, const long long new_timestam
 //		return true;
 //	}
 //}
+
+void InsertFaceToEdit(dui::RichEdit* edit, const std::wstring &file_name, const std::wstring &tag)
+{
+	assert(edit);
+	if (!edit)
+		return;
+	std::wstring file = QPath::GetAppPath();
+	file.append(L"res\\emoji\\img\\" + file_name);
+	if (nbase::FilePathIsExist(file, false))
+	{
+		if (!edit->InsertEmoji(file, tag, EMOJI_SIZE))
+		{
+			QLOG_ERR(L"insert emoj {0} {1} fail") << tag << file;
+		}
+	}
+	else
+	{
+		QLOG_ERR(L"emoj {0} {1} miss") << tag << file;
+	}
+}
+
+void InsertImageToEdit(dui::RichEdit* edit, const std::wstring& image_src, bool loading)
+{
+	if (edit == NULL)
+	{
+		ASSERT(0);
+		return;
+	}
+
+	bool ret = edit->InsertImage(/*InsertCustomItemErrorCallback()*/nullptr, true, image_src, L"", loading);
+	edit->SetFocus();
+}
+
+void InsertFileToEdit(dui::RichEdit* edit, const std::wstring& file_path)
+{
+	if (edit == NULL || file_path.empty())
+	{
+		ASSERT(0);
+		return;
+	}
+	edit->InsertFile(nullptr, file_path);
+	edit->SetFocus();
+}
+
 
 }

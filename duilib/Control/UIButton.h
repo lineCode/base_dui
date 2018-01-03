@@ -18,12 +18,12 @@ namespace dui
 		bool Activate();
 		void SetEnabled(bool bEnable = true);
 		void DoEvent(TEvent& event);
-#if MODE_EVENTMAP
+
 		void AttachClick(const EventCallback& callback)
 		{
 			OnEvent[UIEVENT_CLICK] += callback;
 		}
-#endif
+
 		LPCTSTR GetNormalImage();
 		void SetNormalImage(LPCTSTR pStrImage);
 		LPCTSTR GetHotImage();

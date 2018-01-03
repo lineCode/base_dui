@@ -34,13 +34,6 @@ namespace nim_comp
 				nbase::win32::UnicodeToMBCS(QPath::GetAppPath(), file);
 				file += "other/sessionlist.txt";
 				ifstream is(file.c_str());
-#if 1
-				/*bool b = (bool)is;
-				b = reader.parse(is, root);
-				b = root.isObject();
-				b = root["code"].isInt();
-				b = root["object"].isObject();
-				b = root["object"]["sessionList"].isArray();*/
 
 				if (is && reader.parse(is, root) && root.isObject() && root["code"].isInt())
 				{
@@ -77,24 +70,7 @@ namespace nim_comp
 					printf("Json::Reader parse error\n");
 					goto faile;
 				}
-#else
 
-				SessionDataList session_list;
-				std::list<SessionData> list;
-				SessionData data;
-				time_t tm;
-				for (int i = 0; i < 4; i++)
-				{
-					data.msg_content_ = "this is test";
-					data.msg_sender_accid_ = "accid_1";
-					data.msg_timetag_ = time(&tm);
-					//data.SetMobile(value[i]["friendMobile"].asString());
-					list.push_back(data);
-				}
-				session_list.count_ = list.size();
-				session_list.sessions_ = list;
-				shared::Post2UI(std::bind(*pcb, session_list.unread_count_, session_list));
-#endif
 			faile:
 				is.close();
 			}

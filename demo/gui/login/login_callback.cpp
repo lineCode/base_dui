@@ -1,37 +1,9 @@
 ﻿#include "stdafx.h"
 #include "login_callback.h"
-//#include "export/nim_ui_all.h"
-//#include "gui/link/link_form.h"
-//#include "module/local/local_helper.h"
 #include "module/login/login_manager.h"
-//#include "module/session/session_manager.h"
-//#include "module/session/force_push_manager.h"
-//#include "module/subscribe_event/subscribe_event_manager.h"
-//#include "module/service/user_service.h"
-//#include "module/audio/audio_manager.h"
-//#include "cef/cef_module/cef_manager.h"
 #include "util/user_path.h"
 #include "shared/threads.h"
 #include "shared/closure.h"
-//#include "nim_cpp_client.h"
-
-
-//
-////退出程序前的处理：比如保存数据
-//void _DoBeforeAppExit()
-//{
-//#if 0
-//	ForcePushManager::GetInstance()->Save();
-//#endif
-//	QLOG_APP(L"-----{0} account logout-----") << LoginManager::GetInstance()->GetAccount();
-//}
-//
-////执行sdk退出函数
-//void NimLogout(NIMLogoutType type = kNIMLogoutAppExit)
-//{
-//	QLOG_APP(L"-----logout begin {0}-----") << type;
-//	//Client::Logout( type, &LoginCallbackObject::OnLogoutCallback );
-//}
 
 void LoginCallbackObject::OnLoginCallback(nim_comp::LoginRes& login_res, const void* user_data)
 {
@@ -56,7 +28,6 @@ void LoginCallbackObject::OnLoginCallback(nim_comp::LoginRes& login_res, const v
 
 void LoginCallbackObject::UILoginCallback(const nim_comp::LoginRes& login_res)
 {
-#if 1
 	nim_comp::LoginManager::GetInstance()->SetErrorCode(login_res.res_code_);
 
 	QLOG_APP(L"-----login end {0}-----") << login_res.res_code_;
@@ -66,14 +37,7 @@ void LoginCallbackObject::UILoginCallback(const nim_comp::LoginRes& login_res)
 		if (nim_comp::LoginManager::GetInstance()->GetLoginStatus() == nim_comp::LoginStatus_CANCEL)
 		{
 			QLOG_APP(L"-----login cancel end-----");
-#if 0
-			if (login_res.res_code_ == kNIMResSuccess)
-				NimLogout(kNIMLogoutChangeAccout);
-			else
-				UILogoutCallback();
-#else
 			UILogoutCallback();
-#endif
 			return;
 		}
 		else
@@ -98,122 +62,7 @@ void LoginCallbackObject::UILoginCallback(const nim_comp::LoginRes& login_res)
 		//LoginManager::GetInstance()->SetLoginStatus(login_res.res_code_ == kNIMResSuccess ? LoginStatus_SUCCESS : LoginStatus_NONE);
 		//LoginCallbackObject::DoLogout(false);
 	}
-#else
-	LoginManager::GetInstance()->SetErrorCode(login_res.res_code_);
-	if (login_res.relogin_)
-	{
-		QLOG_APP(L"-----relogin end {0}-----") << login_res.res_code_;
-
-		if (login_res.res_code_ == kNIMResSuccess)
-		{
-			LoginManager::GetInstance()->SetLoginStatus(LoginStatus_SUCCESS);
-			LoginManager::GetInstance()->SetLinkActive(true);
-		}
-		else if (login_res.res_code_ == kNIMResTimeoutError 
-			|| login_res.res_code_ == kNIMResConnectionError
-			|| login_res.res_code_ == kNIMLocalResNetworkError
-			|| login_res.res_code_ == kNIMResTooBuzy)
-		{
-			LoginManager::GetInstance()->SetLoginStatus(LoginStatus_NONE);
-			LoginManager::GetInstance()->SetLinkActive(false);
-
-			ShowLinkForm(login_res.res_code_, login_res.retrying_);
-		}
-		else
-		{
-			LoginManager::GetInstance()->SetLoginStatus(LoginStatus_NONE);
-
-			QCommand::Set(kCmdRestart, L"true");
-			std::wstring wacc = nbase::UTF8ToUTF16(LoginManager::GetInstance()->GetAccount());
-			QCommand::Set(kCmdAccount, wacc);
-			QCommand::Set(kCmdExitWhy, nbase::IntToString16(login_res.res_code_));
-			DoLogout(false, kNIMLogoutChangeAccout);
-		}
-	}
-	else
-	{
-		QLOG_APP(L"-----login end {0}-----") << login_res.res_code_;
-
-		if (nim_ui::LoginManager::GetInstance()->IsLoginFormValid())
-		{
-			if (LoginManager::GetInstance()->GetLoginStatus() == LoginStatus_CANCEL)
-			{
-				QLOG_APP(L"-----login cancel end-----");
-				if (login_res.res_code_ == kNIMResSuccess)
-					NimLogout(kNIMLogoutChangeAccout);
-				else
-					UILogoutCallback();
-				return;
-			}
-			else
-				LoginManager::GetInstance()->SetLoginStatus(login_res.res_code_ == kNIMResSuccess ? LoginStatus_SUCCESS : LoginStatus_NONE);
-
-			if (login_res.res_code_ == kNIMResSuccess)
-			{
-				nim_ui::LoginManager::GetInstance()->InvokeHideWindow();
-				_DoAfterLogin();
-				// 登录成功，显示主界面
-				nim_ui::LoginManager::GetInstance()->InvokeShowMainForm();
-				nim_ui::LoginManager::GetInstance()->InvokeDestroyWindow();
-			}
-			else
-			{
-				nim_ui::LoginManager::GetInstance()->InvokeLoginError(login_res.res_code_);
-			}
-		}
-		else
-		{
-			QLOG_APP(L"login form has been closed");
-			LoginManager::GetInstance()->SetLoginStatus(login_res.res_code_ == kNIMResSuccess ? LoginStatus_SUCCESS : LoginStatus_NONE);
-			LoginCallbackObject::DoLogout(false);
-		}
-	}
-#endif
 }
-
-//void LoginCallbackObject::CacelLogin()
-//{
-//	assert(LoginManager::GetInstance()->GetLoginStatus() == LoginStatus_LOGIN);
-//	LoginManager::GetInstance()->SetLoginStatus(LoginStatus_CANCEL);
-//	QLOG_APP(L"-----login cancel begin-----");
-//}
-//
-//void LoginCallbackObject::DoLogout(bool over, NIMLogoutType type)
-//{
-//	QLOG_APP(L"DoLogout: {0} {1}") <<over <<type;
-//#if 1
-//#else
-//	LoginStatus status = LoginManager::GetInstance()->GetLoginStatus();
-//	if(status == LoginStatus_EXIT)
-//		return;
-//	LoginManager::GetInstance()->SetLoginStatus(LoginStatus_EXIT);
-//
-//	WindowsManager::GetInstance()->SetStopRegister(true);
-//	WindowsManager::GetInstance()->DestroyAllWindows();
-//
-//	if(status == LoginStatus_NONE)
-//	{
-//		UILogoutCallback();
-//		return;
-//	}
-//
-//	if(over)
-//	{
-//		if (type == kNIMLogoutKickout || type == kNIMLogoutRelogin)
-//		{
-//			QCommand::Set(kCmdAccount, nbase::UTF8ToUTF16(LoginManager::GetInstance()->GetAccount()));
-//			QCommand::Set(kCmdRestart, L"true");
-//			std::wstring param = nbase::StringPrintf(L"%d", type);
-//			QCommand::Set(kCmdExitWhy, param);
-//		}
-//		UILogoutCallback();
-//	}
-//	else
-//	{
-//		NimLogout(type);
-//	}
-//#endif
-//}
 
 void LoginCallbackObject::OnLogoutCallback(nim_comp::NIMResCode res_code)
 {
@@ -224,35 +73,9 @@ void LoginCallbackObject::OnLogoutCallback(nim_comp::NIMResCode res_code)
 
 void LoginCallbackObject::UILogoutCallback()
 {
-#if 0
-	if (LoginManager::GetInstance()->GetLoginStatus() == LoginStatus_CANCEL)
-	{
-		LoginManager::GetInstance()->SetLoginStatus(LoginStatus_NONE);
-
-		LoginManager::GetInstance()->InvokeCancelLogin();
-	}
-	else
-	{
-		nim_cef::CefManager::GetInstance()->PostQuitMessage(0);
-		_DoBeforeAppExit();
-	}
-#else
 	nim_comp::LoginManager::GetInstance()->SetLoginStatus(nim_comp::LoginStatus_NONE);
 	nim_comp::LoginManager::GetInstance()->InvokeCancelLogin();
-#endif
 }
-
-//void LoginCallbackObject::ReLogin()
-//{
-//#if 1
-//#else
-//	assert(LoginManager::GetInstance()->GetLoginStatus() == LoginStatus_NONE);
-//	LoginManager::GetInstance()->SetLoginStatus(LoginStatus_LOGIN);
-//
-//	QLOG_APP(L"-----relogin begin-----");
-//	Client::Relogin();
-//#endif
-//}
 
 void LoginCallbackObject::OnKickoutCallback(const nim_comp::KickoutRes& res)
 {

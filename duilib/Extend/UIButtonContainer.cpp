@@ -157,7 +157,6 @@ namespace dui{
 	bool ButtonContainer::Activate()
 	{
 		if (!Control::Activate()) return false;
-#if MODE_EVENTMAP
 		if (OnEvent.find(UIEVENT_CLICK) != OnEvent.cend()){
 			TEvent event;
 			event.Type = UIEVENT_CLICK;
@@ -166,7 +165,6 @@ namespace dui{
 				return false;
 			}
 		}
-#endif
 		if (m_pManager != NULL) m_pManager->SendNotify(this, UIEVENT_CLICK);
 		return true;
 	}

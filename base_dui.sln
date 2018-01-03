@@ -54,6 +54,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "json", "json", "{8477D664-1
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "debug_dui_demo", "debug_dui_demo\debug_dui_demo.vcxproj", "{34A879C9-6244-49FB-8480-944CD6775906}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "capture_image", "capture_image", "{29B20B82-E6B8-4CB8-8223-1E98710E53F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{70757950-919D-4CD9-9F14-3BD79267ADF8}"
+	ProjectSection(SolutionItems) = preProject
+		third_party\capture_image\src\capture_def.h = third_party\capture_image\src\capture_def.h
+		third_party\capture_image\src\capture_manager.h = third_party\capture_image\src\capture_manager.h
+		third_party\capture_image\src\capture_wnd.h = third_party\capture_image\src\capture_wnd.h
+		third_party\capture_image\src\draw_unit.h = third_party\capture_image\src\draw_unit.h
+		third_party\capture_image\src\ui_capture_edit.h = third_party\capture_image\src\ui_capture_edit.h
+		third_party\capture_image\src\ui_capture_text_edit.h = third_party\capture_image\src\ui_capture_text_edit.h
+		third_party\capture_image\src\ui_color_palette.h = third_party\capture_image\src\ui_color_palette.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "image_effects", "image_effects", "{688F811A-5049-40DE-A54C-9DCB22126A7E}"
+	ProjectSection(SolutionItems) = preProject
+		third_party\capture_image\image_effects\gauss_blur.h = third_party\capture_image\image_effects\gauss_blur.h
+		third_party\capture_image\image_effects\mosaic.h = third_party\capture_image\image_effects\mosaic.h
+		third_party\capture_image\image_effects\sse_check.h = third_party\capture_image\image_effects\sse_check.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -164,7 +184,10 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6E1B7426-03DB-4221-B8A7-E7769F6F355F} = {03EBF52E-95F6-497C-A64D-3B59BE8DB55D}
+		{29B20B82-E6B8-4CB8-8223-1E98710E53F3} = {03EBF52E-95F6-497C-A64D-3B59BE8DB55D}
 		{4072B962-61C4-4C5C-8144-C3E836AB4165} = {6E1B7426-03DB-4221-B8A7-E7769F6F355F}
 		{8477D664-1693-40CF-81AD-9788426D7120} = {4072B962-61C4-4C5C-8144-C3E836AB4165}
+		{70757950-919D-4CD9-9F14-3BD79267ADF8} = {29B20B82-E6B8-4CB8-8223-1E98710E53F3}
+		{688F811A-5049-40DE-A54C-9DCB22126A7E} = {29B20B82-E6B8-4CB8-8223-1E98710E53F3}
 	EndGlobalSection
 EndGlobal

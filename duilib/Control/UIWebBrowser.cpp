@@ -550,11 +550,7 @@ LPVOID WebBrowser::GetInterface( LPCTSTR pstrName )
 
 void WebBrowser::SetHomePage( LPCTSTR lpszUrl )
 {
-#if 1
 	m_sHomePage = lpszUrl;
-#else
-	m_sHomePage.Format(_T("%s"),lpszUrl);
-#endif
 }
 
 LPCTSTR WebBrowser::GetHomePage()

@@ -53,7 +53,7 @@ namespace nim_comp
 //bool IsBubbleRight(const nim::IMMessage &msg);
 //
 //// 附加可获取表情对应的字符串
-//std::wstring GetRichText(ui::RichEdit* re);
+//std::wstring GetRichText(dui::RichEdit* re);
 
 // 计算消息时间：会话窗口abbreviate=false；会话列表abbreviate=true
 std::wstring GetMessageTime(const long long t, bool abbreviate);
@@ -71,4 +71,40 @@ bool CheckIfShowTime(const long long old_timestamp, const long long new_timestam
 //
 //// 判断消息中对应的资源文件是否存在（图片、语音）
 //bool IsResourceExist(const nim::IMMessage &msg);
+
+
+
+/**
+* 插入表情到RichEdit
+* @param[in] edit RichEdit控件指针
+* @param[in] file_name 表情文件名
+* @param[in] tag 表情名称
+* @return void 无返回值
+*/
+void InsertFaceToEdit(dui::RichEdit* edit, const std::wstring &file_name, const std::wstring &tag);
+
+/**
+* 将一段文字（其中可能包含表情）插入到RichEdit中
+* @param[in] edit RichEdit控件指针
+* @param[in] str 文字
+* @return void 无返回值
+*/
+void InsertTextToEdit(dui::RichEdit* edit, const std::wstring &str);
+
+/**
+* 插入图片到RichEdit
+* @param[in] edit RichEdit控件指针
+* @param[in] image_src 图片路径
+* @param[in] loading 是否显示正在加载中的图片外观
+* @return void 无返回值
+*/
+void InsertImageToEdit(dui::RichEdit* edit, const std::wstring& image_src, bool loading);
+
+/**
+* 插入文件到RichEdit
+* @param[in] edit RichEdit控件指针
+* @param[in] file_path 文件路径
+* @return void 无返回值
+*/
+void InsertFileToEdit(dui::RichEdit* edit, const std::wstring& file_path);
 }

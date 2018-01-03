@@ -5,23 +5,6 @@
 #include "xml_util.h"
 
 //
-#if 0
-std::string QString::GetGUID()
-{
-	return Tool::GetUuid();
-}
-
-std::string QString::GetMd5(const std::string& input)
-{
-	return Tool::GetMd5(input);
-}
-
-void QString::NIMFreeBuf(void *data)
-{
-	return Global::FreeBuf(data);
-}
-#endif
-//
 std::wstring QPath::GetAppPath()
 {
 	return nbase::win32::GetCurrentModuleDirectory();
@@ -72,10 +55,10 @@ std::map<std::wstring,std::wstring> QCommand::key_value_;
 void QCommand::ParseCommand( const std::wstring &cmd )
 {
 #if 0
-	std::list<std::wstring> arrays = ui::StringHelper::Split(cmd, L"/");
+	std::list<std::wstring> arrays = dui::StringHelper::Split(cmd, L"/");
 	for(std::list<std::wstring>::const_iterator i = arrays.begin(); i != arrays.end(); i++)
 	{
-		std::list<std::wstring> object = ui::StringHelper::Split(*i, L" ");
+		std::list<std::wstring> object = dui::StringHelper::Split(*i, L" ");
 		assert(object.size() == 2);
 		key_value_[ *object.begin() ] = *object.rbegin();
 	}

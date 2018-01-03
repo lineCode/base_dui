@@ -137,25 +137,13 @@ void LoginManager::ReadDemoLogLevel()
 void LoginManager::DoAfterLogin()
 {
 	QLOG_APP(L"-----{0} account login-----") << LoginManager::GetInstance()->GetAccount();
-#if 1
-	/*bool ret = AudioManager::GetInstance()->InitAudio(GetUserDataPath());
-	assert(ret);*/
 
 	LoginManager::GetInstance()->CreateSingletonRunMutex();
 	//TeamService::GetInstance()->QueryAllTeamInfo();
 
 	//ForcePushManager::GetInstance()->Load();
-#endif
 
-	/*auto _LogRobot = []{
-		const long m2 = 2 * 1024 * 1024, m1 = 1024 * 1024;
-		QLogImpl::GetInstance()->HalfTo(m2, m1);
-
-		StdClosure task = nbase::Bind(&_LogRobot);
-		nbase::ThreadManager::PostDelayedTask(shared::kThreadGlobalMisc, task, nbase::TimeDelta::FromMinutes(10));
-	};
-
-	StdClosure task = nbase::Bind(&_LogRobot);
+	/*StdClosure task = nbase::Bind(&_LogRobot);
 	nbase::ThreadManager::PostDelayedTask(shared::kThreadGlobalMisc, task, nbase::TimeDelta::FromMinutes(1));*/
 }
 
