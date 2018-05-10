@@ -63,7 +63,8 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../libs/;../libs/thread_part_libs;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>base_d.lib;shared_d.lib;duilib_d.lib;db_d.lib;wxsqlite3_d.lib;jsoncpp_d.lib;tinyxml_d.lib;ui_kit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxsqlite3_d.lib;jsoncpp_d.lib;tinyxml_d.lib;libmysql.lib;ws2_32.lib;base_d.lib;shared_d.lib;duilib_d.lib;db_d.lib;ui_kit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs>libmysql.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

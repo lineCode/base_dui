@@ -62,6 +62,30 @@
     <Filter Include="module\tray">
       <UniqueIdentifier>{5075c986-2883-413f-9fe5-2e9b2ff20920}</UniqueIdentifier>
     </Filter>
+    <Filter Include="gui\image_view">
+      <UniqueIdentifier>{5bf038da-14dd-4353-8202-e5dc7bf0e08c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui\image_view\control">
+      <UniqueIdentifier>{9449b645-d8d6-4e62-8e3f-6dfb196cee6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui\db_manager">
+      <UniqueIdentifier>{f9b7a2eb-f63c-4264-bd63-f01ba5bd5bb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui\db_manager\control">
+      <UniqueIdentifier>{89a6494e-6c1f-492e-a1a0-32e82c02ea29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gui\db_manager\treestruct">
+      <UniqueIdentifier>{0e5bcd96-89fe-471c-baef-cfdcc3162650}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\db_manager">
+      <UniqueIdentifier>{9f4bf1ac-b6a1-4cec-9f7f-6705f35a134f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\db_manager\mysql6.0.2">
+      <UniqueIdentifier>{dc90756a-06a2-401f-8b00-26eb70e9cc76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="module\http">
+      <UniqueIdentifier>{a360ca79-8227-41f0-8fa1-fb8e465d7820}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gui\msgbox\msgbox.h">
@@ -141,6 +165,45 @@
     <ClInclude Include="gui\emoji\emoji_form.h">
       <Filter>gui\emoji</Filter>
     </ClInclude>
+    <ClInclude Include="gui\image_view\image_view_form.h">
+      <Filter>gui\image_view</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\image_view\control\ui_image_view.h">
+      <Filter>gui\image_view\control</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\db_manager\db_manager_mainform.h">
+      <Filter>gui\db_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\db_manager\treestruct\db_treestruct.h">
+      <Filter>gui\db_manager\treestruct</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\db_manager\treestruct\treestruct.h">
+      <Filter>gui\db_manager\treestruct</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\db_manager\control\db_result_listitem.h">
+      <Filter>gui\db_manager\control</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\db_manager\control\db_treeitem.h">
+      <Filter>gui\db_manager\control</Filter>
+    </ClInclude>
+    <ClInclude Include="module\db_manager\db_connobj.h">
+      <Filter>module\db_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="module\db_manager\db_manager.h">
+      <Filter>module\db_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="module\db_manager\MySQLObject.h">
+      <Filter>module\db_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="module\db_manager\SqlServerObject.h">
+      <Filter>module\db_manager</Filter>
+    </ClInclude>
+    <ClInclude Include="module\http\http_interface.h">
+      <Filter>module\http</Filter>
+    </ClInclude>
+    <ClInclude Include="module\http\http_manager.h">
+      <Filter>module\http</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\msgbox\msgbox.cpp">
@@ -210,6 +273,45 @@
     <ClCompile Include="gui\emoji\emoji_form.cpp">
       <Filter>gui\emoji</Filter>
     </ClCompile>
+    <ClCompile Include="gui\image_view\image_view_form.cpp">
+      <Filter>gui\image_view</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\image_view\image_view_form_ui.cpp">
+      <Filter>gui\image_view</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\image_view\control\ui_image_view.cpp">
+      <Filter>gui\image_view\control</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\db_manager\db_manager_mainform.cpp">
+      <Filter>gui\db_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\db_manager\treestruct\db_treestruct.cpp">
+      <Filter>gui\db_manager\treestruct</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\db_manager\treestruct\treestruct.cpp">
+      <Filter>gui\db_manager\treestruct</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\db_manager\control\db_result_listitem.cpp">
+      <Filter>gui\db_manager\control</Filter>
+    </ClCompile>
+    <ClCompile Include="gui\db_manager\control\db_treeitem.cpp">
+      <Filter>gui\db_manager\control</Filter>
+    </ClCompile>
+    <ClCompile Include="module\db_manager\db_manager.cpp">
+      <Filter>module\db_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="module\db_manager\MySQLObject.cpp">
+      <Filter>module\db_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="module\db_manager\SqlServerObject.cpp">
+      <Filter>module\db_manager</Filter>
+    </ClCompile>
+    <ClCompile Include="module\http\http_interface.cpp">
+      <Filter>module\http</Filter>
+    </ClCompile>
+    <ClCompile Include="module\http\http_manager.cpp">
+      <Filter>module\http</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\bin\res\main_vv\friend_item.xml">
@@ -226,6 +328,15 @@
     </Xml>
     <Xml Include="..\bin\res\emoji\emoji_item.xml">
       <Filter>gui\emoji</Filter>
+    </Xml>
+    <Xml Include="..\bin\res\imageview\imageview.xml">
+      <Filter>gui\image_view</Filter>
+    </Xml>
+    <Xml Include="..\bin\res\db_manager\db_manager_mainform.xml">
+      <Filter>gui\db_manager</Filter>
+    </Xml>
+    <Xml Include="..\bin\res\db_manager\db_treeitem.xml">
+      <Filter>gui\db_manager\control</Filter>
     </Xml>
   </ItemGroup>
 </Project>

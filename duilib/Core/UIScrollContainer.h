@@ -2,13 +2,14 @@
 #define __UISCROLL_CONTAINER_H__
 #pragma once
 
-#include "UIContainer.h"
+//#include "UIContainer.h"
+#include "../Layout/UIVerticalLayout.h"
 
 namespace dui
 {
 	class ScrollBar;
 
-	class DUILIB_API ScrollContainer : public Container
+	class DUILIB_API ScrollContainer : public Container		//ScrollContainer实现VerticalLayout的布局方式
 	{
 	public:
 		ScrollContainer();

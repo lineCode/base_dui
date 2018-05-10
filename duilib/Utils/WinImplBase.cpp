@@ -139,22 +139,30 @@ LRESULT WindowImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	
 	if( !::IsZoomed(*this) )
 	{
+		int ht = HTNOWHERE;
 		RECT rcSizeBox = m_PaintManager.GetSizeBox();
 		if( pt.y < rcClient.top + rcSizeBox.top )
 		{
-			if( pt.x < rcClient.left + rcSizeBox.left ) return HTTOPLEFT;
-			if( pt.x > rcClient.right - rcSizeBox.right ) return HTTOPRIGHT;
-			return HTTOP;
+			if (pt.x < rcClient.left + rcSizeBox.left) ht = HTTOPLEFT;
+			if (pt.x > rcClient.right - rcSizeBox.right) ht = HTTOPRIGHT;
+			else ht = HTTOP;
 		}
 		else if( pt.y > rcClient.bottom - rcSizeBox.bottom )
 		{
-			if( pt.x < rcClient.left + rcSizeBox.left ) return HTBOTTOMLEFT;
-			if( pt.x > rcClient.right - rcSizeBox.right ) return HTBOTTOMRIGHT;
-			return HTBOTTOM;
+			if (pt.x < rcClient.left + rcSizeBox.left) ht = HTBOTTOMLEFT;
+			if (pt.x > rcClient.right - rcSizeBox.right) ht = HTBOTTOMRIGHT;
+			else ht = HTBOTTOM;
 		}
 
-		if( pt.x < rcClient.left + rcSizeBox.left ) return HTLEFT;
-		if( pt.x > rcClient.right - rcSizeBox.right ) return HTRIGHT;
+		if (ht == HTNOWHERE && pt.x < rcClient.left + rcSizeBox.left) ht = HTLEFT;
+		if (ht == HTNOWHERE && pt.x > rcClient.right - rcSizeBox.right) ht = HTRIGHT;
+
+		if (ht != HTNOWHERE)
+		{
+			Control* pControl = static_cast<Control*>(m_PaintManager.FindControl(pt));
+			if (pControl && !pControl->GetInterface(DUI_CTR_BUTTON))
+				return ht;
+		}
 	}
 
 	RECT rcCaption = m_PaintManager.GetCaptionRect();

@@ -83,8 +83,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="gui\db_manager\control\db_result_listitem.h" />
+    <ClInclude Include="gui\db_manager\control\db_treeitem.h" />
+    <ClInclude Include="gui\db_manager\db_manager_mainform.h" />
+    <ClInclude Include="gui\db_manager\treestruct\db_treestruct.h" />
+    <ClInclude Include="gui\db_manager\treestruct\treestruct.h" />
     <ClInclude Include="gui\emoji\emoji_form.h" />
     <ClInclude Include="gui\emoji\emoji_info.h" />
+    <ClInclude Include="gui\image_view\control\ui_image_view.h" />
+    <ClInclude Include="gui\image_view\image_view_form.h" />
     <ClInclude Include="gui\main\control\friend_item.h" />
     <ClInclude Include="gui\main\control\friend_itemex.h" />
     <ClInclude Include="gui\main\control\session_item.h" />
@@ -97,6 +104,12 @@
     <ClInclude Include="gui\window\window_ex.h" />
     <ClInclude Include="kit_define.h" />
     <ClInclude Include="module\db\user_db.h" />
+    <ClInclude Include="module\db_manager\db_connobj.h" />
+    <ClInclude Include="module\db_manager\db_manager.h" />
+    <ClInclude Include="module\db_manager\MySQLObject.h" />
+    <ClInclude Include="module\db_manager\SqlServerObject.h" />
+    <ClInclude Include="module\http\http_interface.h" />
+    <ClInclude Include="module\http\http_manager.h" />
     <ClInclude Include="module\init\init_manager.h" />
     <ClInclude Include="module\login\login_define.h" />
     <ClInclude Include="module\login\login_manager.h" />
@@ -112,10 +125,18 @@
     <ClInclude Include="util\user_path.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="gui\db_manager\control\db_result_listitem.cpp" />
+    <ClCompile Include="gui\db_manager\control\db_treeitem.cpp" />
+    <ClCompile Include="gui\db_manager\db_manager_mainform.cpp" />
+    <ClCompile Include="gui\db_manager\treestruct\db_treestruct.cpp" />
+    <ClCompile Include="gui\db_manager\treestruct\treestruct.cpp" />
     <ClCompile Include="gui\emoji\emoji_form.cpp" />
     <ClCompile Include="gui\emoji\emoji_info.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="gui\image_view\control\ui_image_view.cpp" />
+    <ClCompile Include="gui\image_view\image_view_form.cpp" />
+    <ClCompile Include="gui\image_view\image_view_form_ui.cpp" />
     <ClCompile Include="gui\main\control\friend_item.cpp" />
     <ClCompile Include="gui\main\control\friend_itemex.cpp" />
     <ClCompile Include="gui\main\control\session_item.cpp" />
@@ -131,6 +152,11 @@
     <ClCompile Include="module\db\user_db.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="module\db_manager\db_manager.cpp" />
+    <ClCompile Include="module\db_manager\MySQLObject.cpp" />
+    <ClCompile Include="module\db_manager\SqlServerObject.cpp" />
+    <ClCompile Include="module\http\http_interface.cpp" />
+    <ClCompile Include="module\http\http_manager.cpp" />
     <ClCompile Include="module\init\init_manager.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -150,8 +176,13 @@
     <ClCompile Include="util\user_path.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\bin\res\db_manager\db_manager_mainform.xml" />
+    <Xml Include="..\bin\res\db_manager\db_treeitem.xml" />
     <Xml Include="..\bin\res\emoji\emoji_form.xml" />
     <Xml Include="..\bin\res\emoji\emoji_item.xml" />
+    <Xml Include="..\bin\res\imageview\imageview.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\bin\res\main_vv\friend_item.xml" />
     <Xml Include="..\bin\res\main_vv\session.xml" />
     <Xml Include="..\bin\res\main_vv\session_item.xml" />

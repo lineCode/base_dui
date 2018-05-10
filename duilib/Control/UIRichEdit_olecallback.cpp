@@ -1,5 +1,5 @@
 ﻿#include "StdAfx.h"
-#include "UIRichEdit_olecallback.h"
+//#include "UIRichEdit_olecallback.h"
 #include "UIRichEdit.h"
 
 //#include "richedit_util.h"

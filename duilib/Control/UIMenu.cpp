@@ -640,10 +640,11 @@ void MenuElement::DrawItemExpland(HDC hDC, const RECT& rcItem)
 
 void MenuElement::DrawItemText(HDC hDC, const RECT& rcItem)
 {
+#if 1
 	if (m_sText.empty()) return;
 
     if( m_pOwner == NULL ) return;
-    TListInfo* pInfo = m_pOwner->GetListInfo();
+    ListViewInfo* pInfo = m_pOwner->GetListInfo();
     DWORD iTextColor = pInfo->dwTextColor;
     if( (m_uButtonState & UISTATE_HOT) != 0 ) {
         iTextColor = pInfo->dwHotTextColor;
@@ -667,9 +668,10 @@ void MenuElement::DrawItemText(HDC hDC, const RECT& rcItem)
     else
 		CRenderEngine::DrawText(hDC, m_pManager, rcText, m_sText.c_str(), iTextColor, \
         pInfo->nFont, DT_SINGLELINE | pInfo->uTextStyle);
+#endif
 }
 
-
+#if 1
 SIZE MenuElement::EstimateSize(SIZE szAvailable)
 {
 	SIZE cXY = {0};
@@ -682,7 +684,7 @@ SIZE MenuElement::EstimateSize(SIZE szAvailable)
 			cXY.cx = sz.cx;
 	}
 	if(cXY.cy == 0) {
-		TListInfo* pInfo = m_pOwner->GetListInfo();
+		ListViewInfo* pInfo = m_pOwner->GetListInfo();
 
 		DWORD iTextColor = pInfo->dwTextColor;
 		if( (m_uButtonState & UISTATE_HOT) != 0 ) {
@@ -719,7 +721,7 @@ SIZE MenuElement::EstimateSize(SIZE szAvailable)
 	if (m_pManager) return m_pManager->GetDPIObj()->Scale(cXY);
 	return cXY;
 }
-
+#endif
 void MenuElement::DoEvent(TEvent& event)
 {
 	if( event.Type == UIEVENT_MOUSEENTER )

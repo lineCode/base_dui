@@ -192,8 +192,8 @@ namespace dui
 		if(m_pTreeView){
 			TreeNode* pNode = static_cast<TreeNode*>(m_aTreeNodes.GetAt(m_aTreeNodes.GetSize()-1));
 			if(!pNode || !pNode->GetLastNode())
-				nRet = m_pTreeView->AddChildNodeAt(node, GetIndexFromTree() + 1) >= 0;
-			else nRet = m_pTreeView->AddChildNodeAt(node, pNode->GetLastNode()->GetIndexFromTree() + 1) >= 0;
+				nRet = (m_pTreeView->AddChildNodeAt(node, GetIndexFromTree() + 1) >= 0);
+			else nRet = (m_pTreeView->AddChildNodeAt(node, pNode->GetLastNode()->GetIndexFromTree() + 1) >= 0);
 		}
 
 		if(nRet)
@@ -359,7 +359,7 @@ namespace dui
 #if 0
 		return m_pVirtualRoot->AddChildNode(pTreeNode);
 #else
-		List::Add(pTreeNode);
+		ListView::Add(pTreeNode);
 
 		if(pTreeNode->GetChildCount() > 0)
 		{
@@ -382,7 +382,7 @@ namespace dui
 
         TreeNode* pTreeNode = static_cast<TreeNode*>(pControl->GetInterface(DUI_CTR_TREENODE));
         if (pTreeNode == NULL) return false;
-        return AddAt(pTreeNode, iIndex) >= 0;
+        return (AddAt(pTreeNode, iIndex) >= 0);
     }
 
 	bool Tree::Remove(Control* pControl, bool bDoNotDestroy)
@@ -390,7 +390,7 @@ namespace dui
         if (!pControl) return false;
 
         TreeNode* pTreeNode = static_cast<TreeNode*>(pControl->GetInterface(DUI_CTR_TREENODE));
-        if (pTreeNode == NULL) return List::Remove(pControl, bDoNotDestroy);
+        if (pTreeNode == NULL) return ListView::Remove(pControl, bDoNotDestroy);
 
 		if(pTreeNode->GetChildCount() > 0)
 		{
@@ -403,7 +403,7 @@ namespace dui
 				}
 			}
 		}
-		return List::Remove(pControl, bDoNotDestroy);
+		return ListView::Remove(pControl, bDoNotDestroy);
 	}
 
 	bool Tree::RemoveAt( int iIndex, bool bDoNotDestroy )
@@ -412,14 +412,14 @@ namespace dui
         if (pControl == NULL) return false;
 
         TreeNode* pTreeNode = static_cast<TreeNode*>(pControl->GetInterface(DUI_CTR_TREENODE));
-        if (pTreeNode == NULL) return List::Remove(pControl, bDoNotDestroy);
+        if (pTreeNode == NULL) return ListView::Remove(pControl, bDoNotDestroy);
 
 		return Remove(pTreeNode);
 	}
 
 	void Tree::RemoveAll()
 	{
-		List::RemoveAll();
+		ListView::RemoveAll();
 	}
 
 	bool Tree::AddChildNode(TreeNode* pNode)
@@ -442,7 +442,7 @@ namespace dui
         pTreeNode->GetCheckBox()->OnNotify += MakeDelegate(this,&Tree::OnCheckBoxChanged);
 #endif
 
-        List::AddAt(pTreeNode,iIndex);
+        ListView::AddAt(pTreeNode,iIndex);
 
         if(pTreeNode->GetChildCount() > 0)
         {
@@ -475,7 +475,7 @@ namespace dui
 		if(nItemIndex == -1)
 			return false;
 
-		return AddAt(pNode, nItemIndex) >= 0;
+		return (AddAt(pNode, nItemIndex) >= 0);
 	}
 
 	bool Tree::RemoveChildNode(TreeNode* pNode)
@@ -490,7 +490,7 @@ namespace dui
 
 	void Tree::SetAttribute( LPCTSTR pstrName, LPCTSTR pstrValue )
 	{
-		List::SetAttribute(pstrName,pstrValue);
+		ListView::SetAttribute(pstrName,pstrValue);
 	}
 
 }

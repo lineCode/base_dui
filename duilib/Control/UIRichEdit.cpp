@@ -1573,6 +1573,31 @@ void RichEdit::SetTextPadding(RECT rc)
 	Invalidate();
 }
 
+void RichEdit::SetPromptMode(bool bPrompt)
+{
+	m_bAllowPrompt = bPrompt;
+}
+bool RichEdit::GetPromptMode()
+{
+	return m_bAllowPrompt;
+}
+void RichEdit::SetPromptText(const String& strText)
+{
+	m_sPromptText = strText;
+}
+String RichEdit::GetPromptText() const
+{
+	return m_sPromptText;
+}
+void RichEdit::SetPromptColor(DWORD color)
+{
+	m_dwPromptColor = color;
+}
+DWORD RichEdit::GetPromptColor() const
+{
+	return m_dwPromptColor;
+}
+
 void RichEdit::DoInit()
 {
 	if(m_bInited)
@@ -2105,13 +2130,13 @@ void RichEdit::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     if( _tcscmp(pstrName, _T("vscrollbar")) == 0 ) {
         if( _tcscmp(pstrValue, _T("true")) == 0 ) m_lTwhStyle |= ES_DISABLENOSCROLL | WS_VSCROLL;
     }
-    if( _tcscmp(pstrName, _T("autovscroll")) == 0 ) {
+    else if( _tcscmp(pstrName, _T("autovscroll")) == 0 ) {
         if( _tcscmp(pstrValue, _T("true")) == 0 ) m_lTwhStyle |= ES_AUTOVSCROLL;
     }
     else if( _tcscmp(pstrName, _T("hscrollbar")) == 0 ) {
         if( _tcscmp(pstrValue, _T("true")) == 0 ) m_lTwhStyle |= ES_DISABLENOSCROLL | WS_HSCROLL;
     }
-    if( _tcscmp(pstrName, _T("autohscroll")) == 0 ) {
+	else  if (_tcscmp(pstrName, _T("autohscroll")) == 0) {
         if( _tcscmp(pstrValue, _T("true")) == 0 ) m_lTwhStyle |= ES_AUTOHSCROLL;
     }
     else if( _tcscmp(pstrName, _T("wanttab")) == 0 ) {
@@ -2138,7 +2163,7 @@ void RichEdit::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if( _tcscmp(pstrName, _T("password")) == 0 ) {
         if( _tcscmp(pstrValue, _T("true")) == 0 ) m_lTwhStyle |= ES_PASSWORD;
     }
-    else if( _tcscmp(pstrName, _T("halign")) == 0 ) {
+    else if( _tcscmp(pstrName, _T("texthalign")) == 0 ) {
         if( _tcsstr(pstrValue, _T("left")) != NULL ) {
             m_lTwhStyle &= ~(ES_CENTER | ES_RIGHT);
             m_lTwhStyle |= ES_LEFT;
@@ -2172,6 +2197,27 @@ void RichEdit::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		rcTextPadding.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
 		rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
 		SetTextPadding(rcTextPadding);
+	}
+	//-------prompt-----
+	else if (_tcscmp(pstrName, _T("promptmode")) == 0)
+	{
+		SetPromptMode(_tcscmp(pstrValue, _T("true")) == 0);
+	}
+	else if (_tcscmp(pstrName, _T("prompttext")) == 0)
+	{
+		SetPromptText(pstrName);
+	}
+	else if (_tcscmp(pstrName, _T("promptcolor")) == 0)
+	{
+		while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) pstrValue = ::CharNext(pstrValue);
+		DWORD clrColor = m_pManager->GetColor(pstrValue);
+		if (clrColor == 0)
+		{
+			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
+			LPTSTR pstr = NULL;
+			clrColor = _tcstoul(pstrValue, &pstr, 16);
+		}
+		SetPromptColor(clrColor);
 	}
     else ScrollContainer::SetAttribute(pstrName, pstrValue);
 }

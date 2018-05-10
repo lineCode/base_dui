@@ -163,7 +163,7 @@ namespace dui
 	{
 		if( _tcscmp(pstrName, _T("selectedid")) == 0 ) SelectItem(_ttoi(pstrValue));
 		else if (_tcscmp(pstrName, _T("fadeswitch")) == 0) SetFadeSwitch(_tcscmp(pstrValue, _T("true")) == 0);
-		return ScrollContainer::SetAttribute(pstrName, pstrValue);
+		else return ScrollContainer::SetAttribute(pstrName, pstrValue);
 	}
 
 	void TabLayout::SetPos(RECT rc, bool bNeedInvalidate)

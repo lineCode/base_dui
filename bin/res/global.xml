@@ -12,8 +12,8 @@
   <Font name="微软雅黑" size="14" bold="true"/>
   <Font name="微软雅黑" size="16" bold="true"/>
   <Font name="微软雅黑" size="18" bold="true"/>
-  <Font name="arial" size="10"/>    <!--10-->
-  <Font name="arial" size="12"/>
+  <Font name="宋体" size="10"/>    <!--10-->
+  <Font name="宋体" size="12"/>
   <Font name="arial" size="14"/>
   <Font name="arial" size="16"/>
   <Font name="arial" size="18"/>
@@ -178,7 +178,7 @@
   <Class name="btn_wnd_min" value="name=&quot;minbtn&quot; width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;file='../public/button/btn_wnd_gray_min.png'&quot; hotimage=&quot;../public/button/btn_wnd_gray_min_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_gray_min_pushed.png&quot;"/>
 
   <!--<Class name="btn_wnd_close" value="width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;file='../public/button/btn_wnd_gray_close.png' dest='4,4,16,16'&quot; hotimage=&quot;../public/button/btn_wnd_white_close_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_white_close_pushed.png&quot; fadehot=&quot;false&quot;"/>-->
-  <Class name="btn_wnd_close" value="name=&quot;closebtn&quot; width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;file='../public/button/close.png' source='0,0,20,20'&quot; hotimage=&quot;file='../public/button/close.png' source='20,0,40,20'&quot; fadehot=&quot;false&quot;"/>
+  <Class name="btn_wnd_close" value="name=&quot;closebtn&quot; width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;file='../public/button/close.png' source='0,0,20,20'&quot; hotimage=&quot;file='../public/button/close.png' source='20,0,40,20'&quot; "/>
 
   <Class name="btn_wnd_max" value="name=&quot;maxbtn&quot; width=&quot;20&quot; height=&quot;20&quot; normalimage=&quot;../public/button/btn_wnd_gray_max_hovered.png&quot; hotimage=&quot;../public/button/btn_wnd_gray_max_hovered.png&quot; pushedimage=&quot;../public/button/btn_wnd_gray_max_pushed.png&quot;"/>
 
@@ -239,14 +239,14 @@
 
   <!--list-->
   <Class name="list" value="header=&quot;false&quot; bkcolor=&quot;bk_wnd_lightcolor&quot; vscrollbar=&quot;true&quot; itembkcolor=&quot;&quot; itemhotbkcolor=&quot;bk_wnd_darkcolor&quot; itemselectedbkcolor=&quot;bk_wnd_darkcolor2&quot;"/>
-  <Class name="listitem" value="hotcolor=&quot;bk_listitem_hovered&quot; pushedcolor=&quot;bk_listitem_selected&quot; selectednormalcolor=&quot;bk_listitem_selected&quot; fadehot=&quot;false&quot;"/>
-  <Class name="list_topitem" value="normalcolor=&quot;bk_topitem_normal&quot; hotcolor=&quot;bk_topitem_hovered&quot; pushedcolor=&quot;bk_topitem_selected&quot; selectednormalcolor=&quot;bk_topitem_selected&quot; fadehot=&quot;false&quot;"/>
+  <!--<Class name="listitem" value="hotcolor=&quot;bk_listitem_hovered&quot; pushedcolor=&quot;bk_listitem_selected&quot; selectednormalcolor=&quot;bk_listitem_selected&quot; "/>-->
+  <Class name="list_topitem" value="normalcolor=&quot;bk_topitem_normal&quot; "/>
 
   <!--menu-->
   <Class name="menu" value="width=&quot;auto&quot; height=&quot;auto&quot; bkcolor=&quot;bk_wnd_lightcolor&quot;"/>
-  <Class name="MenuElement" value="height=&quot;40&quot; hotcolor=&quot;bk_menuitem_hovered&quot; pushedcolor=&quot;bk_menuitem_selected&quot; selectednormalcolor=&quot;bk_menuitem_selected&quot;"/>
-  <Class name="OnlineStateMenuElement" value="padding=&quot;7,0,0,0&quot; height=&quot;30&quot; hotcolor=&quot;bk_menuitem_hovered&quot; pushedcolor=&quot;bk_menuitem_selected&quot; selectednormalcolor=&quot;bk_menuitem_selected&quot;"/>
-  <Class name="menu_text" value="normaltextcolor=&quot;darkcolor&quot; font=&quot;2&quot; valign=&quot;center&quot;"/>
+  <Class name="MenuElement" value="height=&quot;40&quot;"/>
+  <Class name="OnlineStateMenuElement" value="padding=&quot;7,0,0,0&quot; height=&quot;30&quot;"/>
+  <Class name="menu_text" value="normaltextcolor=&quot;darkcolor&quot; font=&quot;2&quot; textvalign=&quot;center&quot;"/>
 
   <!--分割线-->
   <Class name="splitline_hor_level1" value="bkcolor=&quot;splitline_level1&quot; height=&quot;1&quot;"/>
@@ -254,11 +254,11 @@
   <Class name="splitline_ver_level1" value="bkcolor=&quot;splitline_level1&quot; width=&quot;1&quot;"/>
 
   <!--列表蒙版-->
-  <Class name="mask_list_left" value="halign=&quot;left&quot; bkimage=&quot;file='../public/shade/shade_left.png'&quot; width=&quot;auto&quot; mouse=&quot;false&quot;"/>
-  <Class name="mask_list_right" value="halign=&quot;right&quot; bkimage=&quot;file='../public/shade/shade_right.png'&quot; width=&quot;auto&quot; mouse=&quot;false&quot;"/>
+  <Class name="mask_list_left" value="texthalign=&quot;left&quot; bkimage=&quot;file='../public/shade/shade_left.png'&quot; width=&quot;auto&quot; mouse=&quot;false&quot;"/>
+  <Class name="mask_list_right" value="texthalign=&quot;right&quot; bkimage=&quot;file='../public/shade/shade_right.png'&quot; width=&quot;auto&quot; mouse=&quot;false&quot;"/>
 
   <!--RichEdit-->
-  <Class name="simple" value="multiline=&quot;false&quot; autohscroll=&quot;true&quot; wantreturnmsg=&quot;true&quot; wanttab=&quot;false&quot; rich=&quot;false&quot; normaltextcolor=&quot;darkcolor&quot; disabledtextcolor=&quot;textdefaultdisablecolor&quot;"/>
+  <Class name="simple" value="multiline=&quot;false&quot; autohscroll=&quot;true&quot; wantreturn=&quot;true&quot; wanttab=&quot;false&quot; rich=&quot;false&quot; normaltextcolor=&quot;darkcolor&quot; disabledtextcolor=&quot;textdefaultdisablecolor&quot;"/>
   <Class name="prompt" value="promptmode=&quot;true&quot; promptcolor=&quot;edit_tip&quot;"/>
   <Class name="edit" value="hotimage=&quot;file='../public/edit/edit1.png' corner='10,10,10,10'&quot; focusedimage=&quot;file='../public/edit/edit2.png' corner='10,10,10,10'&quot;"/>
   <Class name="input" value="normalimage=&quot;file='../public/edit/edit0.png' corner='10,10,10,10'&quot; hotimage=&quot;file='../public/edit/edit0.png' corner='10,10,10,10'&quot; focusedimage=&quot;file='../public/edit/edit0.png' corner='10,10,10,10'&quot; disabledimage=&quot;file='../public/edit/edit0.png' corner='10,10,10,10' fade='80'&quot;"/>

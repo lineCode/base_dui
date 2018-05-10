@@ -289,6 +289,15 @@ public:
 	RECT GetTextPadding() const;
 	void SetTextPadding(RECT rc);
 
+	//---------Prompt-------
+	void SetPromptMode(bool bPrompt);
+	bool GetPromptMode();
+	void SetPromptText(const String& strText);
+	String GetPromptText() const;
+	void SetPromptColor(DWORD color);
+	DWORD GetPromptColor() const;
+
+
     void DoInit();
 	bool SetDropAcceptFile(bool bAccept);
 	// 注意：TxSendMessage和SendMessage是有区别的，TxSendMessage没有multibyte和unicode自动转换的功能，
@@ -394,7 +403,12 @@ protected:
     LONG m_lTwhStyle;
 	bool m_bDrawCaret;
 	bool m_bInited;
-	RECT	m_rcTextPadding;
+	RECT m_rcTextPadding;
+
+	//prompt
+	bool m_bAllowPrompt = false;
+	DWORD m_dwPromptColor = 0xff888888;
+	String m_sPromptText;
 };
 
 } // namespace dui

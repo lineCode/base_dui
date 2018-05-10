@@ -5,7 +5,7 @@
 
 namespace dui
 {
-	class DUILIB_API HorizontalLayout : public ScrollContainer
+	class DUILIB_API HorizontalLayout : public Container
 	{
 	public:
 		HorizontalLayout();

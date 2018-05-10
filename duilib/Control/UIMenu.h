@@ -240,7 +240,7 @@ protected:
 //
 
 #if MENU_EQUAL_LIST
-typedef List Menu;
+typedef ListView Menu;
 #else
 class List;
 class DUILIB_API Menu : public List

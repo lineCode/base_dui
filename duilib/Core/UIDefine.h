@@ -277,9 +277,11 @@ protected:                                                                \
 #define  DUI_CTR_CHECKBOX                        (_T("CheckBox"))
 #define  DUI_CTR_COMBOBOX                        (_T("ComboBox"))
 #define  DUI_CTR_DATETIME                        (_T("DateTime"))
+#define  DUI_CTR_LISTVIEW                        (_T("ListView"))
 #define  DUI_CTR_TREEVIEW                        (_T("TreeView"))
 #define  DUI_CTR_TREENODE                        (_T("TreeNode"))
 //9
+#define  DUI_CTR_ILISTVIEW                       (_T("IListView"))
 #define  DUI_CTR_ILISTITEM                       (_T("IListItem"))
 #define  DUI_CTR_CONTAINER                       (_T("Container"))
 #define  DUI_CTR_TABLAYOUT                       (_T("TabLayout"))

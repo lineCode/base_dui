@@ -54,9 +54,6 @@
     <ClCompile Include="Control\UILabel.cpp">
       <Filter>Control</Filter>
     </ClCompile>
-    <ClCompile Include="Control\UIList.cpp">
-      <Filter>Control</Filter>
-    </ClCompile>
     <ClCompile Include="Control\UIMenu.cpp">
       <Filter>Control</Filter>
     </ClCompile>
@@ -174,6 +171,12 @@
     <ClCompile Include="Help\file.cpp">
       <Filter>Help</Filter>
     </ClCompile>
+    <ClCompile Include="Control\UIListView.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIList.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Control\UIActiveX.h">
@@ -201,9 +204,6 @@
       <Filter>Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UILabel.h">
-      <Filter>Control</Filter>
-    </ClInclude>
-    <ClInclude Include="Control\UIList.h">
       <Filter>Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIMenu.h">
@@ -331,6 +331,15 @@
     </ClInclude>
     <ClInclude Include="Help\file.h">
       <Filter>Help</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIListView.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIList.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIRichEdit_olecallback.h">
+      <Filter>Control</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

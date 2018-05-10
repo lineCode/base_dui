@@ -27,6 +27,7 @@ bool WindowsManager::RegisterWindow(const std::wstring wnd_class_name, const std
 		std::map<std::wstring, WindowEx*>::iterator it2 = it->second.find(wnd_id);
 		if (it2 != it->second.end())
 		{
+			assert(0);
 			QLOG_PRO(L"The window <class name: {0}, id: {1}> has already registered !")<<wnd_class_name <<wnd_id;
 		}
 		it->second[wnd_id] = wnd;
@@ -51,6 +52,8 @@ void WindowsManager::UnRegisterWindow(const std::wstring &wnd_class_name, const 
 			it->second.erase(it2);
 		}
 	}
+	else
+		assert(0);
 }
 	
 WindowList WindowsManager::GetAllWindows()

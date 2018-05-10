@@ -7,6 +7,12 @@ namespace dui {
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
+#define POS_STYLE_TOP						0x00000000
+#define POS_STYLE_LEFT                     0x00000000
+#define POS_STYLE_CENTER                   0x00000001
+#define POS_STYLE_RIGHT                    0x00000002
+#define POS_STYLE_VCENTER                  0x00000004
+#define POS_STYLE_BOTTOM                   0x00000008
 
 typedef Control* (CALLBACK* FINDCONTROLPROC)(Control*, LPVOID);
 
@@ -130,6 +136,12 @@ public:
     virtual void SetFocus();
     virtual bool IsFloat() const;
     virtual void SetFloat(bool bFloat = true);
+	// add by djj[20180108]
+	void SetPosStyle(UINT style);
+	UINT GetPosStyle() const;
+	// fade 系列 add by djj[20180105]
+	virtual void SetFadeAlpha(bool bFade = true);
+	virtual bool GetFadeAlpha();
 
 	// 自定义(未处理的)属性
 	void AddCustomAttribute(LPCTSTR pstrName, LPCTSTR pstrAttr);
@@ -245,6 +257,11 @@ protected:
 	bool m_bKeyboardEnabled ;
     bool m_bFocused;
     bool m_bFloat;
+	// fade 系列 add by djj[20180105]
+	bool m_bFadeAlpha = false;
+
+	UINT m_uPosStyle = POS_STYLE_TOP | POS_STYLE_LEFT;
+
 	TPercentInfo m_piFloatPercent;
     bool m_bSetPos; // 防止SetPos循环调用
 

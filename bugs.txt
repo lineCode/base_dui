@@ -1,4 +1,7 @@
 20171130
+1.无法集成网易云信的截图代码,因为他们闭源的;
 3.list控件指定'scrollbarfloat'属性为'true'时,选中状态色彩区域不正确;
 4.dpi更改时,图片全部丢失;
-5.无法集成网易云信的截图代码,因为他们闭源的;
+5.Control新增fadealpha属性,但是效果没做;
+6.richedit新增prompt属性,但是效果没做;
+7.Combo中的加入ListContainerElement报错;

@@ -78,6 +78,8 @@ public:
 
 protected:
 	PtrArray m_items;
+	//PtrArray m_tmp_fadealpha_items;
+
 	RECT m_rcPadding;
 	int m_iChildMargin;
 	UINT m_iChildAlign;

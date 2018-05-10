@@ -695,6 +695,29 @@ void Control::SetFloat(bool bFloat)
     NeedParentUpdate();
 }
 
+// add by djj[20180108]
+void Control::SetPosStyle(UINT style)
+{
+	m_uPosStyle = style;
+}
+
+UINT Control::GetPosStyle() const
+{
+	return m_uPosStyle;
+}
+
+// ---------fade 系列 add by djj[20180105]---
+void Control::SetFadeAlpha(bool bFade/* = true*/){
+	if (m_bFadeAlpha == bFade) return;
+
+	m_bFadeAlpha = bFade;
+	NeedParentUpdate();
+}
+
+bool Control::GetFadeAlpha(){ 
+	return m_bFadeAlpha; 
+}
+// ----------end fade 系列------------
 void Control::AddCustomAttribute(LPCTSTR pstrName, LPCTSTR pstrAttr)
 {
 	if( pstrName == NULL || pstrName[0] == _T('\0') || pstrAttr == NULL || pstrAttr[0] == _T('\0') ) return;
@@ -1062,7 +1085,40 @@ void Control::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if( _tcscmp(pstrName, _T("menu")) == 0 ) SetContextMenuUsed(_tcscmp(pstrValue, _T("true")) == 0);
 	else if( _tcscmp(pstrName, _T("virtualwnd")) == 0 ) SetVirtualWnd(pstrValue);
 	else if( _tcscmp(pstrName, _T("foreimage")) == 0 ) SetForeImage(pstrValue);
+	//------------------------------add by djj[20180108]---------------------------
+	else if(_tcscmp(pstrName, _T("halign")) == 0) {
+		if (_tcsstr(pstrValue, _T("left")) != NULL) {
+			m_uPosStyle &= ~(POS_STYLE_CENTER | POS_STYLE_RIGHT);
+			m_uPosStyle |= POS_STYLE_LEFT;
+		}
+		if (_tcsstr(pstrValue, _T("center")) != NULL) {
+			m_uPosStyle &= ~(POS_STYLE_LEFT | POS_STYLE_RIGHT);
+			m_uPosStyle |= POS_STYLE_CENTER;
+		}
+		if (_tcsstr(pstrValue, _T("right")) != NULL) {
+			m_uPosStyle &= ~(POS_STYLE_LEFT | POS_STYLE_CENTER);
+			m_uPosStyle |= POS_STYLE_RIGHT;
+		}
+	}
+	else if (_tcscmp(pstrName, _T("valign")) == 0)
+	{
+		if (_tcsstr(pstrValue, _T("top")) != NULL) {
+			m_uPosStyle &= ~(POS_STYLE_BOTTOM | POS_STYLE_VCENTER);
+			m_uPosStyle |= POS_STYLE_TOP;
+		}
+		if (_tcsstr(pstrValue, _T("center")) != NULL) {
+			m_uPosStyle &= ~(POS_STYLE_TOP | POS_STYLE_BOTTOM);
+			m_uPosStyle |= POS_STYLE_VCENTER;
+		}
+		if (_tcsstr(pstrValue, _T("bottom")) != NULL) {
+			m_uPosStyle &= ~(POS_STYLE_TOP | POS_STYLE_VCENTER);
+			m_uPosStyle |= POS_STYLE_BOTTOM;
+		}
+	}
+	//--------------------------------------fade系列 add by djj[20180105]----------------------------------------
+	else if (_tcscmp(pstrName, _T("fadealpha")) == 0) SetFadeAlpha(_tcscmp(pstrValue, _T("true")) == 0);
 	else {
+		wprintf(_T("Control::SetAttribute control:%s attribute:%s not found\n"), GetName().c_str(), pstrName);
 		AddCustomAttribute(pstrName, pstrValue);
 	}
 }

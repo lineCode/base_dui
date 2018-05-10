@@ -18,12 +18,12 @@
     </MenuElement>
 
     <MenuElement class="MenuElement" name="logoff" width="152">
-      <Button normalimage="icon_logout_normal.png" valign="center" mouse="false" />
+      <Button normalimage="icon_logout_normal.png" textvalign="center" mouse="false" />
       <Label class="menu_text" text="注销" margin="27,0,0,0"/>
     </MenuElement>
 
     <MenuElement class="MenuElement" name="quit" width="152">
-      <Button normalimage="icon_exit_normal.png" valign="center" mouse="false" />
+      <Button normalimage="icon_exit_normal.png" textvalign="center" mouse="false" />
       <Label class="menu_text" text="退出" margin="27,0,0,0"/>
     </MenuElement>
   </List>-->

@@ -166,7 +166,7 @@ namespace dui
 	{
 		if( _tcscmp(pstrName, _T("group")) == 0 ) SetGroup(pstrValue);
 		else if( _tcscmp(pstrName, _T("selected")) == 0 ) Selected(_tcscmp(pstrValue, _T("true")) == 0);
-		else if( _tcscmp(pstrName, _T("selectedimage")) == 0 ) SetSelectedImage(pstrValue);
+		else if (_tcscmp(pstrName, _T("selectedimage")) == 0 || _tcscmp(pstrName, _T("selectednormalimage")) == 0) SetSelectedImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("selectedhotimage")) == 0 ) SetSelectedHotImage(pstrValue);
 		else if( _tcscmp(pstrName, _T("selectedbkcolor")) == 0 ) {
 			if( *pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);

@@ -91,7 +91,7 @@ typedef std::string String;
 #include "Core/UIDlgBuilder.h"
 #include "Core/UIRender.h"
 #include "Utils/WinImplBase.h"
-#include "Utils/WndShadow.h"
+//#include "Utils/WndShadow.h"
 #include "Utils/DPI.h"
 
 #include "Layout/UIVerticalLayout.h"
@@ -99,12 +99,6 @@ typedef std::string String;
 #include "Layout/UITileLayout.h"
 #include "Layout/UITabLayout.h"
 #include "Layout/UIChildLayout.h"
-
-#include "Control/UIList.h"
-#include "Control/UICombo.h"
-#include "Control/UIScrollBar.h"
-#include "Control/UITree.h"
-//#include "Control/UITreeView.h"
 
 #include "Control/UILabel.h"
 #include "Control/UIText.h"
@@ -124,6 +118,13 @@ typedef std::string String;
 #include "Control/UIWebBrowser.h"
 #include "Control/UIGifAnim.h"
 #include "Control/UIFlash.h"
+
+#include "Control/UIListView.h"
+#include "Control/UIList.h"
+#include "Control/UICombo.h"
+#include "Control/UIScrollBar.h"
+#include "Control/UITree.h"
+//#include "Control/UITreeView.h"
 
 #include "Control/UIMenu.h"			//djj[20170424] : add
 #include "Extend/UILabelContainer.h"

@@ -322,6 +322,7 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
 					else if (_tcsicmp(pstrClass, DUI_CTR_CHECKBOX) == 0)		  pControl = new CheckBtn;
 					else if (_tcsicmp(pstrClass, DUI_CTR_COMBOBOX) == 0)		  pControl = new Combo;
 					else if (_tcsicmp(pstrClass, DUI_CTR_DATETIME) == 0)		  pControl = new DateTime;
+					else if (_tcsicmp(pstrClass, DUI_CTR_LISTVIEW) == 0)          pControl = new ListView;
 					//else if (_tcsicmp(pstrClass, DUI_CTR_TREEVIEW) == 0)         pControl = new TreeView;
 					else if (_tcsicmp(pstrClass, DUI_CTR_TREENODE) == 0)		  pControl = new TreeNode;
 					break;
@@ -337,6 +338,7 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
 					break;
 				case 11:
 					if (_tcsicmp(pstrClass, DUI_CTR_CHILDLAYOUT) == 0)			 pControl = new ChildLayout;
+					else if (_tcsicmp(pstrClass, DUI_CTR_LISTELEMENT) == 0)		 pControl = new ListElement;
 					break;
 				case 14:
 					if (_tcsicmp(pstrClass, DUI_CTR_LISTHEADERITEM) == 0)		pControl = new ListHeaderItem;
@@ -373,7 +375,9 @@ Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, CPaintMana
 
 		if( pControl == NULL )
 		{
-			DUITRACE(_T("Unknow Control:%s"),pstrClass);
+			//DUITRACE(_T("Unknow Control:%s"),pstrClass);
+			_tprintf(_T("Unknow Control:%s"), pstrClass);
+			assert(0 && "CDialogBuilder::_Parse:Unknow Control");
 			continue;
 		}
 

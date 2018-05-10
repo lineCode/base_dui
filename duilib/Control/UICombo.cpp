@@ -4,8 +4,8 @@ namespace dui {
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-
-class ComboBody : public VerticalLayout
+#if !ComboBody_EQUAL_LIST
+class ComboBody : public ScrollContainer
 {
 public:
     ComboBody::ComboBody(Combo* pOwner);
@@ -25,7 +25,7 @@ bool ComboBody::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl) {
     RECT rcTemp = { 0 };
     if( !::IntersectRect(&rcTemp, &rcPaint, &m_rcItem) ) return true;
 
-    TListInfo* pListInfo = NULL;
+    ListViewInfo* pListInfo = NULL;
     if( m_pOwner ) pListInfo = m_pOwner->GetListInfo();
 
     CRenderClip clip;
@@ -113,7 +113,7 @@ bool ComboBody::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl) {
     }
     return true;
 }
-
+#endif
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -137,7 +137,7 @@ public:
 public:
     CPaintManager m_pm;
     Combo* m_pOwner;
-    VerticalLayout* m_pLayout;
+    List* m_pLayout;
     int m_iOldSel;
     bool m_bScrollbarClicked;
 };
@@ -207,13 +207,25 @@ void CComboWnd::OnFinalMessage(HWND hWnd)
 
 LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	bool bHandle = false;
     if( uMsg == WM_CREATE ) {
 		m_pm.SetForceUseSharedRes(true);
         m_pm.Init(m_hWnd);
+		String strResourcePath = m_pm.GetGlobalResDir();
+		ASSERT(!strResourcePath.empty());
+		if (!strResourcePath.empty()){
+			/*String folder = GetSkinFolder();
+			if (folder.back() != _T('\\') && folder.back() != _T('/')){
+				folder += _T('\\');
+			}
+			strResourcePath += folder;*/
+			strResourcePath += _T("main\\");
+			m_pm.SetThisResPath(strResourcePath.c_str());
+		}
         // The trick is to add the items to the new container. Their owner gets
         // reassigned by this operation - which is why it is important to reassign
         // the items back to the righfull owner/manager when the window closes.
-        m_pLayout = new ComboBody(m_pOwner);
+        m_pLayout = new ComboBody(/*m_pOwner*/);
         m_pLayout->SetManager(&m_pm, NULL, true);
         LPCTSTR pDefaultAttributes = m_pOwner->GetManager()->GetDefaultAttributeList(_T("VBox"));
         if( pDefaultAttributes ) {
@@ -234,7 +246,7 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         return 0;
     }
     else if( uMsg == WM_CLOSE ) {
-        m_pOwner->SetManager(m_pOwner->GetManager(), m_pOwner->GetParent(), false);
+        //m_pOwner->SetManager(m_pOwner->GetManager(), m_pOwner->GetParent(), false);
 		if( !m_pOwner->IsFloat() ) m_pOwner->SetPos(m_pOwner->GetPos(), false);
 		else m_pOwner->SetPos(m_pOwner->GetRelativePos(), false);
         m_pOwner->SetFocus();
@@ -247,6 +259,42 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         if( pControl && _tcscmp(pControl->GetClass(), DUI_CTR_SCROLLBAR) == 0 ) {
             m_bScrollbarClicked = true;
         }
+#if 0
+		if (!m_pm.IsNoActivate()) ::SetFocus(m_hWnd);
+		/*if (m_pRoot == NULL) break;*/
+		POINT pt2 = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+		/*m_ptLastMousePos = pt;*/
+		pControl = m_pm.FindControl(pt2);
+		if (pControl && pControl->GetManager() == &m_pm)
+		{
+			/*m_pEventClick = pControl;*/
+			pControl->SetFocus();
+			/*SetCapture();*/
+			//TEvent event/* = { UIEVENT__FIRST }*/;
+			//event.Type = UIEVENT_BUTTONDOWN;
+			//event.pSender = pControl;
+			//event.wParam = wParam;
+			//event.lParam = lParam;
+			//event.ptMouse = pt;
+			//event.wKeyState = (WORD)wParam;
+			//event.dwTimestamp = ::GetTickCount();
+			//pControl->Event(event);
+			IListItem* pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
+			while (!pListItem)
+			{
+				pControl = pControl->GetParent();
+				if (!pControl)
+					break;
+				pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
+			}
+			if (pListItem && m_pOwner)
+			{
+				pListItem->Select(true, false);
+				m_pOwner->SelectItem(m_pLayout->GetCurSel(), false, false);
+				bHandle = true;
+			}
+		}
+#endif
     }
     else if( uMsg == WM_LBUTTONUP ) {
         if (m_bScrollbarClicked) {
@@ -308,8 +356,12 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
     }
 
-    LRESULT lRes = 0;
-    if( m_pm.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
+	if (!bHandle)
+	{
+		LRESULT lRes = 0;
+		if (m_pm.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
+	}
+   
     return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }
 
@@ -430,10 +482,22 @@ bool Combo::SelectItem(int iIndex, bool bTakeFocus, bool bTriggerEvent)
     if( !pControl || !pControl->IsVisible() || !pControl->IsEnabled() ) return false;
     IListItem* pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
     if( pListItem == NULL ) return false;
+	SetText(pControl->GetText().c_str());
     m_iCurSel = iIndex;
     if( m_pWindow != NULL || bTakeFocus ) pControl->SetFocus();
     pListItem->Select(true, bTriggerEvent);
-	if (m_pManager != NULL && bTriggerEvent) m_pManager->SendNotify(this, UIEVENT_ITEMSELECT, m_iCurSel, iOldSel);
+	if (m_pManager != NULL && bTriggerEvent) 
+		m_pManager->SendNotify(this, UIEVENT_ITEMSELECT, m_iCurSel, iOldSel);
+	//----------------add by djj-----------------
+	if (OnEvent.find(UIEVENT_ITEMSELECT) != OnEvent.cend()){
+		TEvent event;
+		event.Type = UIEVENT_ITEMSELECT;
+		event.pSender = this;
+		if (!OnEvent.find(UIEVENT_ITEMSELECT)->second(&event)){
+			return false;
+		}
+	}
+
     Invalidate();
 
     return true;
@@ -499,12 +563,18 @@ bool Combo::SetMultiItemIndex(Control* pStartControl, int iCount, int iNewStartI
 
 bool Combo::Add(Control* pControl)
 {
+	if (!pControl)
+		return false;
     IListItem* pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
     if( pListItem != NULL ) 
     {
         pListItem->SetOwner(this);
         pListItem->SetIndex(m_items.GetSize());
     }
+	else
+	{
+		printf("Combo::Add Control(%s) is not the interface of DUI_CTR_ILISTITEM\n", pControl->GetName());
+	}
 	return __super::Add(pControl);
 }
 
@@ -831,7 +901,7 @@ void Combo::SetDisabledImage(LPCTSTR pStrImage)
 	Invalidate();
 }
 
-TListInfo* Combo::GetListInfo()
+ListViewInfo* Combo::GetListInfo()
 {
     return &m_ListInfo;
 }
@@ -1288,7 +1358,23 @@ void Combo::PaintText(HDC hDC)
     rcText.right -= m_rcTextPadding.right;
     rcText.top += m_rcTextPadding.top;
     rcText.bottom -= m_rcTextPadding.bottom;
-
+#if 1
+	String sText = GetText();
+	if (sText.empty()) return;
+	int nLinks = 0;
+	if (IsEnabled()) {
+		/*if (m_bShowHtml)
+			CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, sText, m_dwTextColor, NULL, NULL, nLinks, m_iFont, m_uTextStyle);
+		else*/
+		CRenderEngine::DrawText(hDC, m_pManager, rcText, sText.c_str(), 0xff000000, 2, 0);
+	}
+	else {
+		/*if (m_bShowHtml)
+			CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, sText, m_dwDisabledTextColor, NULL, NULL, nLinks, m_iFont, m_uTextStyle);
+		else*/
+		CRenderEngine::DrawText(hDC, m_pManager, rcText, sText.c_str(), 0xff000000, 2, 0);
+	}
+#else
     if( m_iCurSel >= 0 ) {
         Control* pControl = static_cast<Control*>(m_items[m_iCurSel]);
         IListItem* pElement = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
@@ -1302,6 +1388,7 @@ void Combo::PaintText(HDC hDC)
             pControl->SetPos(rcOldPos, false);
         }
     }
+#endif
 }
 
 } // namespace dui

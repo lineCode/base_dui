@@ -1,13 +1,16 @@
 ﻿#include "stdafx.h"
 #include "session_box.h"
 #include "shared/threads.h"
+#include "shared/modal_wnd/file_dialog_ex.h"
 #include "module/session/session_util.h"
 #include "module/window/windows_manager.h"
 #include "module/login/login_manager.h"
+#include "module/db_manager/db_manager.h"
 #include "gui/emoji/emoji_info.h"
 #include "gui/emoji/emoji_form.h"
 #include "gui/msgbox/msgbox.h"
-#include "shared/modal_wnd/file_dialog_ex.h"
+#include "gui/image_view/image_view_form.h"
+#include "gui/db_manager/db_manager_mainform.h"
 
 using namespace dui;
 
@@ -70,12 +73,13 @@ bool SessionBox::OnClicked(dui::TEvent *event)
 	if (name == L"btn_clip")
 	{
 		/*if (CaptureManager::GetInstance()->IsCaptureTracking())
-		{
 			return;
-		}
-
 		StdClosure callback = nbase::Bind(&SessionBox::DoClip, this);
 		nbase::ThreadManager::PostDelayedTask(shared::kThreadUI, callback, nbase::TimeDelta::FromMilliseconds(500));*/
+		ImageViewForm *form = new ImageViewForm;
+		form->Create(m_pManager->GetPaintWindow(), ImageViewForm::kClassName, WS_OVERLAPPED, 0, RECT());
+		//form->WindowEx::Create(m_pManager->GetPaintWindow(), ImageViewForm::kClassName, WS_OVERLAPPED, 0, false, CDuiRect(0, 0, 700, 500));
+		form->ShowWindow();
 	}
 	else if (name == L"chk_face")
 	{
@@ -135,6 +139,7 @@ bool SessionBox::OnClicked(dui::TEvent *event)
 		json["data"]["value"] = jsb;
 
 		SendJsb(writer.write(json));*/
+		DBManager::GetInstance()->ShowDBManagerMainForm("153", L"wd_common", 0xffff);
 	}
 
 	return false;

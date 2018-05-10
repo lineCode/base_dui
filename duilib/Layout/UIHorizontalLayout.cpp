@@ -17,7 +17,7 @@ namespace dui
 	LPVOID HorizontalLayout::GetInterface(LPCTSTR pstrName)
 	{
 		if( _tcscmp(pstrName, DUI_CTR_HLAYOUT) == 0 ) return static_cast<HorizontalLayout*>(this);
-		return ScrollContainer::GetInterface(pstrName);
+		return __super::GetInterface(pstrName);
 	}
 
 	UINT HorizontalLayout::GetControlFlags() const
@@ -37,20 +37,13 @@ namespace dui
 		rc.top += rcPadding.top;
 		rc.right -= rcPadding.right;
 		rc.bottom -= rcPadding.bottom;
-		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
-		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
 
 		if( m_items.GetSize() == 0) {
-			ProcessScrollBar(rc, 0, 0);
 			return;
 		}
 
 		// Determine the minimum size
 		SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
-		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) 
-			szAvailable.cx += m_pHorizontalScrollBar->GetScrollRange();
-		if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) 
-			szAvailable.cy += m_pVerticalScrollBar->GetScrollRange();
 
 		int cyNeeded = 0;
 		int nAdjustables = 0;	//未确定长或宽的Control个数
@@ -105,9 +98,6 @@ namespace dui
 		// Position the elements
 		SIZE szRemaining = szAvailable;
 		int iPosX = rc.left;
-		if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) {
-			iPosX -= m_pHorizontalScrollBar->GetScrollPos();
-		}
 		int iEstimate = 0;
 		int iAdjustable = 0;
 		int cxFixedRemaining = cxFixed;
@@ -155,43 +145,56 @@ namespace dui
 			if( sz.cy < 0 ) sz.cy = 0;
 			if( sz.cy > szControlAvailable.cy ) sz.cy = szControlAvailable.cy;
 			if( sz.cy < pControl->GetMinHeight() ) sz.cy = pControl->GetMinHeight();
-
+#if 1
 			UINT iChildAlign = GetChildVAlign(); 
-			if (iChildAlign == DT_VCENTER) {
+			UINT pos_style = pControl->GetPosStyle();
+			if (pos_style & POS_STYLE_RIGHT)
+			{
+				assert(pControl == m_items.GetAt(m_items.GetSize() - 1));	//只有最后一个可靠右
+				rcMargin.left = szAvailable.cx - iPosX - sz.cx - rcMargin.right;
+			}
+
+			if (iChildAlign == DT_VCENTER || (pos_style & POS_STYLE_VCENTER)) {
 				int iPosY = (rc.bottom + rc.top) / 2;
-				if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) {
-					iPosY += m_pVerticalScrollBar->GetScrollRange() / 2;
-					iPosY -= m_pVerticalScrollBar->GetScrollPos();
-				}
 				RECT rcCtrl = { iPosX + rcMargin.left, iPosY - sz.cy/2, iPosX + sz.cx + rcMargin.left, iPosY + sz.cy - sz.cy/2 };
 				pControl->SetPos(rcCtrl, false);
 			}
-			else if (iChildAlign == DT_BOTTOM) {
+			else if (iChildAlign == DT_BOTTOM || (pos_style & POS_STYLE_BOTTOM)) {
 				int iPosY = rc.bottom;
-				if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) {
-					iPosY += m_pVerticalScrollBar->GetScrollRange();
-					iPosY -= m_pVerticalScrollBar->GetScrollPos();
-				}
 				RECT rcCtrl = { iPosX + rcMargin.left, iPosY - rcMargin.bottom - sz.cy, iPosX + sz.cx + rcMargin.left, iPosY - rcMargin.bottom };
 				pControl->SetPos(rcCtrl, false);
 			}
 			else {
 				int iPosY = rc.top;
-				if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) {
-					iPosY -= m_pVerticalScrollBar->GetScrollPos();
-				}
 				RECT rcCtrl = { iPosX + rcMargin.left, iPosY + rcMargin.top, iPosX + sz.cx + rcMargin.left, iPosY + sz.cy + rcMargin.top };
 				pControl->SetPos(rcCtrl, false);
 			}
 
+			
+#else
+			UINT iChildAlign = GetChildVAlign(); 
+			if (iChildAlign == DT_VCENTER) {
+				int iPosY = (rc.bottom + rc.top) / 2;
+				RECT rcCtrl = { iPosX + rcMargin.left, iPosY - sz.cy/2, iPosX + sz.cx + rcMargin.left, iPosY + sz.cy - sz.cy/2 };
+				pControl->SetPos(rcCtrl, false);
+			}
+			else if (iChildAlign == DT_BOTTOM) {
+				int iPosY = rc.bottom;
+				RECT rcCtrl = { iPosX + rcMargin.left, iPosY - rcMargin.bottom - sz.cy, iPosX + sz.cx + rcMargin.left, iPosY - rcMargin.bottom };
+				pControl->SetPos(rcCtrl, false);
+			}
+			else {
+				int iPosY = rc.top;
+				RECT rcCtrl = { iPosX + rcMargin.left, iPosY + rcMargin.top, iPosX + sz.cx + rcMargin.left, iPosY + sz.cy + rcMargin.top };
+				pControl->SetPos(rcCtrl, false);
+			}
+#endif
 			iPosX += sz.cx + m_iChildMargin + rcMargin.left + rcMargin.right;
 			cxNeeded += sz.cx + rcMargin.left + rcMargin.right;
 			szRemaining.cx -= sz.cx + m_iChildMargin + rcMargin.right;
 		}
 		cxNeeded += (nEstimateNum - 1) * m_iChildMargin;
 
-		// Process the scrollbar
-		ProcessScrollBar(rc, cxNeeded, cyNeeded);
 	}
 
 	void HorizontalLayout::DoPostPaint(HDC hDC, const RECT& rcPaint)
@@ -231,7 +234,7 @@ namespace dui
 	{
 		if( _tcscmp(pstrName, _T("sepwidth")) == 0 ) SetSepWidth(_ttoi(pstrValue));
 		else if( _tcscmp(pstrName, _T("sepimm")) == 0 ) SetSepImmMode(_tcscmp(pstrValue, _T("true")) == 0);
-		else ScrollContainer::SetAttribute(pstrName, pstrValue);
+		else __super::SetAttribute(pstrName, pstrValue);
 	}
 
 	void HorizontalLayout::DoEvent(TEvent& event)
@@ -316,7 +319,7 @@ namespace dui
 				}
 			}
 		}
-		ScrollContainer::DoEvent(event);
+		__super::DoEvent(event);
 	}
 
 	RECT HorizontalLayout::GetThumbRect(bool bUseNew) const

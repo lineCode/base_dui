@@ -6,6 +6,11 @@
 namespace dui {
 /////////////////////////////////////////////////////////////////////////////////////
 //
+#define ComboBody_EQUAL_LIST	1
+
+#ifdef ComboBody_EQUAL_LIST
+	typedef List ComboBody;
+#endif
 
 class CComboWnd;
 
@@ -61,7 +66,7 @@ public:
     LPCTSTR GetDisabledImage() const;
     void SetDisabledImage(LPCTSTR pStrImage);
 
-    TListInfo* GetListInfo();
+    ListViewInfo* GetListInfo();
     UINT GetItemFixedHeight();
     void SetItemFixedHeight(UINT nHeight);
     int GetItemFont(int index);
@@ -112,6 +117,11 @@ public:
 	void Move(SIZE szOffset, bool bNeedInvalidate = true);
     void DoEvent(TEvent& event);
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+
+	void AttachSelect(const EventCallback& callback)
+	{
+		OnEvent[UIEVENT_ITEMSELECT] += callback;
+	}
     
     bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
     void PaintText(HDC hDC);
@@ -120,6 +130,7 @@ public:
 protected:
     CComboWnd* m_pWindow;
 
+	String m_text;
     int m_iCurSel;
 	bool m_bShowText;
 	bool m_bSelectCloseFlag;
@@ -134,7 +145,7 @@ protected:
     TDrawInfo m_diFocused;
     TDrawInfo m_diDisabled;
 
-    TListInfo m_ListInfo;
+    ListViewInfo m_ListInfo;
 };
 
 } // namespace dui

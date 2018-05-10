@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+  <ListContainerElement class="listitem" normalcolor="bk_gray1" width="auto" height="22" mouse="true" mousechild="false">
+    <HLayout padding="9,3,10,3" >
+      <Button name="btn_expand" width="16" height="16" bkimage="btn_expended.png" visible="false" />
+      <Label name="label_type" width="16" height="16" margin="5,0,0,0" />
+      <Label name="label_text" width="auto" margin="5,0,0,0"/>
+    </HLayout>
+  </ListContainerElement>
+</Window>

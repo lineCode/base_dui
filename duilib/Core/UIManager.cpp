@@ -2871,12 +2871,16 @@ void CPaintManager::AddColor(LPCTSTR pStrFontName, DWORD dwValue)
 
 DWORD CPaintManager::GetColor(LPCTSTR pStrFontName)
 {
-	if (!pStrFontName)
+	if (!pStrFontName || !_tcscmp(pStrFontName, _T("")))
 		return 0;
 
 	LPVOID pData = static_cast<LPVOID>(m_ResInfo.m_ColorHash.Find(pStrFontName));
 	if (!pData) pData = static_cast<LPVOID>(m_SharedResInfo.m_ColorHash.Find(pStrFontName));
-	if (!pData) return 0;
+	if (!pData)
+	{
+		_tprintf(_T("CPaintManager::GetColor(%s) empty"), pStrFontName);
+		return 0;
+	}
 	return (DWORD)pData;
 }
 
@@ -3393,6 +3397,9 @@ void CPaintManager::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	else if( _tcscmp(pstrName, _T("layeredopacity")) == 0 ) {
 		SetLayeredOpacity(_ttoi(pstrValue));
     } 
+	else if (_tcscmp(pstrName, _T("layered")) == 0) {
+		SetLayered(_tcscmp(pstrValue, _T("true")) == 0);
+	}
     else if( _tcscmp(pstrName, _T("layeredimage")) == 0 ) {
         SetLayered(true);
         SetLayeredImage(pstrValue);
@@ -3438,8 +3445,11 @@ void CPaintManager::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr); 
 		GetShadow()->SetPosition(cx, cy);
 	}
-    else 
-        AddWindowCustomAttribute(pstrName, pstrValue);
+	else
+	{
+		wprintf(_T("CPaintManager::SetAttribute attribute:%s not found\n"), pstrName);
+		AddWindowCustomAttribute(pstrName, pstrValue);
+	}
 }
 
 String CPaintManager::GetWindowAttributeList(bool bIgnoreDefault)

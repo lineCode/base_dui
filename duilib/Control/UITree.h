@@ -59,7 +59,7 @@ namespace dui
 		PtrArray		m_aTreeNodes;
 	};
 
-	class DUILIB_API Tree : public List,public INotify
+	class DUILIB_API Tree : public ListView, public INotify
 	{
 	public:
 		Tree(void);
@@ -77,12 +77,14 @@ namespace dui
         bool AddChildNodeAt(TreeNode* pNode, int iIndex);
 		bool AddChildNodeAt(TreeNode* pNode, TreeNode* pIndexNode);
 		bool RemoveChildNode(TreeNode* pNode);
+
+		virtual void RemoveAll();
 	protected:
 		virtual bool Add(Control* pControl);
 		virtual bool AddAt(Control* pControl, int iIndex);
 		virtual bool Remove(Control* pControl, bool bDoNotDestroy = false);
 		virtual bool RemoveAt(int iIndex, bool bDoNotDestroy = false);
-		virtual void RemoveAll();
+		
 
 	protected:
 		TreeNode *m_pVirtualRoot;

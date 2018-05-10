@@ -61,15 +61,40 @@ namespace dui
 			if (iControlFixedWidth <= 0)
 				iControlFixedWidth = szAvailable.cx - rcMargin.left - rcMargin.right;
 			if (iControlFixedHeight <= 0)
-				iControlFixedHeight = szAvailable.cx - rcMargin.top - rcMargin.bottom;
+				iControlFixedHeight = szAvailable.cy - rcMargin.top - rcMargin.bottom;
 
 			if (iControlFixedWidth <= 0 || iControlFixedWidth > szAvailable.cx) iControlFixedWidth = szAvailable.cx;
-			if (iControlFixedHeight <= 0 || iControlFixedWidth > szAvailable.cy) iControlFixedHeight = szAvailable.cy;
+			if (iControlFixedHeight <= 0 || iControlFixedHeight > szAvailable.cy) iControlFixedHeight = szAvailable.cy;
 
 			SIZE sz = { iControlFixedWidth, iControlFixedHeight };
-
+			
 			int iPosX = rc.left;
 			int iPosY = rc.top;
+
+			//----------------------mod by djj[20180108]-----------------------
+			UINT pos_style = pControl->GetPosStyle();
+			if (pos_style & POS_STYLE_CENTER)
+			{
+				rcMargin.right = rcMargin.left = (szAvailable.cx - sz.cx) / 2;
+				if ((szAvailable.cx - sz.cx) % 2)
+					rcMargin.left += 1;
+			}
+			else if (pos_style & POS_STYLE_RIGHT)
+			{
+				rcMargin.left = szAvailable.cx - sz.cx - rcMargin.right;
+			}
+			//--------
+			if (pos_style & POS_STYLE_VCENTER)
+			{
+				rcMargin.top = rcMargin.bottom = (szAvailable.cy - sz.cy) / 2;
+				if ((szAvailable.cy - sz.cy) % 2)
+					rcMargin.top += 1;
+			}
+			else if (pos_style & POS_STYLE_BOTTOM)
+			{
+				rcMargin.top = szAvailable.cy - sz.cy - rcMargin.bottom;
+			}
+			//----------------------end-----------------------
 			
 			RECT rcCtrl = { iPosX + rcMargin.left, iPosY + rcMargin.top, iPosX + sz.cx + rcMargin.left, iPosY + sz.cy + rcMargin.top };
 			pControl->SetPos(rcCtrl, false);
@@ -322,12 +347,22 @@ namespace dui
 			else __super::DoEvent(event);
 			return;
 		}
+
+		/*if (event.Type == UIEVENT_MOUSEENTER)
+		{
+			wprintf(L"UIEVENT_MOUSEENTER %s\n", GetName().c_str());
+		}
+		else if (event.Type == UIEVENT_MOUSELEAVE)
+		{
+			wprintf(L"UIEVENT_MOUSELEAVE %s\n", GetName().c_str());
+		}*/
+
 		if (event.Type == UIEVENT_SETFOCUS)
 		{
 			m_bFocused = true;
 			return;
 		}
-		if (event.Type == UIEVENT_KILLFOCUS)
+		else if (event.Type == UIEVENT_KILLFOCUS)
 		{
 			m_bFocused = false;
 			return;

@@ -118,10 +118,10 @@ void MainForm::InitWindow()
 
 	tab_session_friend_ = dynamic_cast<TabLayout*>(m_PaintManager.FindControl(_T("tab_session_friend")));
 
-	list_friend_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_friend")));
-	list_session_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_session")));
+	list_session_ = dynamic_cast<ListView*>(m_PaintManager.FindControl(_T("list_session")));
+	list_friend_ = dynamic_cast<ListView*>(m_PaintManager.FindControl(_T("list_friend")));
 	tree_friend_ = dynamic_cast<Tree*>(m_PaintManager.FindControl(_T("tv_friend")));
-	list_menu_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_menu")));
+	list_menu_ = dynamic_cast<ListView*>(m_PaintManager.FindControl(_T("list_menu")));
 	{
 		ListContainerElement *menu_dpi = dynamic_cast<ListContainerElement*>(list_menu_->FindSubControl(_T("menu_dpi")));
 		auto cb = std::bind([this](TEvent *event){
@@ -251,7 +251,7 @@ void MainForm::OnClick(dui::TEvent& msg)
 
 void MainForm::TrayLeftClick()
 {
-	printf("MainForm::TrayLeftClick\n");
+	::ShowWindow(m_hWnd, SW_SHOW);
 	this->ActiveWindow();
 	::SetForegroundWindow(m_hWnd);
 	::BringWindowToTop(m_hWnd);
@@ -260,7 +260,6 @@ void MainForm::TrayLeftClick()
 
 void MainForm::TrayRightClick()
 {
-	printf("MainForm::TrayRightClick\n");
 	POINT point;
 	::GetCursorPos(&point);
 	PopupTrayMenu(point);

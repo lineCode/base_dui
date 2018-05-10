@@ -396,6 +396,7 @@ private:
 	COLORREF* m_pOffscreenBits;
     HBITMAP m_hbmpBackground;
 	COLORREF* m_pBackgroundBits;
+
 	int m_iTooltipWidth;
     int m_iLastTooltipWidth;
 	HWND m_hwndTooltip;
@@ -453,7 +454,7 @@ private:
     PtrArray m_aFoundControls;
     PtrArray m_aNeedMouseLeaveNeeded;
 	PtrArray m_aTranslateAccelerator;
-    StringPtrMap m_mNameHash;			//(key:name, value:pControl)
+    StringPtrMap m_mNameHash;			//(key:name, value:pControl) CPaintManager::__FindControlFromNameHash whick called in CPaintManager::InitControls which called in CPaintManager::AttachDialog
 	StringPtrMap m_mWindowAttrHash;		//
     StringPtrMap m_mOptionGroup;		//
 

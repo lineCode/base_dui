@@ -251,7 +251,7 @@ namespace dui
 
 	void Label::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	{
-		if( _tcscmp(pstrName, _T("halign")) == 0 ) {
+		if( _tcscmp(pstrName, _T("texthalign")) == 0 ) {
 			if( _tcsstr(pstrValue, _T("left")) != NULL ) {
 				m_uTextStyle &= ~(DT_CENTER | DT_RIGHT);
 				m_uTextStyle |= DT_LEFT;
@@ -265,7 +265,7 @@ namespace dui
 				m_uTextStyle |= DT_RIGHT;
 			}
 		}
-		else if (_tcscmp(pstrName, _T("valign")) == 0)
+		else if (_tcscmp(pstrName, _T("textvalign")) == 0)
 		{
 		    if (_tcsstr(pstrValue, _T("top")) != NULL) {
 		        m_uTextStyle &= ~(DT_BOTTOM | DT_VCENTER);
