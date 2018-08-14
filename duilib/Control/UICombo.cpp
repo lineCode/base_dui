@@ -766,14 +766,25 @@ void Combo::DoEvent(TEvent& event)
 
 	if (event.Type == UIEVENT_ITEMSELECT)
 	{
-		ListElement* item = dynamic_cast<ListElement*>(event.pSender);
+		List *list = dynamic_cast<List*>(event.pSender);
+		assert(list);
+		ListElement* item = dynamic_cast<ListElement*>(list->GetItemAt(event.wParam));
 		if (item)
-			SetText(item->GetText().c_str());
-		else 
-			SetText(_T("unkouwn"));
-		if (OnEvent.find(UIEVENT_ITEMSELECT) != OnEvent.cend())
 		{
-			OnEvent.find(UIEVENT_ITEMSELECT)->second(&event);
+			SetText(item->GetText().c_str());
+			m_iCurSel = event.wParam;
+
+			TEvent ev;
+			ev.Type = UIEVENT_ITEMSELECT;
+			ev.pSender = this;
+			if (!OnEvent.find(UIEVENT_ITEMSELECT)->second(&ev)){
+				return;
+			}
+		}
+		else
+		{
+			SetText(_T("unkouwn"));
+			m_iCurSel = -1;
 		}
 	}
     if( event.Type == UIEVENT_SETFOCUS ) 

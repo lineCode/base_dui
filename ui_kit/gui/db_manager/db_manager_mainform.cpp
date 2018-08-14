@@ -228,6 +228,13 @@ namespace nim_comp
 		{
 			return false;
 		}
+#if 1
+		if (curr_combo_sel_ == -1)
+		{
+			combo_ip_->SetBkImage(L"file='combo2_220_26.png'");
+		}
+		curr_combo_sel_ = sel;
+#else
 		if (sel >= 0 && sel < infos.size())
 		{	
 			DBManager::GetInstance()->CloseAllConn();
@@ -245,6 +252,7 @@ namespace nim_comp
 				curr_combo_sel_ = -1;
 			}
 		}
+#endif
 		return false;
 	}
 

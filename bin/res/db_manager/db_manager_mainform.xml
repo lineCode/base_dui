@@ -11,7 +11,7 @@
     </HLayout>
     <HLayout>
       <VLayout width="250" bkcolor="bk_gray1">
-        <Combo name="combo_ip" width="220" height="26" margin="15,11,15,0" bkimage="combo220_26.png" dropboxfile="combo_ip.xml" dropboxfolder="db_manager"/>
+        <Combo name="combo_ip" width="220" height="26" margin="15,11,15,0" bkimage="combo220_26.png" dropboxsize="0,46" dropboxfile="combo_ip.xml" dropboxfolder="db_manager"/>
         <Control bkcolor="splitline_level1" height="1" margin="15,0,15"/>
         <Tree name="dbtree"  vscrollbar="true" vscrollunit="100" hscrollbar="true" width="250" height="stretch"  indent="20"/>
       </VLayout>
