@@ -6,15 +6,7 @@
       
       <Button text="确定" bkcolor="main_blue"/>
     </HLayout>-->
-    <Combo name="combo1" width="80" height="20" margin="20,50" bkcolor="white" font="3" text="wo shi combo">
-      <ListElement text="微软雅黑" height="23" selected="true"/>
-      <ListElement text="宋体" height="23" width="500" />
-      <ListElement text="黑体" height="23" width="500" />
-      <ListElement text="幼圆" height="23" width="500" />
-      <ListElement text="楷体" height="23" width="500" />
-      <ListElement text="1" height="23" width="500" />
-      <ListElement text="12" height="23" width="500" />
-      <ListElement text="13" height="23" width="500" />
+    <Combo name="combo1" width="80" height="20" margin="20,50" bkcolor="white" font="3" text="wo shi combo" dropboxfile="combo_1.xml" dropboxfolder="simple_demo">
     </Combo>
     <Button name="btn" width="80" height="20" margin="20,5" bkcolor="white" text="btn" bkimage="light_top.png"/>
     <!--<List name="list" width="90" height="120" margin="30,10" bkcolor="white" vscrollbar="true" scrollbarfloat="true">

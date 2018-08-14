@@ -118,50 +118,105 @@ bool ComboBody::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl) {
 //
 //
 
-class CComboWnd : public CWindowWnd
+class CComboWnd : public WindowImplBase
 {
 public:
-    void Init(Combo* pOwner);
-    LPCTSTR GetWindowClassName() const;
-    void OnFinalMessage(HWND hWnd);
+	CComboWnd();
+	virtual ~CComboWnd();
 
-    LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	virtual String GetSkinFolder() override{ return m_folder; };
+	virtual String GetSkinFile() override{ return m_xmlfile; };
+	virtual LPCTSTR GetWindowClassName(void) const override{ return _T("DuiComboWnd"); };
+
+	void Init(Combo* pOwner, String xml, String folder, POINT pt, CPaintManager* pMainPaintManager, bool isLayeredWindow = true);
+	virtual void Notify(TEvent& msg);
+	Control* CreateControl(LPCTSTR pstrClassName);
+
+	virtual void OnFinalMessage(HWND hWnd);
+	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);
 
-#if(_WIN32_WINNT >= 0x0501)
-	virtual UINT GetClassStyle() const;
-#endif
+//#if(_WIN32_WINNT >= 0x0501)
+//	virtual UINT GetClassStyle() const{ return __super::GetClassStyle() | CS_DROPSHADOW; };
+//#endif
 
+	void Show();
+
+private:
+	String			m_folder;
+	String			m_xmlfile;
 public:
-    CPaintManager m_pm;
-    Combo* m_pOwner;
-    List* m_pLayout;
-    int m_iOldSel;
-    bool m_bScrollbarClicked;
+    Combo*			m_pOwner;
+    List*			m_pLayout;
+    int				m_iOldSel;
+    bool			m_bScrollbarClicked;
+	POINT			m_BasedPoint;
+
+	CPaintManager*	m_pParentManager;
+	bool			m_bLayeredWindow;
 };
 
-
-void CComboWnd::Init(Combo* pOwner)
+CComboWnd::CComboWnd() :
+m_pOwner(NULL),
+m_pLayout(NULL),
+m_iOldSel(-1),
+m_bScrollbarClicked(false),
+m_pParentManager(NULL),
+m_bLayeredWindow(true)
 {
+	ZeroMemory(&m_BasedPoint, sizeof(POINT));
+}
+
+CComboWnd::~CComboWnd()
+{
+
+}
+
+
+void CComboWnd::Init(Combo* pOwner, String xml, String folder, POINT pt, CPaintManager* pMainPaintManager, bool isLayeredWindow /*= true*/)
+{
+	assert(pOwner && pMainPaintManager && !xml.empty() && !folder.empty());
     m_pOwner = pOwner;
     m_pLayout = NULL;
+	m_xmlfile = xml;
+	m_folder = folder;
+	m_BasedPoint = pt;
     m_iOldSel = m_pOwner->GetCurSel();
     m_bScrollbarClicked = false;
+	m_pParentManager = pMainPaintManager;
+	m_bLayeredWindow = isLayeredWindow;
+
+	wprintf(L"CMenuWnd::Init ParentManager name:%s\n", m_pParentManager->GetName());	//菜单退出有时候会崩溃
+
+	if (m_bLayeredWindow)
+	{
+		m_PaintManager.GetShadow()->ShowShadow(true);
+		m_PaintManager.GetShadow()->SetImage(_T("../public/bk/bk_shadow.png"));
+		m_PaintManager.GetShadow()->SetSize(14);
+		m_PaintManager.GetShadow()->SetShadowCorner({ 14, 14, 14, 14 });
+	}
 
     // Position the popup window in absolute space
     SIZE szDrop = m_pOwner->GetDropBoxSize();
+	if (szDrop.cx == 0)
+	{
+		szDrop.cx = m_pOwner->GetWidth();
+	}
     RECT rcOwner = pOwner->GetPos();
     RECT rc = rcOwner;
     rc.top = rc.bottom;		// 父窗口left、bottom位置作为弹出窗口起点
     rc.bottom = rc.top + szDrop.cy;	// 计算弹出窗口高度
     if( szDrop.cx > 0 ) rc.right = rc.left + szDrop.cx;	// 计算弹出窗口宽度
 
+	Create(pOwner->GetManager()->GetPaintWindow(), NULL, WS_POPUP, WS_EX_TOOLWINDOW, rc);
+#if 0
     SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
     int cyFixed = 0;
-    for( int it = 0; it < pOwner->GetCount(); it++ ) {
-        Control* pControl = static_cast<Control*>(pOwner->GetItemAt(it));
+	for (int it = 0; it < m_pLayout->GetCount(); it++) {
+		Control* pControl = static_cast<Control*>(m_pLayout->GetItemAt(it));
         if( !pControl->IsVisible() ) continue;
         SIZE sz = pControl->EstimateSize(szAvailable);
         cyFixed += sz.cy;
@@ -184,17 +239,14 @@ void CComboWnd::Init(Combo* pOwner)
         ::MapWindowRect(pOwner->GetManager()->GetPaintWindow(), HWND_DESKTOP, &rc);
     }
     
-    Create(pOwner->GetManager()->GetPaintWindow(), NULL, WS_POPUP, WS_EX_TOOLWINDOW, rc);
+	Create(pOwner->GetManager()->GetPaintWindow(), NULL, WS_POPUP, WS_EX_TOOLWINDOW, rc);
+#endif
     // HACK: Don't deselect the parent's caption
-    HWND hWndParent = m_hWnd;
+	//放到Show()函数中去
+   /* HWND hWndParent = m_hWnd;
     while( ::GetParent(hWndParent) != NULL ) hWndParent = ::GetParent(hWndParent);
     ::ShowWindow(m_hWnd, SW_SHOW);
-    //::SendMessage(hWndParent, WM_NCACTIVATE, TRUE, 0L);
-}
-
-LPCTSTR CComboWnd::GetWindowClassName() const
-{
-    return _T("ComboWnd");
+    ::SendMessage(hWndParent, WM_NCACTIVATE, TRUE, 0L);*/
 }
 
 void CComboWnd::OnFinalMessage(HWND hWnd)
@@ -207,45 +259,46 @@ void CComboWnd::OnFinalMessage(HWND hWnd)
 
 LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	bool bHandle = false;
+	BOOL bHandle = false;
     if( uMsg == WM_CREATE ) {
-		m_pm.SetForceUseSharedRes(true);
-        m_pm.Init(m_hWnd);
-		String strResourcePath = m_pm.GetGlobalResDir();
-		ASSERT(!strResourcePath.empty());
-		if (!strResourcePath.empty()){
-			/*String folder = GetSkinFolder();
-			if (folder.back() != _T('\\') && folder.back() != _T('/')){
-				folder += _T('\\');
-			}
-			strResourcePath += folder;*/
-			strResourcePath += _T("main\\");
-			m_pm.SetThisResPath(strResourcePath.c_str());
-		}
-        // The trick is to add the items to the new container. Their owner gets
-        // reassigned by this operation - which is why it is important to reassign
-        // the items back to the righfull owner/manager when the window closes.
-        m_pLayout = new ComboBody(/*m_pOwner*/);
-        m_pLayout->SetManager(&m_pm, NULL, true);
-        LPCTSTR pDefaultAttributes = m_pOwner->GetManager()->GetDefaultAttributeList(_T("VBox"));
-        if( pDefaultAttributes ) {
-            m_pLayout->SetAttributeList(pDefaultAttributes);
-        }
-        m_pLayout->SetPadding(CDuiRect(1, 1, 1, 1));
-        m_pLayout->SetBkColor(0xFFFFFFFF);
-        m_pLayout->SetBorderColor(0xFFC6C7D2);
-        m_pLayout->SetBorderSize(1);
-        m_pLayout->SetAutoDestroy(false);
-        m_pLayout->EnableScrollBar();
-        m_pLayout->SetAttributeList(m_pOwner->GetDropBoxAttributeList().c_str());
-        for( int i = 0; i < m_pOwner->GetCount(); i++ ) {
-            m_pLayout->Add(static_cast<Control*>(m_pOwner->GetItemAt(i)));
-        }
-        m_pm.AttachDialog(m_pLayout);
+		OnCreate(uMsg, wParam, lParam, bHandle);
+		//m_pm.SetForceUseSharedRes(true);
+  //      m_pm.Init(m_hWnd);
+		//String strResourcePath = m_pm.GetGlobalResDir();
+		//ASSERT(!strResourcePath.empty());
+		//if (!strResourcePath.empty()){
+		//	String folder = GetSkinFolder();
+		//	if (folder.back() != _T('\\') && folder.back() != _T('/')){
+		//		folder += _T('\\');
+		//	}
+		//	strResourcePath += folder;
+		//	m_pm.SetThisResPath(strResourcePath.c_str());
+		//}
+  //      // The trick is to add the items to the new container. Their owner gets
+  //      // reassigned by this operation - which is why it is important to reassign
+  //      // the items back to the righfull owner/manager when the window closes.
+  //      //m_pLayout = new ComboBody(m_pOwner);
+  //      m_pLayout->SetManager(&m_pm, NULL, true);
+  //      LPCTSTR pDefaultAttributes = m_pOwner->GetManager()->GetDefaultAttributeList(_T("VBox"));
+  //      if( pDefaultAttributes ) {
+  //          m_pLayout->SetAttributeList(pDefaultAttributes);
+  //      }
+  //      m_pLayout->SetPadding(CDuiRect(1, 1, 1, 1));
+  //      m_pLayout->SetBkColor(0xFFFFFFFF);
+  //      m_pLayout->SetBorderColor(0xFFC6C7D2);
+  //      m_pLayout->SetBorderSize(1);
+  //      m_pLayout->SetAutoDestroy(false);
+  //      m_pLayout->EnableScrollBar();
+  //      
+  //      for( int i = 0; i < m_pOwner->GetCount(); i++ ) {
+  //          m_pLayout->Add(static_cast<Control*>(m_pOwner->GetItemAt(i)));
+  //      }
+  //      m_pm.AttachDialog(m_pLayout);
         
         return 0;
     }
-    else if( uMsg == WM_CLOSE ) {
+    else 
+	if( uMsg == WM_CLOSE ) {
         //m_pOwner->SetManager(m_pOwner->GetManager(), m_pOwner->GetParent(), false);
 		if( !m_pOwner->IsFloat() ) m_pOwner->SetPos(m_pOwner->GetPos(), false);
 		else m_pOwner->SetPos(m_pOwner->GetRelativePos(), false);
@@ -254,31 +307,31 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     else if( uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONDBLCLK ) {
         POINT pt = { 0 };
         ::GetCursorPos(&pt);
-        ::ScreenToClient(m_pm.GetPaintWindow(), &pt);
-        Control* pControl = m_pm.FindControl(pt);
+		::ScreenToClient(m_PaintManager.GetPaintWindow(), &pt);
+		Control* pControl = m_PaintManager.FindControl(pt);
         if( pControl && _tcscmp(pControl->GetClass(), DUI_CTR_SCROLLBAR) == 0 ) {
             m_bScrollbarClicked = true;
         }
 #if 0
-		if (!m_pm.IsNoActivate()) ::SetFocus(m_hWnd);
+		if (!m_PaintManager.IsNoActivate()) ::SetFocus(m_hWnd);
 		/*if (m_pRoot == NULL) break;*/
 		POINT pt2 = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		/*m_ptLastMousePos = pt;*/
-		pControl = m_pm.FindControl(pt2);
-		if (pControl && pControl->GetManager() == &m_pm)
+		pControl = m_PaintManager.FindControl(pt2);
+		if (pControl && pControl->GetManager() == &m_PaintManager)
 		{
-			/*m_pEventClick = pControl;*/
+			//m_pEventClick = pControl;
 			pControl->SetFocus();
-			/*SetCapture();*/
-			//TEvent event/* = { UIEVENT__FIRST }*/;
-			//event.Type = UIEVENT_BUTTONDOWN;
-			//event.pSender = pControl;
-			//event.wParam = wParam;
-			//event.lParam = lParam;
-			//event.ptMouse = pt;
-			//event.wKeyState = (WORD)wParam;
-			//event.dwTimestamp = ::GetTickCount();
-			//pControl->Event(event);
+			//SetCapture();
+			TEvent event/* = { UIEVENT__FIRST }*/;
+			event.Type = UIEVENT_BUTTONDOWN;
+			event.pSender = pControl;
+			event.wParam = wParam;
+			event.lParam = lParam;
+			event.ptMouse = pt;
+			event.wKeyState = (WORD)wParam;
+			event.dwTimestamp = ::GetTickCount();
+			pControl->Event(event);
 			IListItem* pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
 			while (!pListItem)
 			{
@@ -303,8 +356,8 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         else {
             POINT pt = { 0 };
             ::GetCursorPos(&pt);
-            ::ScreenToClient(m_pm.GetPaintWindow(), &pt);
-            Control* pControl = m_pm.FindControl(pt);
+            ::ScreenToClient(m_PaintManager.GetPaintWindow(), &pt);
+			Control* pControl = m_PaintManager.FindControl(pt);
             if( pControl && _tcscmp(pControl->GetClass(), DUI_CTR_SCROLLBAR) != 0 ) PostMessage(WM_KILLFOCUS);
         }
     }
@@ -326,17 +379,17 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             return 0;
         }
     }
-    else if( uMsg == WM_MOUSEWHEEL ) {
-        int zDelta = (int) (short) HIWORD(wParam);
-        TEvent event/* = { UIEVENT__FIRST }*/;
-        event.Type = UIEVENT_SCROLLWHEEL;
-        event.wParam = MAKELPARAM(zDelta < 0 ? SB_LINEDOWN : SB_LINEUP, 0);
-        event.lParam = lParam;
-        event.dwTimestamp = ::GetTickCount();
-        m_pOwner->DoEvent(event);
-        EnsureVisible(m_pOwner->GetCurSel());
-        return 0;
-    }
+    //else if( uMsg == WM_MOUSEWHEEL ) {
+    //    int zDelta = (int) (short) HIWORD(wParam);
+    //    TEvent event/* = { UIEVENT__FIRST }*/;
+    //    event.Type = UIEVENT_SCROLLWHEEL;
+    //    event.wParam = MAKELPARAM(zDelta < 0 ? SB_LINEDOWN : SB_LINEUP, 0);
+    //    event.lParam = lParam;
+    //    event.dwTimestamp = ::GetTickCount();
+    //    //m_pOwner->DoEvent(event);
+    //    EnsureVisible(m_pOwner->GetCurSel());
+    //    return 0;
+    //}
     else if( uMsg == WM_KILLFOCUS ) {
         if( m_hWnd != (HWND) wParam ) {
             HWND hWnd = ::GetFocus();
@@ -359,10 +412,44 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	if (!bHandle)
 	{
 		LRESULT lRes = 0;
-		if (m_pm.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
+		if (m_PaintManager.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
 	}
+	else
+		return 0;
    
     return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+}
+
+void CComboWnd::Notify(TEvent& msg)
+{
+	if (msg.Type == UIEVENT_ITEMCLICK)
+	{
+		if (m_pOwner)
+		{
+			ListElement* item = dynamic_cast<ListElement*>(msg.pSender);
+			m_pOwner->SetText(item->GetText().c_str());
+		}
+		Close();
+	}
+}
+
+Control* CComboWnd::CreateControl(LPCTSTR pstrClassName)
+{
+	/*if (_tcsicmp(pstrClassName, _T("Menu")) == 0)
+	{
+		return new Menu();
+	}
+	else if (_tcsicmp(pstrClassName, _T("MenuElement")) == 0)
+	{
+		return new MenuElement();
+	}*/
+	return NULL;
+}
+
+LRESULT CComboWnd::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	Close();
+	return 0;
 }
 
 void CComboWnd::EnsureVisible(int iIndex)
@@ -388,44 +475,65 @@ void CComboWnd::Scroll(int dx, int dy)
     m_pLayout->SetScrollPos(CDuiSize(sz.cx + dx, sz.cy + dy));
 }
 
-#if(_WIN32_WINNT >= 0x0501)
-UINT CComboWnd::GetClassStyle() const
+
+void CComboWnd::Show()
 {
-	return __super::GetClassStyle() | CS_DROPSHADOW;
+	assert(m_hWnd != NULL);
+	MONITORINFO oMonitor = {};
+	oMonitor.cbSize = sizeof(oMonitor);
+	::GetMonitorInfo(::MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
+	CDuiRect rcWork = oMonitor.rcWork;
+	CDuiRect monitor_rect = oMonitor.rcMonitor;
+	CDuiSize szInit = { rcWork.right - rcWork.left, rcWork.bottom - rcWork.top };
+	szInit = m_PaintManager.GetRoot()->EstimateSize(szInit);
+
+	/*RECT rcOwner = m_pOwner->GetPos();
+	POINT ptBase = { rcOwner.left, rcOwner.bottom};
+	::ClientToScreen(m_pParentManager->GetPaintWindow(), &ptBase);*/
+	
+	if (m_BasedPoint.y + szInit.cy > monitor_rect.bottom)
+	{
+		m_BasedPoint.y -= szInit.cy;
+	}
+	
+	
+	CDuiRect rc;
+	rc.left = m_BasedPoint.x;
+	rc.top = m_BasedPoint.y;
+	if (rc.top < monitor_rect.top)
+	{
+		rc.top = monitor_rect.top;
+	}
+
+	//判断是否超出屏幕
+	if (rc.left > monitor_rect.right - szInit.cx)
+	{
+		rc.left = monitor_rect.right - szInit.cx;
+	}
+	if (rc.left < monitor_rect.left)
+	{
+		rc.left = monitor_rect.left;
+	}
+	rc.right = rc.left + szInit.cx;
+	rc.bottom = rc.top + szInit.cy;
+
+	//HACK: Don't deselect the parent's caption
+	HWND hWndParent = m_hWnd;
+	while (::GetParent(hWndParent) != NULL) hWndParent = ::GetParent(hWndParent);
+	::SendMessage(hWndParent, WM_NCACTIVATE, TRUE, 0L);
+
+	::SetWindowPos(m_hWnd, HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE);
+	ShowWindow();
 }
-#endif
+
 ////////////////////////////////////////////////////////
-
-
 Combo::Combo() : m_pWindow(NULL), m_iCurSel(-1), m_uButtonState(0)
 {
     m_szDropBox = CDuiSize(0, 150);
     ::ZeroMemory(&m_rcTextPadding, sizeof(m_rcTextPadding));
 
-    m_ListInfo.nColumns = 0;
-    m_ListInfo.uFixedHeight = 0;
-    m_ListInfo.nFont = -1;
-    m_ListInfo.uTextStyle = DT_VCENTER | DT_SINGLELINE;
-    m_ListInfo.dwTextColor = 0xFF000000;
-    m_ListInfo.dwBkColor = 0;
-    m_ListInfo.bAlternateBk = false;
-    m_ListInfo.dwSelectedTextColor = 0xFF000000;
-    m_ListInfo.dwSelectedBkColor = 0xFFC1E3FF;
-    m_ListInfo.dwHotTextColor = 0xFF000000;
-    m_ListInfo.dwHotBkColor = 0xFFE9F5FF;
-    m_ListInfo.dwDisabledTextColor = 0xFFCCCCCC;
-    m_ListInfo.dwDisabledBkColor = 0xFFFFFFFF;
-    m_ListInfo.iHLineSize = 0;
-    m_ListInfo.dwHLineColor = 0xFF3C3C3C;
-    m_ListInfo.iVLineSize = 0;
-    m_ListInfo.dwVLineColor = 0xFF3C3C3C;
-    m_ListInfo.bShowHtml = false;
-    m_ListInfo.bMultiExpandable = false;
-
 	m_bShowText = true;
 	m_bSelectCloseFlag = true;
-    ::ZeroMemory(&m_ListInfo.rcTextPadding, sizeof(m_ListInfo.rcTextPadding));
-    ::ZeroMemory(&m_ListInfo.rcColumn, sizeof(m_ListInfo.rcColumn));
 }
 
 LPCTSTR Combo::GetClass() const
@@ -721,13 +829,13 @@ void Combo::DoEvent(TEvent& event)
     }
     if( event.Type == UIEVENT_SCROLLWHEEL )
     {
-        if (IsEnabled()) {
+        /*if (IsEnabled()) {
             bool bDownward = LOWORD(event.wParam) == SB_LINEDOWN;
             SetSelectCloseFlag(false);
             SelectItem(FindSelectable(m_iCurSel + (bDownward ? 1 : -1), bDownward));
             SetSelectCloseFlag(true);
             return;
-        }
+        }*/
     }
     if( event.Type == UIEVENT_CONTEXTMENU )
     {
@@ -772,36 +880,44 @@ SIZE Combo::EstimateSize(SIZE szAvailable)
 bool Combo::Activate()
 {
     if( !Control::Activate() ) return false;
+#if 1
     if( m_pWindow ) return true;
     m_pWindow = new CComboWnd();
     ASSERT(m_pWindow);
-    m_pWindow->Init(this);
+
+	RECT rcOwner = GetPos();
+	POINT ptBase = { rcOwner.left, rcOwner.bottom + 2 };
+	::ClientToScreen(m_pManager->GetPaintWindow(), &ptBase);
+
+	m_pWindow->Init(this, m_dropBoxFile, m_dropBoxFolder, ptBase, m_pManager);
+	//if (m_pManager != NULL) m_pManager->SendNotify(this, UIEVENT_DROPDOWN);
+    //Invalidate();
+	m_pWindow->Show();
+#else
+	if (!m_pWindow)
+	{
+		m_pWindow = new CComboWnd;
+		ASSERT(m_pWindow);
+		m_pWindow->Init(this, m_dropBoxFile, m_dropBoxFolder, m_pManager);
+	}
+	else
+		m_pWindow->ShowWindow();
 	if (m_pManager != NULL) m_pManager->SendNotify(this, UIEVENT_DROPDOWN);
-    Invalidate();
+#endif
     return true;
 }
 
-String Combo::GetText() const
-{
-    if( m_iCurSel < 0 ) return _T("");
-    Control* pControl = static_cast<Control*>(m_items[m_iCurSel]);
-    return pControl->GetText();
-}
+//String Combo::GetText() const
+//{
+//    if( m_iCurSel < 0 ) return _T("");
+//    Control* pControl = static_cast<Control*>(m_items[m_iCurSel]);
+//    return pControl->GetText();
+//}
 
 void Combo::SetEnabled(bool bEnable)
 {
     __super::SetEnabled(bEnable);
     if( !IsEnabled() ) m_uButtonState = 0;
-}
-
-String Combo::GetDropBoxAttributeList()
-{
-    return m_sDropBoxAttributes;
-}
-
-void Combo::SetDropBoxAttributeList(LPCTSTR pstrList)
-{
-    m_sDropBoxAttributes = pstrList;
 }
 
 SIZE Combo::GetDropBoxSize() const
@@ -901,246 +1017,6 @@ void Combo::SetDisabledImage(LPCTSTR pStrImage)
 	Invalidate();
 }
 
-ListViewInfo* Combo::GetListInfo()
-{
-    return &m_ListInfo;
-}
-
-UINT Combo::GetItemFixedHeight()
-{
-    return m_ListInfo.uFixedHeight;
-}
-
-void Combo::SetItemFixedHeight(UINT nHeight)
-{
-    m_ListInfo.uFixedHeight = nHeight;
-    Invalidate();
-}
-
-int Combo::GetItemFont(int index)
-{
-    return m_ListInfo.nFont;
-}
-
-void Combo::SetItemFont(int index)
-{
-    m_ListInfo.nFont = index;
-    Invalidate();
-}
-
-UINT Combo::GetItemTextStyle()
-{
-    return m_ListInfo.uTextStyle;
-}
-
-void Combo::SetItemTextStyle(UINT uStyle)
-{
-	m_ListInfo.uTextStyle = uStyle;
-	Invalidate();
-}
-
-RECT Combo::GetItemTextPadding() const
-{
-	return m_ListInfo.rcTextPadding;
-}
-
-void Combo::SetItemTextPadding(RECT rc)
-{
-    m_ListInfo.rcTextPadding = rc;
-    Invalidate();
-}
-
-void Combo::SetItemTextColor(DWORD dwTextColor)
-{
-    m_ListInfo.dwTextColor = dwTextColor;
-    Invalidate();
-}
-
-void Combo::SetItemBkColor(DWORD dwBkColor)
-{
-    m_ListInfo.dwBkColor = dwBkColor;
-}
-
-void Combo::SetItemBkImage(LPCTSTR pStrImage)
-{
-	if( m_ListInfo.diBk.sDrawString == pStrImage && m_ListInfo.diBk.pImageInfo != NULL ) return;
-	m_ListInfo.diBk.Clear();
-	m_ListInfo.diBk.sDrawString = pStrImage;
-}
-
-DWORD Combo::GetItemTextColor() const
-{
-	return m_ListInfo.dwTextColor;
-}
-
-DWORD Combo::GetItemBkColor() const
-{
-	return m_ListInfo.dwBkColor;
-}
-
-LPCTSTR Combo::GetItemBkImage() const
-{
-	return m_ListInfo.diBk.sDrawString.c_str();
-}
-
-bool Combo::IsAlternateBk() const
-{
-    return m_ListInfo.bAlternateBk;
-}
-
-void Combo::SetAlternateBk(bool bAlternateBk)
-{
-    m_ListInfo.bAlternateBk = bAlternateBk;
-}
-
-void Combo::SetSelectedItemTextColor(DWORD dwTextColor)
-{
-    m_ListInfo.dwSelectedTextColor = dwTextColor;
-}
-
-void Combo::SetSelectedItemBkColor(DWORD dwBkColor)
-{
-    m_ListInfo.dwSelectedBkColor = dwBkColor;
-}
-
-void Combo::SetSelectedItemImage(LPCTSTR pStrImage)
-{
-	if( m_ListInfo.diSelected.sDrawString == pStrImage && m_ListInfo.diSelected.pImageInfo != NULL ) return;
-	m_ListInfo.diSelected.Clear();
-	m_ListInfo.diSelected.sDrawString = pStrImage;
-}
-
-DWORD Combo::GetSelectedItemTextColor() const
-{
-	return m_ListInfo.dwSelectedTextColor;
-}
-
-DWORD Combo::GetSelectedItemBkColor() const
-{
-	return m_ListInfo.dwSelectedBkColor;
-}
-
-LPCTSTR Combo::GetSelectedItemImage() const
-{
-	return m_ListInfo.diSelected.sDrawString.c_str();
-}
-
-void Combo::SetHotItemTextColor(DWORD dwTextColor)
-{
-    m_ListInfo.dwHotTextColor = dwTextColor;
-}
-
-void Combo::SetHotItemBkColor(DWORD dwBkColor)
-{
-    m_ListInfo.dwHotBkColor = dwBkColor;
-}
-
-void Combo::SetHotItemImage(LPCTSTR pStrImage)
-{
-	if( m_ListInfo.diHot.sDrawString == pStrImage && m_ListInfo.diHot.pImageInfo != NULL ) return;
-	m_ListInfo.diHot.Clear();
-	m_ListInfo.diHot.sDrawString = pStrImage;
-}
-
-DWORD Combo::GetHotItemTextColor() const
-{
-	return m_ListInfo.dwHotTextColor;
-}
-DWORD Combo::GetHotItemBkColor() const
-{
-	return m_ListInfo.dwHotBkColor;
-}
-
-LPCTSTR Combo::GetHotItemImage() const
-{
-	return m_ListInfo.diHot.sDrawString.c_str();
-}
-
-void Combo::SetDisabledItemTextColor(DWORD dwTextColor)
-{
-    m_ListInfo.dwDisabledTextColor = dwTextColor;
-}
-
-void Combo::SetDisabledItemBkColor(DWORD dwBkColor)
-{
-    m_ListInfo.dwDisabledBkColor = dwBkColor;
-}
-
-void Combo::SetDisabledItemImage(LPCTSTR pStrImage)
-{
-	if( m_ListInfo.diDisabled.sDrawString == pStrImage && m_ListInfo.diDisabled.pImageInfo != NULL ) return;
-	m_ListInfo.diDisabled.Clear();
-	m_ListInfo.diDisabled.sDrawString = pStrImage;
-}
-
-DWORD Combo::GetDisabledItemTextColor() const
-{
-	return m_ListInfo.dwDisabledTextColor;
-}
-
-DWORD Combo::GetDisabledItemBkColor() const
-{
-	return m_ListInfo.dwDisabledBkColor;
-}
-
-LPCTSTR Combo::GetDisabledItemImage() const
-{
-	return m_ListInfo.diDisabled.sDrawString.c_str();
-}
-
-int Combo::GetItemHLineSize() const
-{
-    return m_ListInfo.iHLineSize;
-}
-
-void Combo::SetItemHLineSize(int iSize)
-{
-    m_ListInfo.iHLineSize = iSize;
-}
-
-DWORD Combo::GetItemHLineColor() const
-{
-    return m_ListInfo.dwHLineColor;
-}
-
-void Combo::SetItemHLineColor(DWORD dwLineColor)
-{
-    m_ListInfo.dwHLineColor = dwLineColor;
-}
-
-int Combo::GetItemVLineSize() const
-{
-    return m_ListInfo.iVLineSize;
-}
-
-void Combo::SetItemVLineSize(int iSize)
-{
-    m_ListInfo.iVLineSize = iSize;
-}
-
-DWORD Combo::GetItemVLineColor() const
-{
-    return m_ListInfo.dwVLineColor;
-}
-
-void Combo::SetItemVLineColor(DWORD dwLineColor)
-{
-    m_ListInfo.dwVLineColor = dwLineColor;
-}
-
-bool Combo::IsItemShowHtml()
-{
-    return m_ListInfo.bShowHtml;
-}
-
-void Combo::SetItemShowHtml(bool bShowHtml)
-{
-    if( m_ListInfo.bShowHtml == bShowHtml ) return;
-
-    m_ListInfo.bShowHtml = bShowHtml;
-    Invalidate();
-}
-
 void Combo::SetPos(RECT rc, bool bNeedInvalidate)
 {
     // Put all elements out of sight
@@ -1172,7 +1048,6 @@ void Combo::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if( _tcscmp(pstrName, _T("pushedimage")) == 0 ) SetPushedImage(pstrValue);
     else if( _tcscmp(pstrName, _T("focusedimage")) == 0 ) SetFocusedImage(pstrValue);
     else if( _tcscmp(pstrName, _T("disabledimage")) == 0 ) SetDisabledImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("dropbox")) == 0 ) SetDropBoxAttributeList(pstrValue);
 	else if( _tcscmp(pstrName, _T("dropboxsize")) == 0)
 	{
 		SIZE szDropBoxSize = { 0 };
@@ -1181,143 +1056,10 @@ void Combo::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		szDropBoxSize.cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
 		SetDropBoxSize(szDropBoxSize);
 	}
-	else if( _tcscmp(pstrName, _T("itemheight")) == 0 ) m_ListInfo.uFixedHeight = _ttoi(pstrValue);
-	else if( _tcscmp(pstrName, _T("itemfont")) == 0 ) m_ListInfo.nFont = _ttoi(pstrValue);
-    else if( _tcscmp(pstrName, _T("itemalign")) == 0 ) {
-        if( _tcsstr(pstrValue, _T("left")) != NULL ) {
-            m_ListInfo.uTextStyle &= ~(DT_CENTER | DT_RIGHT);
-            m_ListInfo.uTextStyle |= DT_LEFT;
-        }
-        if( _tcsstr(pstrValue, _T("center")) != NULL ) {
-            m_ListInfo.uTextStyle &= ~(DT_LEFT | DT_RIGHT);
-            m_ListInfo.uTextStyle |= DT_CENTER;
-        }
-        if( _tcsstr(pstrValue, _T("right")) != NULL ) {
-            m_ListInfo.uTextStyle &= ~(DT_LEFT | DT_CENTER);
-            m_ListInfo.uTextStyle |= DT_RIGHT;
-        }
-    }
-    if( _tcscmp(pstrName, _T("itemtextpadding")) == 0 ) {
-        RECT rcTextPadding = { 0 };
-        LPTSTR pstr = NULL;
-        rcTextPadding.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);    
-        rcTextPadding.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);    
-        rcTextPadding.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);    
-        rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);    
-        SetItemTextPadding(rcTextPadding);
-    }
-    else if( _tcscmp(pstrName, _T("itemtextcolor")) == 0 ) {
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-        SetItemTextColor(clrColor);
-    }
-    else if( _tcscmp(pstrName, _T("itembkcolor")) == 0 ) {
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-        SetItemBkColor(clrColor);
-    }
-    else if( _tcscmp(pstrName, _T("itembkimage")) == 0 ) SetItemBkImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("itemaltbk")) == 0 ) SetAlternateBk(_tcscmp(pstrValue, _T("true")) == 0);
-    else if( _tcscmp(pstrName, _T("itemselectedtextcolor")) == 0 ) {
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-        SetSelectedItemTextColor(clrColor);
-    }
-    else if( _tcscmp(pstrName, _T("itemselectedbkcolor")) == 0 ) {
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-        SetSelectedItemBkColor(clrColor);
-    }
-    else if( _tcscmp(pstrName, _T("itemselectedimage")) == 0 ) SetSelectedItemImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("itemhottextcolor")) == 0 ) {
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-        SetHotItemTextColor(clrColor);
-    }
-    else if( _tcscmp(pstrName, _T("itemhotbkcolor")) == 0 ) {
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-        SetHotItemBkColor(clrColor);
-    }
-    else if( _tcscmp(pstrName, _T("itemhotimage")) == 0 ) SetHotItemImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("itemdisabledtextcolor")) == 0 ) {
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-        SetDisabledItemTextColor(clrColor);
-    }
-    else if( _tcscmp(pstrName, _T("itemdisabledbkcolor")) == 0 ) {
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-        SetDisabledItemBkColor(clrColor);
-    }
-    else if( _tcscmp(pstrName, _T("itemdisabledimage")) == 0 ) SetDisabledItemImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("itemvlinesize")) == 0 ) {
-        SetItemVLineSize(_ttoi(pstrValue));
-    }
-    else if( _tcscmp(pstrName, _T("itemvlinecolor")) == 0 ) {
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-        SetItemVLineColor(clrColor);
-    }
-    else if( _tcscmp(pstrName, _T("itemhlinesize")) == 0 ) {
-        SetItemHLineSize(_ttoi(pstrValue));
-    }
-    else if( _tcscmp(pstrName, _T("itemhlinecolor")) == 0 ) {
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-        SetItemHLineColor(clrColor);
-    }
-    else if( _tcscmp(pstrName, _T("itemshowhtml")) == 0 ) SetItemShowHtml(_tcscmp(pstrValue, _T("true")) == 0);
+	else if (_tcscmp(pstrName, _T("dropboxfile")) == 0)
+		SetDropBoxFile(pstrValue);
+	else if (_tcscmp(pstrName, _T("dropboxfolder")) == 0)
+		SetDropBoxFolder(pstrValue);
     else __super::SetAttribute(pstrName, pstrValue);
 }
 
@@ -1358,37 +1100,16 @@ void Combo::PaintText(HDC hDC)
     rcText.right -= m_rcTextPadding.right;
     rcText.top += m_rcTextPadding.top;
     rcText.bottom -= m_rcTextPadding.bottom;
-#if 1
+
 	String sText = GetText();
 	if (sText.empty()) return;
 	int nLinks = 0;
 	if (IsEnabled()) {
-		/*if (m_bShowHtml)
-			CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, sText, m_dwTextColor, NULL, NULL, nLinks, m_iFont, m_uTextStyle);
-		else*/
 		CRenderEngine::DrawText(hDC, m_pManager, rcText, sText.c_str(), 0xff000000, 2, 0);
 	}
 	else {
-		/*if (m_bShowHtml)
-			CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, sText, m_dwDisabledTextColor, NULL, NULL, nLinks, m_iFont, m_uTextStyle);
-		else*/
 		CRenderEngine::DrawText(hDC, m_pManager, rcText, sText.c_str(), 0xff000000, 2, 0);
 	}
-#else
-    if( m_iCurSel >= 0 ) {
-        Control* pControl = static_cast<Control*>(m_items[m_iCurSel]);
-        IListItem* pElement = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
-        if( pElement != NULL ) {
-            pElement->DrawItemText(hDC, rcText);
-        }
-        else {
-            RECT rcOldPos = pControl->GetPos();
-            pControl->SetPos(rcText, false);
-            pControl->Paint(hDC, rcText, NULL);
-            pControl->SetPos(rcOldPos, false);
-        }
-    }
-#endif
 }
 
 } // namespace dui

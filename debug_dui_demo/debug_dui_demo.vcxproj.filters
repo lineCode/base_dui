@@ -34,7 +34,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\bin\res\main\login_debug.xml">
+    <Xml Include="..\bin\res\simple_demo\login_debug.xml">
+      <Filter>资源文件</Filter>
+    </Xml>
+    <Xml Include="..\bin\res\simple_demo\combo_1.xml">
       <Filter>资源文件</Filter>
     </Xml>
   </ItemGroup>

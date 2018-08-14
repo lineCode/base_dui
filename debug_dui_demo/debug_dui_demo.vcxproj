@@ -96,9 +96,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\bin\res\main\login_debug.xml">
+    <Xml Include="..\bin\res\simple_demo\combo_1.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\bin\res\simple_demo\login_debug.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

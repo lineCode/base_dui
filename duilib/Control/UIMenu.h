@@ -5,7 +5,6 @@
 
 #include "../Utils/observer_impl_base.hpp"
 
-#define MENUWND_OBSERVER	0
 #define MENU_EQUAL_LIST		1	//List代替Menu
 namespace dui {
 
@@ -54,188 +53,6 @@ enum MenuItemDefaultInfo
 
 #define WM_MENUCLICK WM_USER + 121  //用来接收按钮单击的消息
 
-#if MENUWND_OBSERVER
-///////////////////////////////////////////////
-class MenuMenuReceiverImplBase;
-class MenuMenuObserverImplBase
-{
-public:
-	virtual void AddReceiver(MenuMenuReceiverImplBase* receiver) = 0;
-	virtual void RemoveReceiver(MenuMenuReceiverImplBase* receiver) = 0;
-	virtual BOOL RBroadcast(ContextMenuParam param) = 0;
-};
-/////////////////////////////////////////////////
-class MenuMenuReceiverImplBase
-{
-public:
-	virtual void AddObserver(MenuMenuObserverImplBase* observer) = 0;
-	virtual void RemoveObserver() = 0;
-	virtual BOOL Receive(ContextMenuParam param) = 0;
-};
-/////////////////////////////////////////////////
-
-class MenuReceiverImpl;
-class DUILIB_API MenuObserverImpl : public MenuMenuObserverImplBase
-{
-	friend class Iterator;
-public:
-	MenuObserverImpl():
-	m_pMainWndPaintManager(NULL),
-	m_pMenuCheckInfo(NULL)
-	{
-		pReceivers_ = new ReceiversVector;
-	}
-
-	~MenuObserverImpl()
-	{
-		if (pReceivers_ != NULL)
-		{
-			delete pReceivers_;
-			pReceivers_ = NULL;
-		}
-		
-	}
-
-	virtual void AddReceiver(MenuMenuReceiverImplBase* receiver)
-	{
-		if (receiver == NULL)
-			return;
-
-		pReceivers_->push_back(receiver);
-		receiver->AddObserver(this);
-	}
-
-	virtual void RemoveReceiver(MenuMenuReceiverImplBase* receiver)
-	{
-		if (receiver == NULL)
-			return;
-
-		ReceiversVector::iterator it = pReceivers_->begin();
-		for (; it != pReceivers_->end(); ++it)
-		{
-			if (*it == receiver)
-			{
-				pReceivers_->erase(it);
-				break;
-			}
-		}
-	}
-
-	virtual BOOL RBroadcast(ContextMenuParam param)
-	{
-		ReceiversVector::reverse_iterator it = pReceivers_->rbegin();
-		for (; it != pReceivers_->rend(); ++it)
-		{
-			(*it)->Receive(param);
-		}
-
-		return BOOL();
-	}
-
-
-	class Iterator
-	{
-		MenuObserverImpl & _tbl;
-		DWORD index;
-		MenuMenuReceiverImplBase* ptr;
-	public:
-		Iterator( MenuObserverImpl & table )
-			: _tbl( table ), index(0), ptr(NULL)
-		{}
-
-		Iterator( const Iterator & v )
-			: _tbl( v._tbl ), index(v.index), ptr(v.ptr)
-		{}
-
-		MenuMenuReceiverImplBase* next()
-		{
-			if ( index >= _tbl.pReceivers_->size() )
-				return NULL;
-
-			for ( ; index < _tbl.pReceivers_->size(); )
-			{
-				ptr = (*(_tbl.pReceivers_))[ index++ ];
-				if ( ptr )
-					return ptr;
-			}
-			return NULL;
-		}
-	};
-
-	virtual void SetManger(CPaintManager* pManager)
-	{
-		if (pManager != NULL)
-			m_pMainWndPaintManager = pManager;
-	}
-
-	virtual CPaintManager* GetManager() const
-	{
-		return m_pMainWndPaintManager;
-	}
-
-	virtual void SetMenuCheckInfo(std::map<String,bool>* pInfo)
-	{
-		if (pInfo != NULL)
-			m_pMenuCheckInfo = pInfo;
-		else
-			m_pMenuCheckInfo = NULL;
-	}
-
-	virtual std::map<String,bool>* GetMenuCheckInfo() const
-	{
-		return m_pMenuCheckInfo;
-	}
-
-protected:
-	typedef std::vector<MenuMenuReceiverImplBase*> ReceiversVector;
-	ReceiversVector *pReceivers_;
-
-	CPaintManager* m_pMainWndPaintManager;
-	std::map<String,bool>* m_pMenuCheckInfo;
-};
-
-////////////////////////////////////////////////////
-class DUILIB_API MenuReceiverImpl : public MenuMenuReceiverImplBase
-{
-public:
-	MenuReceiverImpl()
-	{
-		pObservers_ = new ObserversVector;
-	}
-
-	~MenuReceiverImpl()
-	{
-		if (pObservers_ != NULL)
-		{
-			delete pObservers_;
-			pObservers_ = NULL;
-		}
-	}
-
-	virtual void AddObserver(MenuMenuObserverImplBase* observer)
-	{
-		pObservers_->push_back(observer);
-	}
-
-	virtual void RemoveObserver()
-	{
-		ObserversVector::iterator it = pObservers_->begin();
-		for (; it != pObservers_->end(); ++it)
-		{
-			(*it)->RemoveReceiver(this);
-		}
-	}
-
-	virtual BOOL Receive(ContextMenuParam param)
-	{
-		return BOOL();
-	}
-
-protected:
-	typedef std::vector<MenuMenuObserverImplBase*> ObserversVector;
-	ObserversVector* pObservers_;
-};
-#endif
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
@@ -270,19 +87,9 @@ public:
 //
 
 class MenuElement;
-#if MENUWND_OBSERVER
-class DUILIB_API CMenuWnd : public CWindowWnd, public MenuReceiverImpl, public INotify, public IDialogBuilderCallback
-{
-public:
-	static MenuObserverImpl& GetGlobalContextMenuObserver()
-	{
-		static MenuObserverImpl s_context_menu_observer;
-		return s_context_menu_observer;
-	}
-#else
+
 class DUILIB_API CMenuWnd : public WindowImplBase
 {
-#endif
 public:
 	CMenuWnd();
 	virtual ~CMenuWnd();
@@ -310,9 +117,7 @@ public:
 	LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	//LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
-#if MENUWND_OBSERVER
-	BOOL Receive(ContextMenuParam param);
-#endif
+
 	// 获取根菜单控件，用于动态添加子菜单
 	Menu* GetMenuUI();
 

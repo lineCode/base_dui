@@ -950,9 +950,9 @@ RichEdit::~RichEdit()
     if( m_pTwh ) {
 		m_pTwh->GetTextServices()->TxSendMessage(EM_SETOLECALLBACK, 0, 0, 0);
 
-		if (m_pOleCallback)
+		if (m_pOleCallback)		//m_pTwh->GetTextServices()->TxSendMessage(EM_SETOLECALLBACK, 0, 0, 0)中已经调用Relearse析构掉了
 		{
-			delete m_pOleCallback;
+			//delete m_pOleCallback;
 			m_pOleCallback = nullptr;
 		}
 

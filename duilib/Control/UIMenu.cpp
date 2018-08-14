@@ -142,35 +142,7 @@ LPCTSTR CMenuWnd::GetWindowClassName(void) const
 {
 	return _T("DuiMenuWnd");
 }
-#if MENUWND_OBSERVER
-BOOL CMenuWnd::Receive(ContextMenuParam param)
-{
-	switch (param.wParam)
-	{
-	case 1:
-		Close();
-		break;
-	case 2:
-		{
-			HWND hParent = GetParent(m_hWnd);
-			while (hParent != NULL)
-			{
-				if (hParent == param.hWnd)
-				{
-					Close();
-					break;
-				}
-				hParent = GetParent(hParent);
-			}
-		}
-		break;
-	default:
-		break;
-	}
 
-	return TRUE;
-}
-#endif
 void CMenuWnd::Init(MenuElement* pOwner, String xml, String folder, POINT point,
 					CPaintManager* pMainPaintManager, std::map<String,bool>* pMenuCheckInfo/* = NULL*/,
 					DWORD dwAlignment/* = eMenuAlignment_Left | eMenuAlignment_Top*/, bool isLayeredWindow/* = true*/)
@@ -186,18 +158,6 @@ void CMenuWnd::Init(MenuElement* pOwner, String xml, String folder, POINT point,
 
 	wprintf(L"CMenuWnd::Init ParentManager name:%s\n", m_pParentManager->GetName());	//菜单退出有时候会崩溃
 
-#if MENUWND_OBSERVER
-	// 如果是一级菜单的创建
-	if (pOwner == NULL)
-	{
-		ASSERT(pMainPaintManager != NULL);
-		CMenuWnd::GetGlobalContextMenuObserver().SetManger(pMainPaintManager);
-		if (pMenuCheckInfo != NULL)
-			CMenuWnd::GetGlobalContextMenuObserver().SetMenuCheckInfo(pMenuCheckInfo);
-	}
-
-	CMenuWnd::GetGlobalContextMenuObserver().AddReceiver(this);
-#endif
 	if (m_bLayeredWindow)
 	{
 		m_PaintManager.GetShadow()->ShowShadow(true);
@@ -216,15 +176,6 @@ void CMenuWnd::Init(MenuElement* pOwner, String xml, String folder, POINT point,
 
 void CMenuWnd::Notify(TEvent& msg)
 {
-#if MENUWND_OBSERVER
-	if( CMenuWnd::GetGlobalContextMenuObserver().GetManager() != NULL) 
-	{
-		if (msg.sType == DUI_MSGTYPE_CLICK || msg.sType == UIEVENT_ITEMCLICK/* || msg.sType == _T("valuechanged")*/)
-		{
-			CMenuWnd::GetGlobalContextMenuObserver().GetManager()->SendNotify(msg, false);
-		}
-	}
-#else
 	if (msg.Type == UIEVENT_ITEMCLICK)
 	{
 		if (m_pParentManager)
@@ -233,7 +184,6 @@ void CMenuWnd::Notify(TEvent& msg)
 		}
 		Close();
 	}
-#endif
 }
 
 Control* CMenuWnd::CreateControl( LPCTSTR pstrClassName )
@@ -252,9 +202,6 @@ Control* CMenuWnd::CreateControl( LPCTSTR pstrClassName )
 
 void CMenuWnd::OnFinalMessage(HWND hWnd)
 {
-#if MENUWND_OBSERVER
-	RemoveObserver();
-#endif
 	if( m_pOwner != NULL ) {
 		for( int i = 0; i < m_pOwner->GetCount(); i++ ) {
 			if( static_cast<MenuElement*>(m_pOwner->GetItemAt(i)->GetInterface(_T("MenuElement"))) != NULL ) {
@@ -388,23 +335,7 @@ void CMenuWnd::ResizeSubMenu()
 	LONG chBottomAlgin = 0;
 
 	RECT rcPreWindow = {0};
-#if MENUWND_OBSERVER
-	MenuObserverImpl::Iterator iterator(CMenuWnd::GetGlobalContextMenuObserver());
-	MenuMenuReceiverImplBase* pReceiver = iterator.next();
-	while( pReceiver != NULL ) {
-		CMenuWnd* pContextMenu = dynamic_cast<CMenuWnd*>(pReceiver);
-		if( pContextMenu != NULL ) {
-			GetWindowRect(pContextMenu->GetHWND(), &rcPreWindow);
 
-			bReachRight = rcPreWindow.left >= rcWindow.right;
-			bReachBottom = rcPreWindow.top >= rcWindow.bottom;
-			if( pContextMenu->GetHWND() == m_pOwner->GetManager()->GetPaintWindow() 
-				||  bReachBottom || bReachRight )
-				break;
-		}
-		pReceiver = iterator.next();
-	}
-#endif
 	if (bReachBottom)
 	{
 		rc.bottom = rcWindow.top;
@@ -448,32 +379,7 @@ void CMenuWnd::ResizeSubMenu()
 
 LRESULT CMenuWnd::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-#if MENUWND_OBSERVER
-	HWND hFocusWnd = (HWND)wParam;
-
-	BOOL bInMenuWindowList = FALSE;
-	ContextMenuParam param;
-	param.hWnd = GetHWND();
-
-	MenuObserverImpl::Iterator iterator(CMenuWnd::GetGlobalContextMenuObserver());
-	MenuMenuReceiverImplBase* pReceiver = iterator.next();
-	while( pReceiver != NULL ) {
-		CMenuWnd* pContextMenu = dynamic_cast<CMenuWnd*>(pReceiver);
-		if( pContextMenu != NULL && pContextMenu->GetHWND() ==  hFocusWnd ) {
-			bInMenuWindowList = TRUE;
-			break;
-		}
-		pReceiver = iterator.next();
-	}
-
-	if( !bInMenuWindowList ) {
-		param.wParam = 1;
-		CMenuWnd::GetGlobalContextMenuObserver().RBroadcast(param);
-		return 0;
-	}
-#else
 	Close();
-#endif
 	return 0;
 }
 //LRESULT CMenuWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -746,13 +652,7 @@ void MenuElement::DoEvent(TEvent& event)
 		}
 		else
 		{
-#if MENUWND_OBSERVER
-			ContextMenuParam param;
-			param.hWnd = m_pManager->GetPaintWindow();
-			param.wParam = 2;
-			CMenuWnd::GetGlobalContextMenuObserver().RBroadcast(param);
-			m_pOwner->SelectItem(GetIndex(), true);
-#endif
+
 		}
 		return;
 	}
@@ -779,36 +679,7 @@ void MenuElement::DoEvent(TEvent& event)
 			}
 			else
 			{
-#if MENUWND_OBSERVER
-				SetChecked(!GetChecked());
-				if (CMenuWnd::GetGlobalContextMenuObserver().GetManager() != NULL)
-				{
-#if 0		//djj[20170425] : free pMenuCmd err when delete pMenuCmd outside;
-					MenuCmd* pMenuCmd = new MenuCmd();
-					lstrcpy(pMenuCmd->szName, GetName().c_str());
-					lstrcpy(pMenuCmd->szUserData, GetUserData().c_str());
-					lstrcpy(pMenuCmd->szText, GetText().c_str());
-					pMenuCmd->bChecked = GetChecked();
-					if (!PostMessage(CMenuWnd::GetGlobalContextMenuObserver().GetManager()->GetPaintWindow(), WM_MENUCLICK, (WPARAM)pMenuCmd, NULL))
-					{
-						delete pMenuCmd;
-						pMenuCmd = NULL;
-					}
-#else
-					MenuCmd menuCmd = {};
-					lstrcpy(menuCmd.szName, GetName().c_str());
-					lstrcpy(menuCmd.szUserData, GetUserData().c_str());
-					lstrcpy(menuCmd.szText, GetText().c_str());
-					menuCmd.bChecked = GetChecked();
-					if (!SendMessage(CMenuWnd::GetGlobalContextMenuObserver().GetManager()->GetPaintWindow(), WM_MENUCLICK, (WPARAM)&menuCmd, NULL))
-					{}
-#endif		
-				}
-				ContextMenuParam param;
-				param.hWnd = m_pManager->GetPaintWindow();
-				param.wParam = 1;
-				CMenuWnd::GetGlobalContextMenuObserver().RBroadcast(param);
-#endif
+
 			}
         }
 
@@ -836,13 +707,6 @@ void MenuElement::DoEvent(TEvent& event)
 		}
 		else
 		{
-#if MENUWND_OBSERVER
-			ContextMenuParam param;
-			param.hWnd = m_pManager->GetPaintWindow();
-			param.wParam = 2;
-			CMenuWnd::GetGlobalContextMenuObserver().RBroadcast(param);
-			m_pOwner->SelectItem(GetIndex(), true);
-#endif
 		}
 
 		return;
@@ -862,12 +726,6 @@ void MenuElement::CreateMenuWnd()
 
 	m_pWindow = new CMenuWnd();
 	ASSERT(m_pWindow);
-#if MENUWND_OBSERVER
-	ContextMenuParam param;
-	param.hWnd = m_pManager->GetPaintWindow();
-	param.wParam = 2;
-	CMenuWnd::GetGlobalContextMenuObserver().RBroadcast(param);
-#endif
 	m_pWindow->Init(static_cast<MenuElement*>(this), _T(""), _T(""), CDuiPoint(), NULL);
 }
 
@@ -915,31 +773,11 @@ void MenuElement::SetIconSize(LONG cx, LONG cy)
 
 void MenuElement::SetChecked(bool bCheck/* = true*/)
 {
-#if MENUWND_OBSERVER
-	if (!m_bCheckItem || CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo() == NULL )
-		return;
-	std::map<String,bool>::iterator it = CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->find(GetName());
-	if (it == CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->end())
-		CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->insert(std::map<String,bool>::value_type(GetName(),bCheck));
-	else
-		it->second = bCheck;
-#endif
 }
 
 bool MenuElement::GetChecked() const
 {
-#if MENUWND_OBSERVER
-	if (!m_bCheckItem || CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo() == NULL || CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->size() == 0)
-		return false;
-
-	std::map<String,bool>::iterator it = CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->find(GetName());
-	if (it != CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->end())
-	{
-		return it->second;
-	}
-#endif
 	return false;
-
 }
 
 void MenuElement::SetCheckItem(bool bCheckItem/* = false*/)
@@ -973,12 +811,6 @@ void MenuElement::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 		SetCheckItem(_tcscmp(pstrValue, _T("true")) == 0 ? true : false);		
 	}
 	else if( _tcscmp(pstrName, _T("ischeck")) == 0 ) {		
-#if MENUWND_OBSERVER
-		if (CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo() != NULL && CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->find(GetName()) == CMenuWnd::GetGlobalContextMenuObserver().GetMenuCheckInfo()->end())
-		{
-			SetChecked(_tcscmp(pstrValue, _T("true")) == 0 ? true : false);
-		}	
-#endif
 	}	
 	else if (_tcscmp(pstrName, _T("expland")) == 0) {
 		SetShowExplandIcon(_tcscmp(pstrValue, _T("true")) == 0 ? true : false);

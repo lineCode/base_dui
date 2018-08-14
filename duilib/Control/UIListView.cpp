@@ -2135,29 +2135,7 @@ void ListContainerElement::DoEvent(TEvent& event)
         return;
     }
 
-    if( event.Type == UIEVENT_DBLCLICK )
-    {
-#if 0
-        if( IsEnabled() ) {
-            Activate();
-            Invalidate();
-        }
-#endif
-        return;
-    }
-    if( event.Type == UIEVENT_KEYDOWN )
-    {
-#if 0
-        if (IsKeyboardEnabled() && IsEnabled()) {
-            if( event.chKey == VK_RETURN ) {
-                Activate();
-                Invalidate();
-                return;
-            }
-        }
-#endif
-    }
-    if( event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_RBUTTONDOWN )
+    if( event.Type == UIEVENT_BUTTONDOWN)
     {
         if( IsEnabled() ) {
 			Activate();
@@ -2166,15 +2144,15 @@ void ListContainerElement::DoEvent(TEvent& event)
         }
         return;
     }
-    if( event.Type == UIEVENT_BUTTONUP ) 
+    else if( event.Type == UIEVENT_BUTTONUP ) 
     {
         return;
     }
-    if( event.Type == UIEVENT_MOUSEMOVE )
+	else if (event.Type == UIEVENT_MOUSEMOVE)
     {
         return;
     }
-    if( event.Type == UIEVENT_MOUSEENTER )
+	else if (event.Type == UIEVENT_MOUSEENTER)
     {
         if( ::PtInRect(&m_rcItem, event.ptMouse ) ) {
             if( IsEnabled() ) {
@@ -2185,7 +2163,7 @@ void ListContainerElement::DoEvent(TEvent& event)
             }
         }
     }
-    if( event.Type == UIEVENT_MOUSELEAVE )
+	else if (event.Type == UIEVENT_MOUSELEAVE)
     {
         if( !::PtInRect(&m_rcItem, event.ptMouse ) ) {
             if( IsEnabled() ) {

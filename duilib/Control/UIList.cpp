@@ -1076,6 +1076,7 @@ void ListElement::Invalidate()
 
 bool ListElement::Activate()
 {
+	printf("ListElement::Activate()\n");
 	if (!Control::Activate()) return false;
 	if (m_pManager != NULL) m_pManager->SendNotify(this, UIEVENT_ITEMCLICK);
 	return true;
@@ -1115,15 +1116,20 @@ void ListElement::DoEvent(TEvent& event)
 		return;
 	}
 
-	if (event.Type == UIEVENT_DBLCLICK)
+	if (event.Type == UIEVENT_BUTTONDOWN)
 	{
 		if (IsEnabled()) {
 			Activate();
+			Select();
 			Invalidate();
 		}
 		return;
 	}
-	if (event.Type == UIEVENT_KEYDOWN)
+	else if (event.Type == UIEVENT_BUTTONUP)
+	{
+		return;
+	}
+	else if (event.Type == UIEVENT_KEYDOWN)
 	{
 		if (IsKeyboardEnabled() && IsEnabled()) {
 			if (event.chKey == VK_RETURN) {
@@ -1133,6 +1139,38 @@ void ListElement::DoEvent(TEvent& event)
 			}
 		}
 	}
+	else if (event.Type == UIEVENT_MOUSEMOVE)
+	{
+		return;
+	}
+	else if (event.Type == UIEVENT_MOUSEENTER)
+	{
+		if (::PtInRect(&m_rcItem, event.ptMouse)) {
+			if (IsEnabled()) {
+				if ((m_uButtonState & UISTATE_HOT) == 0) {
+					m_uButtonState |= UISTATE_HOT;
+					Invalidate();
+				}
+			}
+		}
+	}
+	else if (event.Type == UIEVENT_MOUSELEAVE)
+	{
+		if (!::PtInRect(&m_rcItem, event.ptMouse)) {
+			if (IsEnabled()) {
+				if ((m_uButtonState & UISTATE_HOT) != 0) {
+					m_uButtonState &= ~UISTATE_HOT;
+					Invalidate();
+				}
+			}
+			if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
+		}
+		else {
+			if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
+			return;
+		}
+	}
+
 	// An important twist: The list-item will send the event not to its immediate
 	// parent but to the "attached" list. A list may actually embed several components
 	// in its path to the item, but key-presses etc. needs to go to the actual list.
@@ -1142,7 +1180,7 @@ void ListElement::DoEvent(TEvent& event)
 void ListElement::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
 	if (_tcscmp(pstrName, _T("selected")) == 0) Select();
-	else Control::SetAttribute(pstrName, pstrValue);
+	else __super::SetAttribute(pstrName, pstrValue);
 }
 
 void ListElement::DrawItemBk(HDC hDC, const RECT& rcItem)

@@ -17,7 +17,7 @@ LoginForm::~LoginForm()
 
 String LoginForm::GetSkinFolder()
 {
-	return L"main";
+	return L"simple_demo";
 }
 
 String LoginForm::GetSkinFile()

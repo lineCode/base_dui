@@ -26,11 +26,9 @@ public:
     void DoInit();
     UINT GetControlFlags() const;
 
-    String GetText() const;
+  /*  String GetText() const;*/
     void SetEnabled(bool bEnable = true);
 
-    String GetDropBoxAttributeList();
-    void SetDropBoxAttributeList(LPCTSTR pstrList);
     SIZE GetDropBoxSize() const;
     void SetDropBoxSize(SIZE szDropBox);
 
@@ -51,6 +49,11 @@ public:
 
     bool Activate();
 
+	String GetDropBoxFile() const{ return m_dropBoxFile; };
+	void SetDropBoxFile(String xmlfile){ m_dropBoxFile = xmlfile; };
+	String GetDropBoxFolder() const{ return m_dropBoxFolder; };
+	void SetDropBoxFolder(String folder){ m_dropBoxFolder = folder; };
+
 	bool GetShowText() const;
 	void SetShowText(bool flag);
     RECT GetTextPadding() const;
@@ -65,52 +68,6 @@ public:
     void SetFocusedImage(LPCTSTR pStrImage);
     LPCTSTR GetDisabledImage() const;
     void SetDisabledImage(LPCTSTR pStrImage);
-
-    ListViewInfo* GetListInfo();
-    UINT GetItemFixedHeight();
-    void SetItemFixedHeight(UINT nHeight);
-    int GetItemFont(int index);
-    void SetItemFont(int index);
-    UINT GetItemTextStyle();
-    void SetItemTextStyle(UINT uStyle);
-	RECT GetItemTextPadding() const;
-    void SetItemTextPadding(RECT rc);
-	DWORD GetItemTextColor() const;
-    void SetItemTextColor(DWORD dwTextColor);
-	DWORD GetItemBkColor() const;
-    void SetItemBkColor(DWORD dwBkColor);
-	LPCTSTR GetItemBkImage() const;
-    void SetItemBkImage(LPCTSTR pStrImage);
-    bool IsAlternateBk() const;
-    void SetAlternateBk(bool bAlternateBk);
-	DWORD GetSelectedItemTextColor() const;
-    void SetSelectedItemTextColor(DWORD dwTextColor);
-	DWORD GetSelectedItemBkColor() const;
-    void SetSelectedItemBkColor(DWORD dwBkColor);
-	LPCTSTR GetSelectedItemImage() const;
-    void SetSelectedItemImage(LPCTSTR pStrImage);
-	DWORD GetHotItemTextColor() const;
-    void SetHotItemTextColor(DWORD dwTextColor);
-	DWORD GetHotItemBkColor() const;
-    void SetHotItemBkColor(DWORD dwBkColor);
-	LPCTSTR GetHotItemImage() const;
-    void SetHotItemImage(LPCTSTR pStrImage);
-	DWORD GetDisabledItemTextColor() const;
-    void SetDisabledItemTextColor(DWORD dwTextColor);
-	DWORD GetDisabledItemBkColor() const;
-    void SetDisabledItemBkColor(DWORD dwBkColor);
-	LPCTSTR GetDisabledItemImage() const;
-    void SetDisabledItemImage(LPCTSTR pStrImage);
-    int GetItemHLineSize() const;
-    void SetItemHLineSize(int iSize);
-    DWORD GetItemHLineColor() const;
-    void SetItemHLineColor(DWORD dwLineColor);
-    int GetItemVLineSize() const;
-    void SetItemVLineSize(int iSize);
-	DWORD GetItemVLineColor() const;
-    void SetItemVLineColor(DWORD dwLineColor);
-    bool IsItemShowHtml();
-    void SetItemShowHtml(bool bShowHtml = true);
 
     SIZE EstimateSize(SIZE szAvailable);
 	void SetPos(RECT rc, bool bNeedInvalidate = true);
@@ -137,6 +94,8 @@ protected:
     RECT m_rcTextPadding;
     String m_sDropBoxAttributes;
     SIZE m_szDropBox;
+	String m_dropBoxFile;
+	String m_dropBoxFolder;
     UINT m_uButtonState;
 
 	TDrawInfo m_diNormal;
@@ -145,7 +104,7 @@ protected:
     TDrawInfo m_diFocused;
     TDrawInfo m_diDisabled;
 
-    ListViewInfo m_ListInfo;
+   // ListViewInfo m_ListInfo;
 };
 
 } // namespace dui
