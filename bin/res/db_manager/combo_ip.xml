@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window roundcorner="4,4" width="80" height="50" >
+  <List bkcolor="white" width="80" height="50" vscrollbar="true">
+    <ListElement text="192.168.0.42" height="23" width="500"/>
+    <ListElement text="192.168.0.43" height="23" width="500" />
+  </List>
+</Window>

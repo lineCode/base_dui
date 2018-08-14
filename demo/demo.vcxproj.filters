@@ -65,6 +65,12 @@
     <Xml Include="..\bin\res\main_vv\list_menu.xml">
       <Filter>gui\main</Filter>
     </Xml>
+    <Xml Include="..\bin\res\db_manager\db_manager_mainform.xml">
+      <Filter>资源文件</Filter>
+    </Xml>
+    <Xml Include="..\bin\res\db_manager\combo_ip.xml">
+      <Filter>资源文件</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="demo.rc">

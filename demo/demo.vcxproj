@@ -104,6 +104,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="..\bin\res\db_manager\combo_ip.xml" />
+    <Xml Include="..\bin\res\db_manager\db_manager_mainform.xml" />
     <Xml Include="..\bin\res\global.xml">
       <SubType>Designer</SubType>
     </Xml>

@@ -422,12 +422,11 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void CComboWnd::Notify(TEvent& msg)
 {
-	if (msg.Type == UIEVENT_ITEMCLICK)
+	if (msg.Type == UIEVENT_ITEMSELECT)
 	{
 		if (m_pOwner)
 		{
-			ListElement* item = dynamic_cast<ListElement*>(msg.pSender);
-			m_pOwner->SetText(item->GetText().c_str());
+			m_pOwner->DoEvent(msg);
 		}
 		Close();
 	}
@@ -765,15 +764,27 @@ void Combo::DoEvent(TEvent& event)
         return;
     }
 
+	if (event.Type == UIEVENT_ITEMSELECT)
+	{
+		ListElement* item = dynamic_cast<ListElement*>(event.pSender);
+		if (item)
+			SetText(item->GetText().c_str());
+		else 
+			SetText(_T("unkouwn"));
+		if (OnEvent.find(UIEVENT_ITEMSELECT) != OnEvent.cend())
+		{
+			OnEvent.find(UIEVENT_ITEMSELECT)->second(&event);
+		}
+	}
     if( event.Type == UIEVENT_SETFOCUS ) 
     {
         Invalidate();
     }
-    if( event.Type == UIEVENT_KILLFOCUS ) 
+    else if( event.Type == UIEVENT_KILLFOCUS ) 
     {
         Invalidate();
     }
-    if( event.Type == UIEVENT_BUTTONDOWN )
+	else if (event.Type == UIEVENT_BUTTONDOWN)
     {
         if( IsEnabled() ) {
             Activate();
@@ -781,7 +792,7 @@ void Combo::DoEvent(TEvent& event)
         }
         return;
     }
-    if( event.Type == UIEVENT_BUTTONUP )
+	else if (event.Type == UIEVENT_BUTTONUP)
     {
         if( (m_uButtonState & UISTATE_CAPTURED) != 0 ) {
             m_uButtonState &= ~ UISTATE_CAPTURED;
@@ -789,11 +800,11 @@ void Combo::DoEvent(TEvent& event)
         }
         return;
     }
-    if( event.Type == UIEVENT_MOUSEMOVE )
+	else if (event.Type == UIEVENT_MOUSEMOVE)
     {
         return;
     }
-    if( event.Type == UIEVENT_KEYDOWN )
+	else if (event.Type == UIEVENT_KEYDOWN)
     {
         if (IsKeyboardEnabled() && IsEnabled()) {
             switch( event.chKey ) {
@@ -827,7 +838,7 @@ void Combo::DoEvent(TEvent& event)
             return;
         }
     }
-    if( event.Type == UIEVENT_SCROLLWHEEL )
+	else if (event.Type == UIEVENT_SCROLLWHEEL)
     {
         /*if (IsEnabled()) {
             bool bDownward = LOWORD(event.wParam) == SB_LINEDOWN;
@@ -837,11 +848,11 @@ void Combo::DoEvent(TEvent& event)
             return;
         }*/
     }
-    if( event.Type == UIEVENT_CONTEXTMENU )
+	else if (event.Type == UIEVENT_CONTEXTMENU)
     {
         return;
     }
-    if( event.Type == UIEVENT_MOUSEENTER )
+	else if (event.Type == UIEVENT_MOUSEENTER)
     {
         if( ::PtInRect(&m_rcItem, event.ptMouse ) ) {
             if( IsEnabled() ) {
@@ -852,7 +863,7 @@ void Combo::DoEvent(TEvent& event)
             }
         }
     }
-    if( event.Type == UIEVENT_MOUSELEAVE )
+	else if (event.Type == UIEVENT_MOUSELEAVE)
     {
         if( !::PtInRect(&m_rcItem, event.ptMouse ) ) {
             if( IsEnabled() ) {
