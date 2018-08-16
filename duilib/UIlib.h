@@ -119,8 +119,9 @@ typedef std::string String;
 #include "Control/UIGifAnim.h"
 #include "Control/UIFlash.h"
 
-#include "Control/UIListView.h"
+#include "Control/UIListItem.h"
 #include "Control/UIList.h"
+#include "Control/UIListView.h"
 #include "Control/UICombo.h"
 #include "Control/UIScrollBar.h"
 #include "Control/UITree.h"

@@ -1,24 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Window size="270,386" caption="0,0,75,49" sizebox="6,6,6,6" >
+<Window size="570,386" caption="0,0,75,49" sizebox="6,6,6,6" >
   <VLayout padding="" bkcolor="gray" bkimage="light_top.png">
-    <!--<HLayout height="26" padding="10,20,10" bkcolor="white">
-      <Label margin="10" text="122222222222222345" bkcolor="main_blue"/>
-      
-      <Button text="确定" bkcolor="main_blue"/>
-    </HLayout>-->
-    <Combo name="combo1" width="80" height="20" margin="20,50" bkcolor="white" font="3" text="wo shi combo" dropboxfile="combo_1.xml" dropboxfolder="simple_demo">
-    </Combo>
-    <Button name="btn" width="80" height="20" margin="20,5" bkcolor="white" text="btn" bkimage="light_top.png"/>
-    <!--<List name="list" width="90" height="120" margin="30,10" bkcolor="white" vscrollbar="true" scrollbarfloat="true">
-      <ListElement width="90" height="30" font="2" text ="hello1"/>
-      <ListElement width="90" height="20" font="2" text ="hello1"/>
-      <ListElement width="90" height="30" font="2" text ="hello1"/>
-      <ListElement width="90" height="30" font="2" text ="hello1"/>
-      <ListElement width="90" height="30" font="2" text ="hello1"/>
-      <ListElement width="90" height="20" font="2" text ="hello1"/>
-      <ListElement width="90" height="30" font="2" text ="hello1"/>
-      <ListElement width="90" height="20" font="2" text ="hello1"/>
-    </List>-->
+    <HLayout height="26" padding="10,2,10" bkcolor="white">
+      <Label name="label1" width="60" height="20" margin="10" text="122222222222222345" bkcolor="main_blue"/>
+      <Button width="60" height="20" margin="10" text="确定" bkcolor="main_blue"/>
+    </HLayout>
+    <HLayout>
+      <VLayout width="120">
+        <Combo name="combo1" width="80" height="20" margin="20,50" bkcolor="white" font="3" text="wo shi combo" dropboxfile="combo_1.xml" dropboxfolder="simple_demo"/>
+        <Button name="btn" width="80" height="20" margin="20,5" bkcolor="white" text="btn" bkimage="light_top.png"/>
+        <List name="list" width="90" height="120" margin="20,10" bkcolor="white" vscrollbar="true" scrollbarfloat="true">
+          <ListElement width="90" height="30" font="2" text ="hello1"/>
+          <ListElement width="90" height="20" font="2" text ="hello2"/>
+          <ListElement width="90" height="30" font="2" text ="hello3"/>
+          <ListElement width="90" height="30" font="2" text ="hello4"/>
+          <ListElement width="90" height="30" font="2" text ="hello5"/>
+          <ListElement width="90" height="20" font="2" text ="hello6"/>
+          <ListElement width="90" height="30" font="2" text ="hello7"/>
+          <ListElement width="90" height="20" font="2" text ="hello8"/>
+        </List>
+      </VLayout>
+      <ListView name="list_view" width="400" height="200" margin="30,40" bkcolor="white">
+        <ListHeader height="24">
+          <ListHeaderItem width="80" text="item1" bkimage="file='../public/list/headitembk.png' corner='2,1,2,1'"/>
+          <ListHeaderItem width="80" text="item2" bkimage="file='../public/list/headitembk.png' corner='2,1,2,1'"/>
+          <ListHeaderItem width="80" text="item3" bkimage="file='../public/list/headitembk.png' corner='2,1,2,1'"/>
+          <ListHeaderItem width="80" text="item4" bkimage="file='../public/list/headitembk.png' corner='2,1,2,1'"/>
+          <ListHeaderItem width="80" text="item5" bkimage="file='../public/list/headitembk.png' corner='2,1,2,1'"/>
+          <ListHeaderItem width="80" text="item6" bkimage="file='../public/list/headitembk.png' corner='2,1,2,1'"/>
+          <!--<ListHeaderItem width="80" text="item7" bkimage="file='../public/list/headitembk.png' corner='2,1,2,1'"/>
+          <ListHeaderItem width="80" text="item8" bkimage="file='../public/list/headitembk.png' corner='2,1,2,1'"/>-->
+        </ListHeader>
+        <ListElement width="80" text="text1" />
+        <ListElement width="80" text="text2" />
+        <ListElement width="80" text="text3" />
+        <ListElement width="80" text="text4" />
+        <ListElement width="80" text="text5" />
+        <ListElement width="80" text="text6" />
+        <ListElement width="80" text="text7" />
+      </ListView>
+    </HLayout>
   </VLayout>
   
 </Window>

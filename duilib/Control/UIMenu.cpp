@@ -547,6 +547,8 @@ void MenuElement::DrawItemExpland(HDC hDC, const RECT& rcItem)
 void MenuElement::DrawItemText(HDC hDC, const RECT& rcItem)
 {
 #if 1
+	return __super::DrawItemText(hDC, rcItem);
+#else
 	if (m_sText.empty()) return;
 
     if( m_pOwner == NULL ) return;
@@ -589,6 +591,7 @@ SIZE MenuElement::EstimateSize(SIZE szAvailable)
 		if( cXY.cx < sz.cx )
 			cXY.cx = sz.cx;
 	}
+#if 0
 	if(cXY.cy == 0) {
 		ListViewInfo* pInfo = m_pOwner->GetListInfo();
 
@@ -616,7 +619,7 @@ SIZE MenuElement::EstimateSize(SIZE szAvailable)
 		cXY.cx = rcText.right - rcText.left + pInfo->rcTextPadding.left + pInfo->rcTextPadding.right + 20;
 		cXY.cy = rcText.bottom - rcText.top + pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
 	}
-
+#endif
 	if( m_cxyFixed.cy != 0 ) cXY.cy = m_cxyFixed.cy;
 	if ( cXY.cx < m_cxyFixed.cx )
 		cXY.cx =  m_cxyFixed.cx;

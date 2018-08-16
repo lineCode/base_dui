@@ -4,120 +4,6 @@ namespace dui {
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-#if !ComboBody_EQUAL_LIST
-class ComboBody : public ScrollContainer
-{
-public:
-    ComboBody::ComboBody(Combo* pOwner);
-    bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
-
-protected:
-    Combo* m_pOwner;
-};
-
-
-ComboBody::ComboBody(Combo* pOwner) : m_pOwner(pOwner)
-{
-    ASSERT(m_pOwner);
-}
-
-bool ComboBody::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl) {
-    RECT rcTemp = { 0 };
-    if( !::IntersectRect(&rcTemp, &rcPaint, &m_rcItem) ) return true;
-
-    ListViewInfo* pListInfo = NULL;
-    if( m_pOwner ) pListInfo = m_pOwner->GetListInfo();
-
-    CRenderClip clip;
-    CRenderClip::GenerateClip(hDC, rcTemp, clip);
-    Control::DoPaint(hDC, rcPaint, pStopControl);
-
-    if( m_items.GetSize() > 0 ) {
-        RECT rc = m_rcItem;
-        rc.left += m_rcPadding.left;
-        rc.top += m_rcPadding.top;
-        rc.right -= m_rcPadding.right;
-        rc.bottom -= m_rcPadding.bottom;
-        if( m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible() ) rc.right -= m_pVerticalScrollBar->GetFixedWidth();
-        if( m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() ) rc.bottom -= m_pHorizontalScrollBar->GetFixedHeight();
-
-        if( !::IntersectRect(&rcTemp, &rcPaint, &rc) ) {
-            for( int it = 0; it < m_items.GetSize(); it++ ) {
-                Control* pControl = static_cast<Control*>(m_items[it]);
-                if( pControl == pStopControl ) return false;
-                if( !pControl->IsVisible() ) continue;
-                if( !::IntersectRect(&rcTemp, &rcPaint, &pControl->GetPos()) ) continue;
-                if( pControl->IsFloat() ) {
-                    if( !::IntersectRect(&rcTemp, &m_rcItem, &pControl->GetPos()) ) continue;
-                    if( !pControl->Paint(hDC, rcPaint, pStopControl) ) return false;
-                }
-            }
-        }
-        else {
-            int iDrawIndex = 0;
-            CRenderClip childClip;
-            CRenderClip::GenerateClip(hDC, rcTemp, childClip);
-            for( int it = 0; it < m_items.GetSize(); it++ ) {
-                Control* pControl = static_cast<Control*>(m_items[it]);
-                if( pControl == pStopControl ) return false;
-                if( !pControl->IsVisible() ) continue;
-                if( !pControl->IsFloat() ) {
-                    IListItem* pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
-                    if( pListItem != NULL ) {
-                        pListItem->SetDrawIndex(iDrawIndex);
-                        iDrawIndex += 1;
-                    }
-                    if (pListInfo && pListInfo->iHLineSize > 0) {
-                        // 因为没有为最后一个预留分割条长度，如果list铺满，最后一条不会显示
-                        RECT rcMargin = pControl->GetMargin();
-                        const RECT& rcPos = pControl->GetPos();
-                        RECT rcBottomLine = { rcPos.left, rcPos.bottom + rcMargin.bottom, rcPos.right, rcPos.bottom + rcMargin.bottom + pListInfo->iHLineSize };
-                        if( ::IntersectRect(&rcTemp, &rcPaint, &rcBottomLine) ) {
-                            rcBottomLine.top += pListInfo->iHLineSize / 2;
-                            rcBottomLine.bottom = rcBottomLine.top;
-                            CRenderEngine::DrawLine(hDC, rcBottomLine, pListInfo->iHLineSize, GetAdjustColor(pListInfo->dwHLineColor));
-                        }
-                    }
-                }
-                if( !::IntersectRect(&rcTemp, &rcPaint, &pControl->GetPos()) ) continue;
-                if( pControl->IsFloat() ) {
-                    if( !::IntersectRect(&rcTemp, &m_rcItem, &pControl->GetPos()) ) continue;
-                    CRenderClip::UseOldClipBegin(hDC, childClip);
-                    if( !pControl->Paint(hDC, rcPaint, pStopControl) ) return false;
-                    CRenderClip::UseOldClipEnd(hDC, childClip);
-                }
-                else {
-                    if( !::IntersectRect(&rcTemp, &rc, &pControl->GetPos()) ) continue;
-                    if( !pControl->Paint(hDC, rcPaint, pStopControl) ) return false;
-                }
-            }
-        }
-    }
-
-    if( m_pVerticalScrollBar != NULL ) {
-        if( m_pVerticalScrollBar == pStopControl ) return false;
-        if (m_pVerticalScrollBar->IsVisible()) {
-            if( ::IntersectRect(&rcTemp, &rcPaint, &m_pVerticalScrollBar->GetPos()) ) {
-                if( !m_pVerticalScrollBar->Paint(hDC, rcPaint, pStopControl) ) return false;
-            }
-        }
-    }
-
-    if( m_pHorizontalScrollBar != NULL ) {
-        if( m_pHorizontalScrollBar == pStopControl ) return false;
-        if (m_pHorizontalScrollBar->IsVisible()) {
-            if( ::IntersectRect(&rcTemp, &rcPaint, &m_pHorizontalScrollBar->GetPos()) ) {
-                if( !m_pHorizontalScrollBar->Paint(hDC, rcPaint, pStopControl) ) return false;
-            }
-        }
-    }
-    return true;
-}
-#endif
-/////////////////////////////////////////////////////////////////////////////////////
-//
-//
-
 class CComboWnd : public WindowImplBase
 {
 public:
@@ -152,7 +38,6 @@ public:
     Combo*			m_pOwner;
     List*			m_pLayout;
     int				m_iOldSel;
-    bool			m_bScrollbarClicked;
 	POINT			m_BasedPoint;
 
 	CPaintManager*	m_pParentManager;
@@ -163,7 +48,6 @@ CComboWnd::CComboWnd() :
 m_pOwner(NULL),
 m_pLayout(NULL),
 m_iOldSel(-1),
-m_bScrollbarClicked(false),
 m_pParentManager(NULL),
 m_bLayeredWindow(true)
 {
@@ -185,7 +69,6 @@ void CComboWnd::Init(Combo* pOwner, String xml, String folder, POINT pt, CPaintM
 	m_folder = folder;
 	m_BasedPoint = pt;
     m_iOldSel = m_pOwner->GetCurSel();
-    m_bScrollbarClicked = false;
 	m_pParentManager = pMainPaintManager;
 	m_bLayeredWindow = isLayeredWindow;
 
@@ -262,39 +145,6 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	BOOL bHandle = false;
     if( uMsg == WM_CREATE ) {
 		OnCreate(uMsg, wParam, lParam, bHandle);
-		//m_pm.SetForceUseSharedRes(true);
-  //      m_pm.Init(m_hWnd);
-		//String strResourcePath = m_pm.GetGlobalResDir();
-		//ASSERT(!strResourcePath.empty());
-		//if (!strResourcePath.empty()){
-		//	String folder = GetSkinFolder();
-		//	if (folder.back() != _T('\\') && folder.back() != _T('/')){
-		//		folder += _T('\\');
-		//	}
-		//	strResourcePath += folder;
-		//	m_pm.SetThisResPath(strResourcePath.c_str());
-		//}
-  //      // The trick is to add the items to the new container. Their owner gets
-  //      // reassigned by this operation - which is why it is important to reassign
-  //      // the items back to the righfull owner/manager when the window closes.
-  //      //m_pLayout = new ComboBody(m_pOwner);
-  //      m_pLayout->SetManager(&m_pm, NULL, true);
-  //      LPCTSTR pDefaultAttributes = m_pOwner->GetManager()->GetDefaultAttributeList(_T("VBox"));
-  //      if( pDefaultAttributes ) {
-  //          m_pLayout->SetAttributeList(pDefaultAttributes);
-  //      }
-  //      m_pLayout->SetPadding(CDuiRect(1, 1, 1, 1));
-  //      m_pLayout->SetBkColor(0xFFFFFFFF);
-  //      m_pLayout->SetBorderColor(0xFFC6C7D2);
-  //      m_pLayout->SetBorderSize(1);
-  //      m_pLayout->SetAutoDestroy(false);
-  //      m_pLayout->EnableScrollBar();
-  //      
-  //      for( int i = 0; i < m_pOwner->GetCount(); i++ ) {
-  //          m_pLayout->Add(static_cast<Control*>(m_pOwner->GetItemAt(i)));
-  //      }
-  //      m_pm.AttachDialog(m_pLayout);
-        
         return 0;
     }
     else 
@@ -304,92 +154,6 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		else m_pOwner->SetPos(m_pOwner->GetRelativePos(), false);
         m_pOwner->SetFocus();
     }
-    else if( uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONDBLCLK ) {
-        POINT pt = { 0 };
-        ::GetCursorPos(&pt);
-		::ScreenToClient(m_PaintManager.GetPaintWindow(), &pt);
-		Control* pControl = m_PaintManager.FindControl(pt);
-        if( pControl && _tcscmp(pControl->GetClass(), DUI_CTR_SCROLLBAR) == 0 ) {
-            m_bScrollbarClicked = true;
-        }
-#if 0
-		if (!m_PaintManager.IsNoActivate()) ::SetFocus(m_hWnd);
-		/*if (m_pRoot == NULL) break;*/
-		POINT pt2 = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-		/*m_ptLastMousePos = pt;*/
-		pControl = m_PaintManager.FindControl(pt2);
-		if (pControl && pControl->GetManager() == &m_PaintManager)
-		{
-			//m_pEventClick = pControl;
-			pControl->SetFocus();
-			//SetCapture();
-			TEvent event/* = { UIEVENT__FIRST }*/;
-			event.Type = UIEVENT_BUTTONDOWN;
-			event.pSender = pControl;
-			event.wParam = wParam;
-			event.lParam = lParam;
-			event.ptMouse = pt;
-			event.wKeyState = (WORD)wParam;
-			event.dwTimestamp = ::GetTickCount();
-			pControl->Event(event);
-			IListItem* pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
-			while (!pListItem)
-			{
-				pControl = pControl->GetParent();
-				if (!pControl)
-					break;
-				pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
-			}
-			if (pListItem && m_pOwner)
-			{
-				pListItem->Select(true, false);
-				m_pOwner->SelectItem(m_pLayout->GetCurSel(), false, false);
-				bHandle = true;
-			}
-		}
-#endif
-    }
-    else if( uMsg == WM_LBUTTONUP ) {
-        if (m_bScrollbarClicked) {
-            m_bScrollbarClicked = false;
-        }
-        else {
-            POINT pt = { 0 };
-            ::GetCursorPos(&pt);
-            ::ScreenToClient(m_PaintManager.GetPaintWindow(), &pt);
-			Control* pControl = m_PaintManager.FindControl(pt);
-            if( pControl && _tcscmp(pControl->GetClass(), DUI_CTR_SCROLLBAR) != 0 ) PostMessage(WM_KILLFOCUS);
-        }
-    }
-    else if( uMsg == WM_KEYDOWN ) {
-        switch( wParam ) {
-        case VK_ESCAPE:
-            m_pOwner->SelectItem(m_iOldSel, true);
-            EnsureVisible(m_iOldSel);
-            // FALL THROUGH...
-        case VK_RETURN:
-            PostMessage(WM_KILLFOCUS);
-            break;
-        default:
-            TEvent event;
-            event.Type = UIEVENT_KEYDOWN;
-            event.chKey = (TCHAR)wParam;
-            m_pOwner->DoEvent(event);
-            EnsureVisible(m_pOwner->GetCurSel());
-            return 0;
-        }
-    }
-    //else if( uMsg == WM_MOUSEWHEEL ) {
-    //    int zDelta = (int) (short) HIWORD(wParam);
-    //    TEvent event/* = { UIEVENT__FIRST }*/;
-    //    event.Type = UIEVENT_SCROLLWHEEL;
-    //    event.wParam = MAKELPARAM(zDelta < 0 ? SB_LINEDOWN : SB_LINEUP, 0);
-    //    event.lParam = lParam;
-    //    event.dwTimestamp = ::GetTickCount();
-    //    //m_pOwner->DoEvent(event);
-    //    EnsureVisible(m_pOwner->GetCurSel());
-    //    return 0;
-    //}
     else if( uMsg == WM_KILLFOCUS ) {
         if( m_hWnd != (HWND) wParam ) {
             HWND hWnd = ::GetFocus();
@@ -560,202 +324,6 @@ int Combo::GetCurSel() const
     return m_iCurSel;
 }
 
-bool Combo::GetSelectCloseFlag()
-{
-	return m_bSelectCloseFlag;
-}
-
-void Combo::SetSelectCloseFlag(bool flag)
-{
-	m_bSelectCloseFlag = flag;
-}
-
-bool Combo::SelectItem(int iIndex, bool bTakeFocus, bool bTriggerEvent)
-{
-    if( m_bSelectCloseFlag && m_pWindow != NULL ) m_pWindow->Close();
-    if( iIndex == m_iCurSel ) return true;
-    int iOldSel = m_iCurSel;
-    if( m_iCurSel >= 0 ) {
-        Control* pControl = static_cast<Control*>(m_items[m_iCurSel]);
-        if( !pControl ) return false;
-        IListItem* pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
-        if( pListItem != NULL ) pListItem->Select(false, bTriggerEvent);
-        m_iCurSel = -1;
-    }
-    if( iIndex < 0 ) return false;
-    if( m_items.GetSize() == 0 ) return false;
-    if( iIndex >= m_items.GetSize() ) iIndex = m_items.GetSize() - 1;
-    Control* pControl = static_cast<Control*>(m_items[iIndex]);
-    if( !pControl || !pControl->IsVisible() || !pControl->IsEnabled() ) return false;
-    IListItem* pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
-    if( pListItem == NULL ) return false;
-	SetText(pControl->GetText().c_str());
-    m_iCurSel = iIndex;
-    if( m_pWindow != NULL || bTakeFocus ) pControl->SetFocus();
-    pListItem->Select(true, bTriggerEvent);
-	if (m_pManager != NULL && bTriggerEvent) 
-		m_pManager->SendNotify(this, UIEVENT_ITEMSELECT, m_iCurSel, iOldSel);
-	//----------------add by djj-----------------
-	if (OnEvent.find(UIEVENT_ITEMSELECT) != OnEvent.cend()){
-		TEvent event;
-		event.Type = UIEVENT_ITEMSELECT;
-		event.pSender = this;
-		if (!OnEvent.find(UIEVENT_ITEMSELECT)->second(&event)){
-			return false;
-		}
-	}
-
-    Invalidate();
-
-    return true;
-}
-
-bool Combo::ExpandItem(int iIndex, bool bExpand)
-{
-    return false;
-}
-
-int Combo::GetExpandedItem() const
-{
-    return -1;
-}
-
-bool Combo::SetItemIndex(Control* pControl, int iNewIndex)
-{
-    int iOrginIndex = GetItemIndex(pControl);
-    if( iOrginIndex == -1 ) return false;
-    if( iOrginIndex == iNewIndex ) return true;
-
-    IListItem* pSelectedListItem = NULL;
-    if( m_iCurSel >= 0 ) pSelectedListItem = 
-        static_cast<IListItem*>(GetItemAt(m_iCurSel)->GetInterface(DUI_CTR_ILISTITEM));
-    if( !__super::SetItemIndex(pControl, iNewIndex) ) return false;
-    int iMinIndex = min(iOrginIndex, iNewIndex);
-    int iMaxIndex = max(iOrginIndex, iNewIndex);
-    for(int i = iMinIndex; i < iMaxIndex + 1; ++i) {
-        Control* p = GetItemAt(i);
-        IListItem* pListItem = static_cast<IListItem*>(p->GetInterface(DUI_CTR_ILISTITEM));
-        if( pListItem != NULL ) {
-            pListItem->SetIndex(i);
-        }
-    }
-    if( m_iCurSel >= 0 && pSelectedListItem != NULL ) m_iCurSel = pSelectedListItem->GetIndex();
-    return true;
-}
-
-bool Combo::SetMultiItemIndex(Control* pStartControl, int iCount, int iNewStartIndex)
-{
-    if (pStartControl == NULL || iCount < 0 || iNewStartIndex < 0) return false;
-    int iStartIndex = GetItemIndex(pStartControl);
-    if (iStartIndex == iNewStartIndex) return true;
-    if (iStartIndex + iCount > GetCount()) return false;
-    if (iNewStartIndex + iCount > GetCount()) return false;
-
-    IListItem* pSelectedListItem = NULL;
-    if( m_iCurSel >= 0 ) pSelectedListItem = 
-        static_cast<IListItem*>(GetItemAt(m_iCurSel)->GetInterface(DUI_CTR_ILISTITEM));
-	if (!__super::SetMultiItemIndex(pStartControl, iCount, iNewStartIndex)) return false;
-    int iMinIndex = min(iStartIndex, iNewStartIndex);
-    int iMaxIndex = max(iStartIndex + iCount, iNewStartIndex + iCount);
-    for(int i = iMinIndex; i < iMaxIndex + 1; ++i) {
-        Control* p = GetItemAt(i);
-        IListItem* pListItem = static_cast<IListItem*>(p->GetInterface(DUI_CTR_ILISTITEM));
-        if( pListItem != NULL ) {
-            pListItem->SetIndex(i);
-        }
-    }
-    if( m_iCurSel >= 0 && pSelectedListItem != NULL ) m_iCurSel = pSelectedListItem->GetIndex();
-    return true;
-}
-
-bool Combo::Add(Control* pControl)
-{
-	if (!pControl)
-		return false;
-    IListItem* pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
-    if( pListItem != NULL ) 
-    {
-        pListItem->SetOwner(this);
-        pListItem->SetIndex(m_items.GetSize());
-    }
-	else
-	{
-		printf("Combo::Add Control(%s) is not the interface of DUI_CTR_ILISTITEM\n", pControl->GetName());
-	}
-	return __super::Add(pControl);
-}
-
-bool Combo::AddAt(Control* pControl, int iIndex)
-{
-    if (!__super::AddAt(pControl, iIndex)) return false;
-
-    // The list items should know about us
-    IListItem* pListItem = static_cast<IListItem*>(pControl->GetInterface(DUI_CTR_ILISTITEM));
-    if( pListItem != NULL ) {
-        pListItem->SetOwner(this);
-        pListItem->SetIndex(iIndex);
-    }
-
-    for(int i = iIndex + 1; i < GetCount(); ++i) {
-        Control* p = GetItemAt(i);
-        pListItem = static_cast<IListItem*>(p->GetInterface(DUI_CTR_ILISTITEM));
-        if( pListItem != NULL ) {
-            pListItem->SetIndex(i);
-        }
-    }
-    if( m_iCurSel >= iIndex ) m_iCurSel += 1;
-    return true;
-}
-
-bool Combo::Remove(Control* pControl, bool bDoNotDestroy)
-{
-    int iIndex = GetItemIndex(pControl);
-    if (iIndex == -1) return false;
-
-    if (!__super::RemoveAt(iIndex, bDoNotDestroy)) return false;
-
-    for(int i = iIndex; i < GetCount(); ++i) {
-        Control* p = GetItemAt(i);
-        IListItem* pListItem = static_cast<IListItem*>(p->GetInterface(DUI_CTR_ILISTITEM));
-        if( pListItem != NULL ) {
-            pListItem->SetIndex(i);
-        }
-    }
-
-    if( iIndex == m_iCurSel && m_iCurSel >= 0 ) {
-        int iSel = m_iCurSel;
-        m_iCurSel = -1;
-        SelectItem(FindSelectable(iSel, false));
-    }
-    else if( iIndex < m_iCurSel ) m_iCurSel -= 1;
-    return true;
-}
-
-bool Combo::RemoveAt(int iIndex, bool bDoNotDestroy)
-{
-    if (!__super::RemoveAt(iIndex, bDoNotDestroy)) return false;
-
-    for(int i = iIndex; i < GetCount(); ++i) {
-        Control* p = GetItemAt(i);
-        IListItem* pListItem = static_cast<IListItem*>(p->GetInterface(DUI_CTR_ILISTITEM));
-        if( pListItem != NULL ) pListItem->SetIndex(i);
-    }
-
-    if( iIndex == m_iCurSel && m_iCurSel >= 0 ) {
-        int iSel = m_iCurSel;
-        m_iCurSel = -1;
-        SelectItem(FindSelectable(iSel, false));
-    }
-    else if( iIndex < m_iCurSel ) m_iCurSel -= 1;
-    return true;
-}
-
-void Combo::RemoveAll()
-{
-    m_iCurSel = -1;
-    __super::RemoveAll();
-}
-
 void Combo::DoEvent(TEvent& event)
 {
     if( !IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND ) {
@@ -768,17 +336,20 @@ void Combo::DoEvent(TEvent& event)
 	{
 		List *list = dynamic_cast<List*>(event.pSender);
 		assert(list);
-		ListElement* item = dynamic_cast<ListElement*>(list->GetItemAt(event.wParam));
+		IListItem* item = static_cast<IListItem*>(list->GetItemAt(event.wParam)->GetInterface(DUI_CTR_ILISTITEM));
 		if (item)
 		{
-			SetText(item->GetText().c_str());
+			SetText(item->GetItemText().c_str());
 			m_iCurSel = event.wParam;
 
-			TEvent ev;
-			ev.Type = UIEVENT_ITEMSELECT;
-			ev.pSender = this;
-			if (!OnEvent.find(UIEVENT_ITEMSELECT)->second(&ev)){
-				return;
+			if (event_map.find(UIEVENT_ITEMSELECT) != event_map.cend())
+			{
+				TEvent ev;
+				ev.Type = UIEVENT_ITEMSELECT;
+				ev.pSender = this;
+				if (!event_map.find(UIEVENT_ITEMSELECT)->second(&ev)){
+					return;
+				}
 			}
 		}
 		else
@@ -819,32 +390,8 @@ void Combo::DoEvent(TEvent& event)
     {
         if (IsKeyboardEnabled() && IsEnabled()) {
             switch( event.chKey ) {
-            case VK_F4:
-                Activate();
-            case VK_UP:
-                SetSelectCloseFlag(false);
-                SelectItem(FindSelectable(m_iCurSel - 1, false));
-                SetSelectCloseFlag(true);
-            case VK_DOWN:
-                SetSelectCloseFlag(false);
-                SelectItem(FindSelectable(m_iCurSel + 1, true));
-                SetSelectCloseFlag(true);
-            case VK_PRIOR:
-                SetSelectCloseFlag(false);
-                SelectItem(FindSelectable(m_iCurSel - 1, false));
-                SetSelectCloseFlag(true);
-            case VK_NEXT:
-                SetSelectCloseFlag(false);
-                SelectItem(FindSelectable(m_iCurSel + 1, true));
-                SetSelectCloseFlag(true);
-            case VK_HOME:
-                SetSelectCloseFlag(false);
-                SelectItem(FindSelectable(0, false));
-                SetSelectCloseFlag(true);
-            case VK_END:
-                SetSelectCloseFlag(false);
-                SelectItem(FindSelectable(GetCount() - 1, true));
-                SetSelectCloseFlag(true);
+			default:
+				break;
             }
             return;
         }

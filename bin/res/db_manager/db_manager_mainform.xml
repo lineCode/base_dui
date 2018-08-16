@@ -5,15 +5,16 @@
       <Label name="icon_label" width="20" height="20" margin="5,2,0,2" bkimage="db_logo20.png" visible="false"/>
       <Label name="title_label" height="20" margin="5,4,0,4" normaltextcolor="white"/>
       <Control /> 
-      <Button name="minbtn" width="14" height="14" normalimage="file='btn_min.png' " cursortype="hand" margin="10,2,0,0"/>
-      <Button name="btn_max_restore" width="14" height="14" normalimage="file='btn_max.png' " cursortype="hand" margin="10,2,0,0"/>
-      <Button name="closebtn" width="14" height="14" normalimage="file='btn_close.png' " cursortype="hand" margin="10,2,4,0"/>
+      <Button name="minbtn" width="14" height="14" normalimage="file='btn_min.png'"  margin="10,2,0,0"/>
+      <Button name="btn_max_restore" width="14" height="14" normalimage="file='btn_max.png'"  margin="10,2,0,0"/>
+      <Button name="closebtn" width="14" height="14" normalimage="file='btn_close.png'"  margin="10,2,4,0"/>
     </HLayout>
     <HLayout>
       <VLayout width="250" bkcolor="bk_gray1">
         <Combo name="combo_ip" width="220" height="26" margin="15,11,15,0" bkimage="combo220_26.png" dropboxsize="0,46" dropboxfile="combo_ip.xml" dropboxfolder="db_manager"/>
         <Control bkcolor="splitline_level1" height="1" margin="15,0,15"/>
-        <Tree name="dbtree"  vscrollbar="true" vscrollunit="100" hscrollbar="true" width="250" height="stretch"  indent="20"/>
+        <!--<Tree name="dbtree"  vscrollbar="true" vscrollunit="100" hscrollbar="true" width="250" height="stretch"  indent="20"/>-->
+        <Tree name="dbtree"  vscrollbar="true" hscrollbar="true" width="250" height="stretch" />
       </VLayout>
       <VLayout margin="=0,0,0,0" bkcolor="white">
         <HLayout height="45">
@@ -22,12 +23,12 @@
             <HLayout height="38">
               <Label margin="0,15" font="2" normaltextcolor="main_blue" text="输入语句"/>
               <Control />
-              <Button name="btnrun" width="45" height="21" margin="10,9,10,7" normalimage="run_normal.png" cursortype="hand"/>
+              <Button name="btnrun" width="45" height="21" margin="10,9,10,7" normalimage="run_normal.png" />
             </HLayout>
             <Control class="splitline_hor_level1"/>
           </VLayout>
         </HLayout>
-        <RichEdit class="prompt" name="input_edit" bkcolor="white" height="220" margin="35,2,2,2" multiline="true" vscrollbar="true" autovscroll="true" readonly="false" font="1" normaltextcolor="darkcolor" padding="8,0,0,0" wantreturnmsg="false" rich="true" />
+        <RichEdit class="prompt" name="input_edit" bkcolor="white" height="220" margin="35,2,2,2" multiline="true" vscrollbar="true" autovscroll="true" readonly="false" font="1" normaltextcolor="darkcolor" padding="8,0,0,0" rich="true" />
         <HLayout height="30">
           <Control width="30" height="30" margin="10,0,5" bkimage="icon_result.png"/>
           <VLayout>
@@ -36,8 +37,8 @@
           </VLayout>
         </HLayout>
         <Container bkcolor="white" margin="10,5,10,5">
-          <ListView name="result_list" width="stretch" height="stretch" bkcolor="white" vscrollbar="true" vscrollunit="100" hscrollbar="true"/>
-          <Label name="result_label" width="stretch" height="stretch" bkcolor="white" font="2" textpadding="10,10" singleline="false" visible="false"/>
+          <ListView name="result_list" width="stretch" height="stretch" bkcolor="white" vscrollbar="true" hscrollbar="true"/>
+          <Label name="result_label" width="stretch" height="stretch" bkcolor="white" font="2" textpadding="10,10" visible="false"/>
         </Container>
       </VLayout>
     </HLayout>

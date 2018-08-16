@@ -177,6 +177,9 @@
     <ClCompile Include="Control\UIList.cpp">
       <Filter>Control</Filter>
     </ClCompile>
+    <ClCompile Include="Control\UIListItem.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Control\UIActiveX.h">
@@ -339,6 +342,9 @@
       <Filter>Control</Filter>
     </ClInclude>
     <ClInclude Include="Control\UIRichEdit_olecallback.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIListItem.h">
       <Filter>Control</Filter>
     </ClInclude>
   </ItemGroup>

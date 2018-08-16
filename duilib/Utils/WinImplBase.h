@@ -14,7 +14,6 @@ namespace dui
 
 	class DUILIB_API WindowImplBase
 		: public CWindowWnd
-		, public CNotifyPump
 		, public INotify
 		, public IMessageFilter
 		, public IDialogBuilderCallback
@@ -26,7 +25,6 @@ namespace dui
 		virtual void OnFinalMessage( HWND hWnd );
 		virtual void Notify(TEvent& msg);
 
-		DUI_DECLARE_MESSAGE_MAP()
 		virtual void OnClick(TEvent& msg);
 
 	protected:

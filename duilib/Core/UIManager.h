@@ -357,7 +357,6 @@ public:
 
     bool MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
     bool PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
-	void UsedVirtualWnd(bool bUsed);
 
 	Container* CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, CPaintManager *pManager = NULL, Control *pParent = NULL);
 
@@ -438,7 +437,6 @@ private:
     bool m_bMouseTracking;
     bool m_bMouseCapture;
 	bool m_bIsPainting;
-	bool m_bUsedVirtualWnd;
 	bool m_bAsyncNotifyPosted;
 
     //

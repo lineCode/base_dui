@@ -341,11 +341,11 @@ void Control::SetPos(RECT rc, bool bNeedInvalidate)
 
     if( !m_bSetPos ) {
         m_bSetPos = true;
-		if (OnEvent.find(UIEVENT_RESIZE) != OnEvent.cend())
+		if (event_map.find(UIEVENT_RESIZE) != event_map.cend())
 		{
 			TEvent event;
 			event.pSender = this;
-			OnEvent.find(UIEVENT_RESIZE)->second(&event);
+			event_map.find(UIEVENT_RESIZE)->second(&event);
 		}
         m_bSetPos = false;
     }
@@ -855,8 +855,8 @@ void Control::DoInit()
 
 void Control::Event(TEvent& event)
 {
-	auto it = OnEvent.find(event.Type);
-	if (it == OnEvent.cend() || it->second(&event))
+	auto it = event_map.find(event.Type);
+	if (it == event_map.cend() || it->second(&event))
 	{
 		DoEvent(event);
 	}
@@ -894,31 +894,6 @@ void Control::DoEvent(TEvent& event)
         }
     }
     if( m_pParent != NULL ) m_pParent->DoEvent(event);
-}
-
-
-void Control::SetVirtualWnd(LPCTSTR pstrValue)
-{
-	m_sVirtualWnd = pstrValue;
-	m_pManager->UsedVirtualWnd(true);
-}
-
-String Control::GetVirtualWnd() const
-{
-	String str;
-	if( !m_sVirtualWnd.empty() ){
-		str = m_sVirtualWnd;
-	}
-	else{
-		Control* pParent = GetParent();
-		if( pParent != NULL){
-			str = pParent->GetVirtualWnd();
-		}
-		else{
-			str = _T("");
-		}
-	}
-	return str;
 }
 
 LPCTSTR Control::GetForeImage() const
@@ -1083,7 +1058,6 @@ void Control::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 	}
     else if( _tcscmp(pstrName, _T("shortcut")) == 0 ) SetShortcut(pstrValue[0]);
     else if( _tcscmp(pstrName, _T("menu")) == 0 ) SetContextMenuUsed(_tcscmp(pstrValue, _T("true")) == 0);
-	else if( _tcscmp(pstrName, _T("virtualwnd")) == 0 ) SetVirtualWnd(pstrValue);
 	else if( _tcscmp(pstrName, _T("foreimage")) == 0 ) SetForeImage(pstrValue);
 	//------------------------------add by djj[20180108]---------------------------
 	else if(_tcscmp(pstrName, _T("halign")) == 0) {

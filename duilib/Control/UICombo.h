@@ -6,11 +6,8 @@
 namespace dui {
 /////////////////////////////////////////////////////////////////////////////////////
 //
-#define ComboBody_EQUAL_LIST	1
 
-#ifdef ComboBody_EQUAL_LIST
-	typedef List ComboBody;
-#endif
+typedef List ComboBody;
 
 class CComboWnd;
 
@@ -33,19 +30,6 @@ public:
     void SetDropBoxSize(SIZE szDropBox);
 
     int GetCurSel() const;
-	bool GetSelectCloseFlag();
-	void SetSelectCloseFlag(bool flag);
-    bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent=true);
-    bool ExpandItem(int iIndex, bool bExpand = true);
-    int GetExpandedItem() const;
-
-    bool SetItemIndex(Control* pControl, int iNewIndex);
-    bool SetMultiItemIndex(Control* pStartControl, int iCount, int iNewStartIndex);
-    bool Add(Control* pControl);
-    bool AddAt(Control* pControl, int iIndex);
-    bool Remove(Control* pControl, bool bDoNotDestroy=false);
-    bool RemoveAt(int iIndex, bool bDoNotDestroy=false);
-    void RemoveAll();
 
     bool Activate();
 
@@ -77,7 +61,7 @@ public:
 
 	void AttachSelect(const EventCallback& callback)
 	{
-		OnEvent[UIEVENT_ITEMSELECT] += callback;
+		event_map[UIEVENT_ITEMSELECT] += callback;
 	}
     
     bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);

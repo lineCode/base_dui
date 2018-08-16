@@ -9,8 +9,6 @@ namespace dui {
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
-typedef int (CALLBACK *PULVCompareFunc)(UINT_PTR, UINT_PTR, UINT_PTR);
-
 #define UILIST_MAX_COLUMNS 64
 
 typedef struct tagListViewInfo
@@ -21,25 +19,27 @@ typedef struct tagListViewInfo
     int nFont;
     UINT uTextStyle;
     RECT rcTextPadding;
+
+	bool bAlternateBk;
     DWORD dwTextColor;
+	DWORD dwSelectedTextColor;
+	DWORD dwHotTextColor;
+	DWORD dwDisabledTextColor;
+
     DWORD dwBkColor;
-    TDrawInfo diBk;
-    bool bAlternateBk;
-    DWORD dwSelectedTextColor;
-    DWORD dwSelectedBkColor;
-    TDrawInfo diSelected;
-    DWORD dwHotTextColor;
-    DWORD dwHotBkColor;
-    TDrawInfo diHot;
-    DWORD dwDisabledTextColor;
+	DWORD dwSelectedBkColor;
+	DWORD dwHotBkColor;
     DWORD dwDisabledBkColor;
-    TDrawInfo diDisabled;
+	
     int iHLineSize;
-    DWORD dwHLineColor;
     int iVLineSize;
+	DWORD dwHLineColor;
     DWORD dwVLineColor;
-    bool bShowHtml;
-    bool bMultiExpandable;
+
+	TDrawInfo diBk;
+	TDrawInfo diSelected;
+	TDrawInfo diHot;
+	TDrawInfo diDisabled;
 } ListViewInfo;
 
 
@@ -53,52 +53,45 @@ public:
 };
 
 class ListHeader;
-class IListView
+class IListView : public IList
 {
 public:
 	virtual ListViewInfo* GetListInfo() = 0;
-	virtual int GetCurSel() const = 0;
-	virtual bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent = true) = 0;
-	virtual void DoEvent(TEvent& event) = 0;
-	virtual bool ExpandItem(int iIndex, bool bExpand = true) = 0;
-	virtual int GetExpandedItem() const = 0;
-    virtual ListHeader* GetHeader() const = 0;
+	virtual ListHeader* GetHeader() const = 0;
     virtual ScrollContainer* GetList() const = 0;
     virtual IListViewCallback* GetTextCallback() const = 0;
     virtual void SetTextCallback(IListViewCallback* pCallback) = 0;
 };
 
-class IListItem
+/////////////////////////////////////////////////////////////////////////////////////
+//
+class ListHeader : public HorizontalLayout
 {
 public:
-    virtual int GetIndex() const = 0;
-    virtual void SetIndex(int iIndex) = 0;
-    virtual int GetDrawIndex() const = 0;
-    virtual void SetDrawIndex(int iIndex) = 0;
-	virtual IListView* GetOwner() = 0;
-    virtual void SetOwner(Control* pOwner) = 0;
-    virtual bool IsSelected() const = 0;
-    virtual bool Select(bool bSelect = true, bool bTriggerEvent=true) = 0;
-    virtual bool IsExpanded() const = 0;
-    virtual bool Expand(bool bExpand = true) = 0;
-    virtual void DrawItemText(HDC hDC, const RECT& rcItem) = 0;
-	//------------------add by djj----------------------
-	//virtual void SetText(LPCTSTR text) = 0;
-	//virtual LPCTSTR GetText() = 0;
+	ListHeader(){};
+	virtual ~ListHeader(){
+		printf("~ListHeader\n");
+	};
+	virtual LPCTSTR GetClass() const{ return DUI_CTR_LISTHEADER; };
+	virtual LPVOID GetInterface(LPCTSTR pstrName){
+		if (_tcscmp(pstrName, DUI_CTR_LISTHEADER) == 0) return this;
+		return HorizontalLayout::GetInterface(pstrName);
+	};
+
+	virtual SIZE EstimateSize(SIZE szAvailable);
 };
-
-
 /////////////////////////////////////////////////////////////////////////////////////
 //
 
 class ListBody;
-class ListHeader;
-
 class DUILIB_API ListView : public ScrollContainer, public IListView
 {
+
 public:
     ListView();
-
+	virtual ~ListView(){
+		printf("~ListView\n");
+	};
     LPCTSTR GetClass() const;
     UINT GetControlFlags() const;
     LPVOID GetInterface(LPCTSTR pstrName);
@@ -171,12 +164,10 @@ public:
     void SetItemVLineSize(int iSize);
     DWORD GetItemVLineColor() const;
     void SetItemVLineColor(DWORD dwLineColor);
-    bool IsItemShowHtml();
+ /*   bool IsItemShowHtml();
     void SetItemShowHtml(bool bShowHtml = true);
 
-    void SetMultiExpanding(bool bMultiExpandable); 
-    int GetExpandedItem() const;
-    bool ExpandItem(int iIndex, bool bExpand = true);
+    void SetMultiExpanding(bool bMultiExpandable); */
 
 	void SetPos(RECT rc, bool bNeedInvalidate = true);
 	void Move(SIZE szOffset, bool bNeedInvalidate = true);
@@ -209,165 +200,14 @@ public:
 protected:
     bool m_bScrollSelect;
     int m_iCurSel;
-    int m_iExpandedItem;
+    //int m_iExpandedItem;
     IListViewCallback* m_pCallback;
     ListBody* m_pList;
     ListHeader* m_pHeader;
     ListViewInfo m_ListInfo;
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
 
-class DUILIB_API ListHeader : public HorizontalLayout
-{
-public:
-    ListHeader();
-
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-
-    SIZE EstimateSize(SIZE szAvailable);
-};
-
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-
-class DUILIB_API ListHeaderItem : public Control
-{
-public:
-    ListHeaderItem();
-
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    UINT GetControlFlags() const;
-
-    void SetEnabled(bool bEnable = true);
-
-	bool IsDragable() const;
-    void SetDragable(bool bDragable);
-	DWORD GetSepWidth() const;
-    void SetSepWidth(int iWidth);
-	DWORD GetTextStyle() const;
-    void SetTextStyle(UINT uStyle);
-	DWORD GetTextColor() const;
-    void SetTextColor(DWORD dwTextColor);
-    DWORD GetSepColor() const;
-    void SetSepColor(DWORD dwSepColor);
-	void SetTextPadding(RECT rc);
-	RECT GetTextPadding() const;
-    void SetFont(int index);
-    bool IsShowHtml();
-    void SetShowHtml(bool bShowHtml = true);
-    LPCTSTR GetNormalImage() const;
-    void SetNormalImage(LPCTSTR pStrImage);
-    LPCTSTR GetHotImage() const;
-    void SetHotImage(LPCTSTR pStrImage);
-    LPCTSTR GetPushedImage() const;
-    void SetPushedImage(LPCTSTR pStrImage);
-    LPCTSTR GetFocusedImage() const;
-    void SetFocusedImage(LPCTSTR pStrImage);
-    LPCTSTR GetSepImage() const;
-    void SetSepImage(LPCTSTR pStrImage);
-
-    void DoEvent(TEvent& event);
-    SIZE EstimateSize(SIZE szAvailable);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    RECT GetThumbRect() const;
-
-    void PaintText(HDC hDC);
-    void PaintStatusImage(HDC hDC);
-
-protected:
-    POINT ptLastMouse;
-    bool m_bDragable;
-    UINT m_uButtonState;
-    int m_iSepWidth;
-    DWORD m_dwTextColor;
-    DWORD m_dwSepColor;
-    int m_iFont;
-    UINT m_uTextStyle;
-    bool m_bShowHtml;
-	RECT m_rcTextPadding;
-    TDrawInfo m_diNormal;
-    TDrawInfo m_diHot;
-    TDrawInfo m_diPushed;
-    TDrawInfo m_diFocused;
-    TDrawInfo m_diSep;
-};
-
-#if 1
-
-class DUILIB_API ListContainerElement : public Container, public IListItem
-{
-public:
-    ListContainerElement();
-
-    LPCTSTR GetClass() const;
-    UINT GetControlFlags() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-
-    int GetIndex() const;
-    void SetIndex(int iIndex);
-    int GetDrawIndex() const;
-    void SetDrawIndex(int iIndex);
-
-	IListView* GetOwner();
-    void SetOwner(Control* pOwner);
-    void SetVisible(bool bVisible = true);
-    void SetEnabled(bool bEnable = true);
-
-    bool IsSelected() const;
-    bool Select(bool bSelect = true, bool bTriggerEvent=true);
-#if 1
-    bool IsExpandable() const;
-    void SetExpandable(bool bExpandable);
-    bool IsExpanded() const;
-    bool Expand(bool bExpand = true);
-#endif
-    void Invalidate(); // 直接CControl::Invalidate会导致滚动条刷新，重写减少刷新区域
-    bool Activate();
-
-    void DoEvent(TEvent& event);
-	void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-	bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
-
-    void DrawItemText(HDC hDC, const RECT& rcItem);    
-    void DrawItemBk(HDC hDC, const RECT& rcItem);
-
-    //SIZE EstimateSize(SIZE szAvailable);
-
-	void AttachItemClick(const EventCallback& callback)
-	{
-		OnEvent[UIEVENT_ITEMCLICK] += callback;
-	}
-
-protected:
-    int m_iIndex;
-    int m_iDrawIndex;
-    bool m_bSelected;
-    bool m_bExpandable;
-    bool m_bExpand;
-    UINT m_uButtonState;
-	IListView* m_pOwner;
-};
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-
-class DUILIB_API ListHBoxElement : public ListContainerElement
-{
-public:
-    ListHBoxElement();
-
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
-};
-#endif
 } // namespace dui
 
 #endif // __UILISTVIEW_H__

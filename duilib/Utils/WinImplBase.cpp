@@ -7,10 +7,6 @@ namespace dui
 
 LPBYTE WindowImplBase::m_lpResourceZIPBuffer=NULL;
 
-DUI_BEGIN_MESSAGE_MAP(WindowImplBase,CNotifyPump)
-	DUI_ON_MSGTYPE(UIEVENT_CLICK, OnClick)
-DUI_END_MESSAGE_MAP()
-
 void WindowImplBase::OnFinalMessage( HWND hWnd )
 {
 	m_PaintManager.RemovePreMessageFilter(this);
@@ -468,7 +464,11 @@ void WindowImplBase::OnClick(TEvent& msg)
 
 void WindowImplBase::Notify(TEvent& msg)
 {
-	return CNotifyPump::NotifyPump(msg);
+	if (msg.Type == UIEVENT_CLICK)
+	{
+		OnClick(msg);
+	}
+	return;
 }
 
 }

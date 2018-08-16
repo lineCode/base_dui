@@ -74,18 +74,16 @@ void LoginForm::InitWindow()
 void LoginForm::Notify(dui::TEvent& msg)
 {
 	bool bHandle = false;
-	/*Control *pControl = msg.pSender;
-	if (pControl && msg.sType == DUI_MSGTYPE_WINDOWINIT)
+	Control *pControl = msg.pSender;
+	if (pControl && msg.Type == UIEVENT_ITEMCLICK)
 	{
 		bHandle = true;
-		wprintf(_T("LoginForm::Notify Name:%s MSG:%s\n"), pControl->GetName().c_str(), DUI_MSGTYPE_WINDOWINIT);
+		Label *lb = static_cast<Label*>(m_PaintManager.FindControl(_T("label1")));
+		if (lb)
+		{
+			lb->SetText(pControl->GetText().c_str());
+		}
 	}
-	else if (pControl && msg.sType == UIEVENT_ITEMCLICK)
-	{
-		bHandle = true;
-		wprintf(_T("LoginForm::Notify Name:%s MSG:%s\n"), pControl->GetName().c_str(), UIEVENT_ITEMCLICK);
-		ImportDataToDB();
-	}*/
 	if (!bHandle)
 	{
 		__super::Notify(msg);
@@ -94,7 +92,9 @@ void LoginForm::Notify(dui::TEvent& msg)
 
 void LoginForm::OnClick(TEvent& msg)
 {
+	wprintf(L"LoginForm::OnClick %s clicked\n", msg.pSender->GetName().c_str());
 	bool bHandle = false;
+	
 	//std::wstring name = msg.pSender->GetName();
 	/*if (msg.pSender == btn_login_)
 	{

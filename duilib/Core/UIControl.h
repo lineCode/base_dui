@@ -180,53 +180,49 @@ public:
 
     virtual void DoPostPaint(HDC hDC, const RECT& rcPaint);
 
-	//ÐéÄâ´°¿Ú²ÎÊý
-	void SetVirtualWnd(LPCTSTR pstrValue);
-	String GetVirtualWnd() const;
-
 	void AttachMouseEnter(const EventCallback& callback)
 	{
-		OnEvent[UIEVENT_MOUSEENTER] += callback;
+		event_map[UIEVENT_MOUSEENTER] += callback;
 	}
 
 	void AttachMouseLeave(const EventCallback& callback)
 	{
-		OnEvent[UIEVENT_MOUSELEAVE] += callback;
+		event_map[UIEVENT_MOUSELEAVE] += callback;
 	}
 
 	void AttachMouseHover(const EventCallback& callback)
 	{
-		OnEvent[UIEVENT_MOUSEHOVER] += callback;
+		event_map[UIEVENT_MOUSEHOVER] += callback;
 	}
 
 	void AttachButtonDown(const EventCallback& callback)
 	{
-		OnEvent[UIEVENT_BUTTONDOWN] += callback;
+		event_map[UIEVENT_BUTTONDOWN] += callback;
 	}
 
 	void AttachButtonUp(const EventCallback& callback)
 	{
-		OnEvent[UIEVENT_BUTTONUP] += callback;
+		event_map[UIEVENT_BUTTONUP] += callback;
 	}
 
 	void AttachSetFocus(const EventCallback& callback)
 	{
-		OnEvent[UIEVENT_SETFOCUS] += callback;
+		event_map[UIEVENT_SETFOCUS] += callback;
 	}
 
 	void AttachKillFocus(const EventCallback& callback)
 	{
-		OnEvent[UIEVENT_KILLFOCUS] += callback;
+		event_map[UIEVENT_KILLFOCUS] += callback;
 	}
 
 	void AttachMenu(const EventCallback& callback)
 	{
-		OnEvent[UIEVENT_CONTEXTMENU] += callback;
+		event_map[UIEVENT_CONTEXTMENU] += callback;
 	}
 
 	void AttachResize(const EventCallback& callback)
 	{
-		OnEvent[UIEVENT_RESIZE] += callback;
+		event_map[UIEVENT_RESIZE] += callback;
 	}
 public:
 	CEventSource OnInit;
@@ -234,12 +230,11 @@ public:
 	CEventSource OnNotify;
 	CEventSource OnPaint;
 	CEventSource OnPostPaint;
-	EventMap	OnEvent;
+	EventMap	event_map;
 protected:
     CPaintManager* m_pManager;
     Control* m_pParent;
     Control* m_pCover;
-	String m_sVirtualWnd;
     String m_sName;
     bool m_bUpdateNeeded;
     bool m_bMenuUsed;

@@ -121,7 +121,6 @@ m_bMouseTracking(false),
 m_bMouseCapture(false),
 m_bIsPainting(false),
 m_bOffscreenPaint(true),
-m_bUsedVirtualWnd(false),
 m_bAsyncNotifyPosted(false),
 m_bForceUseSharedRes(false),
 m_nOpacity(0xFF),
@@ -2271,10 +2270,6 @@ void CPaintManager::SendNotify(TEvent& Msg, bool bAsync /*= false*/, bool bEnabl
 {
     Msg.ptMouse = m_ptLastMousePos;
     Msg.dwTimestamp = ::GetTickCount();
-	if( m_bUsedVirtualWnd )
-	{
-		Msg.sVirtualWnd = Msg.pSender->GetVirtualWnd();
-	}
 
     if( !bAsync ) {
         // Send to all listeners
@@ -2290,7 +2285,6 @@ void CPaintManager::SendNotify(TEvent& Msg, bool bAsync /*= false*/, bool bEnabl
 			for( int i = 0; i < m_aAsyncNotify.GetSize(); i++ ) {
 				TEvent* pMsg = static_cast<TEvent*>(m_aAsyncNotify[i]);
 				if( pMsg->pSender == Msg.pSender && pMsg->Type == Msg.Type) {
-                    if (m_bUsedVirtualWnd) pMsg->sVirtualWnd = Msg.sVirtualWnd;
 					pMsg->wParam = Msg.wParam;
 					pMsg->lParam = Msg.lParam;
 					pMsg->ptMouse = Msg.ptMouse;
@@ -2301,7 +2295,6 @@ void CPaintManager::SendNotify(TEvent& Msg, bool bAsync /*= false*/, bool bEnabl
 		}
 
 		TEvent *pMsg = new TEvent;
-        if (m_bUsedVirtualWnd) pMsg->sVirtualWnd = Msg.sVirtualWnd;
 		pMsg->pSender = Msg.pSender;
 		pMsg->Type = Msg.Type;
 		pMsg->wParam = Msg.wParam;
@@ -3789,11 +3782,6 @@ bool CPaintManager::RemoveTranslateAccelerator(ITranslateAccelerator *pTranslate
 		}
 	}
 	return false;
-}
-
-void CPaintManager::UsedVirtualWnd(bool bUsed)
-{
-	m_bUsedVirtualWnd = bUsed;
 }
 
 Container* CPaintManager::CreateBox(const std::wstring& xmlPath, IDialogBuilderCallback *pCallback/* = NULL*/, CPaintManager *pManager/* = NULL*/, Control *pParent/* = NULL*/)

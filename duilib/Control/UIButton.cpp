@@ -157,11 +157,11 @@ namespace dui
 	{
 		if( !Control::Activate() ) return false;
 
-		if (OnEvent.find(UIEVENT_CLICK) != OnEvent.cend()){
+		if (event_map.find(UIEVENT_CLICK) != event_map.cend()){
 			TEvent event;
 			event.Type = UIEVENT_CLICK;
 			event.pSender = this;
-			if (!OnEvent.find(UIEVENT_CLICK)->second(&event)){
+			if (!event_map.find(UIEVENT_CLICK)->second(&event)){
 				return false;
 			}
 		}
