@@ -23,17 +23,17 @@
       </HLayout>
       <Control class="splitline_hor_level1"/>
       <TabLayout name="tab_session_friend" fadeswitch="true">
-        <ListView class="list" name="list_session" bkcolor="white" scrollbarfloat="true"/>
-        <ListView class="list" name="list_friend" scrollbarfloat="true"/>
+        <List class="list" name="list_session" bkcolor="white" scrollbarfloat="true"/>
+        <List class="list" name="list_friend" scrollbarfloat="true"/>
         <Tree class="list" name="tv_friend" bkcolor="white" scrollbarfloat=""/>
-        <ListView class="list" name="list_menu" scrollbarfloat="true">
+        <List class="list" name="list_menu" scrollbarfloat="true">
           <ListContainerElement class="listitem" name="menu_dpi" width="240" height="40" bkimage="file='icon_menu_dpi.png' dest='12,12,28,28'">
             <Label width="80" height="40" margin="40" font="2" text="DPI设置" />
           </ListContainerElement>
           <ListContainerElement class="listitem" name="menu_about" width="240" height="40" bkimage="file='icon_menu_dpi.png' dest='12,12,28,28'">
             <Label width="80" height="40" margin="40" font="2" text="关于" />
           </ListContainerElement>
-        </ListView>
+        </List>
       </TabLayout>
     </VLayout>
     <Control class="splitline_ver_level1"/>

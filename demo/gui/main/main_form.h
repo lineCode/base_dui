@@ -51,10 +51,10 @@ private:
 	dui::Label		*label_name_;
 	dui::TabLayout	*tab_session_friend_;
 
-	dui::ListView		*list_friend_;
-	dui::ListView		*list_session_;
+	dui::List		*list_friend_;
+	dui::List		*list_session_;
 	dui::Tree		*tree_friend_;
-	dui::ListView		*list_menu_;
+	dui::List		*list_menu_;
 	
 	dui::TreeNode	*group_nodes_[28];
 

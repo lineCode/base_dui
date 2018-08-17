@@ -80,13 +80,63 @@ public:
 
 	virtual SIZE EstimateSize(SIZE szAvailable);
 };
+
 /////////////////////////////////////////////////////////////////////////////////////
 //
+class ListBody : public ScrollContainer
+{
+public:
+	ListBody(IListView* pOwner);
+	virtual ~ListBody(){
+		printf("~ListBody\n");
+	};
+	virtual bool Add(Control* pControl);
+	void SetScrollPos(SIZE szPos);
+	void SetPos(RECT rc, bool bNeedInvalidate = true);
+	void DoEvent(TEvent& event);
+	bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
+	bool SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData, int& iCurSel);
 
-class ListBody;
+	//----SingleLine add by djj------------
+	class SingleLine : public HorizontalLayout
+	{
+	public:
+		SingleLine(IListView *pOwner, unsigned index) : m_pOwner(pOwner), m_index(index){};
+		virtual ~SingleLine(){
+			printf("~SingleLine\n");
+		};
+		//行为由ListBody全权负责
+		/*virtual bool Add(Control* pControl){
+		if (GetCount() >= m_column)
+		return false;
+		return __super::Add(pControl);
+		};*/
+		LPCTSTR GetClass() const;
+		LPVOID GetInterface(LPCTSTR pstrName);
+
+		void SetPos(RECT rc, bool bNeedInvalidate = true);
+		bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
+
+		virtual SIZE EstimateSize(SIZE szAvailable);
+	private:
+		IListView	*m_pOwner;
+		unsigned	m_index;
+	};
+
+protected:
+	static int __cdecl ItemComareFunc(void *pvlocale, const void *item1, const void *item2);
+	int __cdecl ItemComareFunc(const void *item1, const void *item2);
+
+protected:
+	IListView* m_pOwner;
+	PULVCompareFunc m_pCompareFunc;
+	UINT_PTR m_compareData;
+};
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
 class DUILIB_API ListView : public ScrollContainer, public IListView
 {
-
 public:
     ListView();
 	virtual ~ListView(){
@@ -115,12 +165,12 @@ public:
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);
 
-    int GetChildMargin() const;
-    void SetChildMargin(int iPadding);
+	int GetChildMargin() const{ return m_pList->GetChildMargin(); };
+	void SetChildMargin(int iPadding){ m_pList->SetChildMargin(iPadding); };
 
     ListHeader* GetHeader() const;  
     ScrollContainer* GetList() const;
-    ListViewInfo* GetListInfo();
+	ListViewInfo* GetListInfo(){ return &m_ListInfo; };
 
     UINT GetItemFixedHeight();
     void SetItemFixedHeight(UINT nHeight);
@@ -164,10 +214,6 @@ public:
     void SetItemVLineSize(int iSize);
     DWORD GetItemVLineColor() const;
     void SetItemVLineColor(DWORD dwLineColor);
- /*   bool IsItemShowHtml();
-    void SetItemShowHtml(bool bShowHtml = true);
-
-    void SetMultiExpanding(bool bMultiExpandable); */
 
 	void SetPos(RECT rc, bool bNeedInvalidate = true);
 	void Move(SIZE szOffset, bool bNeedInvalidate = true);
@@ -200,7 +246,6 @@ public:
 protected:
     bool m_bScrollSelect;
     int m_iCurSel;
-    //int m_iExpandedItem;
     IListViewCallback* m_pCallback;
     ListBody* m_pList;
     ListHeader* m_pHeader;

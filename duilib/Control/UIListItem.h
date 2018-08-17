@@ -54,23 +54,9 @@ namespace dui {
 		UINT m_uButtonState;
 		IList* m_pOwner;
 	};
-#if 1
-	/*class IListView;
-	class IListViewItem
-	{
-	public:
-		virtual int GetIndex() const = 0;
-		virtual void SetIndex(int iIndex) = 0;
-		virtual IListView* GetOwner() = 0;
-		virtual void SetOwner(Control* pOwner) = 0;
-		virtual bool IsSelected() const = 0;
-		virtual bool Select(bool bSelect = true, bool bTriggerEvent = true) = 0;
-		virtual void DrawItemText(HDC hDC, const RECT& rcItem) = 0;
-		//------------------add by djj----------------------
-		virtual void SetText(LPCTSTR text) = 0;
-		virtual LPCTSTR GetText() = 0;
-	};*/
 
+	/////////////////////////////////////////////////////////////////////////////////////
+	//
 	class DUILIB_API ListContainerElement : public Container, public IListItem
 	{
 	public:
@@ -112,88 +98,6 @@ namespace dui {
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
-
-	/*class DUILIB_API ListHBoxElement : public ListContainerElement
-	{
-	public:
-		ListHBoxElement();
-
-		LPCTSTR GetClass() const;
-		LPVOID GetInterface(LPCTSTR pstrName);
-
-		void SetPos(RECT rc, bool bNeedInvalidate = true);
-		bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
-	};*/
-#else
-	class DUILIB_API ListContainerElement : public Container, public IListItem
-	{
-	public:
-		ListContainerElement();
-
-		LPCTSTR GetClass() const;
-		UINT GetControlFlags() const;
-		LPVOID GetInterface(LPCTSTR pstrName);
-
-		int GetIndex() const;
-		void SetIndex(int iIndex);
-		int GetDrawIndex() const;
-		void SetDrawIndex(int iIndex);
-
-		IList* GetOwner();
-		void SetOwner(Control* pOwner);
-		void SetVisible(bool bVisible = true);
-		void SetEnabled(bool bEnable = true);
-
-		bool IsSelected() const;
-		bool Select(bool bSelect = true, bool bTriggerEvent=true);
-		bool IsExpandable() const;
-		void SetExpandable(bool bExpandable);
-		bool IsExpanded() const;
-		bool Expand(bool bExpand = true);
-
-		void Invalidate(); // 直接CControl::Invalidate会导致滚动条刷新，重写减少刷新区域
-		bool Activate();
-
-		void DoEvent(TEvent& event);
-		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-		bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
-
-		void DrawItemText(HDC hDC, const RECT& rcItem);    
-		void DrawItemBk(HDC hDC, const RECT& rcItem);
-
-		//SIZE EstimateSize(SIZE szAvailable);
-
-		void AttachItemClick(const EventCallback& callback)
-		{
-			OnEvent[UIEVENT_ITEMCLICK] += callback;
-		}
-
-	protected:
-		int m_iIndex;
-		int m_iDrawIndex;
-		bool m_bSelected;
-		bool m_bExpandable;
-		bool m_bExpand;
-		UINT m_uButtonState;
-		IList* m_pOwner;
-	};
-
-	/////////////////////////////////////////////////////////////////////////////////////
-	//
-
-	class DUILIB_API ListHBoxElement : public ListContainerElement
-	{
-	public:
-		ListHBoxElement();
-
-		LPCTSTR GetClass() const;
-		LPVOID GetInterface(LPCTSTR pstrName);
-
-		void SetPos(RECT rc, bool bNeedInvalidate = true);
-		bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
-	};
-#endif
-
 	class DUILIB_API ListHeaderItem : public Control
 	{
 	public:

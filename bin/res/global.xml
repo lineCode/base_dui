@@ -263,4 +263,7 @@
   <Class name="edit" value="hotimage=&quot;file='../public/edit/edit1.png' corner='10,10,10,10'&quot; focusedimage=&quot;file='../public/edit/edit2.png' corner='10,10,10,10'&quot;"/>
   <Class name="input" value="normalimage=&quot;file='../public/edit/edit0.png' corner='10,10,10,10'&quot; hotimage=&quot;file='../public/edit/edit0.png' corner='10,10,10,10'&quot; focusedimage=&quot;file='../public/edit/edit0.png' corner='10,10,10,10'&quot; disabledimage=&quot;file='../public/edit/edit0.png' corner='10,10,10,10' fade='80'&quot;"/>
 
+  <Default name="List" value="vscrollbar=&quot;true&quot; scrollbarfloat=&quot;true&quot;"/>
+  <Default name="ListView" value="vscrollbar=&quot;true&quot; scrollbarfloat=&quot;true&quot;"/>
 </Global>
+

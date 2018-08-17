@@ -5,7 +5,7 @@ namespace dui
 	ScrollContainer::ScrollContainer() :
 		m_pVerticalScrollBar(NULL),
 		m_pHorizontalScrollBar(NULL),
-		m_bScrollBarFloat(false),
+		m_bScrollBarFloat(true),
 		m_bScrollProcess(false)
 	{
 		::ZeroMemory(&m_rcPadding, sizeof(m_rcPadding));

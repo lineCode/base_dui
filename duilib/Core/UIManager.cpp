@@ -439,6 +439,28 @@ bool CPaintManager::LoadGlobalResource()
 				AddSharedDefaultAttributeList(pName, pValue);
 			}
 		}
+		else if (_tcsicmp(pstrClass, _T("Default")) == 0) {
+			nAttributes = node.GetAttributeCount();
+			LPCTSTR pControlName = NULL;
+			LPCTSTR pControlValue = NULL;
+			bool shared = false;
+			for (int i = 0; i < nAttributes; i++) {
+				pstrName = node.GetAttributeName(i);
+				pstrValue = node.GetAttributeValue(i);
+				if (_tcsicmp(pstrName, _T("name")) == 0) {
+					pControlName = pstrValue;
+				}
+				else if (_tcsicmp(pstrName, _T("value")) == 0) {
+					pControlValue = pstrValue;
+				}
+				else if (_tcsicmp(pstrName, _T("shared")) == 0) {
+					shared = (_tcsicmp(pstrValue, _T("true")) == 0);
+				}
+			}
+			if (pControlName && pControlValue) {
+				AddSharedDefaultAttributeList(pControlName, pControlValue);
+			}
+		}
 	}
 	return true;
 }

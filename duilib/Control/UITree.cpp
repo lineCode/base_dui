@@ -324,7 +324,6 @@ namespace dui
 	/*****************************************************************************/
 	Tree::Tree(void) :m_pVirtualRoot(NULL)
 	{
-		this->GetHeader()->SetVisible(false);
 		m_pVirtualRoot = new TreeNode;
 		m_pVirtualRoot->SetTreeView(this);
 	}
@@ -359,7 +358,7 @@ namespace dui
 #if 0
 		return m_pVirtualRoot->AddChildNode(pTreeNode);
 #else
-		ListView::Add(pTreeNode);
+		__super::Add(pTreeNode);
 
 		if(pTreeNode->GetChildCount() > 0)
 		{
@@ -390,7 +389,7 @@ namespace dui
         if (!pControl) return false;
 
         TreeNode* pTreeNode = static_cast<TreeNode*>(pControl->GetInterface(DUI_CTR_TREENODE));
-        if (pTreeNode == NULL) return ListView::Remove(pControl, bDoNotDestroy);
+        if (pTreeNode == NULL) return __super::Remove(pControl, bDoNotDestroy);
 
 		if(pTreeNode->GetChildCount() > 0)
 		{
@@ -403,7 +402,7 @@ namespace dui
 				}
 			}
 		}
-		return ListView::Remove(pControl, bDoNotDestroy);
+		return __super::Remove(pControl, bDoNotDestroy);
 	}
 
 	bool Tree::RemoveAt( int iIndex, bool bDoNotDestroy )
@@ -412,14 +411,14 @@ namespace dui
         if (pControl == NULL) return false;
 
         TreeNode* pTreeNode = static_cast<TreeNode*>(pControl->GetInterface(DUI_CTR_TREENODE));
-        if (pTreeNode == NULL) return ListView::Remove(pControl, bDoNotDestroy);
+		if (pTreeNode == NULL) return __super::Remove(pControl, bDoNotDestroy);
 
 		return Remove(pTreeNode);
 	}
 
 	void Tree::RemoveAll()
 	{
-		ListView::RemoveAll();
+		__super::RemoveAll();
 	}
 
 	bool Tree::AddChildNode(TreeNode* pNode)
@@ -442,7 +441,7 @@ namespace dui
         pTreeNode->GetCheckBox()->OnNotify += MakeDelegate(this,&Tree::OnCheckBoxChanged);
 #endif
 
-        ListView::AddAt(pTreeNode,iIndex);
+		__super::AddAt(pTreeNode, iIndex);
 
         if(pTreeNode->GetChildCount() > 0)
         {
@@ -490,7 +489,7 @@ namespace dui
 
 	void Tree::SetAttribute( LPCTSTR pstrName, LPCTSTR pstrValue )
 	{
-		ListView::SetAttribute(pstrName,pstrValue);
+		__super::SetAttribute(pstrName, pstrValue);
 	}
 
 }

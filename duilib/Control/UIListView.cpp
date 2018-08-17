@@ -2,63 +2,6 @@
 
 namespace dui {
 
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-
-class ListBody : public ScrollContainer
-{
-public:
-    ListBody(ListView* pOwner);
-	virtual ~ListBody(){
-		printf("~ListBody\n");
-	};
-	virtual bool Add(Control* pControl);
-    void SetScrollPos(SIZE szPos);
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    void DoEvent(TEvent& event);
-    bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
-    bool SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData, int& iCurSel);
-
-	//----SingleLine add by djj------------
-	class SingleLine : public HorizontalLayout
-	{
-	public:
-		SingleLine(){};
-		virtual ~SingleLine(){
-			printf("~SingleLine\n");
-		};
-		//行为由ListBody全权负责
-		//virtual bool Add(Control* pControl){
-		//	if (GetCount() >= m_column)
-		//		return false;
-		//	return __super::Add(pControl);
-		//};
-		LPCTSTR GetClass() const;
-		LPVOID GetInterface(LPCTSTR pstrName);
-
-		void SetPos(RECT rc, bool bNeedInvalidate = true);
-		bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
-
-		virtual SIZE EstimateSize(SIZE szAvailable);
-	/*private:
-		unsigned m_column;*/
-	};
-
-protected:
-    static int __cdecl ItemComareFunc(void *pvlocale, const void *item1, const void *item2);
-    int __cdecl ItemComareFunc(const void *item1, const void *item2);
-
-protected:
-    ListView* m_pOwner;
-    PULVCompareFunc m_pCompareFunc;
-    UINT_PTR m_compareData;
-};
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-//
-
 ListView::ListView() : m_pCallback(NULL), m_bScrollSelect(false), m_iCurSel(-1)
 {
     m_pHeader = new ListHeader;
@@ -218,6 +161,9 @@ bool ListView::Add(Control* pControl)
 
 bool ListView::AddAt(Control* pControl, int iIndex)
 {
+#if 1
+	assert(0);
+#else
     // Override the AddAt() method so we can add items specifically to
     // the intended widgets. Headers and are assumed to be
     // answer the correct interface so we can add multiple list headers.
@@ -252,6 +198,7 @@ bool ListView::AddAt(Control* pControl, int iIndex)
         }
     }
     if( m_iCurSel >= iIndex ) m_iCurSel += 1;
+#endif
     return true;
 }
 
@@ -285,6 +232,9 @@ bool ListView::Remove(Control* pControl, bool bDoNotDestroy)
 
 bool ListView::RemoveAt(int iIndex, bool bDoNotDestroy)
 {
+#if 1
+	assert(0);
+#else
     if (!m_pList->RemoveAt(iIndex, bDoNotDestroy)) return false;
 
     for(int i = iIndex; i < m_pList->GetCount(); ++i) {
@@ -299,6 +249,7 @@ bool ListView::RemoveAt(int iIndex, bool bDoNotDestroy)
         SelectItem(FindSelectable(iSel, false));
     }
     else if( iIndex < m_iCurSel ) m_iCurSel -= 1;
+#endif
     return true;
 }
 
@@ -528,21 +479,6 @@ bool ListView::SelectItem(int iIndex, bool bTakeFocus, bool bTriggerEvent)
     }
 
     return true;
-}
-
-ListViewInfo* ListView::GetListInfo()
-{
-    return &m_ListInfo;
-}
-
-int ListView::GetChildMargin() const
-{
-    return m_pList->GetChildMargin();
-}
-
-void ListView::SetChildMargin(int iPadding)
-{
-    m_pList->SetChildMargin(iPadding);
 }
 
 UINT ListView::GetItemFixedHeight()
@@ -782,24 +718,6 @@ void ListView::SetItemVLineColor(DWORD dwLineColor)
     m_ListInfo.dwVLineColor = dwLineColor;
     Invalidate();
 }
-
-//bool ListView::IsItemShowHtml()
-//{
-//    return m_ListInfo.bShowHtml;
-//}
-//
-//void ListView::SetItemShowHtml(bool bShowHtml)
-//{
-//    if( m_ListInfo.bShowHtml == bShowHtml ) return;
-//
-//    m_ListInfo.bShowHtml = bShowHtml;
-//    NeedUpdate();
-//}
-//
-//void ListView::SetMultiExpanding(bool bMultiExpandable)
-//{
-//    m_ListInfo.bMultiExpandable = bMultiExpandable;
-//}
 
 void ListView::EnsureVisible(int iIndex)
 {
@@ -1124,7 +1042,7 @@ bool ListView::SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData)
 //
 //
 
-ListBody::ListBody(ListView* pOwner) : m_pOwner(pOwner)
+ListBody::ListBody(IListView* pOwner) : m_pOwner(pOwner)
 {
     ASSERT(m_pOwner);
 }
@@ -1140,7 +1058,7 @@ bool ListBody::Add(Control* pControl)
 
 	SingleLine *line = nullptr;
 	if (GetCount() == 0){
-		line = new SingleLine;
+		line = new SingleLine(m_pOwner, 0);
 		__super::Add(line);
 	}
 	else
@@ -1149,11 +1067,11 @@ bool ListBody::Add(Control* pControl)
 		return false;
 	if (line->GetCount() >= column)
 	{
-		line = new SingleLine;
+		line = new SingleLine(m_pOwner, GetCount());
 		__super::Add(line);
 	}
 	assert(line && line->GetCount() < column);
-	
+	item->SetIndex(line->GetCount());
 	return line->Add(pControl);
 }
 
@@ -1376,10 +1294,10 @@ void ListBody::DoEvent(TEvent& event)
 				{
 					switch( LOWORD(event.wParam) ) {
 					case SB_LINEUP:
-						m_pOwner->LineLeft();
+						//m_pOwner->LineLeft();
 						return;
 					case SB_LINEDOWN:
-						m_pOwner->LineRight();
+						//m_pOwner->LineRight();
 						return;
 					}
 				}
@@ -1506,7 +1424,6 @@ SIZE ListHeader::EstimateSize(SIZE szAvailable)
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
-#if 1
 LPCTSTR ListBody::SingleLine::GetClass() const
 {
 	//assert(0);
@@ -1523,8 +1440,9 @@ LPVOID ListBody::SingleLine::GetInterface(LPCTSTR pstrName)
 
 void ListBody::SingleLine::SetPos(RECT rc, bool bNeedInvalidate)
 {
+	printf("ListBody::SingleLine::SetPos()\n");
 	__super::SetPos(rc, bNeedInvalidate);
-	/*if( m_pOwner == NULL ) return __super::SetPos(rc, bNeedInvalidate);
+	if( m_pOwner == NULL ) return __super::SetPos(rc, bNeedInvalidate);
 
 	Control::SetPos(rc, bNeedInvalidate);
 	rc = m_rcItem;
@@ -1566,7 +1484,7 @@ void ListBody::SingleLine::SetPos(RECT rc, bool bNeedInvalidate)
 				m_rcItem.right - rcMargin.right, m_rcItem.bottom - rcMargin.bottom };
 			pControl->SetPos(rcItem, false);
 		}
-	}*/
+	}
 }
 
 bool ListBody::SingleLine::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
@@ -1604,86 +1522,5 @@ SIZE ListBody::SingleLine::EstimateSize(SIZE szAvailable)
 
 	return cXY;
 };
-#else
-ListHBoxElement::ListHBoxElement()
-{
-    
-}
 
-LPCTSTR ListHBoxElement::GetClass() const
-{
-    return DUI_CTR_LISTHBOXELEMENT;
-}
-
-LPVOID ListHBoxElement::GetInterface(LPCTSTR pstrName)
-{
-    if( _tcscmp(pstrName, DUI_CTR_LISTHBOXELEMENT) == 0 ) return static_cast<ListHBoxElement*>(this);
-    return ListContainerElement::GetInterface(pstrName);
-}
-
-void ListHBoxElement::SetPos(RECT rc, bool bNeedInvalidate)
-{
-    if( m_pOwner == NULL ) return ListContainerElement::SetPos(rc, bNeedInvalidate);
-
-    Control::SetPos(rc, bNeedInvalidate);
-    rc = m_rcItem;
-
-    ListViewInfo* pInfo = m_pOwner->GetListInfo();
-    if (pInfo == NULL) return;
-    if (pInfo->nColumns > 0) {
-        int iColumnIndex = 0;
-        for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
-            Control* pControl = static_cast<Control*>(m_items[it2]);
-            if( !pControl->IsVisible() ) continue;
-            if( pControl->IsFloat() ) {
-                SetFloatPos(it2);
-                continue;
-            }
-            if( iColumnIndex >= pInfo->nColumns ) continue;
-
-            RECT rcMargin = pControl->GetMargin();
-            RECT rcItem = { pInfo->rcColumn[iColumnIndex].left + rcMargin.left, m_rcItem.top + rcMargin.top, 
-                pInfo->rcColumn[iColumnIndex].right - rcMargin.right, m_rcItem.bottom - rcMargin.bottom };
-            if (pInfo->iVLineSize > 0 && iColumnIndex < pInfo->nColumns - 1) {
-                rcItem.right -= pInfo->iVLineSize;
-            }
-            pControl->SetPos(rcItem, false);
-            iColumnIndex += 1;
-        }
-    }
-    else {
-        for( int it2 = 0; it2 < m_items.GetSize(); it2++ ) {
-            Control* pControl = static_cast<Control*>(m_items[it2]);
-            if( !pControl->IsVisible() ) continue;
-            if( pControl->IsFloat() ) {
-                SetFloatPos(it2);
-                continue;
-            }
-
-            RECT rcMargin = pControl->GetMargin();
-            RECT rcItem = { m_rcItem.left + rcMargin.left, m_rcItem.top + rcMargin.top, 
-                m_rcItem.right - rcMargin.right, m_rcItem.bottom - rcMargin.bottom };
-            pControl->SetPos(rcItem, false);
-        }
-    }
-}
-
-bool ListHBoxElement::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
-{
-    ASSERT(m_pOwner);
-    if( m_pOwner == NULL ) return true;
-    ListViewInfo* pInfo = m_pOwner->GetListInfo();
-    if( pInfo == NULL ) return true;
-
-    DrawItemBk(hDC, m_rcItem);
-    for( int i = 0; i < pInfo->nColumns; i++ ) {
-        RECT rcItem = { pInfo->rcColumn[i].left, m_rcItem.top, pInfo->rcColumn[i].right, m_rcItem.bottom };
-        if (pInfo->iVLineSize > 0 && i < pInfo->nColumns - 1) {
-            RECT rcLine = { rcItem.right - pInfo->iVLineSize / 2, rcItem.top, rcItem.right - pInfo->iVLineSize / 2, rcItem.bottom};
-            CRenderEngine::DrawLine(hDC, rcLine, pInfo->iVLineSize, GetAdjustColor(pInfo->dwVLineColor));
-        }
-    }
-	return __super::DoPaint(hDC, rcPaint, pStopControl);
-}
-#endif
 } // namespace dui

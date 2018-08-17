@@ -59,7 +59,7 @@ namespace dui
 		PtrArray		m_aTreeNodes;
 	};
 
-	class DUILIB_API Tree : public ListView, public INotify
+	class DUILIB_API Tree : public List, public INotify
 	{
 	public:
 		Tree(void);
