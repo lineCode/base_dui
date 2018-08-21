@@ -12,8 +12,8 @@ void InitManager::Init(LPCTSTR dui_res_dir)
 {
 	UserDB::GetInstance()->Load();
 
-	dui::CPaintManager::SetInstance(GetModuleHandle(NULL));
-	dui::CPaintManager::SetGlobalResDir((dui::CPaintManager::GetInstancePath() + dui_res_dir).c_str());
+	dui::UIManager::SetInstance(GetModuleHandle(NULL));
+	dui::UIManager::SetGlobalResDir((dui::UIManager::GetInstancePath() + dui_res_dir).c_str());
 
 	//加载聊天表情
 	LoadEmoji();

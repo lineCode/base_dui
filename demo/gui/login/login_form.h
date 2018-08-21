@@ -14,12 +14,12 @@ public:
 	virtual UINT GetClassStyle() const override;
 
 	virtual void InitWindow() override;
-	virtual void Notify(dui::TEvent& msg) override;
+	virtual void Notify(dui::Event& msg) override;
 
 	virtual LRESULT OnClose(UINT u, WPARAM w, LPARAM l, BOOL& bHandled) override;
 	
 
-	virtual void OnClick(dui::TEvent& msg) override;
+	virtual void OnClick(dui::Event& msg) override;
 
 	/**
 	* 注册UIKIT回调函数，让UIKIT控制登录窗体的一些行为

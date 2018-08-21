@@ -71,7 +71,7 @@ void LoginForm::InitWindow()
 	re_pwd_->SetText(L"dingjunjie");
 }
 
-void LoginForm::Notify(dui::TEvent& msg)
+void LoginForm::Notify(dui::Event& msg)
 {
 	bool bHandle = false;
 	Control *pControl = msg.pSender;
@@ -92,7 +92,7 @@ void LoginForm::Notify(dui::TEvent& msg)
 	}
 }
 
-void LoginForm::OnClick(TEvent& msg)
+void LoginForm::OnClick(Event& msg)
 {
 	bool bHandle = false;
 	//std::wstring name = msg.pSender->GetName();

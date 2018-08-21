@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="570,386" caption="0,0,75,49" sizebox="6,6,6,6" >
-  <VLayout padding="" bkcolor="gray" bkimage="light_top.png">
-    <HLayout height="26" padding="10,2,10" bkcolor="white">
+  <VBox padding="" bkcolor="gray" bkimage="light_top.png">
+    <HBox height="26" padding="10,2,10" bkcolor="white">
       <Label name="label1" width="60" height="20" margin="10" text="122222222222222345" bkcolor="main_blue"/>
       <Button width="60" height="20" margin="10" text="确定" bkcolor="main_blue"/>
-    </HLayout>
-    <HLayout>
-      <VLayout width="120">
+    </HBox>
+    <HBox>
+      <VBox width="120">
         <Combo name="combo1" width="80" height="20" margin="20,50" bkcolor="white" font="3" text="wo shi combo" dropboxfile="combo_1.xml" dropboxfolder="simple_demo"/>
         <Button name="btn" width="80" height="20" margin="20,5" bkcolor="white" text="btn" bkimage="light_top.png"/>
         <List name="list" width="90" height="120" margin="20,10" bkcolor="white" >
-          <ListElement width="90" height="30" font="2" text ="hello1"/>
-          <ListElement width="90" height="20" font="2" text ="hello2"/>
-          <ListElement width="90" height="30" font="2" text ="hello3"/>
-          <ListElement width="90" height="30" font="2" text ="hello4"/>
-          <ListElement width="90" height="30" font="2" text ="hello5"/>
-          <ListElement width="90" height="20" font="2" text ="hello6"/>
-          <ListElement width="90" height="30" font="2" text ="hello7"/>
-          <ListElement width="90" height="20" font="2" text ="hello8"/>
+          <ListElement width="90" height="30" font="2" text ="hello1" bkcolor="bk_wnd_lightcolor" hotbkcolor="bk_wnd_darkcolor" selectedbkcolor="bk_wnd_darkcolor2"/>
+          <ListElement width="90" height="20" font="2" text ="hello2" bkcolor="bk_wnd_lightcolor" hotbkcolor="bk_wnd_darkcolor" selectedbkcolor="bk_wnd_darkcolor2"/>
+          <ListElement width="90" height="30" font="2" text ="hello3" bkcolor="bk_wnd_lightcolor" hotbkcolor="bk_wnd_darkcolor" selectedbkcolor="bk_wnd_darkcolor2"/>
+          <ListElement width="90" height="30" font="2" text ="hello4" bkcolor="bk_wnd_lightcolor" hotbkcolor="bk_wnd_darkcolor" selectedbkcolor="bk_wnd_darkcolor2"/>
+          <ListElement width="90" height="30" font="2" text ="hello5" bkcolor="bk_wnd_lightcolor" hotbkcolor="bk_wnd_darkcolor" selectedbkcolor="bk_wnd_darkcolor2"/>
+          <ListElement width="90" height="20" font="2" text ="hello6" bkcolor="bk_wnd_lightcolor" hotbkcolor="bk_wnd_darkcolor" selectedbkcolor="bk_wnd_darkcolor2"/>
+          <ListElement width="90" height="30" font="2" text ="hello7" bkcolor="bk_wnd_lightcolor" hotbkcolor="bk_wnd_darkcolor" selectedbkcolor="bk_wnd_darkcolor2"/>
+          <ListElement width="90" height="20" font="2" text ="hello8" bkcolor="bk_wnd_lightcolor" hotbkcolor="bk_wnd_darkcolor" selectedbkcolor="bk_wnd_darkcolor2"/>
         </List>
-      </VLayout>
+      </VBox>
       <ListView name="list_view" width="400" height="200" margin="30,40" bkcolor="white" >
         <ListHeader height="40">
           <ListHeaderItem width="220" text="item1" bkimage="file='../public/list/headitembk.png' corner='2,1,2,1'"/>
@@ -41,7 +41,7 @@
         <ListElement width="80" height="40" text="text10" />
         <ListElement width="80" height="40" text="text11" />
       </ListView>
-    </HLayout>
-  </VLayout>
+    </HBox>
+  </VBox>
   
 </Window>

@@ -55,7 +55,7 @@ namespace nim_comp
 		::SetWindowLong(GetHWND(), GWL_STYLE, styleValue | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 
 		Button *button_close = static_cast<Button *>(m_PaintManager.FindControl(L"close_btn"));
-		button_close->AttachClick([this](TEvent*){
+		button_close->AttachClick([this](Event*){
 			Close(); return false; });
 
 		ui_image_view_ = static_cast<UiImageView*>(m_PaintManager.FindControl(L"image_view"));
@@ -170,7 +170,7 @@ namespace nim_comp
 		return __super::HandleMessage(uMsg, wParam, lParam);
 	}
 
-	void ImageViewForm::Notify(TEvent& msg)
+	void ImageViewForm::Notify(Event& msg)
 	{
 #if 0
 		if (msg->Type == kEventClick)

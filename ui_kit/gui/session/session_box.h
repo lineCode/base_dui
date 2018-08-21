@@ -4,7 +4,7 @@
 namespace nim_comp
 {
 //class AtMeView;
-	class SessionBox : public dui::VerticalLayout, public IDropTarget
+	class SessionBox : public dui::VBox, public IDropTarget
 	{
 	public:
 		SessionBox(std::string id, NIMSessionType type);
@@ -14,7 +14,7 @@ namespace nim_comp
 		void InitRichEdit();
 
 		//virtual bool Notify(void* param) override;
-		bool OnClicked(dui::TEvent *event);
+		bool OnClicked(dui::Event *event);
 
 		bool CheckFileSize(const std::wstring &src);
 	private:

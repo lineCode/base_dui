@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="270,386" caption="0,0,75,49" sizebox="6,6,6,6" >
-  <VLayout padding="" bkimage="login_bk.png" > 
-    <HLayout height="50" margin="0,6,5,9">
+  <VBox padding="" bkimage="login_bk.png" > 
+    <HBox height="50" margin="0,6,5,9">
       <Label width="60" height="32" margin="10" texthalign="" textvalign="" font="3" text="微微"/>
       <Control />
       <CheckBox name="chk_arrow_down" width="20" height="20" margin="0,2,2" normalimage="file='btn_arrow_down.png' source='0,0,20,20'" hotimage="file='btn_arrow_down.png' source='20,0,40,20'" 
@@ -9,33 +9,33 @@
       <Button name="minbtn" width="25" height="25" normalimage="file='btn_min.png'" pushedimage="file='btn_min_pushed.png'"/>
       <!--<Button name="maxbtn" />-->
       <Button name="closebtn" width="25" height="25" normalimage="file='btn_close.png'" pushedimage="file='btn_close_pushed.png'"/>
-    </HLayout>
+    </HBox>
 
-    <ScrollContainer margin="100,20" mouse="false" width="70" height="70">
+    <ScrollBox margin="100,20" mouse="false" width="70" height="70">
       <Control width="70" height="70" bkimage="default_head.png" borderround="70,70"/>
       <Control width="70" height="70" bkimage="head_mask.png" />
-    </ScrollContainer>
+    </ScrollBox>
     
-    <VLayout margin="0,40">
-      <HLayout height="30">
+    <VBox margin="0,40">
+      <HBox height="30">
         <Label width="30" margin="30" font="2" text="账号"/>
         <RichEdit name="re_account" width="170" height="28" margin="5" bkimage="file='rich_bk.png' corner='1,1,1,1'" rich="false" multiline="false" textpadding="4,6" font="2"/>
-      </HLayout>
-      <HLayout height="30" margin="0,10">
+      </HBox>
+      <HBox height="30" margin="0,10">
         <Label width="30" margin="30" font="2" text="密码"/>
         <RichEdit name="re_pwd" width="170" height="28" margin="5" bkimage="file='rich_bk.png' corner='1,1,1,1'" rich="false" multiline="false" textpadding="4,6" font="2" password="true"/>
-      </HLayout>
+      </HBox>
       <Label name="label_info" height="20" margin="40, 5" textcolor="gray"/>
       <Button class="btn_global_blue" name="btn_login" width="190" height="35" margin="40,5" 
               font="8" textcolor="white" text="登  录"/>
       <Button class="btn_global_blue" name="btn_cancel_login" width="190" height="35" margin="40,5" normalimage="file='../public/button/gray.png' source='0,0,10,30' corner='3,3,3,3'"
               hotimage="file='../public/button/gray.png' source='10,0,20,30' corner='3,3,3,3'" pushedimage="file='public/button/gray.png' source='20,0,30,30' corner='3,3,3,3'"
               font="8" textcolor="white" disabledtextcolor="white" text="取消登录" visible="false"/>
-      <HLayout height="30" margin="0,10">
+      <HBox height="30" margin="0,10">
         <CheckBox name="login_pw_chb" width="60" height="20" margin="40,5,0,0"  textpadding="14,2,0,0" normalimage="file='check.png' dest='0,5,11,16'"  selectedimage="file='check_sel.png' dest='0,5,11,16'" font="1" text="记住密码" />
         <CheckBox name="login_zd_chb" width="60" height="20" margin="68,5,0,0"  textpadding="14,2,0,0" normalimage="file='check.png' dest='0,5,11,16'"  selectedimage="file='check_sel.png' dest='0,5,11,16'" font="1" text="自动登录" />
-      </HLayout> 
+      </HBox> 
       <!--<Control name="ctrl_gif" width="16" height="16" bkimage="../public/animation/ani_loading.gif"/>-->
-    </VLayout>
-  </VLayout>
+    </VBox>
+  </VBox>
 </Window>

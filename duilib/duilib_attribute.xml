@@ -155,8 +155,8 @@
     <!--CheckBox-->
     <CheckBox parent="Option" notifies="同Option" >
     </CheckBox>
-    <!--ScrollBar-->
-    <ScrollBar parent="Control" notifies="">
+    <!--Scroll-->
+    <Scroll parent="Control" notifies="">
       <Attribute name="button1normalimage"    default="" type="" comment=""/>
       <Attribute name="button1hotimage"       default="" type="" comment=""/>
       <Attribute name="button1pushedimage"    default="" type="" comment=""/>
@@ -184,49 +184,49 @@
       <Attribute name="scrollunit"  default="" type="" comment=""/>
       <Attribute name="showbutton1" default="" type="" comment=""/>
       <Attribute name="showbutton2" default="" type="" comment=""/>
-    </ScrollBar>
+    </Scroll>
     
-    <!--Container begin-->
-    <Container parent="Control" notifies="" comment="">
+    <!--Box begin-->
+    <Box parent="Control" notifies="" comment="">
       <Attribute name="padding"         default="" type="" comment=""/>
       <Attribute name="mousechild"      default="" type="" comment=""/>
       <Attribute name="childmargin"     default="" type="" comment=""/>
       <Attribute name="childalign"      default="" type="" comment=""/>
       <Attribute name="childvalign"     default="" type="" comment=""/>
-    </Container>
+    </Box>
 
-    <ScrollContainer parent="Container" notifies="" comment="">
+    <ScrollBox parent="Box" notifies="" comment="">
       <Attribute name="vscrollbar"      default="" type="" comment=""/>
       <Attribute name="vscrollbarstyle" default="" type="" comment=""/>
       <Attribute name="hscrollbar"      default="" type="" comment=""/>
       <Attribute name="hscrollbarstyle" default="" type="" comment=""/>
-    </ScrollContainer>
+    </ScrollBox>
 
-    <LabelContainer parent="Container"        notifies="" comment="同Label">
-    </LabelContainer>
+    <LabelBox parent="Box"        notifies="" comment="同Label">
+    </LabelBox>
     
-    <ButtonContainer parent="LabelContainer"  notifies="" comment="同Button">
-    </ButtonContainer>
+    <ButtonBox parent="LabelBox"  notifies="" comment="同Button">
+    </ButtonBox>
 
-    <OptionContainer parent="ButtonContainer" notifies="" comment="同Option">
-    </OptionContainer>
+    <OptionBox parent="ButtonBox" notifies="" comment="同Option">
+    </OptionBox>
     
-    <HLayout parent="ScrollContainer" notifies="" comment="">
+    <HBox parent="ScrollBox" notifies="" comment="">
       <Attribute name="sepheight"     default="" type="" comment=""/>
       <Attribute name="sepimm"        default="" type="" comment=""/>
-    </HLayout>
+    </HBox>
     
-    <VLayout parent="ScrollContainer" notifies="" comment="">
+    <VBox parent="ScrollBox" notifies="" comment="">
       <Attribute name="sepheight"     default="" type="" comment=""/>
       <Attribute name="sepimm"        default="" type="" comment=""/>
-    </VLayout>
+    </VBox>
     
-    <TabLayout parent="ScrollContainer" notifies="" comment="fadeswitch 未完成">
+    <TabBox parent="ScrollBox" notifies="" comment="fadeswitch 未完成">
       <Attribute name="selectedid"     default="" type="" comment=""/>
       <Attribute name="fadeswitch"     default="false" type="bool" comment="tab切换动画"/>  
-    </TabLayout>
+    </TabBox>
 
-    <ListContainerElement parent="Container" notifies="" comment="">
+    <ListContainerElement parent="Box" notifies="" comment="">
       <Attribute name="selected"        default="" type="" comment=""/>
       <Attribute name="expandable"      default="" type="" comment=""/>
     </ListContainerElement>
@@ -242,7 +242,7 @@
       <Attribute name="linepadding"     default="" type="" comment=""/>
     </MenuElement>
 
-    <RichEdit parent="ScrollContainer" notifies="" comment="">
+    <RichEdit parent="ScrollBox" notifies="" comment="">
       <Attribute name="vscrollbar"        default="" type="" comment=""/>
       <Attribute name="autovscroll"       default="" type="" comment=""/>
       <Attribute name="hscrollbar"        default="" type="" comment=""/>
@@ -265,7 +265,7 @@
       <Attribute name="promptcolor"       default="" type="" comment=""/>
     </RichEdit>
 
-    <ListView parent="VLayout" notifies="" comment="">
+    <ListView parent="VBox" notifies="" comment="">
       <Attribute name="header"            default="" type="" comment=""/>
       <Attribute name="headerbkimage"     default="" type="" comment=""/>
       <Attribute name="scrollselect"      default="" type="" comment=""/>
@@ -326,7 +326,7 @@
 		<Attribute name="progressbarpadding" default="0,0,0,0" type="RECT" comment="����������ʱ��С���ڱ߾�"/>
 	</Slider>-->
 
-    <!--<ScrollBar parent="Control" notifies="��ʱ��д">
+    <!--<Scroll parent="Control" notifies="��ʱ��д">
 		<Attribute name="button1normalimage" default="" type="STRING" comment="����ϰ�ť��ͨ״̬ͼƬ"/>
 		<Attribute name="button1hotimage" default="" type="STRING" comment="����ϰ�ť�������״̬ͼƬ"/>
 		<Attribute name="button1pushedimage" default="" type="STRING" comment="����ϰ�ť��갴��״̬ͼƬ"/>
@@ -355,7 +355,7 @@
 		<Attribute name="showbutton1" default="true" type="BOOL" comment="�Ƿ���ʾ����ϰ�ť,��(true)"/>
 		<Attribute name="showbutton2" default="true" type="BOOL" comment="�Ƿ���ʾ�һ��°�ť,��(true)"/>
 		<Attribute name="autohidescroll" default="true" type="BOOL" comment="�Ƿ��Զ����ع�����,��(true)"/>
-	</ScrollBar>-->
+	</Scroll>-->
 
     <!--<ChildBox parent="Box" notifies="��ʱ��д" >
 		<Attribute name="xmlfile" default="" type="STRING" comment="ҪǶ���xml�ļ��ĵ�ַ,��(childxml.xml)"/>

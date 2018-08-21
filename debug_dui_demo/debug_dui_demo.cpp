@@ -9,15 +9,15 @@
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	dui::CPaintManager::SetInstance(GetModuleHandle(NULL));
-	dui::CPaintManager::SetGlobalResDir((dui::CPaintManager::GetInstancePath() + L"res/").c_str());
+	dui::UIManager::SetInstance(GetModuleHandle(NULL));
+	dui::UIManager::SetGlobalResDir((dui::UIManager::GetInstancePath() + L"res/").c_str());
 
 	LoginForm *form = new LoginForm;
 	form->Create(NULL, LoginForm::kClassName, WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX, 0);
 	form->CenterWindow();
 	form->ShowWindow();
 
-	dui::CPaintManager::MessageLoop();
+	dui::UIManager::MessageLoop();
 
 	return 0;
 }

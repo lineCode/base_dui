@@ -74,6 +74,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "image_effects", "image_effe
 		third_party\capture_image\image_effects\sse_check.h = third_party\capture_image\image_effects\sse_check.h
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "player", "player\player.vcxproj", "{D1B03378-ABD2-487B-A201-6770D79C8E83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -178,6 +180,18 @@ Global
 		{34A879C9-6244-49FB-8480-944CD6775906}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
 		{34A879C9-6244-49FB-8480-944CD6775906}.UnicodeRelease|Win32.Build.0 = Release|Win32
 		{34A879C9-6244-49FB-8480-944CD6775906}.UnicodeRelease|x64.ActiveCfg = Release|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.Debug|Win32.Build.0 = Debug|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.Debug|x64.ActiveCfg = Debug|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.Release|Win32.ActiveCfg = Release|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.Release|Win32.Build.0 = Release|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.Release|x64.ActiveCfg = Release|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.UnicodeDebug|Win32.Build.0 = Debug|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.UnicodeDebug|x64.ActiveCfg = Debug|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.UnicodeRelease|Win32.Build.0 = Release|Win32
+		{D1B03378-ABD2-487B-A201-6770D79C8E83}.UnicodeRelease|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

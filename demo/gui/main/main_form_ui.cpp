@@ -91,14 +91,14 @@ void MainForm::InitWindow()
 	btn_head_ = dynamic_cast<Button*>(m_PaintManager.FindControl(_T("btn_head")));
 	if (btn_head_)
 	{
-		auto OnBtnHeadClicked = [this](TEvent *event){
+		auto OnBtnHeadClicked = [this](Event *event){
 			printf("MainForm OnBtnHeadClicked, name:%s\n", event->pSender->GetName().c_str());
 			return false; };
 
 		btn_head_->AttachClick(std::bind(OnBtnHeadClicked, std::placeholders::_1));
 	}
 
-	auto OnOptContainerClicked = [this](TEvent *event, int index){
+	auto OnOptContainerClicked = [this](Event *event, int index){
 		printf("MainForm OnBtnContainerClicked, name:%s\n", event->pSender->GetName().c_str());
 
 		//if (index < 3)
@@ -107,16 +107,16 @@ void MainForm::InitWindow()
 		}
 		
 		return true; };
-	OptionContainer *optbox_opt_session = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("optbox_opt_session")));
-	OptionContainer *optbox_opt_friends = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("optbox_opt_friends")));
-	OptionContainer *optbox_opt_groups = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("optbox_opt_groups")));
-	OptionContainer *optbox_opt_menu = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("optbox_opt_menu")));
+	OptionBox *optbox_opt_session = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("optbox_opt_session")));
+	OptionBox *optbox_opt_friends = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("optbox_opt_friends")));
+	OptionBox *optbox_opt_groups = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("optbox_opt_groups")));
+	OptionBox *optbox_opt_menu = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("optbox_opt_menu")));
 	optbox_opt_session->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 0));
 	optbox_opt_friends->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 1));
 	optbox_opt_groups->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 2));
 	optbox_opt_menu->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 3));
 
-	tab_session_friend_ = dynamic_cast<TabLayout*>(m_PaintManager.FindControl(_T("tab_session_friend")));
+	tab_session_friend_ = dynamic_cast<TabBox*>(m_PaintManager.FindControl(_T("tab_session_friend")));
 
 	list_session_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_session")));
 	list_friend_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_friend")));
@@ -124,15 +124,15 @@ void MainForm::InitWindow()
 	list_menu_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_menu")));
 	{
 		ListContainerElement *menu_dpi = dynamic_cast<ListContainerElement*>(list_menu_->FindSubControl(_T("menu_dpi")));
-		auto cb = std::bind([this](TEvent *event){
-			CPaintManager::SetAllDPI(120);
+		auto cb = std::bind([this](Event *event){
+			UIManager::SetAllDPI(120);
 			return false;
 		}, std::placeholders::_1);
 		menu_dpi->AttachItemClick(cb);
 
 		ListContainerElement *menu_about = dynamic_cast<ListContainerElement*>(list_menu_->FindSubControl(_T("menu_about")));
-		auto cb2 = std::bind([this](TEvent *event){
-			CPaintManager::SetAllDPI(96);
+		auto cb2 = std::bind([this](Event *event){
+			UIManager::SetAllDPI(96);
 			return false;
 		}, std::placeholders::_1);
 		menu_about->AttachItemClick(cb2);
@@ -152,7 +152,7 @@ void MainForm::InitWindow()
 		}
 		if (btn_expand)
 		{
-			auto cb = [node](TEvent *event){
+			auto cb = [node](Event *event){
 				node->SetNodeExpand(!node->GetNodeExpand());
 				return false;
 			};
@@ -187,7 +187,7 @@ void MainForm::InitWindow()
 	tree_friend_->AddChildNodeAt(node, 1);
 	group_nodes_[1] = node;
 	//--------------------------------tab session-------------------------------
-	tab_session_ = dynamic_cast<TabLayout*>(m_PaintManager.FindControl(_T("tab_session")));
+	tab_session_ = dynamic_cast<TabBox*>(m_PaintManager.FindControl(_T("tab_session")));
 	nim_comp::SessionBox *session = new nim_comp::SessionBox("1", nim_comp::kNIMSessionTypeP2P);
 	m_PaintManager.FillBox(session, _T("session.xml"), this, &m_PaintManager);
 	tab_session_->Add(session);
@@ -198,7 +198,7 @@ void MainForm::InitWindow()
 	nim_comp::SessionManager::GetInstance()->DoLoadSession(std::bind(&MainForm::OnGetAllSessionInfo, this, std::placeholders::_1, std::placeholders::_2));
 }
 
-void MainForm::Notify(dui::TEvent& msg)
+void MainForm::Notify(dui::Event& msg)
 {
 	bool bHandle = false;
 
@@ -223,7 +223,7 @@ void MainForm::Notify(dui::TEvent& msg)
 	}
 }
 
-void MainForm::OnClick(dui::TEvent& msg)
+void MainForm::OnClick(dui::Event& msg)
 {
 	bool bHandle = false;
 
@@ -327,7 +327,7 @@ void MainForm::OnGetAllSessionInfo(int unread_count, const nim_comp::SessionData
 	printf("load Session ui %d ms\n", clock() - ck1);
 }
 
-bool MainForm::MenuLogoffClick(dui::TEvent* param)
+bool MainForm::MenuLogoffClick(dui::Event* param)
 {
 #if 0
 	QCommand::Set(kCmdRestart, L"true");
@@ -346,7 +346,7 @@ bool MainForm::MenuLogoffClick(dui::TEvent* param)
 	return true;
 }
 
-bool MainForm::MenuLogoutClick(dui::TEvent* param)
+bool MainForm::MenuLogoutClick(dui::Event* param)
 {
 	nim_comp::LoginManager::GetInstance()->DoLogout(false);
 	return true;

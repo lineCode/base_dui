@@ -24,7 +24,7 @@ public:
 	* @param[in] rc ´°¿ÚÎ»ÖÃ
 	* @return HWND ´°¿Ú¾ä±ú
 	*/
-	HWND Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, bool isLayeredWindow = true, const dui::CDuiRect& rc = dui::CDuiRect(0, 0, 0, 0));
+	HWND Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, bool isLayeredWindow = true, const dui::DuiRect& rc = dui::DuiRect(0, 0, 0, 0));
 
 	virtual void OnFinalMessage(HWND hWnd) override;
 	/**

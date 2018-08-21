@@ -23,7 +23,7 @@ namespace nim_comp
 
 	public:
 		virtual void DoInit() override;
-		/*virtual void HandleMessage(dui::TEvent& event) override;*/
+		/*virtual void HandleMessage(dui::Event& event) override;*/
 		//virtual void Paint(dui::IRenderContext* pRender, const dui::DuiRect& rcPaint) override;
 		virtual bool Paint(HDC hDC, const RECT& rcPaint, Control* pStopControl = NULL) override;
 

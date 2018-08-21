@@ -50,7 +50,7 @@ namespace nim_comp
 			//int w = DB_LIST_COL_WIDTH;
 			label->SetFixedWidth(DB_LIST_COL_WIDTH);
 			label->SetFixedHeight(DB_LIST_ROW_HEIGHT);
-			label->SetMargin(dui::CDuiRect(width_, 0, 0, 0));
+			label->SetMargin(dui::DuiRect(width_, 0, 0, 0));
 
 			label->SetTextStyle(DT_LEFT | DT_VCENTER);
 			label->SetText(text.c_str());
@@ -73,7 +73,7 @@ namespace nim_comp
 			//int w = DB_LIST_COL_WIDTH;
 			label->SetFixedWidth(DB_LIST_COL_WIDTH);
 			label->SetFixedHeight(DB_LIST_ROW_HEIGHT);
-			label->SetMargin(dui::CDuiRect(width_, 0, 0, 0));
+			label->SetMargin(dui::DuiRect(width_, 0, 0, 0));
 
 			label->SetTextStyle(DT_LEFT | DT_VCENTER);
 			label->SetText(text.c_str());

@@ -71,7 +71,7 @@ void LoginForm::InitWindow()
 	//re_pwd_->SetText(L"dingjunjie");
 }
 
-void LoginForm::Notify(dui::TEvent& msg)
+void LoginForm::Notify(dui::Event& msg)
 {
 	bool bHandle = false;
 	Control *pControl = msg.pSender;
@@ -90,7 +90,7 @@ void LoginForm::Notify(dui::TEvent& msg)
 	}
 }
 
-void LoginForm::OnClick(TEvent& msg)
+void LoginForm::OnClick(Event& msg)
 {
 	wprintf(L"LoginForm::OnClick %s clicked\n", msg.pSender->GetName().c_str());
 	bool bHandle = false;

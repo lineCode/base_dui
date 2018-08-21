@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="968,600" sizebox="4,4,4,4" caption="0,0,0,40" mininfo="600,400">
+  <Font name="微软雅黑" size="14" bold="false" italic="false" />
+  <Font name="微软雅黑" size="14" bold="true" italic="false" />
+  <Font name="微软雅黑" size="10" bold="false" />
+  <Font name="微软雅黑" size="12" bold="false" />
+  <Font name="微软雅黑" size="13" bold="false" />
+  <Font name="微软雅黑" size="14" bold="false" />
+  <Include source="scrollbar.xml" />
+  <VBox bkcolor="#FF070707">
+    <Caption height="40" />
+    <HBox height="40" name="tabbar" bkcolor="#FF070707" inset="10,0,0,0">
+      <Option name="tabReal" text="实时视频" width="88" height="38" textcolor="#FFB7DBFB" disabledtextcolor="#FFA7A6AA" font="1" align="center" hottextcolor="#FF084DC8" group="tabbar" selected="true" selectedimage="light_top.png" />
+      <Option name="tabRecord" text="录像" width="88" height="38" textcolor="#FFB7DBFB" disabledtextcolor="#FFA7A6AA" font="1" align="center" hottextcolor="#FF084DC8" group="tabbar" selected="false" selectedimage="light_top.png" />
+      <Button name="tabMap" text="地图" width="88" height="38" textcolor="#FFB7DBFB" disabledtextcolor="#FFA7A6AA" font="1" align="center" hottextcolor="#FF084DC8" group="tabbar" selected="false" selectedimage="light_top.png" />
+      <Button name="tabData" text="数据统计" width="88" height="38" textcolor="#FFB7DBFB" disabledtextcolor="#FFA7A6AA" font="1" align="center" hottextcolor="#FF084DC8" group="tabbar" selected="false" selectedimage="light_top.png" />
+      <Button name="tabSetting" text="系统设置" width="88" height="38" textcolor="#FFB7DBFB" disabledtextcolor="#FFA7A6AA" font="1" align="center" hottextcolor="#FF084DC8" group="tabbar" selected="false" selectedimage="light_top.png" />
+    </HBox>
+
+    <HBox name="ctnClient">
+      <VBox width="290" bkcolor="#FF111111">
+        <HBox height="33">
+          <Button name="listHeader" text="摄像机列表" textpadding="10,0,0,0" font="6" align="left" valign="vcenter" height="33" bkimage="treeview_header.png" textcolor="#FFC8C6CB" />
+        </HBox>
+        <TreeView name="listView" childpadding="4" multipleitem="true" inset="4,0,3,0" bordersize="1" bordercolor="#FF2B2B2B" itemtextcolor="#FFC8C6CB" itemhottextcolor="#FFC8C6CB" selitemtextcolor="#FFC8C6CB" itemhotbkcolor="#FF1B1B1B" itemselectedbkcolor="#FF151C2C" vscrollbar="true" hscrollbar="true" >
+          <TreeNode text="江苏省公安厅" inset="0,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+            <TreeNode text="南京" inset="-8,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+              <TreeNode text="下载1" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+              <TreeNode text="下载2" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+            </TreeNode>
+            <TreeNode text="无锡" inset="-8,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+              <TreeNode text="下载1" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+              <TreeNode text="下载2" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+            </TreeNode>
+            <TreeNode text="常州" inset="-8,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+              <TreeNode text="下载1" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+              <TreeNode text="下载2" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+            </TreeNode>
+            <TreeNode text="苏州" inset="-8,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+              <TreeNode text="下载1" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+              <TreeNode text="下载2" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+            </TreeNode>
+            <TreeNode text="徐州" inset="-8,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+              <TreeNode text="下载1" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+              <TreeNode text="下载2" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+            </TreeNode>
+            <TreeNode text="南通" inset="-8,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+              <TreeNode text="下载1" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+              <TreeNode text="下载2" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+            </TreeNode>
+            <TreeNode text="连云港" inset="-8,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+              <TreeNode text="下载1" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+              <TreeNode text="下载2" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+            </TreeNode>
+            <TreeNode text="淮安" inset="-8,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+              <TreeNode text="下载1" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+              <TreeNode text="下载2" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+            </TreeNode>
+            <TreeNode text="盐城" inset="-8,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+              <TreeNode text="下载1" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+              <TreeNode text="下载2" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+            </TreeNode>
+            <TreeNode text="扬州" inset="-8,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+              <TreeNode text="下载1" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+              <TreeNode text="下载2" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+            </TreeNode>
+            <TreeNode text="宿迁" inset="-8,0,0,0" height="22" itemattr="valign=&quot;vcenter&quot; font=&quot;0&quot; textpadding=&quot;4,0,0,0&quot;" folderattr="padding=&quot;0,5,0,0&quot; width=&quot;12&quot; height=&quot;12&quot; selectedimage=&quot;file='treeview_expand.png' source='0,0,12,12' &quot; normalimage=&quot;file='treeview_expand.png' source='13,0,25,12' &quot;">
+              <TreeNode text="下载1" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+              <TreeNode text="下载2" height="22" inset="7,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;"/>
+            </TreeNode>
+          </TreeNode>
+        </TreeView>
+      </VBox>
+      <VBox inset="3,0,3,0">
+        <PlayerLayout name="playerLayout" visible="true" />
+
+        <HBox name="recordBar" visible="false" height="48" inset="10,0,10,0">
+          <HBox inset="0,15,0,0">
+            <Label name="labelPlayTime" text="--:--" font="2" width="100" height="18" textcolor="#FF85909F" align="center" />
+            <Slider name="sliderPlay" height="20" bkimage="slider\SliderBack.png" foreimage="slider\SliderFore.png" min="0" max="1000" value="0" hor="true"  thumbhotimage="file=&apos;slider\SliderBar.png&apos; source=&apos;21,0,41,20&apos;" thumbpushedimage="file=&apos;slider\SliderBar.png&apos; source=&apos;42,0,62,20&apos;" thumbsize="20,20" />
+          </HBox>
+          <Control width="10"/>
+          <Button name="btnStop" tooltip="停止" enabled="false" width="40" height="40" padding="0,4,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_stop.png&apos; source=&apos;0,0,40,40&apos;" hotimage="file=&apos;btn_stop.png&apos; source=&apos;41,0,81,40&apos;" pushedimage="file=&apos;btn_stop.png&apos; source=&apos;82,0,122,40&apos;" disabledimage="file=&apos;btn_stop.png&apos; source=&apos;123,0,163,40&apos;" />
+          <Button name="btnPlay" tooltip="播放" width="48" height="48" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_play.png&apos; source=&apos;0,0,48,50&apos;" hotimage="file=&apos;btn_play.png&apos; source=&apos;49,0,97,48&apos;" pushedimage="file=&apos;btn_play.png&apos; source=&apos;98,0,146,48&apos;" />
+          <Button name="btnPause" tooltip="暂停" visible="false" width="48" height="48" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_pause.png&apos; source=&apos;0,0,48,50&apos;" hotimage="file=&apos;btn_pause.png&apos; source=&apos;49,0,97,48&apos;" pushedimage="file=&apos;btn_pause.png&apos; source=&apos;98,0,146,48&apos;" />
+          <Control width="10"/>
+          <Button name="btnVolume" tooltip="静音" width="16" height="16" padding="0,16" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_volume.png&apos; source=&apos;0,0,16,16&apos;" hotimage="file=&apos;btn_volume.png&apos; source=&apos;17,0,33,16&apos;" pushedimage="file=&apos;btn_volume.png&apos; source=&apos;34,0,50,16&apos;" />
+          <Button name="btnVolumeZero" tooltip="取消静音" visible="false" padding="0,16"  width="16" height="16" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_volume_zero.png&apos; source=&apos;0,0,16,16&apos;" hotimage="file=&apos;btn_volume_zero.png&apos; source=&apos;17,0,33,16&apos;" pushedimage="file=&apos;btn_volume_zero.png&apos; source=&apos;34,0,50,16&apos;" />
+          <Slider name="sliderVol" width="85" height="20" min="0" max="100" padding="0,14" value="60" bkimage="slider\SliderBackVolume.png" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" foreimage="slider\SliderForeVolume.png" hor="true" thumbimage="file=&apos;slider\SliderBar.png&apos; source=&apos;0,0,20,20&apos; " thumbhotimage="file=&apos;slider\SliderBar.png&apos; source=&apos;21,0,41,20&apos;" thumbpushedimage="file=&apos;slider\SliderBar.png&apos; source=&apos;42,0,62,20&apos;" thumbsize="20,20" />
+        </HBox>
+      </VBox>
+    </HBox>
+    
+    <HBox height="40" inset="10,0,10,0" bkcolor="#FF0E1A2F" bkcolor2="#FF060606" >
+      <Control />
+      <HBox inset="0,11,0,0" width="243">
+        <Button name="btnOpenMini" text="打开文件" tooltip="打开文件" width="81" height="23" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_style.png&apos; source=&apos;0,0,81,23&apos;" hotimage="file=&apos;btn_style.png&apos; source=&apos;82,0,163,23&apos;" pushedimage="file=&apos;btn_style.png&apos; source=&apos;164,0,245,23&apos;" />
+        <Button name="btnSelectedHF" text="选中回放" tooltip="选中回放" width="81" height="23" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_style.png&apos; source=&apos;0,0,81,23&apos;" hotimage="file=&apos;btn_style.png&apos; source=&apos;82,0,163,23&apos;" pushedimage="file=&apos;btn_style.png&apos; source=&apos;164,0,245,23&apos;" />
+        <Button name="btnMultiHF" text="批量回放" tooltip="选中回放" width="81" height="23" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_style.png&apos; source=&apos;0,0,81,23&apos;" hotimage="file=&apos;btn_style.png&apos; source=&apos;82,0,163,23&apos;" pushedimage="file=&apos;btn_style.png&apos; source=&apos;164,0,245,23&apos;" />
+        <Button name="btnRestoreReal" visible="false" text="恢复实时" tooltip="恢复实时" width="81" height="23" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_style.png&apos; source=&apos;0,0,81,23&apos;" hotimage="file=&apos;btn_style.png&apos; source=&apos;82,0,163,23&apos;" pushedimage="file=&apos;btn_style.png&apos; source=&apos;164,0,245,23&apos;" />
+      </HBox>
+      <Control width="16"/>
+      <HBox  inset="0,11,0,0" width="162">
+        <Button name="btnSnap" text="视频抓图" tooltip="视频抓图" width="81" height="23" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_style.png&apos; source=&apos;0,0,81,23&apos;" hotimage="file=&apos;btn_style.png&apos; source=&apos;82,0,163,23&apos;" pushedimage="file=&apos;btn_style.png&apos; source=&apos;164,0,245,23&apos;" />
+        <Button name="btnRecord" text="开始录像" tooltip="开始录像" width="81" height="23" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_style.png&apos; source=&apos;0,0,81,23&apos;" hotimage="file=&apos;btn_style.png&apos; source=&apos;82,0,163,23&apos;" pushedimage="file=&apos;btn_style.png&apos; source=&apos;164,0,245,23&apos;" />
+      </HBox>
+      <Control width="16"/>
+      <HBox width="160" inset="0,11,0,0">
+        <Button name="btnPL" userdata="1" text="单屏" width="40" height="18" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" align="center"  />
+        <Button name="btnPL" userdata="4" text="4分屏" width="40" height="18" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" align="center"  />
+        <Button name="btnPL" userdata="9" text="9分屏" width="40" height="18" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" align="center" />
+        <Button name="btnPL" userdata="16" text="16分屏" width="40" height="18" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" align="center" />
+      </HBox>
+      <Control width="16"/>
+      <HBox width="24" inset="0,11,0,0">
+        <Button name="btnScreenFull" tooltip="全屏" enabled="false" width="24" height="18" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_screen_full.png&apos; source=&apos;0,0,24,18&apos;" hotimage="file=&apos;btn_screen_full.png&apos; source=&apos;25,0,49,18&apos;" pushedimage="file=&apos;btn_screen_full.png&apos; source=&apos;50,0,74,18&apos;" disabledimage="file=&apos;btn_screen_full.png&apos; source=&apos;75,0,99,18&apos;" />
+        <Button name="btnScreenNormal" tooltip="退出全屏" visible="false" width="24" height="18" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;btn_screen_normal.png&apos; source=&apos;0,0,24,18&apos;" hotimage="file=&apos;btn_screen_normal.png&apos; source=&apos;25,0,49,18&apos;" pushedimage="file=&apos;btn_screen_normal.png&apos; source=&apos;50,0,74,18&apos;" disabledimage="file=&apos;btn_screen_normal.png&apos; source=&apos;75,0,99,18&apos;" />
+      </HBox>
+    </HBox>
+  </VBox>
+</Window>

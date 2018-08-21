@@ -106,7 +106,7 @@ namespace nim_comp
 #endif
 	}
 
-	bool DBManagerMainForm::OnClicked(dui::TEvent* args)
+	bool DBManagerMainForm::OnClicked(dui::Event* args)
 	{
 		dui::Control *pSender = args->pSender;
 		if (!pSender)
@@ -134,7 +134,7 @@ namespace nim_comp
 		}*/
 	}
 
-	bool DBManagerMainForm::OnBtnOKClieked(dui::TEvent* args)
+	bool DBManagerMainForm::OnBtnOKClieked(dui::Event* args)
 	{
 #if 0
 		std::vector<DB_CONN_INFO> infos = DBManager::GetInstance()->GetDBConnInfos(dbcid_);
@@ -153,13 +153,13 @@ namespace nim_comp
 		return false;
 	}
 
-	bool DBManagerMainForm::OnBtnCancelClieked(dui::TEvent* args)
+	bool DBManagerMainForm::OnBtnCancelClieked(dui::Event* args)
 	{
 		DBManager::GetInstance()->CloseAllConn();
 		return false;
 	}
 
-	bool DBManagerMainForm::OnBtnRunClieked(dui::TEvent* args)
+	bool DBManagerMainForm::OnBtnRunClieked(dui::Event* args)
 	{
 		std::string text;
 		if (re_input_->GetText().empty())
@@ -220,7 +220,7 @@ namespace nim_comp
 		return false;
 	}
 
-	bool DBManagerMainForm::OnComboSelected(dui::TEvent* args)
+	bool DBManagerMainForm::OnComboSelected(dui::Event* args)
 	{
 		std::vector<DB_CONN_INFO> infos = DBManager::GetInstance()->GetDBConnInfos(dbcid_);
 		int sel = combo_ip_->GetCurSel();

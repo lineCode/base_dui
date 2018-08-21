@@ -147,7 +147,7 @@
   <!--Caption-->
   <Class name="caption" value="height=&quot;34&quot; bkimage=&quot;file='../public/caption/caption_public.png' corner='0,0,0,1'&quot; padding=&quot;10,0,5,0&quot;"/>
 
-  <!--ScrollBar-->
+  <!--Scroll-->
   <Class name="VScrollBar" value="width=&quot;14&quot; fadealpha=&quot;true&quot; thumbnormalimage=&quot;file='../public/vsrcollbar/thumb_normal.png'  corner='0,8,0,8'&quot; thumbhotimage=&quot;file='../public/vsrcollbar/thumb_hovered.png' corner='0,8,0,8'&quot; bkhotimage=&quot;file='../public/vsrcollbar/bk_hovered.png' corner='0,4,0,4'&quot; showbutton1=&quot;false&quot; showbutton2=&quot;false&quot;"/>
   <Class name="HScrollBar" value="height=&quot;14&quot; fadealpha=&quot;true&quot; thumbnormalimage=&quot;file='../public/hscrollbar/thumb_normal.png' corner='8,0,8,0'&quot; thumbhotimage=&quot;file='../public/hscrollbar/thumb_hovered.png' corner='8,0,8,0'&quot; bkhotimage=&quot;file='../public/hscrollbar/bk_hovered.png' corner='4,0,4,0'&quot; showbutton1=&quot;false&quot; showbutton2=&quot;false&quot;"/>
 
@@ -238,13 +238,13 @@
   <Class name="checkbox_team_headimage_mask_52x52" value="width=&quot;52&quot; height=&quot;52&quot; bkimage=&quot;&quot; normalimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_normal.png&quot; hotimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_hover.png&quot; pushedimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_hover.png&quot; selectednormalimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_hover.png&quot; selectedhotimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_hover.png&quot; selectedpushedimage=&quot;../public/headmask/btn_team_headimage_mask_52x52_hover.png&quot;"/>
 
   <!--list-->
-  <Class name="list" value="header=&quot;false&quot; bkcolor=&quot;bk_wnd_lightcolor&quot; vscrollbar=&quot;true&quot; itembkcolor=&quot;&quot; itemhotbkcolor=&quot;bk_wnd_darkcolor&quot; itemselectedbkcolor=&quot;bk_wnd_darkcolor2&quot;"/>
-  <!--<Class name="listitem" value="hotcolor=&quot;bk_listitem_hovered&quot; pushedcolor=&quot;bk_listitem_selected&quot; selectednormalcolor=&quot;bk_listitem_selected&quot; "/>-->
+  <Class name="list" value="bkcolor=&quot;bk_wnd_lightcolor&quot; vscrollbar=&quot;true&quot; "/>
+  <Class name="listitem" value="hotbkcolor=&quot;bk_listitem_hovered&quot; selectedbkcolor=&quot;bk_listitem_selected&quot; "/>
   <Class name="list_topitem" value="normalcolor=&quot;bk_topitem_normal&quot; "/>
 
   <!--menu-->
   <Class name="menu" value="width=&quot;auto&quot; height=&quot;auto&quot; bkcolor=&quot;bk_wnd_lightcolor&quot;"/>
-  <Class name="MenuElement" value="height=&quot;40&quot;"/>
+  <Class name="MenuElement" value="height=&quot;40&quot; hotbkcolor=&quot;bk_listitem_hovered&quot; selectedbkcolor=&quot;bk_listitem_selected&quot;"/>
   <Class name="OnlineStateMenuElement" value="padding=&quot;7,0,0,0&quot; height=&quot;30&quot;"/>
   <Class name="menu_text" value="normaltextcolor=&quot;darkcolor&quot; font=&quot;2&quot; textvalign=&quot;center&quot;"/>
 

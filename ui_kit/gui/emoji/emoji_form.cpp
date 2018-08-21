@@ -48,21 +48,21 @@ UINT EmojiForm::GetClassStyle() const
 
 void EmojiForm::InitWindow()
 {
-	auto OnOptContainerClicked = [this](TEvent *event, int index){
+	auto OnOptContainerClicked = [this](Event *event, int index){
 		printf("EmojiForm OnOptContainerClicked, name:%s\n", event->pSender->GetName().c_str());
-		TabLayout *list_tabbox = static_cast<TabLayout *>(m_PaintManager.FindControl(_T("list_tabbox")));
+		TabBox *list_tabbox = static_cast<TabBox *>(m_PaintManager.FindControl(_T("list_tabbox")));
 		list_tabbox->SelectItem(index);
 		return true; };
-	OptionContainer *sticker_op_emoji = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("sticker_op_emoji")));
-	OptionContainer *sticker_op_ajmd = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("sticker_op_ajmd")));
-	OptionContainer *sticker_op_lt = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("sticker_op_lt")));
-	OptionContainer *sticker_op_xxy = dynamic_cast<OptionContainer *>(m_PaintManager.FindControl(_T("sticker_op_xxy")));
+	OptionBox *sticker_op_emoji = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("sticker_op_emoji")));
+	OptionBox *sticker_op_ajmd = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("sticker_op_ajmd")));
+	OptionBox *sticker_op_lt = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("sticker_op_lt")));
+	OptionBox *sticker_op_xxy = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("sticker_op_xxy")));
 	sticker_op_emoji->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 0));
 	sticker_op_ajmd->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 1));
 	sticker_op_lt->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 2));
 	sticker_op_xxy->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 3));
 	
-	emoj_ = (TileLayout*)m_PaintManager.FindControl(L"tile_emoj");
+	emoj_ = (TileBox*)m_PaintManager.FindControl(L"tile_emoj");
 	
 	if (only_emoj_)
 	{
@@ -76,7 +76,7 @@ void EmojiForm::InitWindow()
 
 	for(std::vector<Emoticon>::const_iterator it = vec.begin(); it != vec.end(); it++)
 	{
-		ButtonContainer* box = new ButtonContainer;
+		ButtonBox* box = new ButtonBox;
 		m_PaintManager.FillBox(box, L"emoji_item.xml", nullptr, &m_PaintManager);
 		emoj_->Add(box);
 
@@ -136,10 +136,10 @@ void EmojiForm::ShowEmoj(POINT pt, OnSelectEmotion sel, OnSelectSticker sel_stic
 void EmojiForm::AddSticker(std::wstring name, int num)
 {
 	/*std::wstring sticker_id = nbase::StringPrintf(L"sticker_%s", name.c_str());
-	TileLayout* sticker = (TileLayout*)m_PaintManager.FindControl(sticker_id.c_str());
+	TileBox* sticker = (TileBox*)m_PaintManager.FindControl(sticker_id.c_str());
 	for (int i = 1; i <= num; i++)
 	{
-		ButtonContainer* box = new ButtonContainer;
+		ButtonBox* box = new ButtonBox;
 		GlobalManager::FillBoxWithCache(box, L"emoji/sticker.xml");
 		sticker->Add(box);
 		sticker->SetData(name);
@@ -157,7 +157,7 @@ void EmojiForm::AddSticker(std::wstring name, int num)
 	}*/
 }
 
-bool EmojiForm::OnSelChanged(dui::TEvent* param)
+bool EmojiForm::OnSelChanged(dui::Event* param)
 {
 	/*std::wstring name = param->pSender->GetName();
 	std::wstring dataid = param->pSender->GetDataID();
@@ -175,7 +175,7 @@ bool EmojiForm::OnSelChanged(dui::TEvent* param)
 	return true;
 }
 
-bool EmojiForm::OnEmojiClicked(dui::TEvent* arg)
+bool EmojiForm::OnEmojiClicked(dui::Event* arg)
 {
 	if (is_closing_)
 		return false;
@@ -197,7 +197,7 @@ bool EmojiForm::OnEmojiClicked(dui::TEvent* arg)
 	return false;
 }
 
-bool EmojiForm::OnStickerClicked(dui::TEvent* arg)
+bool EmojiForm::OnStickerClicked(dui::Event* arg)
 {
 	/*if (is_closing_)
 		return false;

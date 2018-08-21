@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="550,350">
-  <VLayout bkcolor="bk_wnd_lightcolor" width="550" height="auto">
-    <Container padding="5,0,0,0" height="289">
-      <TabLayout name="list_tabbox" fadeswitch="true" >
-        <TileLayout name="tile_emoj" padding="5,0,0,5" itemsize="40,30" vscrollbar="true" />
-        <TileLayout name="sticker_ajmd" padding="5,0,0,5" itemsize="176,176" vscrollbar="true" />
-        <TileLayout name="sticker_lt" padding="5,0,0,5" itemsize="176,176" vscrollbar="true" />
-        <TileLayout name="sticker_xxy" padding="5,0,0,5" itemsize="176,176" vscrollbar="true" />
-      </TabLayout>
-    </Container>
+  <VBox bkcolor="bk_wnd_lightcolor" width="550" height="auto">
+    <Box padding="5,0,0,0" height="289">
+      <TabBox name="list_tabbox" fadeswitch="true" >
+        <TileBox name="tile_emoj" padding="5,0,0,5" itemsize="40,30" vscrollbar="true" />
+        <TileBox name="sticker_ajmd" padding="5,0,0,5" itemsize="176,176" vscrollbar="true" />
+        <TileBox name="sticker_lt" padding="5,0,0,5" itemsize="176,176" vscrollbar="true" />
+        <TileBox name="sticker_xxy" padding="5,0,0,5" itemsize="176,176" vscrollbar="true" />
+      </TabBox>
+    </Box>
     <Control class="splitline_hor_level1"/>
-    <HLayout name="sticker_vector_container" height="60" bkcolor="bk_wnd_darkcolor">
-      <OptionContainer name="sticker_op_emoji" group="list_tab" selected="true" margin="10,10,10,10" width="40" height="40" normalimage="emoj_s_normal.png" hotimage="emoj_s_pressed.png" pushedimage="emoj_s_pressed.png" selectedimage="emoj_s_pressed.png">
+    <HBox name="sticker_vector_container" height="60" bkcolor="bk_wnd_darkcolor">
+      <OptionBox name="sticker_op_emoji" group="list_tab" selected="true" margin="10,10,10,10" width="40" height="40" normalimage="emoj_s_normal.png" hotimage="emoj_s_pressed.png" pushedimage="emoj_s_pressed.png" selectedimage="emoj_s_pressed.png">
         <!--<Event type="select" receiver="list_tabbox" applyattribute="selectedid=&quot;0&quot;"/>-->
-      </OptionContainer>
+      </OptionBox>
 
-      <OptionContainer name="sticker_op_ajmd" group="list_tab" margin="10,10,10,10" width="40" height="40" normalimage="ajmd_s_normal.png" hotimage="ajmd_s_pressed.png" pushedimage="ajmd_s_pressed.png" selectedimage="ajmd_s_pressed.png">
+      <OptionBox name="sticker_op_ajmd" group="list_tab" margin="10,10,10,10" width="40" height="40" normalimage="ajmd_s_normal.png" hotimage="ajmd_s_pressed.png" pushedimage="ajmd_s_pressed.png" selectedimage="ajmd_s_pressed.png">
         <!--<Event type="select" receiver="list_tabbox" applyattribute="selectedid=&quot;1&quot;"/>-->
-      </OptionContainer>
+      </OptionBox>
 
-      <OptionContainer name="sticker_op_lt" group="list_tab" margin="10,10,10,10" width="40" height="40" normalimage="lt_s_normal.png" hotimage="lt_s_pressed.png" pushedimage="lt_s_pressed.png" selectedimage="lt_s_pressed.png">
+      <OptionBox name="sticker_op_lt" group="list_tab" margin="10,10,10,10" width="40" height="40" normalimage="lt_s_normal.png" hotimage="lt_s_pressed.png" pushedimage="lt_s_pressed.png" selectedimage="lt_s_pressed.png">
         <!--<Event type="select" receiver="list_tabbox" applyattribute="selectedid=&quot;2&quot;"/>-->
-      </OptionContainer>
+      </OptionBox>
 
-      <OptionContainer name="sticker_op_xxy" group="list_tab" margin="10,10,10,10" width="40" height="40" normalimage="xxy_s_normal.png" hotimage="xxy_s_pressed.png" pushedimage="xxy_s_pressed.png" selectedimage="xxy_s_pressed.png">
+      <OptionBox name="sticker_op_xxy" group="list_tab" margin="10,10,10,10" width="40" height="40" normalimage="xxy_s_normal.png" hotimage="xxy_s_pressed.png" pushedimage="xxy_s_pressed.png" selectedimage="xxy_s_pressed.png">
         <!--<Event type="select" receiver="list_tabbox" applyattribute="selectedid=&quot;3&quot;"/>-->
-      </OptionContainer>
-    </HLayout>
-  </VLayout>
+      </OptionBox>
+    </HBox>
+  </VBox>
 </Window>

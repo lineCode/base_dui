@@ -36,7 +36,7 @@ public:
 	virtual void InitWindow() override;
 	virtual void OnFinalMessage(HWND hWnd);
 	
-	virtual void OnClick(dui::TEvent& msg) override;
+	virtual void OnClick(dui::Event& msg) override;
 private:
 	void SetTitle(const std::wstring &str);
 	void SetContent(const std::wstring &str);

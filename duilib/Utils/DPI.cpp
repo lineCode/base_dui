@@ -1,6 +1,6 @@
-#include "StdAfx.h"
-#include "DPI.h"
-#include "VersionHelpers.h"
+#include "stdafx.h"
+//#include "DPI.h"
+#include "ver_help.h"
 namespace dui
 {
 	//96 DPI = 100% scaling

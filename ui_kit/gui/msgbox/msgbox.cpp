@@ -121,7 +121,7 @@ void MsgBox::InitWindow()
 	btn_no_ = (Button*)m_PaintManager.FindControl(L"btn_no");
 }
 
-void MsgBox::OnClick(dui::TEvent& msg)
+void MsgBox::OnClick(dui::Event& msg)
 {
 	bool bHandle = false;
 	std::wstring name = msg.pSender->GetName();
@@ -153,7 +153,7 @@ void MsgBox::SetContent( const std::wstring &str )
 #if 0
 	int width = content_->GetFixedWidth();
 
-	CDuiSize sz = content_->GetNaturalSize(width, 0);
+	DuiSize sz = content_->GetNaturalSize(width, 0);
 	content_->SetFixedHeight(sz.cy, false);
 #endif
 }

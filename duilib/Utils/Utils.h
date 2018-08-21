@@ -19,41 +19,41 @@ namespace dui
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
-	class DUILIB_API CDuiPoint : public tagPOINT
+	class DUILIB_API DuiPoint : public tagPOINT
 	{
 	public:
-		CDuiPoint();
-		CDuiPoint(const POINT& src);
-		CDuiPoint(long x, long y);
-		CDuiPoint(LPARAM lParam);
-        CDuiPoint(LPCTSTR pstrValue);
+		DuiPoint();
+		DuiPoint(const POINT& src);
+		DuiPoint(long x, long y);
+		DuiPoint(LPARAM lParam);
+        DuiPoint(LPCTSTR pstrValue);
         String ToString();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 
-	class DUILIB_API CDuiSize : public tagSIZE
+	class DUILIB_API DuiSize : public tagSIZE
 	{
 	public:
-		CDuiSize();
-		CDuiSize(const SIZE& src);
-		CDuiSize(const RECT rc);
-		CDuiSize(long cx, long cy);
-        CDuiSize(LPCTSTR pstrValue);
+		DuiSize();
+		DuiSize(const SIZE& src);
+		DuiSize(const RECT rc);
+		DuiSize(long cx, long cy);
+        DuiSize(LPCTSTR pstrValue);
         String ToString();
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 
-	class DUILIB_API CDuiRect : public tagRECT
+	class DUILIB_API DuiRect : public tagRECT
 	{
 	public:
-		CDuiRect();
-		CDuiRect(const RECT& src);
-		CDuiRect(long iLeft, long iTop, long iRight, long iBottom);
-        CDuiRect(LPCTSTR pstrValue);
+		DuiRect();
+		DuiRect(const RECT& src);
+		DuiRect(long iLeft, long iTop, long iRight, long iBottom);
+        DuiRect(LPCTSTR pstrValue);
         String ToString();
 
 		int GetWidth() const;
@@ -66,7 +66,7 @@ namespace dui
 		void Offset(int cx, int cy);
 		void Inflate(int cx, int cy);
 		void Deflate(int cx, int cy);
-		void Union(CDuiRect& rc);
+		void Union(DuiRect& rc);
 	};
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -168,39 +168,39 @@ namespace dui
 	/////////////////////////////////////////////////////////////////////////////////////
 	//
 #if 0
-	class CVariant : public VARIANT
+	class Variant : public VARIANT
 	{
 	public:
-		CVariant() 
+		Variant() 
 		{ 
 			VariantInit(this); 
 		}
-		CVariant(int i)
+		Variant(int i)
 		{
 			VariantInit(this);
 			this->vt = VT_I4;
 			this->intVal = i;
 		}
-		CVariant(float f)
+		Variant(float f)
 		{
 			VariantInit(this);
 			this->vt = VT_R4;
 			this->fltVal = f;
 		}
-		CVariant(LPOLESTR s)
+		Variant(LPOLESTR s)
 		{
 			VariantInit(this);
 			this->vt = VT_BSTR;
 			this->bstrVal = s;
 		}
-		CVariant(IDispatch *disp)
+		Variant(IDispatch *disp)
 		{
 			VariantInit(this);
 			this->vt = VT_DISPATCH;
 			this->pdispVal = disp;
 		}
 
-		~CVariant() 
+		~Variant() 
 		{ 
 			VariantClear(this); 
 		}

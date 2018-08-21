@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window class="shadow_window" size="180,160" >
-  <VLayout width="120" height="80">
+  <VBox width="120" height="80">
     <Menu width="120" height="80" bkcolor="white">
       <MenuElement class="MenuElement" name="export_db" width="120" >
         <Label class="menu_text" text="导入数据" margin="54,0,0,0"/>
@@ -9,5 +9,5 @@
         <Label class="menu_text" text="查看数据库" margin="54,0,0,0"/>
       </MenuElement>
     </Menu>
-  </VLayout>
+  </VBox>
 </Window>

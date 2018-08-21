@@ -15,7 +15,7 @@ public:
 	virtual LPCTSTR GetWindowId() const override;
 	virtual UINT GetClassStyle() const override;
 
-	virtual void Notify(dui::TEvent& msg) override;
+	virtual void Notify(dui::Event& msg) override;
 	
 	/**
 	* 处理窗口销毁消息
@@ -31,7 +31,7 @@ public:
 
 private:
 	/* @return bool true 继续传递控件消息，false 停止传递控件消息*/
-	virtual void OnClick(dui::TEvent& msg) override;
+	virtual void OnClick(dui::Event& msg) override;
 
 	void TrayLeftClick();
 	void TrayRightClick();
@@ -41,15 +41,15 @@ private:
 public:
 	void PopupTrayMenu(POINT point);
 
-	bool MainForm::MenuLogoffClick(dui::TEvent* param);
-	bool MainForm::MenuLogoutClick(dui::TEvent* param);
+	bool MainForm::MenuLogoffClick(dui::Event* param);
+	bool MainForm::MenuLogoutClick(dui::Event* param);
 public:
 	static const LPCTSTR kClassName;
 
 private:
 	dui::Button		*btn_head_;
 	dui::Label		*label_name_;
-	dui::TabLayout	*tab_session_friend_;
+	dui::TabBox	*tab_session_friend_;
 
 	dui::List		*list_friend_;
 	dui::List		*list_session_;
@@ -58,7 +58,7 @@ private:
 	
 	dui::TreeNode	*group_nodes_[28];
 
-	dui::TabLayout	*tab_session_;
+	dui::TabBox	*tab_session_;
 };
 
 using namespace nbase;

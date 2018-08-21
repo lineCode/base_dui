@@ -25,12 +25,12 @@ namespace nim_comp
 
 		virtual void OnFinalMessage(HWND hWnd) override;
 	private:
-		bool OnClicked(dui::TEvent* args);
+		bool OnClicked(dui::Event* args);
 
-		bool OnBtnOKClieked(dui::TEvent* args);
-		bool OnBtnCancelClieked(dui::TEvent* args);
-		bool OnBtnRunClieked(dui::TEvent* args);
-		bool OnComboSelected(dui::TEvent* args);
+		bool OnBtnOKClieked(dui::Event* args);
+		bool OnBtnCancelClieked(dui::Event* args);
+		bool OnBtnRunClieked(dui::Event* args);
+		bool OnComboSelected(dui::Event* args);
 
 		void OnWndSizeMax(bool max);
 		

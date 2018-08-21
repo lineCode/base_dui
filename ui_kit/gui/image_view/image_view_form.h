@@ -28,7 +28,7 @@ namespace nim_comp
 		virtual dui::Control* CreateControl(LPCTSTR pstrClass);
 
 		virtual void InitWindow() override;
-		virtual void Notify(dui::TEvent& msg) override;
+		virtual void Notify(dui::Event& msg) override;
 
 		virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 		void SaveImageDlgCallback(BOOL ret, std::wstring file_path_save); //保存图片的回调

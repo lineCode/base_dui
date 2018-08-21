@@ -62,7 +62,7 @@ void SessionBox::InitRichEdit()
 	::RegisterDragDrop(m_pManager->GetPaintWindow(), this);
 }
 
-bool SessionBox::OnClicked(dui::TEvent *event)
+bool SessionBox::OnClicked(dui::Event *event)
 {
 	wstring name = event->pSender->GetName();
 	if (event)
@@ -78,7 +78,7 @@ bool SessionBox::OnClicked(dui::TEvent *event)
 		nbase::ThreadManager::PostDelayedTask(shared::kThreadUI, callback, nbase::TimeDelta::FromMilliseconds(500));*/
 		ImageViewForm *form = new ImageViewForm;
 		form->Create(m_pManager->GetPaintWindow(), ImageViewForm::kClassName, WS_OVERLAPPED, 0, RECT());
-		//form->WindowEx::Create(m_pManager->GetPaintWindow(), ImageViewForm::kClassName, WS_OVERLAPPED, 0, false, CDuiRect(0, 0, 700, 500));
+		//form->WindowEx::Create(m_pManager->GetPaintWindow(), ImageViewForm::kClassName, WS_OVERLAPPED, 0, false, DuiRect(0, 0, 700, 500));
 		form->ShowWindow();
 	}
 	else if (name == L"chk_face")

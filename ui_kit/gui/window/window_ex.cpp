@@ -12,7 +12,7 @@ WindowEx::~WindowEx()
 {
 }
 
-HWND WindowEx::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, bool isLayeredWindow, const dui::CDuiRect& rc)
+HWND WindowEx::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle, bool isLayeredWindow, const dui::DuiRect& rc)
 {
 	if (!RegisterWnd())
 	{
@@ -120,7 +120,7 @@ POINT  WindowEx::GetPopupWindowPos()
 	::GetMonitorInfo(::MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST), &oMonitor);
 	RECT screen = oMonitor.rcWork;
 
-	dui::CDuiRect rect = GetPos(true);
+	dui::DuiRect rect = GetPos(true);
 
 	POINT pt = { 0, 0 };
 	pt.x = screen.right - rect.GetWidth();

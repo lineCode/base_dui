@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <Window>
-  <ButtonContainer name="emoj" width="30" height="30"  hotimage="file='icon_hover.png' dest='0,0,30,30'" pushedimage="file='icon_pushed.png' dest='0,0,30,30'">
+  <ButtonBox name="emoj" width="30" height="30"  hotimage="file='icon_hover.png' dest='0,0,30,30'" pushedimage="file='icon_pushed.png' dest='0,0,30,30'">
     <Control name="ctrl_emoj" mouse="false" width="24" height="24" margin="3,3"/>
-  </ButtonContainer>
+  </ButtonBox>
 </Window>

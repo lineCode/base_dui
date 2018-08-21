@@ -71,6 +71,9 @@
     <Xml Include="..\bin\res\db_manager\combo_ip.xml">
       <Filter>资源文件</Filter>
     </Xml>
+    <Xml Include="..\bin\res\main_vv\friend_tree_class_item.xml">
+      <Filter>资源文件</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="demo.rc">

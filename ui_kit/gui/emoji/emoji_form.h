@@ -85,25 +85,25 @@ private:
 	* @param[in] param 消息的相关信息
 	* @return bool true 继续传递控件消息，false 停止传递控件消息
 	*/
-	bool OnSelChanged(dui::TEvent* param);
+	bool OnSelChanged(dui::Event* param);
 
 	/**
 	* 处理表情按钮的单击消息
 	* @param[in] param 消息的相关信息
 	* @return bool true 继续传递控件消息，false 停止传递控件消息
 	*/
-	bool OnEmojiClicked(dui::TEvent* param);
+	bool OnEmojiClicked(dui::Event* param);
 
 	/**
 	* 处理贴图按钮的单击消息
 	* @param[in] param 消息的相关信息
 	* @return bool true 继续传递控件消息，false 停止传递控件消息
 	*/
-	bool OnStickerClicked(dui::TEvent* param);
+	bool OnStickerClicked(dui::Event* param);
 public:
 	static const LPCTSTR kClassName;
 private:
-	dui::TileLayout*	emoj_;
+	dui::TileBox*	emoj_;
 
 	OnSelectEmotion sel_cb_;
 	OnSelectSticker sel_sticker_cb_;

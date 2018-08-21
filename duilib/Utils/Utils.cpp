@@ -24,30 +24,30 @@ namespace dui
     //
     //
 
-	CDuiPoint::CDuiPoint()
+	DuiPoint::DuiPoint()
 	{
 		x = y = 0;
 	}
 
-	CDuiPoint::CDuiPoint(const POINT& src)
+	DuiPoint::DuiPoint(const POINT& src)
 	{
 		x = src.x;
 		y = src.y;
 	}
 
-	CDuiPoint::CDuiPoint(long _x, long _y)
+	DuiPoint::DuiPoint(long _x, long _y)
 	{
 		x = _x;
 		y = _y;
 	}
 
-	CDuiPoint::CDuiPoint(LPARAM lParam)
+	DuiPoint::DuiPoint(LPARAM lParam)
 	{
 		x = GET_X_LPARAM(lParam);
 		y = GET_Y_LPARAM(lParam);
 	}
 
-    CDuiPoint::CDuiPoint(LPCTSTR pstrValue)
+    DuiPoint::DuiPoint(LPCTSTR pstrValue)
     {
         if (pstrValue == NULL || *pstrValue == _T('\0')) x = y = 0;
         LPTSTR pstr = NULL;
@@ -55,7 +55,7 @@ namespace dui
         y = _tcstol(pstr + 1, &pstr, 10);      ASSERT(pstr);
     }
 
-    String CDuiPoint::ToString()
+    String DuiPoint::ToString()
     {
 		TCHAR cPoint[64] = {};
 		::wsprintf(cPoint, _T("%ld,%ld"), x, y);
@@ -66,30 +66,30 @@ namespace dui
 	//
 	//
 
-	CDuiSize::CDuiSize()
+	DuiSize::DuiSize()
 	{
 		cx = cy = 0;
 	}
 
-	CDuiSize::CDuiSize(const SIZE& src)
+	DuiSize::DuiSize(const SIZE& src)
 	{
 		cx = src.cx;
 		cy = src.cy;
 	}
 
-	CDuiSize::CDuiSize(const RECT rc)
+	DuiSize::DuiSize(const RECT rc)
 	{
 		cx = rc.right - rc.left;
 		cy = rc.bottom - rc.top;
 	}
 
-	CDuiSize::CDuiSize(long _cx, long _cy)
+	DuiSize::DuiSize(long _cx, long _cy)
 	{
 		cx = _cx;
 		cy = _cy;
 	}
 
-    CDuiSize::CDuiSize(LPCTSTR pstrValue)
+    DuiSize::DuiSize(LPCTSTR pstrValue)
     {
         if (pstrValue == NULL || *pstrValue == _T('\0')) cx = cy = 0;
         LPTSTR pstr = NULL;
@@ -97,7 +97,7 @@ namespace dui
         cy = _tcstol(pstr + 1, &pstr, 10);       ASSERT(pstr);
     }
 
-    String CDuiSize::ToString()
+    String DuiSize::ToString()
     {
 		TCHAR cSize[64] = {};
 		::wsprintf(cSize, _T("%ld,%ld"), cx, cy);
@@ -108,12 +108,12 @@ namespace dui
 	//
 	//
 
-	CDuiRect::CDuiRect()
+	DuiRect::DuiRect()
 	{
 		left = top = right = bottom = 0;
 	}
 
-	CDuiRect::CDuiRect(const RECT& src)
+	DuiRect::DuiRect(const RECT& src)
 	{
 		left = src.left;
 		top = src.top;
@@ -121,7 +121,7 @@ namespace dui
 		bottom = src.bottom;
 	}
 
-	CDuiRect::CDuiRect(long iLeft, long iTop, long iRight, long iBottom)
+	DuiRect::DuiRect(long iLeft, long iTop, long iRight, long iBottom)
 	{
 		left = iLeft;
 		top = iTop;
@@ -129,7 +129,7 @@ namespace dui
 		bottom = iBottom;
 	}
 
-    CDuiRect::CDuiRect(LPCTSTR pstrValue)
+    DuiRect::DuiRect(LPCTSTR pstrValue)
     {
         if (pstrValue == NULL || *pstrValue == _T('\0')) left = top = right = bottom = 0;
         LPTSTR pstr = NULL;
@@ -139,34 +139,34 @@ namespace dui
         bottom = _tcstol(pstr + 1, &pstr, 10);                       ASSERT(pstr);
     }
 
-    String CDuiRect::ToString()
+    String DuiRect::ToString()
     {
 		TCHAR cRect[64] = {};
 		::wsprintf(cRect, _T("%ld,%ld,%ld,%ld"), left, top, right, bottom);
 		return String(cRect);
     }
 
-	int CDuiRect::GetWidth() const
+	int DuiRect::GetWidth() const
 	{
 		return right - left;
 	}
 
-	int CDuiRect::GetHeight() const
+	int DuiRect::GetHeight() const
 	{
 		return bottom - top;
 	}
 
-	void CDuiRect::Empty()
+	void DuiRect::Empty()
 	{
 		left = top = right = bottom = 0;
 	}
 
-	bool CDuiRect::IsNull() const
+	bool DuiRect::IsNull() const
 	{
 		return (left == 0 && right == 0 && top == 0 && bottom == 0); 
 	}
 
-	void CDuiRect::Join(const RECT& rc)
+	void DuiRect::Join(const RECT& rc)
 	{
 		if( rc.left < left ) left = rc.left;
 		if( rc.top < top ) top = rc.top;
@@ -174,33 +174,33 @@ namespace dui
 		if( rc.bottom > bottom ) bottom = rc.bottom;
 	}
 
-	void CDuiRect::ResetOffset()
+	void DuiRect::ResetOffset()
 	{
 		::OffsetRect(this, -left, -top);
 	}
 
-	void CDuiRect::Normalize()
+	void DuiRect::Normalize()
 	{
 		if( left > right ) { int iTemp = left; left = right; right = iTemp; }
 		if( top > bottom ) { int iTemp = top; top = bottom; bottom = iTemp; }
 	}
 
-	void CDuiRect::Offset(int cx, int cy)
+	void DuiRect::Offset(int cx, int cy)
 	{
 		::OffsetRect(this, cx, cy);
 	}
 
-	void CDuiRect::Inflate(int cx, int cy)
+	void DuiRect::Inflate(int cx, int cy)
 	{
 		::InflateRect(this, cx, cy);
 	}
 
-	void CDuiRect::Deflate(int cx, int cy)
+	void DuiRect::Deflate(int cx, int cy)
 	{
 		::InflateRect(this, -cx, -cy);
 	}
 
-	void CDuiRect::Union(CDuiRect& rc)
+	void DuiRect::Union(DuiRect& rc)
 	{
 		::UnionRect(this, this, &rc);
 	}
@@ -648,7 +648,7 @@ namespace dui
 		*ppv = NULL;
 		if (image_ole_module_ == NULL)
 		{
-			std::wstring dll_path = CPaintManager::GetInstancePath();
+			std::wstring dll_path = UIManager::GetInstancePath();
 			dll_path.append(_T("dll\\"));
 			dll_path.append(IMAGE_OLE_NAME);
 			image_ole_module_ = LoadLibrary(dll_path.c_str());
@@ -679,7 +679,7 @@ namespace dui
 
 	String GetIconByFile(String file)
 	{
-		std::wstring app_w_path = /*QPath::GetAppPath()*/CPaintManager::GetInstancePath();
+		std::wstring app_w_path = /*QPath::GetAppPath()*/UIManager::GetInstancePath();
 		std::wstring image_path = app_w_path + L"res\\icons\\";
 
 		std::wstring file_exten;
