@@ -70,6 +70,7 @@
 #include <stdio.h>
 #include <string>
 #include <functional>
+#include <map>
 
 #ifdef _UNICODE
 typedef std::wstring String;
@@ -77,18 +78,18 @@ typedef std::wstring String;
 typedef std::string String;
 #endif
 
-#include "utils/utils.h"
-#include "utils/observer_impl_base.hpp"
-#include "utils/delegate.h"
-#include "utils/shadow.h"
+#include "core/base.h"
 #include "core/define.h"
+#include "core/delegate.h"
+
+#include "core/shadow.h"
 #include "core/manager.h"
 #include "core/window.h"
 #include "core/control.h"
 #include "core/markup.h"
 #include "core/builder.h"
 #include "core/render.h"
-#include "utils/win_impl_base.h"
+#include "core/win_impl_base.h"
 #include "utils/dpi.h"
 
 #include "control/label.h"

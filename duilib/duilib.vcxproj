@@ -297,12 +297,16 @@
     <ClCompile Include="control\slider.cpp" />
     <ClCompile Include="control\text.cpp" />
     <ClCompile Include="control\tree.cpp" />
+    <ClCompile Include="core\base.cpp" />
     <ClCompile Include="core\builder.cpp" />
     <ClCompile Include="core\control.cpp" />
+    <ClCompile Include="core\delegate.cpp" />
     <ClCompile Include="core\manager.cpp" />
     <ClCompile Include="core\markup.cpp" />
     <ClCompile Include="core\render.cpp" />
+    <ClCompile Include="core\shadow.cpp" />
     <ClCompile Include="core\window.cpp" />
+    <ClCompile Include="core\win_impl_base.cpp" />
     <ClCompile Include="extend\buttonbox.cpp" />
     <ClCompile Include="extend\labelbox.cpp" />
     <ClCompile Include="extend\optionbox.cpp" />
@@ -313,17 +317,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="uilib.cpp" />
-    <ClCompile Include="utils\delegate.cpp" />
     <ClCompile Include="utils\dpi.cpp" />
     <ClCompile Include="utils\image_ole_i.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="utils\shadow.cpp" />
     <ClCompile Include="utils\stb_image.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="utils\utils.cpp" />
-    <ClCompile Include="utils\win_impl_base.cpp" />
     <ClCompile Include="utils\Xunzip.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -358,13 +358,17 @@
     <ClInclude Include="control\slider.h" />
     <ClInclude Include="control\text.h" />
     <ClInclude Include="control\tree.h" />
+    <ClInclude Include="core\base.h" />
     <ClInclude Include="core\builder.h" />
     <ClInclude Include="core\control.h" />
     <ClInclude Include="core\define.h" />
+    <ClInclude Include="core\delegate.h" />
     <ClInclude Include="core\manager.h" />
     <ClInclude Include="core\markup.h" />
     <ClInclude Include="core\render.h" />
+    <ClInclude Include="core\shadow.h" />
     <ClInclude Include="core\window.h" />
+    <ClInclude Include="core\win_impl_base.h" />
     <ClInclude Include="extend\buttonbox.h" />
     <ClInclude Include="extend\labelbox.h" />
     <ClInclude Include="extend\optionbox.h" />
@@ -374,17 +378,15 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="uilib.h" />
     <ClInclude Include="utils\browser_event_handler.h" />
-    <ClInclude Include="utils\delegate.h" />
     <ClInclude Include="utils\downloadmgr.h" />
     <ClInclude Include="utils\dpi.h" />
     <ClInclude Include="utils\flash_event_handler.h" />
     <ClInclude Include="utils\image_ole_i.h" />
-    <ClInclude Include="utils\observer_impl_base.hpp" />
-    <ClInclude Include="utils\shadow.h" />
+    <ClInclude Include="utils\observer_impl_base.hpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="utils\stb_image.h" />
-    <ClInclude Include="utils\utils.h" />
     <ClInclude Include="utils\ver_help.h" />
-    <ClInclude Include="utils\win_impl_base.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "Help/image.h"
-#include "Help/file.h"
+#include "help/image.h"
+#include "help/file.h"
 #ifdef _USEIMM
 #include <imm.h>
 #pragma comment(lib, "imm32.lib")

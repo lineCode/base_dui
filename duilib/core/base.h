@@ -1,5 +1,5 @@
-#ifndef __UTILS_H__
-#define __UTILS_H__
+#ifndef __DUI_BASE_H__
+#define __DUI_BASE_H__
 
 #pragma once
 
@@ -206,12 +206,7 @@ namespace dui
 		}
 	};
 #endif
-
-
-	bool CreateImageObject(void **ppv);
-	String GetIconByFile(String file);
-	bool FilePathExtension(const String &filepath_in, String &extension_out);
 	
 }// namespace dui
 
-#endif // __UTILS_H__
+#endif // __DUI_BASE_H__

@@ -141,25 +141,10 @@
     <ClCompile Include="box\vbox.cpp">
       <Filter>box</Filter>
     </ClCompile>
-    <ClCompile Include="utils\delegate.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\dpi.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="utils\image_ole_i.c">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="utils\shadow.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
     <ClCompile Include="utils\stb_image.c">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\utils.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="utils\win_impl_base.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="utils\Xunzip.cpp">
@@ -167,7 +152,6 @@
     </ClCompile>
     <ClCompile Include="log.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="uilib.cpp" />
     <ClCompile Include="control\check.cpp">
       <Filter>control</Filter>
     </ClCompile>
@@ -176,6 +160,22 @@
     </ClCompile>
     <ClCompile Include="control\scroll.cpp">
       <Filter>control</Filter>
+    </ClCompile>
+    <ClCompile Include="core\win_impl_base.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="uilib.cpp" />
+    <ClCompile Include="core\base.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\delegate.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\shadow.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\dpi.cpp">
+      <Filter>utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -296,13 +296,7 @@
     <ClInclude Include="utils\browser_event_handler.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\delegate.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\downloadmgr.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\dpi.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="utils\flash_event_handler.h">
@@ -314,21 +308,11 @@
     <ClInclude Include="utils\observer_impl_base.hpp">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="utils\shadow.h">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="utils\stb_image.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\utils.h">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\win_impl_base.h">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="log.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="uilib.h" />
     <ClInclude Include="control\check.h">
       <Filter>control</Filter>
     </ClInclude>
@@ -339,6 +323,22 @@
       <Filter>control</Filter>
     </ClInclude>
     <ClInclude Include="utils\ver_help.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="core\win_impl_base.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="uilib.h" />
+    <ClInclude Include="core\base.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\delegate.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="core\shadow.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\dpi.h">
       <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>

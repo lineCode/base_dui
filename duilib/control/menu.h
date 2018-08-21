@@ -1,11 +1,7 @@
 #ifndef __UIMENU_H__
 #define __UIMENU_H__
-
 #pragma once
 
-#include "../Utils/observer_impl_base.hpp"
-
-#define MENU_EQUAL_LIST		1	//List´úÌæMenu
 namespace dui {
 
 struct ContextMenuParam

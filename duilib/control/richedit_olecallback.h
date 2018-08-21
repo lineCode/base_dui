@@ -4,7 +4,7 @@
 #include <richole.h>
 #include <textserv.h>
 
-namespace nim_comp
+namespace dui
 {
 interface IRichEditOleCallbackEx : public IRichEditOleCallback
 {

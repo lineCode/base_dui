@@ -1,8 +1,9 @@
 #include "stdafx.h"
-//#include "base/file/file_util.h"
-//#include <memory>
-//#include "base/util/string_util.h"
 #include "image.h"
+#include <atlbase.h>
+#include <textserv.h>
+
+#include "../utils/image_ole_i.h"
 
 namespace duihelp
 {
@@ -113,5 +114,124 @@ namespace duihelp
 		return true;
 	}
 
+	//------------------------------add by djj------------------------------------
+#define IMAGE_OLE_NAME	L"image_ole.dll"
+
+	static HMODULE image_ole_module_ = NULL;
+
+	typedef HRESULT(WINAPI* DLLGETCLASSOBJECTFUNC) (REFCLSID rclsid, REFIID riid, LPVOID* ppv);
+
+	void FreeImageoleModule()
+	{
+		if (image_ole_module_)
+		{
+			FreeLibrary(image_ole_module_);
+			image_ole_module_ = NULL;
+		}
+	}
+
+	bool CreateImageObject(void **ppv)
+	{
+		*ppv = NULL;
+		if (image_ole_module_ == NULL)
+		{
+			std::wstring dll_path = dui::UIManager::GetInstancePath();
+			dll_path.append(_T("dll\\"));
+			dll_path.append(IMAGE_OLE_NAME);
+			image_ole_module_ = LoadLibrary(dll_path.c_str());
+		}
+		if (image_ole_module_ == NULL)
+		{
+			return false;
+		}
+
+		DLLGETCLASSOBJECTFUNC pFunc = (DLLGETCLASSOBJECTFUNC)GetProcAddress(image_ole_module_, "DllGetClassObject");
+		if (pFunc == NULL)
+		{
+			FreeImageoleModule();
+			return false;
+		}
+		CComPtr<IClassFactory> pFactory;
+		HRESULT hr = (*pFunc)(CLSID_ImageOle/*ÄãµÄ×é¼þCLSID*/, IID_IClassFactory, (void**)&pFactory);
+		if (hr == S_OK)
+			hr = pFactory->CreateInstance(0, IID_IImageOle, ppv);
+
+		if (hr != S_OK || *ppv == NULL)
+		{
+			FreeImageoleModule();
+			return false;
+		}
+		return true;
+	}
+
+	String GetIconByFile(String file)
+	{
+		std::wstring app_w_path = dui::UIManager::GetInstancePath();
+		std::wstring image_path = app_w_path + L"res\\icons\\";
+
+		std::wstring file_exten;
+		std::wstring ext;
+		FilePathExtension(file, ext);
+		if (ext.size() > 1)
+		{
+			file_exten = ext.substr(1);
+		}
+		if (file_exten == L"doc" || file_exten == L"docx")
+		{
+			image_path += L"file_doc.png";
+		}
+		else if (file_exten == L"ppt" || file_exten == L"pptx")
+		{
+			image_path += L"file_ppt.png";
+		}
+		else if (file_exten == L"xls" || file_exten == L"xlsx")
+		{
+			image_path += L"file_excel.png";
+		}
+		else if (file_exten == L"mp3")
+		{
+			image_path += L"file_mp3.png";
+		}
+		else if (file_exten == L"htm" || file_exten == L"html")
+		{
+			image_path += L"file_html.png";
+		}
+		else if (file_exten == L"txt" || file_exten == L"text")
+		{
+			image_path += L"file_txt.png";
+		}
+		else if (file_exten == L"pdf")
+		{
+			image_path += L"file_pdf.png";
+		}
+		else if (file_exten == L"zip")
+		{
+			image_path += L"file_zip.png";
+		}
+		else if (file_exten == L"rar")
+		{
+			image_path += L"file_rar.png";
+		}
+		else if (file_exten == L"zip")
+		{
+			image_path += L"file_zip.png";
+		}
+		else
+		{
+			image_path += L"file_default.png";
+		}
+		return image_path;
+	}
+
+	bool FilePathExtension(const String &filepath_in, String &extension_out)
+	{
+		if (filepath_in.size() == 0)
+			return false;
+		size_t pos = filepath_in.rfind(_T('.'));
+		if (pos == String::npos)
+			return false;
+		extension_out = filepath_in.substr(pos, String::npos);
+		return true;
+	}
 
 }

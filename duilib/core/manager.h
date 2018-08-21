@@ -137,7 +137,7 @@ public:
 //
 typedef Control* (*LPCREATECONTROL)(LPCTSTR pstrType);
 
-class CDPI;
+class DPI;
 class DUILIB_API UIManager
 {
 public:
@@ -362,7 +362,7 @@ public:
 
 	bool FillBox(Box* pFilledContainer, const std::wstring& xmlPath, IDialogBuilderCallback *pCallback = NULL, UIManager *pManager = NULL, Control *pParent = NULL);
 	//----------dpi-----------
-	CDPI* GetDPIObj();
+	DPI* GetDPIObj();
 	void ResetDPIAssets();
 	void RebuildFont(TFontInfo* pFontInfo);
 	void SetDPI(int iDPI);
@@ -405,7 +405,7 @@ private:
     bool m_bShowUpdateRect;
 	ShadowUI m_shadow;
 
-	CDPI* m_pDPI;
+	DPI* m_pDPI;
     //
     Control* m_pRoot;
     Control* m_pFocus;

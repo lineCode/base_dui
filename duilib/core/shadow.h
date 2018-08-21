@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <map>
-
 namespace dui
 {
 	class DUILIB_API ShadowUI

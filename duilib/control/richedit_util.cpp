@@ -2,7 +2,8 @@
 #include <atlbase.h>
 #include <textserv.h>
 
-#include "Utils/image_ole_i.h"
+#include "utils/image_ole_i.h"
+#include "help/image.h"
 
 namespace dui {
 
@@ -168,7 +169,7 @@ namespace dui {
 		do
 		{
 			{
-				if (!CreateImageObject((LPVOID*)&image_ole))
+				if (!duihelp::CreateImageObject((LPVOID*)&image_ole))
 				break;
 			}
 
@@ -209,7 +210,7 @@ namespace dui {
 				image_ole->SetFont((BSTR)(fontName.c_str()), 20, RGB(0x1a, 0x30, 0x47));
 				if (image_path.size() == 0)
 				{
-					image_path = GetIconByFile(face_tag);
+					image_path = duihelp::GetIconByFile(face_tag);
 				}
 				image_ole->SetBgColor(RGB(255, 255, 255));
 			}

@@ -2,8 +2,6 @@
 #include <zmouse.h>
 #include <stdlib.h>
 
-#include "Utils/DPI.h"
-
 DECLARE_HANDLE(HZIP);	// An HZIP identifies a zip file that has been opened
 typedef DWORD ZRESULT;
 #define OpenZip OpenZipU
@@ -3847,10 +3845,10 @@ bool UIManager::FillBox(Box* pFilledContainer, const std::wstring& xmlPath, IDia
 	return true;
 }
 
-CDPI * UIManager::GetDPIObj()
+DPI * UIManager::GetDPIObj()
 {
 	if (m_pDPI == NULL) {
-		m_pDPI = new CDPI;
+		m_pDPI = new DPI;
 	}
 	return m_pDPI;
 }

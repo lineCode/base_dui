@@ -1,7 +1,4 @@
 #include "stdafx.h"
-//#include "UIShadow.h"
-#include "math.h"
-#include "crtdbg.h"
 
 namespace dui
 {

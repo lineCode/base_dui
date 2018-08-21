@@ -22,10 +22,10 @@ typedef enum MONITOR_DPI_TYPE {
 
 namespace dui
 {
-	class DUILIB_API CDPI
+	class DUILIB_API DPI
 	{
 	public:
-		CDPI(void);
+		DPI(void);
 
 	public:
 		static int GetMainMonitorDPI();

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "file.h"
 
-
 namespace duihelp
 {
 	bool FilePathIsExist(const TCHAR *path, bool is_directory)

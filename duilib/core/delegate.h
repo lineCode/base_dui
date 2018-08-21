@@ -1,8 +1,6 @@
 #ifndef __UIDELEGATE_H__
 #define __UIDELEGATE_H__
-
 #pragma once
-#include "core/define.h"
 
 namespace dui {
 	typedef std::function<bool(Event*)> EventCallback;

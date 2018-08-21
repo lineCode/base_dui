@@ -1,6 +1,5 @@
 #include "stdafx.h"
-//#include "DPI.h"
-#include "ver_help.h"
+#include "../utils/ver_help.h"
 namespace dui
 {
 	//96 DPI = 100% scaling
@@ -27,7 +26,7 @@ namespace dui
 		);
 
 
-	CDPI::CDPI()
+	DPI::DPI()
 	{
 		m_nScaleFactor = 0;
 		m_nScaleFactorSDA = 0;
@@ -37,7 +36,7 @@ namespace dui
 
 	}
 
-	int CDPI::GetDPIOfMonitor(HMONITOR hMonitor)
+	int DPI::GetDPIOfMonitor(HMONITOR hMonitor)
 	{
 		UINT dpix = 96, dpiy = 96;
 		if (IsWindows8Point1OrGreater()) {
@@ -59,14 +58,14 @@ namespace dui
 		return dpix;
 	}
 
-	int CDPI::GetDPIOfMonitorNearestToPoint(POINT pt)
+	int DPI::GetDPIOfMonitorNearestToPoint(POINT pt)
 	{
 		HMONITOR hMonitor;
 		hMonitor = MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST);
 		return GetDPIOfMonitor(hMonitor);
 	}
 
-	int CDPI::GetMainMonitorDPI()
+	int DPI::GetMainMonitorDPI()
 	{
 		POINT    pt;
 		// Get the DPI for the main monitor
@@ -75,7 +74,7 @@ namespace dui
 		return GetDPIOfMonitorNearestToPoint(pt);
 	}
 
-	PROCESS_DPI_AWARENESS CDPI::GetDPIAwareness()
+	PROCESS_DPI_AWARENESS DPI::GetDPIAwareness()
 	{
 		if (IsWindows8Point1OrGreater()) {
 			HMODULE hModule =::LoadLibrary(_T("Shcore.dll"));
@@ -92,7 +91,7 @@ namespace dui
 		return m_Awareness;
 	}
 
-	BOOL CDPI::SetDPIAwareness(PROCESS_DPI_AWARENESS Awareness)
+	BOOL DPI::SetDPIAwareness(PROCESS_DPI_AWARENESS Awareness)
 	{
 		BOOL bRet = FALSE;
 		if (IsWindows8Point1OrGreater()) {
@@ -111,7 +110,7 @@ namespace dui
 		return bRet;
 	}
 
-	UINT CDPI::GetDPI()
+	UINT DPI::GetDPI()
 	{
 		if (m_Awareness == PROCESS_DPI_UNAWARE) {
 			return 96;
@@ -124,7 +123,7 @@ namespace dui
 		return MulDiv(m_nScaleFactor, 96, 100);
 	}
 
-	UINT CDPI::GetScale()
+	UINT DPI::GetScale()
 	{
 		if (m_Awareness == PROCESS_DPI_UNAWARE) {
 			return 100;
@@ -136,7 +135,7 @@ namespace dui
 	}
 
 
-	void CDPI::SetScale(UINT uDPI)
+	void DPI::SetScale(UINT uDPI)
 	{
 		m_nScaleFactor = MulDiv(uDPI, 100, 96);
 		if (m_nScaleFactorSDA == 0) {
@@ -144,7 +143,7 @@ namespace dui
 		}
 	}
 
-	int  CDPI::Scale(int iValue)
+	int  DPI::Scale(int iValue)
 	{
 		if (m_Awareness == PROCESS_DPI_UNAWARE) {
 			return iValue;
@@ -155,7 +154,7 @@ namespace dui
 		return MulDiv(iValue, m_nScaleFactor, 100);
 	}
 
-	int  CDPI::ScaleBack(int iValue) {
+	int  DPI::ScaleBack(int iValue) {
 
 		if (m_Awareness == PROCESS_DPI_UNAWARE) {
 			return iValue;
@@ -166,7 +165,7 @@ namespace dui
 		return MulDiv(iValue, 100, m_nScaleFactor);
 	}
 
-	RECT CDPI::Scale(RECT rcRect)
+	RECT DPI::Scale(RECT rcRect)
 	{
 		RECT rcScale = rcRect;
 		int sw = Scale(rcRect.right - rcRect.left);
@@ -178,7 +177,7 @@ namespace dui
 		return rcScale;
 	}
 
-	void CDPI::Scale(RECT *pRect)
+	void DPI::Scale(RECT *pRect)
 	{
 		int sw = Scale(pRect->right - pRect->left);
 		int sh = Scale(pRect->bottom - pRect->top);
@@ -188,7 +187,7 @@ namespace dui
 		pRect->bottom = pRect->top + sh;
 	}
 
-	void CDPI::ScaleBack(RECT *pRect)
+	void DPI::ScaleBack(RECT *pRect)
 	{
 		int sw = ScaleBack(pRect->right - pRect->left);
 		int sh = ScaleBack(pRect->bottom - pRect->top);
@@ -198,13 +197,13 @@ namespace dui
 		pRect->bottom = pRect->top + sh;
 	}
 
-	void CDPI::Scale(POINT *pPoint)
+	void DPI::Scale(POINT *pPoint)
 	{
 		pPoint->x = Scale(pPoint->x);
 		pPoint->y = Scale(pPoint->y);
 	}
 
-	POINT CDPI::Scale(POINT ptPoint)
+	POINT DPI::Scale(POINT ptPoint)
 	{
 		POINT ptScale = ptPoint;
 		ptScale.x = Scale(ptPoint.x);
@@ -212,13 +211,13 @@ namespace dui
 		return ptScale;
 	}
 
-	void CDPI::Scale(SIZE *pSize)
+	void DPI::Scale(SIZE *pSize)
 	{
 		pSize->cx = Scale(pSize->cx);
 		pSize->cy = Scale(pSize->cy);
 	}
 
-	SIZE CDPI::Scale(SIZE szSize)
+	SIZE DPI::Scale(SIZE szSize)
 	{
 		SIZE szScale = szSize;
 		szScale.cx = Scale(szSize.cx);
