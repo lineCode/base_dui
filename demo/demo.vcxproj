@@ -90,6 +90,7 @@
     <ClInclude Include="gui\main\main_form.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="thread\main_thread.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gui\login\login_callback.cpp" />
@@ -102,6 +103,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="thread\main_thread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\bin\res\db_manager\combo_ip.xml" />

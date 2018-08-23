@@ -151,6 +151,7 @@
     <ClCompile Include="gui\window\window_ex.cpp" />
     <ClCompile Include="module\db\user_db.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="module\db_manager\db_manager.cpp" />
     <ClCompile Include="module\db_manager\MySQLObject.cpp" />

@@ -311,7 +311,7 @@ HBITMAP Render::CreateARGB32Bitmap(HDC hDC, int cx, int cy, COLORREF** pBits)
 	return hBitmap;
 }
 
-void Render::AdjustImage(bool bUseHSL, TImageInfo* imageInfo, short H, short S, short L)
+void Render::AdjustImage(bool bUseHSL, ImageInfo* imageInfo, short H, short S, short L)
 {
 	if( imageInfo == NULL || imageInfo->bUseHSL == false || imageInfo->hBitmap == NULL || 
 		imageInfo->pBits == NULL || imageInfo->pSrcBits == NULL ) 
@@ -334,7 +334,7 @@ void Render::AdjustImage(bool bUseHSL, TImageInfo* imageInfo, short H, short S, 
 	}
 }
 
-TImageInfo* Render::LoadImage(STRINGorID bitmap, UIManager* pManager, LPCTSTR type, DWORD mask)
+ImageInfo* Render::LoadImage(STRINGorID bitmap, UIManager* pManager, LPCTSTR type, DWORD mask)
 {
     LPBYTE pData = NULL;
     DWORD dwSize = 0;
@@ -507,7 +507,7 @@ TImageInfo* Render::LoadImage(STRINGorID bitmap, UIManager* pManager, LPCTSTR ty
         stbi_image_free(pImage);
     }
 
-	TImageInfo* data = new TImageInfo;
+	ImageInfo* data = new ImageInfo;
 	data->hBitmap = hBitmap;
 	data->pBits = pDest;
 	data->nX = x;
@@ -518,7 +518,7 @@ TImageInfo* Render::LoadImage(STRINGorID bitmap, UIManager* pManager, LPCTSTR ty
 	return data;
 }
 
-void Render::FreeImage(TImageInfo* bitmap, bool bDelete)
+void Render::FreeImage(ImageInfo* bitmap, bool bDelete)
 {
 	if (bitmap == NULL) return;
 	if (bitmap->hBitmap) {
@@ -1086,7 +1086,7 @@ bool Render::DrawImage(HDC hDC, UIManager* pManager, const RECT& rcItem, const R
 		}
 		drawInfo.sImageName = sImageName;
 
-		const TImageInfo* data = NULL;
+		const ImageInfo* data = NULL;
 		if( bUseRes == false ) {
 			data = pManager->GetImageEx((LPCTSTR)sImageName.c_str(), NULL, dwMask, bUseHSL);
 		}
@@ -1482,8 +1482,8 @@ void Render::DrawHtmlText(HDC hDC, UIManager* pManager, RECT& rc, LPCTSTR pstrTe
                     //}
                     aColorArray.Add((LPVOID)clrColor);
                     ::SetTextColor(hDC,  RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
-                    TFontInfo* pFontInfo = pManager->GetFontInfo(iDefaultFont);
-                    if( aFontArray.GetSize() > 0 ) pFontInfo = (TFontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
+                    FontInfo* pFontInfo = pManager->GetFontInfo(iDefaultFont);
+                    if( aFontArray.GetSize() > 0 ) pFontInfo = (FontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
                     if( pFontInfo->bUnderline == false ) {
 						HFONT hFont = pManager->GetFont(pFontInfo->sFontName.c_str(), pFontInfo->iSize, pFontInfo->bBold, true, pFontInfo->bItalic);
 						if( hFont == NULL ) {
@@ -1503,8 +1503,8 @@ void Render::DrawHtmlText(HDC hDC, UIManager* pManager, RECT& rc, LPCTSTR pstrTe
             case _T('b'):  // Bold
                 {
                     pstrText++;
-                    TFontInfo* pFontInfo = pManager->GetFontInfo(iDefaultFont);
-                    if( aFontArray.GetSize() > 0 ) pFontInfo = (TFontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
+                    FontInfo* pFontInfo = pManager->GetFontInfo(iDefaultFont);
+                    if( aFontArray.GetSize() > 0 ) pFontInfo = (FontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
                     if( pFontInfo->bBold == false ) {
 						HFONT hFont = pManager->GetFont(pFontInfo->sFontName.c_str(), pFontInfo->iSize, true, pFontInfo->bUnderline, pFontInfo->bItalic);
 						if( hFont == NULL ) {
@@ -1537,7 +1537,7 @@ void Render::DrawHtmlText(HDC hDC, UIManager* pManager, RECT& rc, LPCTSTR pstrTe
                     int iFont = (int) _tcstol(pstrText, const_cast<LPTSTR*>(&pstrText), 10);
                     //if( isdigit(*pstrText) ) { // debug版本会引起异常
                     if( pstrTemp != pstrText ) {
-                        TFontInfo* pFontInfo = pManager->GetFontInfo(iFont);
+                        FontInfo* pFontInfo = pManager->GetFontInfo(iFont);
                         aFontArray.Add(pFontInfo);
                         pTm = &pFontInfo->tm;
                         ::SelectObject(hDC, pFontInfo->hFont);
@@ -1576,7 +1576,7 @@ void Render::DrawHtmlText(HDC hDC, UIManager* pManager, RECT& rc, LPCTSTR pstrTe
 							hFont = pManager->AddFont(g_iFontID, sFontName.c_str(), iFontSize, bBold, bUnderline, bItalic);
 							g_iFontID += 1;
 						}
-                        TFontInfo* pFontInfo = pManager->GetFontInfo(hFont);
+                        FontInfo* pFontInfo = pManager->GetFontInfo(hFont);
                         aFontArray.Add(pFontInfo);
                         pTm = &pFontInfo->tm;
                         ::SelectObject(hDC, pFontInfo->hFont);
@@ -1592,7 +1592,7 @@ void Render::DrawHtmlText(HDC hDC, UIManager* pManager, RECT& rc, LPCTSTR pstrTe
                     int iWidth = 0;
                     int iHeight = 0;
                     while( *pstrText > _T('\0') && *pstrText <= _T(' ') ) pstrText = ::CharNext(pstrText);
-                    const TImageInfo* pImageInfo = NULL;
+                    const ImageInfo* pImageInfo = NULL;
                     String sName;
                     while( *pstrText != _T('\0') && *pstrText != _T('>') && *pstrText != _T('}') && *pstrText != _T(' ') ) {
                         LPCTSTR pstrTemp = ::CharNext(pstrText);
@@ -1602,8 +1602,8 @@ void Render::DrawHtmlText(HDC hDC, UIManager* pManager, RECT& rc, LPCTSTR pstrTe
                     }
                     if( sName.empty() ) { // Italic
                         pstrNextStart = NULL;
-                        TFontInfo* pFontInfo = pManager->GetFontInfo(iDefaultFont);
-                        if( aFontArray.GetSize() > 0 ) pFontInfo = (TFontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
+                        FontInfo* pFontInfo = pManager->GetFontInfo(iDefaultFont);
+                        if( aFontArray.GetSize() > 0 ) pFontInfo = (FontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
                         if( pFontInfo->bItalic == false ) {
 							HFONT hFont = pManager->GetFont(pFontInfo->sFontName.c_str(), pFontInfo->iSize, pFontInfo->bBold, pFontInfo->bUnderline, true);
 							if( hFont == NULL ) {
@@ -1771,8 +1771,8 @@ void Render::DrawHtmlText(HDC hDC, UIManager* pManager, RECT& rc, LPCTSTR pstrTe
             case _T('u'):  // Underline text
                 {
                     pstrText++;
-                    TFontInfo* pFontInfo = pManager->GetFontInfo(iDefaultFont);
-                    if( aFontArray.GetSize() > 0 ) pFontInfo = (TFontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
+                    FontInfo* pFontInfo = pManager->GetFontInfo(iDefaultFont);
+                    if( aFontArray.GetSize() > 0 ) pFontInfo = (FontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
                     if( pFontInfo->bUnderline == false ) {
 						HFONT hFont = pManager->GetFont(pFontInfo->sFontName.c_str(), pFontInfo->iSize, pFontInfo->bBold, true, pFontInfo->bItalic);
 						if( hFont == NULL ) {
@@ -1863,7 +1863,7 @@ void Render::DrawHtmlText(HDC hDC, UIManager* pManager, RECT& rc, LPCTSTR pstrTe
                 {
                     pstrText++;
                     aFontArray.Remove(aFontArray.GetSize() - 1);
-                    TFontInfo* pFontInfo = (TFontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
+                    FontInfo* pFontInfo = (FontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
                     if( pFontInfo == NULL ) pFontInfo = pManager->GetFontInfo(iDefaultFont);
                     if( pTm->tmItalic && pFontInfo->bItalic == false ) {
                         ABC abc;
@@ -2040,7 +2040,7 @@ void Render::DrawHtmlText(HDC hDC, UIManager* pManager, RECT& rc, LPCTSTR pstrTe
                 DWORD clrColor = dwTextColor;
                 if( aColorArray.GetSize() > 0 ) clrColor = (int)aColorArray.GetAt(aColorArray.GetSize() - 1);
                 ::SetTextColor(hDC, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
-                TFontInfo* pFontInfo = (TFontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
+                FontInfo* pFontInfo = (FontInfo*)aFontArray.GetAt(aFontArray.GetSize() - 1);
                 if( pFontInfo == NULL ) pFontInfo = pManager->GetFontInfo(iDefaultFont);
                 pTm = &pFontInfo->tm;
                 ::SelectObject(hDC, pFontInfo->hFont);

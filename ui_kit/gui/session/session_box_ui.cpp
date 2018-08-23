@@ -105,10 +105,10 @@ bool SessionBox::OnClicked(dui::Event *event)
 		std::map<LPCTSTR, LPCTSTR> filters;
 		filters[text.c_str()] = filter;
 
-		//CFileDialogEx::FileDialogCallback2 cb = nbase::Bind(&SessionBox::OnImageSelected, this, false, std::placeholders::_1, std::placeholders::_2);
-		CFileDialogEx::FileDialogCallback2 cb = std::bind(&SessionBox::OnImageSelected, this, false, std::placeholders::_1, std::placeholders::_2);
+		//FileDialogEx::FileDialogCallback2 cb = nbase::Bind(&SessionBox::OnImageSelected, this, false, std::placeholders::_1, std::placeholders::_2);
+		FileDialogEx::FileDialogCallback2 cb = std::bind(&SessionBox::OnImageSelected, this, false, std::placeholders::_1, std::placeholders::_2);
 
-		CFileDialogEx* file_dlg = new CFileDialogEx();
+		FileDialogEx* file_dlg = new FileDialogEx();
 		file_dlg->SetFilter(filters);
 		file_dlg->SetParentWnd(nim_comp::WindowsManager::GetInstance()->GetWindow(L"MainForm", L"MainForm")->GetHWND());
 		file_dlg->AyncShowOpenFileDlg(cb);
@@ -120,10 +120,10 @@ bool SessionBox::OnClicked(dui::Event *event)
 		std::map<LPCTSTR, LPCTSTR> filters;
 		filters[file_type.c_str()] = filter;
 
-		//CFileDialogEx::FileDialogCallback2 cb = nbase::Bind(&SessionBox::OnFileSelected, this, std::placeholders::_1, std::placeholders::_2);
-		CFileDialogEx::FileDialogCallback2 cb = std::bind(&SessionBox::OnFileSelected, this, std::placeholders::_1, std::placeholders::_2);
+		//FileDialogEx::FileDialogCallback2 cb = nbase::Bind(&SessionBox::OnFileSelected, this, std::placeholders::_1, std::placeholders::_2);
+		FileDialogEx::FileDialogCallback2 cb = std::bind(&SessionBox::OnFileSelected, this, std::placeholders::_1, std::placeholders::_2);
 
-		CFileDialogEx* file_dlg = new CFileDialogEx();
+		FileDialogEx* file_dlg = new FileDialogEx();
 		file_dlg->SetFilter(filters);
 		file_dlg->SetMultiSel(TRUE);
 		file_dlg->SetParentWnd(nim_comp::WindowsManager::GetInstance()->GetWindow(L"MainForm", L"MainForm")->GetHWND());

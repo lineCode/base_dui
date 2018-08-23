@@ -14,6 +14,9 @@
     <Filter Include="gui\main">
       <UniqueIdentifier>{29f77d8c-533f-4aa2-b538-cdda2c0b2f74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="thread">
+      <UniqueIdentifier>{1b2409a4-83fa-4246-a75f-6910e294a799}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -33,6 +36,9 @@
     <ClCompile Include="gui\login\login_callback.cpp">
       <Filter>gui\login</Filter>
     </ClCompile>
+    <ClCompile Include="thread\main_thread.cpp">
+      <Filter>thread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -46,6 +52,9 @@
       <Filter>gui\login</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="thread\main_thread.h">
+      <Filter>thread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\bin\res\login\login.xml">

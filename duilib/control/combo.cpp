@@ -76,10 +76,10 @@ void ComboWnd::Init(Combo* pOwner, String xml, String folder, POINT pt, UIManage
 
 	if (m_bLayeredWindow)
 	{
-		m_PaintManager.GetShadow()->ShowShadow(true);
-		m_PaintManager.GetShadow()->SetImage(_T("../public/bk/bk_shadow.png"));
-		m_PaintManager.GetShadow()->SetSize(14);
-		m_PaintManager.GetShadow()->SetShadowCorner({ 14, 14, 14, 14 });
+		m_manager.GetShadow()->ShowShadow(true);
+		m_manager.GetShadow()->SetImage(_T("../public/bk/bk_shadow.png"));
+		m_manager.GetShadow()->SetSize(14);
+		m_manager.GetShadow()->SetShadowCorner({ 14, 14, 14, 14 });
 	}
 
     // Position the popup window in absolute space
@@ -176,7 +176,7 @@ LRESULT ComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	if (!bHandle)
 	{
 		LRESULT lRes = 0;
-		if (m_PaintManager.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
+		if (m_manager.MessageHandler(uMsg, wParam, lParam, lRes)) return lRes;
 	}
 	else
 		return 0;
@@ -240,7 +240,7 @@ void ComboWnd::Show()
 	DuiRect rcWork = oMonitor.rcWork;
 	DuiRect monitor_rect = oMonitor.rcMonitor;
 	DuiSize szInit = { rcWork.right - rcWork.left, rcWork.bottom - rcWork.top };
-	szInit = m_PaintManager.GetRoot()->EstimateSize(szInit);
+	szInit = m_manager.GetRoot()->EstimateSize(szInit);
 
 	/*RECT rcOwner = m_pOwner->GetPos();
 	POINT ptBase = { rcOwner.left, rcOwner.bottom};
@@ -335,12 +335,12 @@ void Combo::DoEvent(Event& event)
 			SetText(item->GetItemText().c_str());
 			m_iCurSel = event.wParam;
 
-			if (event_map.find(UIEVENT_ITEMSELECT) != event_map.cend())
+			if (m_event_map.find(UIEVENT_ITEMSELECT) != m_event_map.cend())
 			{
 				Event ev;
 				ev.Type = UIEVENT_ITEMSELECT;
 				ev.pSender = this;
-				if (!event_map.find(UIEVENT_ITEMSELECT)->second(&ev)){
+				if (!m_event_map.find(UIEVENT_ITEMSELECT)->second(&ev)){
 					return;
 				}
 			}
@@ -435,7 +435,7 @@ void Combo::DoEvent(Event& event)
 
 SIZE Combo::EstimateSize(SIZE szAvailable)
 {
-	if (m_cxyFixed.cy == 0 && m_cxyFixed.cx == 0) return DuiSize(m_pManager->GetDPIObj()->Scale(m_cxyFixed.cx), m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8);
+	if (m_FixedSize.cy == 0 && m_FixedSize.cx == 0) return DuiSize(m_pManager->GetDPIObj()->Scale(m_FixedSize.cx), m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8);
 	return Control::EstimateSize(szAvailable);
 }
 

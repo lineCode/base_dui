@@ -61,7 +61,7 @@ public:
 
 	void AttachSelect(const EventCallback& callback)
 	{
-		event_map[UIEVENT_ITEMSELECT] += callback;
+		m_event_map[UIEVENT_ITEMSELECT] += callback;
 	}
     
     bool DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);

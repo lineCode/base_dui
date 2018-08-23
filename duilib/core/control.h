@@ -81,8 +81,8 @@ public:
     virtual void SetMargin(RECT rcMargin); // 设置外边距，由上层窗口绘制
     virtual SIZE GetFixedXY() const;         // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
     virtual void SetFixedXY(SIZE szXY);      // 仅float为true时有效
-	virtual TPercentInfo GetFloatPercent() const;
-	virtual void SetFloatPercent(TPercentInfo piFloatPercent);
+	virtual PercentInfo GetFloatPercent() const;
+	virtual void SetFloatPercent(PercentInfo piFloatPercent);
     virtual int GetFixedWidth() const;       // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
     virtual void SetFixedWidth(int cx);      // 预设的参考值
     virtual int GetFixedHeight() const;      // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
@@ -154,7 +154,7 @@ public:
     DWORD GetAdjustColor(DWORD dwColor);
 
     virtual void Init();
-    virtual void DoInit();
+    //virtual void DoInit();
 
     virtual void HandleEvent(Event& event);
     virtual void DoEvent(Event& event);
@@ -178,55 +178,55 @@ public:
 
 	void AttachMouseEnter(const EventCallback& callback)
 	{
-		event_map[UIEVENT_MOUSEENTER] += callback;
+		m_event_map[UIEVENT_MOUSEENTER] += callback;
 	}
 
 	void AttachMouseLeave(const EventCallback& callback)
 	{
-		event_map[UIEVENT_MOUSELEAVE] += callback;
+		m_event_map[UIEVENT_MOUSELEAVE] += callback;
 	}
 
 	void AttachMouseHover(const EventCallback& callback)
 	{
-		event_map[UIEVENT_MOUSEHOVER] += callback;
+		m_event_map[UIEVENT_MOUSEHOVER] += callback;
 	}
 
 	void AttachButtonDown(const EventCallback& callback)
 	{
-		event_map[UIEVENT_BUTTONDOWN] += callback;
+		m_event_map[UIEVENT_BUTTONDOWN] += callback;
 	}
 
 	void AttachButtonUp(const EventCallback& callback)
 	{
-		event_map[UIEVENT_BUTTONUP] += callback;
+		m_event_map[UIEVENT_BUTTONUP] += callback;
 	}
 
 	void AttachSetFocus(const EventCallback& callback)
 	{
-		event_map[UIEVENT_SETFOCUS] += callback;
+		m_event_map[UIEVENT_SETFOCUS] += callback;
 	}
 
 	void AttachKillFocus(const EventCallback& callback)
 	{
-		event_map[UIEVENT_KILLFOCUS] += callback;
+		m_event_map[UIEVENT_KILLFOCUS] += callback;
 	}
 
 	void AttachMenu(const EventCallback& callback)
 	{
-		event_map[UIEVENT_CONTEXTMENU] += callback;
+		m_event_map[UIEVENT_CONTEXTMENU] += callback;
 	}
 
 	void AttachResize(const EventCallback& callback)
 	{
-		event_map[UIEVENT_RESIZE] += callback;
+		m_event_map[UIEVENT_RESIZE] += callback;
 	}
 public:
-	EventSource OnInit;
-	EventSource OnDestroy;
-	EventSource OnNotify;
-	EventSource OnPaint;
-	EventSource OnPostPaint;
-	EventMap	event_map;
+	EventSource m_cbInit;
+	EventSource m_cbDestroy;
+	EventSource m_cbNotify;
+	EventSource m_cbPaint;
+	EventSource m_cbPostPaint;
+	EventMap	m_event_map;
 protected:
     UIManager* m_pManager;
     Control* m_pParent;
@@ -237,10 +237,10 @@ protected:
 	bool m_bAsyncNotify;
     RECT m_rcItem;
     RECT m_rcMargin;
-    SIZE m_cXY;
-    SIZE m_cxyFixed;	//
-    SIZE m_cxyMin;
-    SIZE m_cxyMax;
+    SIZE m_Size;
+    SIZE m_FixedSize;	//
+    SIZE m_MinSize;
+    SIZE m_MaxSize;
     bool m_bVisible;
     bool m_bInternVisible;
     bool m_bEnabled;
@@ -253,7 +253,7 @@ protected:
 
 	UINT m_uPosStyle = POS_STYLE_TOP | POS_STYLE_LEFT;
 
-	TPercentInfo m_piFloatPercent;
+	PercentInfo m_piFloatPercent;
     bool m_bSetPos; // 防止SetPos循环调用
 
     String m_sText;
@@ -270,10 +270,10 @@ protected:
     bool m_bColorHSL;
 	int m_nBorderStyle;
 	int m_nTooltipWidth;
-    SIZE m_cxyBorderRound;
+    SIZE m_BorderRoundSize;
     RECT m_rcPaint;
 	RECT m_rcBorderSize;
-	StringPtrMap m_mCustomAttrHash;
+	StringPtrMap m_CustomAttrHash;
 };
 
 } // namespace dui

@@ -179,7 +179,7 @@ namespace dui{
 
 	SIZE LabelBox::EstimateSize(SIZE szAvailable)
 	{
-		if (m_cxyFixed.cx > 0 && m_cxyFixed.cy > 0) return Control::EstimateSize(szAvailable);
+		if (m_FixedSize.cx > 0 && m_FixedSize.cy > 0) return Control::EstimateSize(szAvailable);
 
 		if ((m_uTextStyle & DT_SINGLELINE) == 0 &&
 			(szAvailable.cx != m_szAvailableLast.cx || szAvailable.cy != m_szAvailableLast.cy)) {
@@ -189,7 +189,7 @@ namespace dui{
 		if (m_bNeedEstimateSize) {
 			m_bNeedEstimateSize = false;
 			m_szAvailableLast = szAvailable;
-			m_cxyFixedLast = m_cxyFixed;
+			m_cxyFixedLast = m_FixedSize;
 			if ((m_uTextStyle & DT_SINGLELINE) != 0) {
 				if (m_cxyFixedLast.cy == 0) {
 					m_cxyFixedLast.cy = m_pManager->GetFontInfo(m_iFont)->tm.tmHeight + 8;

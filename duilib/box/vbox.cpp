@@ -285,7 +285,7 @@ namespace dui
 
 					DuiRect rcInvalidate = GetThumbRect(true);
 					m_rcNewPos = rc;
-					m_cxyFixed.cy = m_rcNewPos.bottom - m_rcNewPos.top;
+					m_FixedSize.cy = m_rcNewPos.bottom - m_rcNewPos.top;
 
 					if( m_bImmMode ) {
 						m_rcItem = m_rcNewPos;

@@ -157,9 +157,9 @@ namespace dui{
 
 	/*SIZE OptionBox::EstimateSize(SIZE szAvailable)
 	{
-		if (m_cxyFixed.cy == 0) return DuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
+		if (m_FixedSize.cy == 0) return DuiSize(m_FixedSize.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
 		return __super::EstimateSize(szAvailable);
-		if (m_cxyFixed.cy == 0 && m_cxyFixed.cx == 0) return DuiSize(m_pManager->GetDPIObj()->Scale(m_cxyFixed.cx), m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
+		if (m_FixedSize.cy == 0 && m_FixedSize.cx == 0) return DuiSize(m_pManager->GetDPIObj()->Scale(m_FixedSize.cx), m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
 		return Control::EstimateSize(szAvailable);
 	}*/
 

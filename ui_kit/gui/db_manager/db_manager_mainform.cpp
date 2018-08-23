@@ -60,26 +60,26 @@ namespace nim_comp
 		//SetIcon(IDI_ICON);
 #if 1
 		std::wstring title = company_name_ + L" 的 数据库工具";
-		((dui::Label *)m_PaintManager.FindControl(L"title_label"))->SetText(title.c_str());
+		((dui::Label *)m_manager.FindControl(L"title_label"))->SetText(title.c_str());
 		SetWindowText(m_hWnd, L"数据库工具");
 
 		//m_pRoot->AttachBubbledEvent(ui::kEventClick, nbase::Bind(&DBManagerMainForm::OnClicked, this, std::placeholders::_1));
 
-		btn_max_restore_ = static_cast<dui::Button*>(m_PaintManager.FindControl(L"btn_max_restore"));
+		btn_max_restore_ = static_cast<dui::Button*>(m_manager.FindControl(L"btn_max_restore"));
 
-		btn_run_ = (dui::Button *)m_PaintManager.FindControl(L"btnrun");
+		btn_run_ = (dui::Button *)m_manager.FindControl(L"btnrun");
 		//btn_run_->AttachClick(nbase::Bind(&DBManagerMainForm::OnBtnRunClieked, this, std::placeholders::_1));
 
-		re_input_ = (dui::RichEdit*)m_PaintManager.FindControl(L"input_edit");
+		re_input_ = (dui::RichEdit*)m_manager.FindControl(L"input_edit");
 
-		db_tree_ = (dui::Tree*)m_PaintManager.FindControl(L"dbtree");
-		combo_ip_ = (dui::Combo*)m_PaintManager.FindControl(L"combo_ip");
+		db_tree_ = (dui::Tree*)m_manager.FindControl(L"dbtree");
+		combo_ip_ = (dui::Combo*)m_manager.FindControl(L"combo_ip");
 
-		result_list_ = (dui::ListView*)m_PaintManager.FindControl(L"result_list");
-		result_label_ = (dui::Label*)m_PaintManager.FindControl(L"result_label");
-		info_label_ = (dui::Label*)m_PaintManager.FindControl(L"info_label");
-		status_label_ = (dui::Label*)m_PaintManager.FindControl(L"status_label");
-		oper_label_ = (dui::Label*)m_PaintManager.FindControl(L"oper_label");
+		result_list_ = (dui::ListView*)m_manager.FindControl(L"result_list");
+		result_label_ = (dui::Label*)m_manager.FindControl(L"result_label");
+		info_label_ = (dui::Label*)m_manager.FindControl(L"info_label");
+		status_label_ = (dui::Label*)m_manager.FindControl(L"status_label");
+		oper_label_ = (dui::Label*)m_manager.FindControl(L"oper_label");
 
 		combo_ip_->AttachSelect(std::bind(&DBManagerMainForm::OnComboSelected, this, std::placeholders::_1));
 		status_label_->SetText(L"正在获取数据库列表, 请等待...");
@@ -314,7 +314,7 @@ namespace nim_comp
 
 			DBTreeItem *item = new DBTreeItem, *ui_db_node, *ui_fnode, *ui_item_node;
 			/*dui::GlobalManager::FillBoxWithCache(item, L"db_manager/db_treeitem.xml");*/
-			m_PaintManager.FillBox(item, _T("db_treeitem.xml"), nullptr, &m_PaintManager, NULL);
+			m_manager.FillBox(item, _T("db_treeitem.xml"), nullptr, &m_manager, NULL);
 			item->Init(root->date_);
 
 			dui::TreeNode * ui_root = nullptr/*db_tree_->GetRootNode()*/;
@@ -331,7 +331,7 @@ namespace nim_comp
 
 				ui_db_node = new DBTreeItem;
 				//dui::GlobalManager::FillBoxWithCache(ui_db_node, L"db_manager/db_treeitem.xml");
-				m_PaintManager.FillBox(ui_db_node, _T("db_treeitem.xml"), nullptr, &m_PaintManager, NULL);
+				m_manager.FillBox(ui_db_node, _T("db_treeitem.xml"), nullptr, &m_manager, NULL);
 				ui_db_node->Init(db_node->date_);
 				ui_father_node->AddChildNode(ui_db_node);
 
@@ -342,7 +342,7 @@ namespace nim_comp
 
 					ui_fnode = new DBTreeItem;
 					//dui::GlobalManager::FillBoxWithCache(ui_fnode, L"db_manager/db_treeitem.xml");
-					m_PaintManager.FillBox(ui_fnode, _T("db_treeitem.xml"), nullptr, &m_PaintManager, NULL);
+					m_manager.FillBox(ui_fnode, _T("db_treeitem.xml"), nullptr, &m_manager, NULL);
 					ui_fnode->Init(fnode->date_);
 					ui_father_node->AddChildNode(ui_fnode);
 
@@ -353,7 +353,7 @@ namespace nim_comp
 
 						ui_item_node = new DBTreeItem;
 						//dui::GlobalManager::FillBoxWithCache(ui_item_node, L"db_manager/db_treeitem.xml");
-						m_PaintManager.FillBox(ui_item_node, _T("db_treeitem.xml"), nullptr, &m_PaintManager, NULL);
+						m_manager.FillBox(ui_item_node, _T("db_treeitem.xml"), nullptr, &m_manager, NULL);
 						ui_item_node->Init(item_node->date_);
 						ui_father_node->AddChildNode(ui_item_node);
 
@@ -401,7 +401,7 @@ namespace nim_comp
 					if (i == 0)
 					{
 						result_list_item = new DBResultListItem(DBResultListItem::DB_LISTITEM_HEADER);
-						result_list_item->SetBkColor(/*L"bk_db_result_header"*/m_PaintManager.GetColor(L"bk_blacklist_tip"));
+						result_list_item->SetBkColor(/*L"bk_db_result_header"*/m_manager.GetColor(L"bk_blacklist_tip"));
 						
 					}		
 					else
@@ -409,7 +409,7 @@ namespace nim_comp
 						result_list_item = new DBResultListItem(DBResultListItem::DB_LISTITEM_NORMAL);
 						if ((i%2) == 0)
 						{
-							result_list_item->SetBkColor(m_PaintManager.GetColor(L"bk_db_result_item2"));
+							result_list_item->SetBkColor(m_manager.GetColor(L"bk_db_result_item2"));
 						}	
 					}
 					if (result_list_item)
@@ -438,14 +438,14 @@ namespace nim_comp
 					if (i == 0)
 					{
 						result_list_item = new DBResultListItem(DBResultListItem::DB_LISTITEM_HEADER);
-						result_list_item->SetBkColor(m_PaintManager.GetColor(L"bk_blacklist_tip"));
+						result_list_item->SetBkColor(m_manager.GetColor(L"bk_blacklist_tip"));
 					}		
 					else
 					{
 						result_list_item = new DBResultListItem(DBResultListItem::DB_LISTITEM_NORMAL);
 						if ((i % 2) == 0)
 						{
-							result_list_item->SetBkColor(m_PaintManager.GetColor(L"bk_db_result_item2"));
+							result_list_item->SetBkColor(m_manager.GetColor(L"bk_db_result_item2"));
 						}
 					}	
 					if (result_list_item)

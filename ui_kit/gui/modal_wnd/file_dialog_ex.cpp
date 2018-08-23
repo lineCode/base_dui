@@ -7,7 +7,7 @@
 #include "base/file/file_util.h"
 #include "shared/threads.h"
 
-CFileDialogEx::CFileDialogEx(void)
+FileDialogEx::FileDialogEx(void)
 {
 	memset(&m_szDefExt, 0, sizeof(m_szDefExt));
 	memset(&m_szFilter, 0, sizeof(m_szFilter));
@@ -24,7 +24,7 @@ CFileDialogEx::CFileDialogEx(void)
 	m_stOFN.nMaxFile = MAX_PATH;
 }
 
-CFileDialogEx::~CFileDialogEx(void)
+FileDialogEx::~FileDialogEx(void)
 {
 	if (m_lpszFileName != NULL)
 	{
@@ -33,23 +33,23 @@ CFileDialogEx::~CFileDialogEx(void)
 	}
 }
 
-void CFileDialogEx::SetDefExt(LPCTSTR lpszDefExt)
+void FileDialogEx::SetDefExt(LPCTSTR lpszDefExt)
 {
 	wcsncpy_s(m_szDefExt, lpszDefExt, sizeof(m_szDefExt) / sizeof(TCHAR));
 }
 
-void CFileDialogEx::SetFileName(LPCTSTR lpszFileName)
+void FileDialogEx::SetFileName(LPCTSTR lpszFileName)
 {
 	wcsncpy_s(m_szFileName, lpszFileName, sizeof(m_szFileName) / sizeof(TCHAR));
 }
 
-void CFileDialogEx::SetFlags(DWORD dwFlags)
+void FileDialogEx::SetFlags(DWORD dwFlags)
 {
 	m_stOFN.Flags = dwFlags;
 }
 
 // 示例_T("Text Files(*.txt)\0*.txt\0网页文件\0*.htm;*.html\0All Files(*.*)\0*.*\0\0")
-void CFileDialogEx::SetFilter(LPCTSTR lpszFilter)
+void FileDialogEx::SetFilter(LPCTSTR lpszFilter)
 {
 	LPTSTR lpsz = (LPTSTR)lpszFilter;
 	LPTSTR lpszOld;
@@ -76,7 +76,7 @@ void CFileDialogEx::SetFilter(LPCTSTR lpszFilter)
 //param:过滤字符串对,key-描述字符串 value-过滤字符串
 //参数可以指定多组过滤类型
 //example:filers[L"图像文件(*.jpg)"] = L"*.jpg";
-void CFileDialogEx::SetFilter(std::map<LPCTSTR,LPCTSTR>& filters)
+void FileDialogEx::SetFilter(std::map<LPCTSTR,LPCTSTR>& filters)
 {
 	std::map<LPCTSTR,LPCTSTR>::iterator it = filters.begin();
 	const int size = filters.size()*100;
@@ -94,7 +94,7 @@ void CFileDialogEx::SetFilter(std::map<LPCTSTR,LPCTSTR>& filters)
 	delete[] filterstring;
 }
 
-void CFileDialogEx::SetMultiSel(BOOL bMultiSel/* = TRUE*/)
+void FileDialogEx::SetMultiSel(BOOL bMultiSel/* = TRUE*/)
 {
 	if (bMultiSel)
 	{
@@ -105,17 +105,17 @@ void CFileDialogEx::SetMultiSel(BOOL bMultiSel/* = TRUE*/)
 		m_stOFN.Flags &= ~OFN_ALLOWMULTISELECT;
 }
 
-void CFileDialogEx::SetParentWnd(HWND hParentWnd)
+void FileDialogEx::SetParentWnd(HWND hParentWnd)
 {
 	m_stOFN.hwndOwner = hParentWnd;
 }
 
-void CFileDialogEx::SetTitle(LPCTSTR lpszTitle)
+void FileDialogEx::SetTitle(LPCTSTR lpszTitle)
 {
 	m_stOFN.lpstrTitle = lpszTitle;
 }
 
-void CFileDialogEx::SetFileNameBufferSize(DWORD dwSize)
+void FileDialogEx::SetFileNameBufferSize(DWORD dwSize)
 {
 	if (m_lpszFileName != NULL)
 	{
@@ -145,21 +145,21 @@ void CFileDialogEx::SetFileNameBufferSize(DWORD dwSize)
 	}
 }
 
-void CFileDialogEx::AyncShowOpenFileDlg(FileDialogCallback2 file_dialog_callback2)
+void FileDialogEx::AyncShowOpenFileDlg(FileDialogCallback2 file_dialog_callback2)
 {
 	file_dialog_callback2_ = file_dialog_callback2;
 	file_dialog_type_ = FDT_OpenFile;
 	AsyncDoModal(this);
 }
 
-void CFileDialogEx::AyncShowSaveFileDlg(FileDialogCallback2 file_dialog_callback2)
+void FileDialogEx::AyncShowSaveFileDlg(FileDialogCallback2 file_dialog_callback2)
 {
 	file_dialog_callback2_ = file_dialog_callback2;
 	file_dialog_type_ = FDT_SaveFile;
 	AsyncDoModal(this);
 }
 
-void CFileDialogEx::SyncShowModal()
+void FileDialogEx::SyncShowModal()
 {
 	if (file_dialog_type_ == FDT_OpenFile)
 	{
@@ -208,38 +208,38 @@ void CFileDialogEx::SyncShowModal()
 	}
 }
 
-std::wstring CFileDialogEx::GetPathName()
+std::wstring FileDialogEx::GetPathName()
 {
 	return m_stOFN.lpstrFile;
 }
 
-std::wstring CFileDialogEx::GetFileName()
+std::wstring FileDialogEx::GetFileName()
 {
 	return L"";
 }
 
-std::wstring CFileDialogEx::GetFileExt()
+std::wstring FileDialogEx::GetFileExt()
 {
 	return L"";
 }
 
-std::wstring CFileDialogEx::GetFileTitle()
+std::wstring FileDialogEx::GetFileTitle()
 {
 	return L"";
 }
 
-std::wstring CFileDialogEx::GetFolderPath()
+std::wstring FileDialogEx::GetFolderPath()
 {
 	return L"";
 }
 
 
-POSITION CFileDialogEx::GetStartPosition()
+POSITION FileDialogEx::GetStartPosition()
 {
 	return (POSITION)m_stOFN.lpstrFile;
 }
 
-std::wstring CFileDialogEx::GetNextPathName(POSITION& pos)
+std::wstring FileDialogEx::GetNextPathName(POSITION& pos)
 {
 	LPTSTR lpsz = (LPTSTR)pos;
 	if (lpsz == m_stOFN.lpstrFile) // first time

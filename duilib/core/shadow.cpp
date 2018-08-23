@@ -239,7 +239,7 @@ void ShadowUI::Update(HWND hParent)
 	{
 		RECT rcPaint = {0, 0, nShadWndWid, nShadWndHei};
 		
-		const TImageInfo* data = m_pManager->GetImageEx((LPCTSTR)m_sShadowImage.c_str(), NULL, 0);
+		const ImageInfo* data = m_pManager->GetImageEx((LPCTSTR)m_sShadowImage.c_str(), NULL, 0);
 		if( !data ) return;    
 
 		RECT rcBmpPart = {0};

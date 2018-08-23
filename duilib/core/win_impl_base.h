@@ -40,7 +40,7 @@ namespace dui
 
 		virtual DuiRect GetPos(bool layed){ return DuiRect(0, 0, 600, 400); };		//add by djj
 
-		virtual Control* CreateControl(LPCTSTR pstrClass);
+		virtual Control* CreateControl(LPCTSTR pstrClass){ return nullptr; };
 		virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/);
 		virtual LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
 		virtual LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
@@ -69,7 +69,7 @@ namespace dui
 		virtual LONG GetStyle();
 
 	protected:
-		UIManager m_PaintManager;
+		UIManager m_manager;
 		static LPBYTE m_lpResourceZIPBuffer;
 	};
 }

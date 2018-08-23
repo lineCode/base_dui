@@ -76,6 +76,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "image_effects", "image_effe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "player", "player\player.vcxproj", "{D1B03378-ABD2-487B-A201-6770D79C8E83}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ffmpeg_test", "ffmpeg_test\ffmpeg_test.vcxproj", "{6F610600-0E54-4A29-B272-8F616766EAD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -192,6 +194,18 @@ Global
 		{D1B03378-ABD2-487B-A201-6770D79C8E83}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
 		{D1B03378-ABD2-487B-A201-6770D79C8E83}.UnicodeRelease|Win32.Build.0 = Release|Win32
 		{D1B03378-ABD2-487B-A201-6770D79C8E83}.UnicodeRelease|x64.ActiveCfg = Release|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.Debug|Win32.Build.0 = Debug|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.Debug|x64.ActiveCfg = Debug|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.Release|Win32.ActiveCfg = Release|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.Release|Win32.Build.0 = Release|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.Release|x64.ActiveCfg = Release|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.UnicodeDebug|Win32.Build.0 = Debug|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.UnicodeDebug|x64.ActiveCfg = Debug|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.UnicodeRelease|Win32.Build.0 = Release|Win32
+		{6F610600-0E54-4A29-B272-8F616766EAD3}.UnicodeRelease|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

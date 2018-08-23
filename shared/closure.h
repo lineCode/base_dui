@@ -12,4 +12,7 @@ namespace shared
 
 	//投递任务到DB线程
 	void Post2Database(const StdClosure &closure);
+
+	//投递任务到DB线程
+	void Post2VideoPlay(const StdClosure &closure);
 }

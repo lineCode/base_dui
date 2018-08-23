@@ -82,7 +82,7 @@ namespace dui {
 		virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 		virtual void PaintBkColor(HDC hDC);
 		void AttachItemClick(const EventCallback& callback){
-			event_map[UIEVENT_ITEMCLICK] += callback;
+			m_event_map[UIEVENT_ITEMCLICK] += callback;
 		};
 
 		//vitrual funcs of class IListItem

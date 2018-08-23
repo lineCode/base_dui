@@ -132,7 +132,7 @@ typedef std::string String;
 
 #ifdef _DEBUG
 #include "log.h"
-extern CLogFile *g_plog;
+extern LogFile *g_plog;
 #endif
 
 //#include "Control/UIMenu.h"

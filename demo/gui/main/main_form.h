@@ -41,8 +41,8 @@ private:
 public:
 	void PopupTrayMenu(POINT point);
 
-	bool MainForm::MenuLogoffClick(dui::Event* param);
-	bool MainForm::MenuLogoutClick(dui::Event* param);
+	bool MenuLogoffClick(dui::Event* param);
+	bool MenuLogoutClick(dui::Event* param);
 public:
 	static const LPCTSTR kClassName;
 

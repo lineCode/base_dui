@@ -54,15 +54,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>./;../;../ui_kit/</AdditionalIncludeDirectories>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>./;../;../ui_kit/;./include/;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../libs/;../libs/thread_part_libs;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>tinyxml_d.lib;base_d.lib;shared_d.lib;duilib_d.lib;ui_kit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../libs/;../libs/thread_part_libs;./lib/;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wxsqlite3_d.lib;db_d.lib;tinyxml_d.lib;base_d.lib;shared_d.lib;duilib_d.lib;ui_kit_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -83,13 +83,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="control\screen.h" />
     <ClInclude Include="gui\main\player_main_form.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="thread\main_thread.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="control\screen.cpp" />
+    <ClCompile Include="control\screen_ui.cpp" />
     <ClCompile Include="gui\main\player_main_form.cpp" />
     <ClCompile Include="gui\main\player_main_form_ui.cpp" />
     <ClCompile Include="player.cpp" />
@@ -97,10 +99,17 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="thread\main_thread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\bin\res\player\player_main_form.xml" />
     <Xml Include="..\bin\res\player\XMP.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="player.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

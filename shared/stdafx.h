@@ -37,5 +37,3 @@
 
 
 
-#define MODE_COMMENT	0
-

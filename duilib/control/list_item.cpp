@@ -381,11 +381,11 @@ bool ListContainerElement::Activate()
 	printf("ListContainerElement::Activate()\n");
 	if (!__super::Activate()) return false;
 
-	if (event_map.find(UIEVENT_ITEMCLICK) != event_map.cend()){
+	if (m_event_map.find(UIEVENT_ITEMCLICK) != m_event_map.cend()){
 		Event event;
 		event.Type = UIEVENT_ITEMCLICK;
 		event.pSender = this;
-		if (!event_map.find(UIEVENT_ITEMCLICK)->second(&event)){
+		if (!m_event_map.find(UIEVENT_ITEMCLICK)->second(&event)){
 			return false;
 		}
 	}
@@ -852,7 +852,7 @@ void ListHeaderItem::DoEvent(Event& event)
 			}
 
 			if (rc.right - rc.left > GetMinWidth()) {
-				m_cxyFixed.cx = rc.right - rc.left;
+				m_FixedSize.cx = rc.right - rc.left;
 				ptLastMouse = event.ptMouse;
 				if (GetParent())
 					GetParent()->NeedParentUpdate();
@@ -900,7 +900,7 @@ void ListHeaderItem::DoEvent(Event& event)
 
 SIZE ListHeaderItem::EstimateSize(SIZE szAvailable)
 {
-	if (m_cxyFixed.cy == 0) return DuiSize(m_cxyFixed.cx, m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8);
+	if (m_FixedSize.cy == 0) return DuiSize(m_FixedSize.cx, m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8);
 	return Control::EstimateSize(szAvailable);
 }
 

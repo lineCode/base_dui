@@ -156,11 +156,11 @@ namespace dui{
 	bool ButtonBox::Activate()
 	{
 		if (!Control::Activate()) return false;
-		if (event_map.find(UIEVENT_CLICK) != event_map.cend()){
+		if (m_event_map.find(UIEVENT_CLICK) != m_event_map.cend()){
 			Event event;
 			event.Type = UIEVENT_CLICK;
 			event.pSender = this;
-			if (!event_map.find(UIEVENT_CLICK)->second(&event)){
+			if (!m_event_map.find(UIEVENT_CLICK)->second(&event)){
 				return false;
 			}
 		}
@@ -303,9 +303,9 @@ namespace dui{
 			LONG width = m_diNormal.pImageInfo->nX / 5;
 			LONG height = m_diNormal.pImageInfo->nY;
 			m_diNormal.rcBmpPart = DuiRect(0, 0, width, height);
-			if (m_bFloat && m_cxyFixed.cx == 0 && m_cxyFixed.cy == 0) {
-				m_cxyFixed.cx = width;
-				m_cxyFixed.cy = height;
+			if (m_bFloat && m_FixedSize.cx == 0 && m_FixedSize.cy == 0) {
+				m_FixedSize.cx = width;
+				m_FixedSize.cy = height;
 			}
 		}
 
@@ -360,7 +360,7 @@ namespace dui{
 
 	SIZE ButtonBox::EstimateSize(SIZE szAvailable)
 	{
-		if (m_cxyFixed.cy == 0 && m_cxyFixed.cx >= 0) return DuiSize(m_pManager->GetDPIObj()->Scale(m_cxyFixed.cx), m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
+		if (m_FixedSize.cy == 0 && m_FixedSize.cx >= 0) return DuiSize(m_pManager->GetDPIObj()->Scale(m_FixedSize.cx), m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8);
 		return Control::EstimateSize(szAvailable);
 	}
 

@@ -21,7 +21,7 @@ ScrollBar::ScrollBar() :
 	m_bShowButton1(true),
 	m_bShowButton2(true)
 {
-	m_cxyFixed.cx = DEFAULT_SCROLLBAR_SIZE;
+	m_FixedSize.cx = DEFAULT_SCROLLBAR_SIZE;
 	ptLastMouse.x = ptLastMouse.y = 0;
 	::ZeroMemory(&m_rcThumb, sizeof(m_rcThumb));
 	::ZeroMemory(&m_rcButton1, sizeof(m_rcButton1));
@@ -85,15 +85,15 @@ void ScrollBar::SetHorizontal(bool bHorizontal)
 
 	m_bHorizontal = bHorizontal;
 	if( m_bHorizontal ) {
-		if( m_cxyFixed.cy == 0 ) {
-			m_cxyFixed.cx = 0;
-			m_cxyFixed.cy = DEFAULT_SCROLLBAR_SIZE;
+		if( m_FixedSize.cy == 0 ) {
+			m_FixedSize.cx = 0;
+			m_FixedSize.cy = DEFAULT_SCROLLBAR_SIZE;
 		}
 	}
 	else {
-		if( m_cxyFixed.cx == 0 ) {
-			m_cxyFixed.cx = DEFAULT_SCROLLBAR_SIZE;
-			m_cxyFixed.cy = 0;
+		if( m_FixedSize.cx == 0 ) {
+			m_FixedSize.cx = DEFAULT_SCROLLBAR_SIZE;
+			m_FixedSize.cy = 0;
 		}
 	}
 
@@ -485,7 +485,7 @@ void ScrollBar::SetPos(RECT rc, bool bNeedInvalidate)
 {
 	Control::SetPos(rc, bNeedInvalidate);
 	
-	SIZE cxyFixed = m_cxyFixed;
+	SIZE cxyFixed = m_FixedSize;
 	if (m_pManager != NULL) 
 		GetManager()->GetDPIObj()->Scale(&cxyFixed);
 
@@ -566,14 +566,14 @@ void ScrollBar::SetPos(RECT rc, bool bNeedInvalidate)
 	}
 	else {
 		int cy = rc.bottom - rc.top;
-		if( m_bShowButton1 ) cy -= m_cxyFixed.cx;
-		if( m_bShowButton2 ) cy -= m_cxyFixed.cx;
-		if( cy > m_cxyFixed.cx ) {
+		if( m_bShowButton1 ) cy -= m_FixedSize.cx;
+		if( m_bShowButton2 ) cy -= m_FixedSize.cx;
+		if( cy > m_FixedSize.cx ) {
 			m_rcButton1.left = rc.left;
 			m_rcButton1.top = rc.top;
 			if( m_bShowButton1 ) {
-				m_rcButton1.right = rc.left + m_cxyFixed.cx;
-				m_rcButton1.bottom = rc.top + m_cxyFixed.cx;
+				m_rcButton1.right = rc.left + m_FixedSize.cx;
+				m_rcButton1.bottom = rc.top + m_FixedSize.cx;
 			}
 			else {
 				m_rcButton1.right = m_rcButton1.left;
@@ -583,8 +583,8 @@ void ScrollBar::SetPos(RECT rc, bool bNeedInvalidate)
 			m_rcButton2.left = rc.left;
 			m_rcButton2.bottom = rc.bottom;
 			if( m_bShowButton2 ) {
-				m_rcButton2.top = rc.bottom - m_cxyFixed.cx;
-				m_rcButton2.right = rc.left + m_cxyFixed.cx;
+				m_rcButton2.top = rc.bottom - m_FixedSize.cx;
+				m_rcButton2.right = rc.left + m_FixedSize.cx;
 			}
 			else {
 				m_rcButton2.top = m_rcButton2.bottom;
@@ -592,10 +592,10 @@ void ScrollBar::SetPos(RECT rc, bool bNeedInvalidate)
 			}
 
 			m_rcThumb.left = rc.left;
-			m_rcThumb.right = rc.left + m_cxyFixed.cx;
+			m_rcThumb.right = rc.left + m_FixedSize.cx;
 			if( m_nRange > 0 ) {
 				int cyThumb = cy * (rc.bottom - rc.top) / (m_nRange + rc.bottom - rc.top);
-				if( cyThumb < m_cxyFixed.cx ) cyThumb = m_cxyFixed.cx;
+				if( cyThumb < m_FixedSize.cx ) cyThumb = m_FixedSize.cx;
 
 				m_rcThumb.top = m_nScrollPos * (cy - cyThumb) / m_nRange + m_rcButton1.bottom;
 				m_rcThumb.bottom = m_rcThumb.top + cyThumb;
@@ -611,11 +611,11 @@ void ScrollBar::SetPos(RECT rc, bool bNeedInvalidate)
 		}
 		else {
 			int cyButton = (rc.bottom - rc.top) / 2;
-			if( cyButton > m_cxyFixed.cx ) cyButton = m_cxyFixed.cx;
+			if( cyButton > m_FixedSize.cx ) cyButton = m_FixedSize.cx;
 			m_rcButton1.left = rc.left;
 			m_rcButton1.top = rc.top;
 			if( m_bShowButton1 ) {
-				m_rcButton1.right = rc.left + m_cxyFixed.cx;
+				m_rcButton1.right = rc.left + m_FixedSize.cx;
 				m_rcButton1.bottom = rc.top + cyButton;
 			}
 			else {
@@ -627,7 +627,7 @@ void ScrollBar::SetPos(RECT rc, bool bNeedInvalidate)
 			m_rcButton2.bottom = rc.bottom;
 			if( m_bShowButton2 ) {
 				m_rcButton2.top = rc.bottom - cyButton;
-				m_rcButton2.right = rc.left + m_cxyFixed.cx;
+				m_rcButton2.right = rc.left + m_FixedSize.cx;
 			}
 			else {
 				m_rcButton2.top = m_rcButton2.bottom;
@@ -741,9 +741,9 @@ void ScrollBar::DoEvent(Event& event)
 
 				int vRange = m_rcItem.bottom - m_rcItem.top - m_rcThumb.bottom + m_rcThumb.top;
 				if( m_bShowButton1 )
-					vRange -= m_cxyFixed.cx;
+					vRange -= m_FixedSize.cx;
 				if( m_bShowButton2 )
-					vRange -= m_cxyFixed.cx;
+					vRange -= m_FixedSize.cx;
 
 				if (vRange != 0)
 					m_nLastScrollOffset = (event.ptMouse.y - ptLastMouse.y) * m_nRange / vRange;
@@ -753,9 +753,9 @@ void ScrollBar::DoEvent(Event& event)
 
 				int hRange = m_rcItem.right - m_rcItem.left - m_rcThumb.right + m_rcThumb.left;
 				if( m_bShowButton1 )
-					hRange -= m_cxyFixed.cy;
+					hRange -= m_FixedSize.cy;
 				if( m_bShowButton2 )
-					hRange -= m_cxyFixed.cy;
+					hRange -= m_FixedSize.cy;
 
 				if (hRange != 0)
 					m_nLastScrollOffset = (event.ptMouse.x - ptLastMouse.x) * m_nRange / hRange;

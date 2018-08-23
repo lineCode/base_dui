@@ -19,4 +19,8 @@ namespace shared
 		nbase::ThreadManager::PostTask(shared::kThreadDatabase, closure);
 	}
 
+	void Post2VideoPlay(const StdClosure &closure)
+	{
+		nbase::ThreadManager::PostTask(shared::kThreadVideoPlay, closure);
+	}
 }

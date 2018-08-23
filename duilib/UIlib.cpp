@@ -51,12 +51,12 @@
 #include "UIlib.h"
 
 #ifdef _DEBUG
-CLogFile *g_plog = NULL;
+LogFile *g_plog = NULL;
 void InitDll()
 {
 	if (g_plog)
 		return;
-	g_plog = new CLogFile("dui.log", 0);
+	g_plog = new LogFile("dui.log", 0);
 	assert(g_plog);
 	printf("VERSION:%s\n", DUI_VERSION);
 	char cWrite[1024] = {};

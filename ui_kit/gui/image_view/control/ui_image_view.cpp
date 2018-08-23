@@ -19,11 +19,6 @@ namespace nim_comp
 		rect_image_.bottom = 0;
 	}
 
-	void UiImageView::DoInit()
-	{
-
-	}
-
 	UiImageView::~UiImageView(void)
 	{
 	}

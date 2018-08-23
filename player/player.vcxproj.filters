@@ -11,9 +11,12 @@
     <Filter Include="gui\main">
       <UniqueIdentifier>{728092e4-7067-4b4a-afd9-54b0f92770b7}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <Filter Include="control">
+      <UniqueIdentifier>{f68663b1-f019-4b39-bee1-5b671207e514}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thread">
+      <UniqueIdentifier>{d722ae68-f022-4af2-bf10-50249e1b6add}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="player.cpp" />
@@ -24,11 +27,27 @@
     <ClCompile Include="gui\main\player_main_form_ui.cpp">
       <Filter>gui\main</Filter>
     </ClCompile>
+    <ClCompile Include="control\screen.cpp">
+      <Filter>control</Filter>
+    </ClCompile>
+    <ClCompile Include="control\screen_ui.cpp">
+      <Filter>control</Filter>
+    </ClCompile>
+    <ClCompile Include="thread\main_thread.cpp">
+      <Filter>thread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="gui\main\player_main_form.h">
       <Filter>gui\main</Filter>
+    </ClInclude>
+    <ClInclude Include="control\screen.h">
+      <Filter>control</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="thread\main_thread.h">
+      <Filter>thread</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -38,5 +57,15 @@
     <Xml Include="..\bin\res\player\player_main_form.xml">
       <Filter>gui\main</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="player.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.ico">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

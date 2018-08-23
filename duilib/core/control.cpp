@@ -26,11 +26,11 @@ m_bColorHSL(false),
 m_nBorderStyle(PS_SOLID),
 m_nTooltipWidth(300)
 {
-    m_cXY.cx = m_cXY.cy = 0;
-    m_cxyFixed.cx = m_cxyFixed.cy = 0;
-    m_cxyMin.cx = m_cxyMin.cy = 0;
-    m_cxyMax.cx = m_cxyMax.cy = 9999;
-    m_cxyBorderRound.cx = m_cxyBorderRound.cy = 0;
+    m_Size.cx = m_Size.cy = 0;
+    m_FixedSize.cx = m_FixedSize.cy = 0;
+    m_MinSize.cx = m_MinSize.cy = 0;
+    m_MaxSize.cx = m_MaxSize.cy = 9999;
+    m_BorderRoundSize.cx = m_BorderRoundSize.cy = 0;
 
     ::ZeroMemory(&m_rcMargin, sizeof(RECT));
     ::ZeroMemory(&m_rcItem, sizeof(RECT));
@@ -47,11 +47,11 @@ Control::~Control()
     }
 
 	RemoveAllCustomAttribute();
-	if (OnDestroy)
+	if (m_cbDestroy)
 	{
 		Event event;
 		event.pSender = this;
-		OnDestroy(&event);
+		m_cbDestroy(&event);
 	}
     if( m_pManager != NULL ) m_pManager->ReapObjects(this);
 }
@@ -175,9 +175,9 @@ void Control::SetBkImage(LPCTSTR pStrImage)
 	m_diBk.Clear();
 	m_diBk.sDrawString = pStrImage;
 	DrawImage(NULL, m_diBk);
-	if( m_bFloat && m_cxyFixed.cx == 0 && m_cxyFixed.cy == 0 && m_diBk.pImageInfo ) {
-		m_cxyFixed.cx = m_diBk.pImageInfo->nX;
-		m_cxyFixed.cy = m_diBk.pImageInfo->nY;
+	if( m_bFloat && m_FixedSize.cx == 0 && m_FixedSize.cy == 0 && m_diBk.pImageInfo ) {
+		m_FixedSize.cx = m_diBk.pImageInfo->nX;
+		m_FixedSize.cy = m_diBk.pImageInfo->nY;
 	}
 	Invalidate();
 }
@@ -241,13 +241,13 @@ void Control::SetBorderSize(int iSize)
 
 SIZE Control::GetBorderRound() const
 {
-	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_cxyBorderRound);
-    return m_cxyBorderRound;
+	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_BorderRoundSize);
+    return m_BorderRoundSize;
 }
 
 void Control::SetBorderRound(SIZE cxyRound)
 {
-    m_cxyBorderRound = cxyRound;
+    m_BorderRoundSize = cxyRound;
     Invalidate();
 }
 
@@ -300,10 +300,10 @@ void Control::SetPos(RECT rc, bool bNeedInvalidate)
 			LONG height = rcParentPos.bottom - rcParentPos.top;
 			RECT rcPercent = {(LONG)(width*m_piFloatPercent.left), (LONG)(height*m_piFloatPercent.top),
 				(LONG)(width*m_piFloatPercent.right), (LONG)(height*m_piFloatPercent.bottom)};
-			m_cXY.cx = rc.left - rcPercent.left;
-			m_cXY.cy = rc.top - rcPercent.top;
-			m_cxyFixed.cx = rc.right - rcPercent.right - m_cXY.cx;
-			m_cxyFixed.cy = rc.bottom - rcPercent.bottom - m_cXY.cy;
+			m_Size.cx = rc.left - rcPercent.left;
+			m_Size.cy = rc.top - rcPercent.top;
+			m_FixedSize.cx = rc.right - rcPercent.right - m_Size.cx;
+			m_FixedSize.cy = rc.bottom - rcPercent.bottom - m_Size.cy;
 		}
 	}
 	else {
@@ -313,11 +313,11 @@ void Control::SetPos(RECT rc, bool bNeedInvalidate)
 
     if( !m_bSetPos ) {
         m_bSetPos = true;
-		if (event_map.find(UIEVENT_RESIZE) != event_map.cend())
+		if (m_event_map.find(UIEVENT_RESIZE) != m_event_map.cend())
 		{
 			Event event;
 			event.pSender = this;
-			event_map.find(UIEVENT_RESIZE)->second(&event);
+			m_event_map.find(UIEVENT_RESIZE)->second(&event);
 		}
         m_bSetPos = false;
     }
@@ -342,7 +342,7 @@ void Control::SetPos(RECT rc, bool bNeedInvalidate)
         if( m_pCover->IsFloat() ) {
             SIZE szXY = m_pCover->GetFixedXY();
             SIZE sz = {m_pCover->GetFixedWidth(), m_pCover->GetFixedHeight()};
-            TPercentInfo rcPercent = m_pCover->GetFloatPercent();
+            PercentInfo rcPercent = m_pCover->GetFloatPercent();
             LONG width = m_rcItem.right - m_rcItem.left;
             LONG height = m_rcItem.bottom - m_rcItem.top;
             RECT rcCtrl = { 0 };
@@ -423,23 +423,23 @@ void Control::SetMargin(RECT rcMargin)
 
 SIZE Control::GetFixedXY() const
 {
-	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_cXY);
-    return m_cXY;
+	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_Size);
+    return m_Size;
 }
 
 void Control::SetFixedXY(SIZE szXY)
 {
-    m_cXY.cx = szXY.cx;
-    m_cXY.cy = szXY.cy;
+    m_Size.cx = szXY.cx;
+    m_Size.cy = szXY.cy;
     NeedParentUpdate();
 }
 
-TPercentInfo Control::GetFloatPercent() const
+PercentInfo Control::GetFloatPercent() const
 {
 	return m_piFloatPercent;
 }
 
-void Control::SetFloatPercent(TPercentInfo piFloatPercent)
+void Control::SetFloatPercent(PercentInfo piFloatPercent)
 {
 	m_piFloatPercent = piFloatPercent;
 	NeedParentUpdate();
@@ -447,75 +447,75 @@ void Control::SetFloatPercent(TPercentInfo piFloatPercent)
 
 int Control::GetFixedWidth() const
 {
-	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_cxyFixed.cx);
-    return m_cxyFixed.cx;
+	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_FixedSize.cx);
+    return m_FixedSize.cx;
 }
 
 void Control::SetFixedWidth(int cx)
 {
     if( cx < 0 ) return; 
-    m_cxyFixed.cx = cx;
+    m_FixedSize.cx = cx;
     NeedParentUpdate();
 }
 
 int Control::GetFixedHeight() const
 {
-	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_cxyFixed.cy);
-    return m_cxyFixed.cy;
+	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_FixedSize.cy);
+    return m_FixedSize.cy;
 }
 
 void Control::SetFixedHeight(int cy)
 {
     if( cy < 0 ) return; 
-    m_cxyFixed.cy = cy;
+    m_FixedSize.cy = cy;
     NeedParentUpdate();
 }
 //min
 int Control::GetMinWidth() const{
-	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_cxyMin.cx);
-    return m_cxyMin.cx;
+	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_MinSize.cx);
+    return m_MinSize.cx;
 }
 void Control::SetMinWidth(int cx){
-    if( m_cxyMin.cx == cx ) return;
+    if( m_MinSize.cx == cx ) return;
 
     if( cx < 0 ) return; 
-    m_cxyMin.cx = cx;
+    m_MinSize.cx = cx;
     NeedParentUpdate();
 }
 int Control::GetMinHeight() const{
-	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_cxyMin.cy);
-	return m_cxyMin.cy;
+	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_MinSize.cy);
+	return m_MinSize.cy;
 }
 void Control::SetMinHeight(int cy){
-	if (m_cxyMin.cy == cy) return;
+	if (m_MinSize.cy == cy) return;
 
 	if (cy < 0) return;
-	m_cxyMin.cy = cy;
+	m_MinSize.cy = cy;
 	NeedParentUpdate();
 }
 //max
 int Control::GetMaxWidth() const{
-	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_cxyMax.cx);
-	//if (m_cxyMax.cx < m_cxyMin.cx) return m_cxyMin.cx;	//comment by djj20171123
-    return m_cxyMax.cx;
+	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_MaxSize.cx);
+	//if (m_MaxSize.cx < m_MinSize.cx) return m_MinSize.cx;	//comment by djj20171123
+    return m_MaxSize.cx;
 }
 void Control::SetMaxWidth(int cx){
-    if( m_cxyMax.cx == cx ) return;
+    if( m_MaxSize.cx == cx ) return;
 
     if( cx < 0 ) return; 
-    m_cxyMax.cx = cx;
+    m_MaxSize.cx = cx;
     NeedParentUpdate();
 }
 int Control::GetMaxHeight() const{
-	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_cxyMax.cy);
-	//if (m_cxyMax.cy < m_cxyMin.cy) return m_cxyMin.cy;	//comment by djj20171123
-	return m_cxyMax.cy;
+	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_MaxSize.cy);
+	//if (m_MaxSize.cy < m_MinSize.cy) return m_MinSize.cy;	//comment by djj20171123
+	return m_MaxSize.cy;
 }
 void Control::SetMaxHeight(int cy){
-	if (m_cxyMax.cy == cy) return;
+	if (m_MaxSize.cy == cy) return;
 
 	if (cy < 0) return;
-	m_cxyMax.cy = cy;
+	m_MaxSize.cy = cy;
 	NeedParentUpdate();
 }
 
@@ -695,8 +695,8 @@ void Control::AddCustomAttribute(LPCTSTR pstrName, LPCTSTR pstrAttr)
 	if( pstrName == NULL || pstrName[0] == _T('\0') || pstrAttr == NULL || pstrAttr[0] == _T('\0') ) return;
 	String* pCostomAttr = new String(pstrAttr);
 	if (pCostomAttr != NULL) {
-		if (m_mCustomAttrHash.Find(pstrName) == NULL)
-			m_mCustomAttrHash.Set(pstrName, (LPVOID)pCostomAttr);
+		if (m_CustomAttrHash.Find(pstrName) == NULL)
+			m_CustomAttrHash.Set(pstrName, (LPVOID)pCostomAttr);
 		else
 			delete pCostomAttr;
 	}
@@ -705,7 +705,7 @@ void Control::AddCustomAttribute(LPCTSTR pstrName, LPCTSTR pstrAttr)
 LPCTSTR Control::GetCustomAttribute(LPCTSTR pstrName) const
 {
 	if( pstrName == NULL || pstrName[0] == _T('\0') ) return NULL;
-	String* pCostomAttr = static_cast<String*>(m_mCustomAttrHash.Find(pstrName));
+	String* pCostomAttr = static_cast<String*>(m_CustomAttrHash.Find(pstrName));
 	if (pCostomAttr) return pCostomAttr->c_str();
 	return NULL;
 }
@@ -713,23 +713,23 @@ LPCTSTR Control::GetCustomAttribute(LPCTSTR pstrName) const
 bool Control::RemoveCustomAttribute(LPCTSTR pstrName)
 {
 	if( pstrName == NULL || pstrName[0] == _T('\0') ) return NULL;
-	String* pCostomAttr = static_cast<String*>(m_mCustomAttrHash.Find(pstrName));
+	String* pCostomAttr = static_cast<String*>(m_CustomAttrHash.Find(pstrName));
 	if( !pCostomAttr ) return false;
 
 	delete pCostomAttr;
-	return m_mCustomAttrHash.Remove(pstrName);
+	return m_CustomAttrHash.Remove(pstrName);
 }
 
 void Control::RemoveAllCustomAttribute()
 {
 	String* pCostomAttr;
-	for( int i = 0; i< m_mCustomAttrHash.GetSize(); i++ ) {
-		if(LPCTSTR key = m_mCustomAttrHash.GetAt(i)) {
-			pCostomAttr = static_cast<String*>(m_mCustomAttrHash.Find(key));
+	for( int i = 0; i< m_CustomAttrHash.GetSize(); i++ ) {
+		if(LPCTSTR key = m_CustomAttrHash.GetAt(i)) {
+			pCostomAttr = static_cast<String*>(m_CustomAttrHash.Find(key));
 			delete pCostomAttr;
 		}
 	}
-	m_mCustomAttrHash.Resize();
+	m_CustomAttrHash.Resize();
 }
 
 Control* Control::FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags)
@@ -811,24 +811,17 @@ DWORD Control::GetAdjustColor(DWORD dwColor)
 
 void Control::Init()
 {
-    DoInit();
-#if 1
-	
-#else
-    if( OnInit ) 
-		OnInit(this);
-#endif
 }
 
-void Control::DoInit()
-{
-
-}
+//void Control::DoInit()
+//{
+//
+//}
 
 void Control::HandleEvent(Event& event)
 {
-	auto it = event_map.find(event.Type);
-	if (it == event_map.cend() || it->second(&event))
+	auto it = m_event_map.find(event.Type);
+	if (it == m_event_map.cend() || it->second(&event))
 	{
 		DoEvent(event);
 	}
@@ -996,7 +989,7 @@ void Control::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 			SetFloat(_tcscmp(pstrValue, _T("true")) == 0);
 		}
 		else {
-			TPercentInfo piFloatPercent = { 0 };
+			PercentInfo piFloatPercent = { 0 };
 			LPTSTR pstr = NULL;
 			piFloatPercent.left = _tcstod(pstrValue, &pstr);  ASSERT(pstr);
 			piFloatPercent.top = _tcstod(pstr + 1, &pstr);    ASSERT(pstr);
@@ -1084,18 +1077,18 @@ void Control::SetAttributeList(LPCTSTR pstrList)
 
 SIZE Control::EstimateSize(SIZE szAvailable)
 {
-	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_cxyFixed);
-    return m_cxyFixed;
+	if (m_pManager != NULL) return m_pManager->GetDPIObj()->Scale(m_FixedSize);
+    return m_FixedSize;
 }
 
 bool Control::Paint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 {
 	if (pStopControl == this) return false;
 	if( !::IntersectRect(&m_rcPaint, &rcPaint, &m_rcItem) ) return true;
-	if( OnPaint ) {
+	if (m_cbPaint) {
 		Event event;
 		event.pSender = this;
-		if (!OnPaint(&event)) return true;
+		if (!m_cbPaint(&event)) return true;
 	}
 	if (!DoPaint(hDC, rcPaint, pStopControl)) return false;
     if( m_pCover != NULL ) return m_pCover->Paint(hDC, rcPaint);
@@ -1109,11 +1102,11 @@ bool Control::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 	SIZE cxyBorderRound;
 	RECT rcBorderSize;
 	if (m_pManager) {
-		cxyBorderRound = GetManager()->GetDPIObj()->Scale(m_cxyBorderRound);
+		cxyBorderRound = GetManager()->GetDPIObj()->Scale(m_BorderRoundSize);
 		rcBorderSize = GetManager()->GetDPIObj()->Scale(m_rcBorderSize);
 	}
 	else {
-		cxyBorderRound = m_cxyBorderRound;
+		cxyBorderRound = m_BorderRoundSize;
 		rcBorderSize = m_rcBorderSize;
 	}
     // 绘制循序：背景颜色->背景图->状态图->文本->边框
@@ -1166,12 +1159,12 @@ void Control::PaintBorder(HDC hDC)
 	RECT rcBorderSize;
 	if (m_pManager) {
 		//nBorderSize = GetManager()->GetDPIObj()->Scale(m_nBorderSize);
-		cxyBorderRound = GetManager()->GetDPIObj()->Scale(m_cxyBorderRound);
+		cxyBorderRound = GetManager()->GetDPIObj()->Scale(m_BorderRoundSize);
 		rcBorderSize = GetManager()->GetDPIObj()->Scale(m_rcBorderSize);
 	}
 	else {
 		//nBorderSize = m_nBorderSize;
-		cxyBorderRound = m_cxyBorderRound;
+		cxyBorderRound = m_BorderRoundSize;
 		rcBorderSize = m_rcBorderSize;
 	}
 
@@ -1239,11 +1232,11 @@ void Control::PaintBorder(HDC hDC)
 
 void Control::DoPostPaint(HDC hDC, const RECT& rcPaint)
 {
-	if (OnPostPaint)
+	if (m_cbPostPaint)
 	{
 		Event event;
 		event.pSender = this;
-		OnPostPaint(&event);
+		m_cbPostPaint(&event);
 	}
 }
 

@@ -21,7 +21,7 @@ namespace dui
 
 		void AttachClick(const EventCallback& callback)
 		{
-			event_map[UIEVENT_CLICK] += callback;
+			m_event_map[UIEVENT_CLICK] += callback;
 		}
 
 		LPCTSTR GetNormalImage();

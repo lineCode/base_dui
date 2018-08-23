@@ -1,4 +1,4 @@
-// LogFile.h: interface for the CLogFile class.
+// LogFile.h: interface for the LogFile class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -15,12 +15,12 @@
 
 const DWORD DEFAULT_LOGFILE_SIZE = 10 * 1024 * 1024;        //默认日志大小为10m
 
-class CLogFile  
+class LogFile  
 {
 public:
-	CLogFile();
-    CLogFile(const char *pszFileName, DWORD dwFileSize);
-	virtual ~CLogFile();
+	LogFile();
+    LogFile(const char *pszFileName, DWORD dwFileSize);
+	virtual ~LogFile();
 
     void Init();
     void WriteLog(const char *pszLog);

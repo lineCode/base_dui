@@ -9,9 +9,9 @@ LPBYTE WindowImplBase::m_lpResourceZIPBuffer=NULL;
 
 void WindowImplBase::OnFinalMessage( HWND hWnd )
 {
-	m_PaintManager.RemovePreMessageFilter(this);
-	m_PaintManager.RemoveNotifier(this);
-	m_PaintManager.ReapObjects(m_PaintManager.GetRoot());
+	m_manager.RemovePreMessageFilter(this);
+	m_manager.RemoveNotifier(this);
+	m_manager.ReapObjects(m_manager.GetRoot());
 }
 
 LRESULT WindowImplBase::ResponseDefaultKeyEvent(WPARAM wParam)
@@ -47,11 +47,6 @@ String WindowImplBase::GetZIPFileName() const
 LPCTSTR WindowImplBase::GetResourceID() const
 {
 	return _T("");
-}
-
-Control* WindowImplBase::CreateControl(LPCTSTR pstrClass)
-{
-	return NULL;
 }
 
 LRESULT WindowImplBase::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/)
@@ -136,7 +131,7 @@ LRESULT WindowImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 	if( !::IsZoomed(*this) )
 	{
 		int ht = HTNOWHERE;
-		RECT rcSizeBox = m_PaintManager.GetSizeBox();
+		RECT rcSizeBox = m_manager.GetSizeBox();
 		if( pt.y < rcClient.top + rcSizeBox.top )
 		{
 			if (pt.x < rcClient.left + rcSizeBox.left) ht = HTTOPLEFT;
@@ -155,16 +150,16 @@ LRESULT WindowImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 
 		if (ht != HTNOWHERE)
 		{
-			Control* pControl = static_cast<Control*>(m_PaintManager.FindControl(pt));
+			Control* pControl = static_cast<Control*>(m_manager.FindControl(pt));
 			if (pControl && !pControl->GetInterface(DUI_CTR_BUTTON))
 				return ht;
 		}
 	}
 
-	RECT rcCaption = m_PaintManager.GetCaptionRect();
+	RECT rcCaption = m_manager.GetCaptionRect();
 	if( pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right \
 		&& pt.y >= rcCaption.top && pt.y < rcCaption.bottom ) {
-			Control* pControl = static_cast<Control*>(m_PaintManager.FindControl(pt));
+			Control* pControl = static_cast<Control*>(m_manager.FindControl(pt));
 			if( pControl && _tcsicmp(pControl->GetClass(), DUI_CTR_BUTTON) != 0 && 
 				_tcsicmp(pControl->GetClass(), DUI_CTR_OPTION) != 0 &&
 				_tcsicmp(pControl->GetClass(), DUI_CTR_TEXT) != 0 )
@@ -192,8 +187,8 @@ LRESULT WindowImplBase::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam,
 	lpMMI->ptMaxTrackSize.x =rcWork.GetWidth();
 	lpMMI->ptMaxTrackSize.y =rcWork.GetHeight();
 
-	lpMMI->ptMinTrackSize.x =m_PaintManager.GetMinInfo().cx;
-	lpMMI->ptMinTrackSize.y =m_PaintManager.GetMinInfo().cy;
+	lpMMI->ptMinTrackSize.x =m_manager.GetMinInfo().cx;
+	lpMMI->ptMinTrackSize.y =m_manager.GetMinInfo().cy;
 
 	bHandled = FALSE;
 	return 0;
@@ -214,7 +209,7 @@ LRESULT WindowImplBase::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 LRESULT WindowImplBase::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	SIZE szRoundCorner = m_PaintManager.GetRoundCorner();
+	SIZE szRoundCorner = m_manager.GetRoundCorner();
 #if defined(WIN32) && !defined(UNDER_CE)
 	if( !::IsIconic(*this) && (szRoundCorner.cx != 0 || szRoundCorner.cy != 0) ) {
 		DuiRect rcWnd;
@@ -249,8 +244,8 @@ LRESULT WindowImplBase::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 	LRESULT lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 	if( ::IsZoomed(*this) != bZoomed )
 	{
-        Control* pbtnMax = static_cast<Control*>(m_PaintManager.FindControl(_T("maxbtn")));         // max button
-        Control* pbtnRestore = static_cast<Control*>(m_PaintManager.FindControl(_T("restorebtn"))); // restore button
+        Control* pbtnMax = static_cast<Control*>(m_manager.FindControl(_T("maxbtn")));         // max button
+        Control* pbtnRestore = static_cast<Control*>(m_manager.FindControl(_T("restorebtn"))); // restore button
 
         // toggle status of max and restore button
         if (pbtnMax && pbtnRestore)
@@ -275,10 +270,10 @@ LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	::SetWindowPos(*this, NULL, rcClient.left, rcClient.top, rcClient.right - rcClient.left, \
 		rcClient.bottom - rcClient.top, SWP_FRAMECHANGED);
 
-	m_PaintManager.Init(m_hWnd);
-	m_PaintManager.AddPreMessageFilter(this);
+	m_manager.Init(m_hWnd);
+	m_manager.AddPreMessageFilter(this);
 
-	String strResourcePath = m_PaintManager.GetGlobalResDir();
+	String strResourcePath = m_manager.GetGlobalResDir();
 	ASSERT(!strResourcePath.empty());
 	if (!strResourcePath.empty()){
 		String folder = GetSkinFolder();
@@ -286,22 +281,22 @@ LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 			folder += _T('\\');
 		}
 		strResourcePath += folder;
-		m_PaintManager.SetThisResPath(strResourcePath.c_str());
+		m_manager.SetThisResPath(strResourcePath.c_str());
 	}
 
 	CDialogBuilder builder;
 	switch(GetResourceType())
 	{
 	case UILIB_ZIP:
-		m_PaintManager.SetResourceZip(GetZIPFileName().c_str(), true);
+		m_manager.SetResourceZip(GetZIPFileName().c_str(), true);
 		break;
 	case UILIB_ZIPRESOURCE:
 		{
-			HRSRC hResource = ::FindResource(m_PaintManager.GetResourceDll(), GetResourceID(), _T("ZIPRES"));
+			HRSRC hResource = ::FindResource(m_manager.GetResourceDll(), GetResourceID(), _T("ZIPRES"));
 			if( hResource == NULL )
 				return 0L;
 			DWORD dwSize = 0;
-			HGLOBAL hGlobal = ::LoadResource(m_PaintManager.GetResourceDll(), hResource);
+			HGLOBAL hGlobal = ::LoadResource(m_manager.GetResourceDll(), hResource);
 			if( hGlobal == NULL ) 
 			{
 #if defined(WIN32) && !defined(UNDER_CE)
@@ -309,7 +304,7 @@ LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 #endif
 				return 0L;
 			}
-			dwSize = ::SizeofResource(m_PaintManager.GetResourceDll(), hResource);
+			dwSize = ::SizeofResource(m_manager.GetResourceDll(), hResource);
 			if( dwSize == 0 )
 				return 0L;
 			m_lpResourceZIPBuffer = new BYTE[ dwSize ];
@@ -320,7 +315,7 @@ LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 #if defined(WIN32) && !defined(UNDER_CE)
 			::FreeResource(hResource);
 #endif
-			m_PaintManager.SetResourceZip(m_lpResourceZIPBuffer, dwSize);
+			m_manager.SetResourceZip(m_lpResourceZIPBuffer, dwSize);
 		}
 		break;
 	}
@@ -329,10 +324,10 @@ LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	if (GetResourceType()==UILIB_RESOURCE)
 	{
 		STRINGorID xml(_ttoi(GetSkinFile().c_str()));
-		pRoot = builder.Create(xml, _T("xml"), this, &m_PaintManager);
+		pRoot = builder.Create(xml, _T("xml"), this, &m_manager);
 	}
 	else
-		pRoot = builder.Create(GetSkinFile().c_str(), (UINT)0, this, &m_PaintManager);
+		pRoot = builder.Create(GetSkinFile().c_str(), (UINT)0, this, &m_manager);
 	ASSERT(pRoot);
 	if (pRoot==NULL)
 	{
@@ -340,8 +335,8 @@ LRESULT WindowImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		ExitProcess(1);
 		return 0;
 	}
-	m_PaintManager.AttachDialog(pRoot);
-	m_PaintManager.AddNotifier(this);
+	m_manager.AttachDialog(pRoot);
+	m_manager.AddNotifier(this);
 
 	InitWindow();
 	return 0;
@@ -417,7 +412,7 @@ LRESULT WindowImplBase::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	lRes = HandleCustomMessage(uMsg, wParam, lParam, bHandled);
 	if (bHandled) return lRes;
 
-	if (m_PaintManager.MessageHandler(uMsg, wParam, lParam, lRes))
+	if (m_manager.MessageHandler(uMsg, wParam, lParam, lRes))
 		return lRes;
 	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }

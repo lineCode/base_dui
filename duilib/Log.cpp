@@ -1,4 +1,4 @@
-// LogFile.cpp: implementation of the CLogFile class.
+// LogFile.cpp: implementation of the LogFile class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -15,7 +15,7 @@ static char THIS_FILE[]=__FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CLogFile::CLogFile()
+LogFile::LogFile()
 {
     m_dwFileSize = 100;       // 每个日志文件默认大小10m
     memset(m_szFileName, 0, MAX_FILENAME_LEN);
@@ -23,7 +23,7 @@ CLogFile::CLogFile()
     InitializeCriticalSection(&m_FileCriticalSection);
 }
 
-CLogFile::CLogFile(const char *pszFileName, DWORD dwFileSize)
+LogFile::LogFile(const char *pszFileName, DWORD dwFileSize)
 : m_dwFileSize(dwFileSize)
 {
     memset(m_szFileName, 0, MAX_FILENAME_LEN);
@@ -31,12 +31,12 @@ CLogFile::CLogFile(const char *pszFileName, DWORD dwFileSize)
     InitializeCriticalSection(&m_FileCriticalSection);
 }
 
-void CLogFile::Init()
+void LogFile::Init()
 {
 
 }
 
-void CLogFile::WriteLog(const char *pszLog)
+void LogFile::WriteLog(const char *pszLog)
 {
     if (NULL == pszLog)
     {
@@ -67,7 +67,7 @@ void CLogFile::WriteLog(const char *pszLog)
     LeaveCriticalSection(&m_FileCriticalSection);    
 }
 
-void CLogFile::GetSysTime(char *pTime)
+void LogFile::GetSysTime(char *pTime)
 {
     if (NULL == pTime)
     {
@@ -80,7 +80,7 @@ void CLogFile::GetSysTime(char *pTime)
         sTime.wDay, sTime.wHour, sTime.wMinute, sTime.wSecond);
 }
 
-CLogFile::~CLogFile()
+LogFile::~LogFile()
 {
     ::DeleteCriticalSection(&m_FileCriticalSection);
 }

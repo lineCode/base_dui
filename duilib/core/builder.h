@@ -25,14 +25,14 @@ public:
     Control* Create(IDialogBuilderCallback* pCallback = NULL, UIManager* pManager = NULL,
 		Control* pParent = NULL, Box *pFilledContainer = NULL);
 
-    CMarkup* GetMarkup();
+    Markup* GetMarkup();
 
     void GetLastErrorMessage(LPTSTR pstrMessage, SIZE_T cchMax) const;
     void GetLastErrorLocation(LPTSTR pstrSource, SIZE_T cchMax) const;
 private:
-	Control* _Parse(CMarkupNode* parent, Control* pParent = NULL, UIManager* pManager = NULL, Box *pFilledContainer = NULL);
+	Control* _Parse(MarkupNode* parent, Control* pParent = NULL, UIManager* pManager = NULL, Box *pFilledContainer = NULL);
 
-    CMarkup m_xml;
+    Markup m_xml;
     IDialogBuilderCallback* m_pCallback;
     LPCTSTR m_pstrtype;
 };

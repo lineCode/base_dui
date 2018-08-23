@@ -88,7 +88,7 @@ void MainForm::InitWindow()
 	nim_comp::TrayManager::GetInstance()->RegEventCallback(std::bind(&MainForm::TrayLeftClick, this), nim_comp::TrayEventType_LeftClick);
 	nim_comp::TrayManager::GetInstance()->RegEventCallback(std::bind(&MainForm::TrayRightClick, this), nim_comp::TrayEventType_RightClick);
 
-	btn_head_ = dynamic_cast<Button*>(m_PaintManager.FindControl(_T("btn_head")));
+	btn_head_ = dynamic_cast<Button*>(m_manager.FindControl(_T("btn_head")));
 	if (btn_head_)
 	{
 		auto OnBtnHeadClicked = [this](Event *event){
@@ -107,21 +107,21 @@ void MainForm::InitWindow()
 		}
 		
 		return true; };
-	OptionBox *optbox_opt_session = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("optbox_opt_session")));
-	OptionBox *optbox_opt_friends = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("optbox_opt_friends")));
-	OptionBox *optbox_opt_groups = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("optbox_opt_groups")));
-	OptionBox *optbox_opt_menu = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("optbox_opt_menu")));
+	OptionBox *optbox_opt_session = dynamic_cast<OptionBox *>(m_manager.FindControl(_T("optbox_opt_session")));
+	OptionBox *optbox_opt_friends = dynamic_cast<OptionBox *>(m_manager.FindControl(_T("optbox_opt_friends")));
+	OptionBox *optbox_opt_groups = dynamic_cast<OptionBox *>(m_manager.FindControl(_T("optbox_opt_groups")));
+	OptionBox *optbox_opt_menu = dynamic_cast<OptionBox *>(m_manager.FindControl(_T("optbox_opt_menu")));
 	optbox_opt_session->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 0));
 	optbox_opt_friends->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 1));
 	optbox_opt_groups->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 2));
 	optbox_opt_menu->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 3));
 
-	tab_session_friend_ = dynamic_cast<TabBox*>(m_PaintManager.FindControl(_T("tab_session_friend")));
+	tab_session_friend_ = dynamic_cast<TabBox*>(m_manager.FindControl(_T("tab_session_friend")));
 
-	list_session_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_session")));
-	list_friend_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_friend")));
-	tree_friend_ = dynamic_cast<Tree*>(m_PaintManager.FindControl(_T("tv_friend")));
-	list_menu_ = dynamic_cast<List*>(m_PaintManager.FindControl(_T("list_menu")));
+	list_session_ = dynamic_cast<List*>(m_manager.FindControl(_T("list_session")));
+	list_friend_ = dynamic_cast<List*>(m_manager.FindControl(_T("list_friend")));
+	tree_friend_ = dynamic_cast<Tree*>(m_manager.FindControl(_T("tv_friend")));
+	list_menu_ = dynamic_cast<List*>(m_manager.FindControl(_T("list_menu")));
 	{
 		ListContainerElement *menu_dpi = dynamic_cast<ListContainerElement*>(list_menu_->FindSubControl(_T("menu_dpi")));
 		auto cb = std::bind([this](Event *event){
@@ -141,7 +141,7 @@ void MainForm::InitWindow()
 	for (size_t i = 0; i < 26; i++)
 	{
 		TreeNode *node = new TreeNode;
-		m_PaintManager.FillBox(node, _T("friend_tree_class_item.xml"), NULL, &m_PaintManager, NULL);
+		m_manager.FillBox(node, _T("friend_tree_class_item.xml"), NULL, &m_manager, NULL);
 		Label *label = static_cast<Label *>(node->FindSubControl(_T("label_name")));
 		Button *btn_expand = static_cast<Button *>(node->FindSubControl(_T("btn_expand")));
 		if (label)
@@ -164,7 +164,7 @@ void MainForm::InitWindow()
 	}
 
 	TreeNode *node = new TreeNode;
-	m_PaintManager.FillBox(node, _T("friend_tree_class_item.xml"), NULL, &m_PaintManager, NULL);
+	m_manager.FillBox(node, _T("friend_tree_class_item.xml"), NULL, &m_manager, NULL);
 	Label *label = static_cast<Label *>(node->FindSubControl(_T("label_name")));
 	if (label)
 	{
@@ -176,7 +176,7 @@ void MainForm::InitWindow()
 	group_nodes_[0] = node;
 
 	node = new TreeNode;
-	m_PaintManager.FillBox(node, _T("friend_tree_class_item.xml"), NULL, &m_PaintManager, NULL);
+	m_manager.FillBox(node, _T("friend_tree_class_item.xml"), NULL, &m_manager, NULL);
 	label = static_cast<Label *>(node->FindSubControl(_T("label_name")));
 	if (label)
 	{
@@ -187,9 +187,9 @@ void MainForm::InitWindow()
 	tree_friend_->AddChildNodeAt(node, 1);
 	group_nodes_[1] = node;
 	//--------------------------------tab session-------------------------------
-	tab_session_ = dynamic_cast<TabBox*>(m_PaintManager.FindControl(_T("tab_session")));
+	tab_session_ = dynamic_cast<TabBox*>(m_manager.FindControl(_T("tab_session")));
 	nim_comp::SessionBox *session = new nim_comp::SessionBox("1", nim_comp::kNIMSessionTypeP2P);
-	m_PaintManager.FillBox(session, _T("session.xml"), this, &m_PaintManager);
+	m_manager.FillBox(session, _T("session.xml"), this, &m_manager);
 	tab_session_->Add(session);
 
 	tab_session_->SelectItem(0);
@@ -269,7 +269,7 @@ void MainForm::PopupTrayMenu(POINT point)
 {
 	dui::CMenuWnd* pMenu = new dui::CMenuWnd;
 	String xml(L"tray_menu.xml");
-	pMenu->Init(NULL, xml, _T("menu"), point, &m_PaintManager, NULL, eMenuAlignment_Left | eMenuAlignment_Bottom);
+	pMenu->Init(NULL, xml, _T("menu"), point, &m_manager, NULL, eMenuAlignment_Left | eMenuAlignment_Bottom);
 
 	pMenu->Show();
 }
@@ -283,7 +283,7 @@ void MainForm::OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list)
 	for (auto it = list.cbegin(); it != list.cend(); it++)
 	{
 		nim_comp::FriendItem *item = new nim_comp::FriendItem(*it);
-		m_PaintManager.FillBox(item, _T("friend_item.xml"), this, &m_PaintManager, NULL);
+		m_manager.FillBox(item, _T("friend_item.xml"), this, &m_manager, NULL);
 		list_friend_->Add(item);
 	}
 	printf("load friends ui(in list) %d ms\n", clock()-ck1);
@@ -291,7 +291,7 @@ void MainForm::OnGetAllFriendInfo(const std::list<nim_comp::UserNameCard>& list)
 	for (auto it = list.cbegin(); it != list.cend(); it++)
 	{
 		nim_comp::FriendItemEx *item = new nim_comp::FriendItemEx(*it);
-		m_PaintManager.FillBox(item, _T("friend_item.xml"), this, &m_PaintManager, NULL);
+		m_manager.FillBox(item, _T("friend_item.xml"), this, &m_manager, NULL);
 
 		wstring wname = nbase::UTF8ToUTF16(it->GetName());
 		const char *piny = shared::PinYinHelper::GetInstance()->ConvertToFullSpell(wname);
@@ -321,7 +321,7 @@ void MainForm::OnGetAllSessionInfo(int unread_count, const nim_comp::SessionData
 	for (auto it = list.cbegin(); it != list.cend(); it++)
 	{
 		nim_comp::SessionItem *item = new nim_comp::SessionItem(*it);
-		m_PaintManager.FillBox(item, _T("session_item.xml"), this, &m_PaintManager, NULL);
+		m_manager.FillBox(item, _T("session_item.xml"), this, &m_manager, NULL);
 		list_session_->Add(item);
 	}
 	printf("load Session ui %d ms\n", clock() - ck1);

@@ -3,26 +3,26 @@
 namespace dui {
 	EventSource::~EventSource()
 	{
-		for( int i = 0; i < m_aDelegates.GetSize(); i++ ) {
-			EventCallback* pObject = static_cast<EventCallback*>(m_aDelegates[i]);
+		for( int i = 0; i < m_delegates.GetSize(); i++ ) {
+			EventCallback* pObject = static_cast<EventCallback*>(m_delegates[i]);
 			if( pObject) delete pObject;
 		}
 	}
 
 	EventSource::operator bool()
 	{
-		return m_aDelegates.GetSize() > 0;
+		return m_delegates.GetSize() > 0;
 	}
 
 	void EventSource::operator+= (const EventCallback& d)
 	{ 
 #if 0
-		for( int i = 0; i < m_aDelegates.GetSize(); i++ ) {
-			EventCallback* pObject = static_cast<EventCallback*>(m_aDelegates[i]);
+		for( int i = 0; i < m_delegates.GetSize(); i++ ) {
+			EventCallback* pObject = static_cast<EventCallback*>(m_delegates[i]);
 			if( pObject && *pObject->Equals(d) ) return;
 		}
 #endif
-		m_aDelegates.Add(new EventCallback(d));
+		m_delegates.Add(new EventCallback(d));
 	}
 
 	void EventSource::operator+= (FnType pFn)
@@ -33,11 +33,11 @@ namespace dui {
 	void EventSource::operator-= (const EventCallback& d)
 	{
 #if 0
-		for( int i = 0; i < m_aDelegates.GetSize(); i++ ) {
-			EventCallback* pObject = static_cast<EventCallback*>(m_aDelegates[i]);
+		for( int i = 0; i < m_delegates.GetSize(); i++ ) {
+			EventCallback* pObject = static_cast<EventCallback*>(m_delegates[i]);
 			if( pObject && pObject->Equals(d) ) {
 				delete pObject;
-				m_aDelegates.Remove(i);
+				m_delegates.Remove(i);
 				return;
 			}
 		}
@@ -51,8 +51,8 @@ namespace dui {
 	bool EventSource::operator() (Event* param)
 	{
 		bool bReturn = true;
-		for( int i = 0; i < m_aDelegates.GetSize(); i++ ) {
-			EventCallback* pObject = static_cast<EventCallback*>(m_aDelegates[i]);
+		for( int i = 0; i < m_delegates.GetSize(); i++ ) {
+			EventCallback* pObject = static_cast<EventCallback*>(m_delegates[i]);
 			if( pObject && !(*pObject)(param) ) 
 				bReturn = false;
 		}

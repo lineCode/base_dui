@@ -56,7 +56,7 @@ typedef struct DUILIB_API tagTFontInfo
     bool bUnderline;
     bool bItalic;
     TEXTMETRIC tm;
-} TFontInfo;
+} FontInfo;
 
 typedef struct DUILIB_API tagTImageInfo
 {
@@ -69,7 +69,7 @@ typedef struct DUILIB_API tagTImageInfo
     bool bUseHSL;
     String sResType;
     DWORD dwMask;
-} TImageInfo;
+} ImageInfo;
 
 typedef struct DUILIB_API tagTDrawInfo
 {
@@ -79,7 +79,7 @@ typedef struct DUILIB_API tagTDrawInfo
 	String sDrawString;
     String sImageName;
 	bool bLoaded;
-	const TImageInfo* pImageInfo;
+	const ImageInfo* pImageInfo;
 	RECT rcDestOffset;
 	RECT rcBmpPart;
 	RECT rcScale9;
@@ -95,7 +95,7 @@ typedef struct DUILIB_API tagTPercentInfo
 	double top;
 	double right;
 	double bottom;
-} TPercentInfo;
+} PercentInfo;
 
 typedef struct DUILIB_API tagTResInfo
 {
@@ -104,13 +104,13 @@ typedef struct DUILIB_API tagTResInfo
 	DWORD m_dwDefaultLinkFontColor;
 	DWORD m_dwDefaultLinkHoverFontColor;
 	DWORD m_dwDefaultSelectedBkColor;
-	TFontInfo m_DefaultFontInfo;
+	FontInfo m_DefaultFontInfo;
 	StringPtrMap m_CustomFonts;			//"Font"
 	StringPtrMap m_ColorHash;			//"Color"
 	StringPtrMap m_ImageHash;
 	StringPtrMap m_AttrHash;			//"Default" + "Class"
 	StringPtrMap m_MultiLanguageHash;
-} TResInfo;
+} ResInfo;
 
 // Listener interface
 class DUILIB_API INotify
@@ -232,7 +232,7 @@ public:
     DWORD GetDefaultSelectedBkColor() const;
     void SetDefaultSelectedBkColor(DWORD dwColor, bool bShared = false);
 	//------------Font--------------
-    TFontInfo* GetDefaultFontInfo();
+    FontInfo* GetDefaultFontInfo();
     void SetDefaultFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic, bool bShared = false);
     DWORD GetCustomFontCount(bool bShared = false) const;
     HFONT AddFont(int id, LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic, bool bShared = false);
@@ -243,8 +243,8 @@ public:
     void RemoveFont(HFONT hFont, bool bShared = false);
     void RemoveFont(int id, bool bShared = false);
     void RemoveAllFonts(bool bShared = false);
-    TFontInfo* GetFontInfo(int id);
-    TFontInfo* GetFontInfo(HFONT hFont);
+    FontInfo* GetFontInfo(int id);
+    FontInfo* GetFontInfo(HFONT hFont);
 	static HFONT AddSharedFont(int id, LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic);
 	//------------Color--------------
 	void AddColor(LPCTSTR pStrFontName, DWORD dwValue);
@@ -253,10 +253,10 @@ public:
 	void RemoveAllColors(bool bShared = false);
 	static void AddSharedColor(LPCTSTR pStrFontName, DWORD dwValue);
 	//------------Image--------------
-    const TImageInfo* GetImage(LPCTSTR bitmap);
-    const TImageInfo* GetImageEx(LPCTSTR bitmap, LPCTSTR type = NULL, DWORD mask = 0, bool bUseHSL = false);
-    const TImageInfo* AddImage(LPCTSTR bitmap, LPCTSTR type = NULL, DWORD mask = 0, bool bUseHSL = false, bool bShared = false);
-    const TImageInfo* AddImage(LPCTSTR bitmap, HBITMAP hBitmap, int iWidth, int iHeight, bool bAlpha, bool bShared = false);
+    const ImageInfo* GetImage(LPCTSTR bitmap);
+    const ImageInfo* GetImageEx(LPCTSTR bitmap, LPCTSTR type = NULL, DWORD mask = 0, bool bUseHSL = false);
+    const ImageInfo* AddImage(LPCTSTR bitmap, LPCTSTR type = NULL, DWORD mask = 0, bool bUseHSL = false, bool bShared = false);
+    const ImageInfo* AddImage(LPCTSTR bitmap, HBITMAP hBitmap, int iWidth, int iHeight, bool bAlpha, bool bShared = false);
     void RemoveImage(LPCTSTR bitmap, bool bShared = false);
     void RemoveAllImages(bool bShared = false);
 	void ReloadImages();
@@ -364,7 +364,7 @@ public:
 	//----------dpi-----------
 	DPI* GetDPIObj();
 	void ResetDPIAssets();
-	void RebuildFont(TFontInfo* pFontInfo);
+	void RebuildFont(FontInfo* pFontInfo);
 	void SetDPI(int iDPI);
 	static void SetAllDPI(int iDPI);
 
@@ -386,7 +386,7 @@ private:
 
 private:
 	String m_sName;
-	String m_pThisResPath;
+	String m_sThisResPath;
     HWND m_hWndPaint;
     HDC m_hDcPaint;
     HDC m_hDcOffscreen;
@@ -398,8 +398,8 @@ private:
 
 	int m_iTooltipWidth;
     int m_iLastTooltipWidth;
-	HWND m_hwndTooltip;
-	TOOLINFO m_ToolTip;
+	HWND m_hWndTooltip;
+	TOOLINFO m_ToolTipInfo;
 	int m_iHoverTime;
     bool m_bNoActivate;
     bool m_bShowUpdateRect;
@@ -458,16 +458,16 @@ private:
 
     //
 	bool m_bForceUseSharedRes;
-	TResInfo m_ResInfo;		//StringPtrMap fonts, images, attrs, MultiLanguages,
+	ResInfo m_ResInfo;		//StringPtrMap fonts, images, attrs, MultiLanguages,
 
     //
 	static HINSTANCE m_hResourceInstance;
-	static String m_pStrGlobalResDir;
-	static String m_pStrResourceZip;
+	static String m_sGlobalResDir;
+	static String m_sResourceZip;
 	static HANDLE m_hResourceZip;
 
 	static bool m_bCachedResourceZip;
-	static TResInfo m_SharedResInfo;
+	static ResInfo m_SharedResInfo;
     static HINSTANCE m_hInstance;
 	static bool m_bUseHSL;
     static short m_H;

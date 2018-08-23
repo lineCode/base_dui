@@ -52,18 +52,18 @@ UINT LoginForm::GetClassStyle() const
 
 void LoginForm::InitWindow()
 {
-	////m_PaintManager.AttachEvent(ui::kEventClick, nbase::Bind(&LoginForm::OnClicked, this, std::placeholders::_1));
+	////m_manager.AttachEvent(ui::kEventClick, nbase::Bind(&LoginForm::OnClicked, this, std::placeholders::_1));
 	//SetIcon(IDI_ICON1);
 	//SetTaskbarTitle(L"µÇÂ¼");
 
-	//re_account_ = (RichEdit*)m_PaintManager.FindControl(L"re_account");
-	//re_pwd_ = (RichEdit*)m_PaintManager.FindControl(L"re_pwd");
-	//label_info_ = (Label*)m_PaintManager.FindControl(L"label_info");
+	//re_account_ = (RichEdit*)m_manager.FindControl(L"re_account");
+	//re_pwd_ = (RichEdit*)m_manager.FindControl(L"re_pwd");
+	//label_info_ = (Label*)m_manager.FindControl(L"label_info");
 	///*re_account_->SetSelAllOnFocus(true);
 	//re_pwd_->SetSelAllOnFocus(true);*/
-	//btn_login_ = (Button*)m_PaintManager.FindControl(L"btn_login");
-	//btn_cancel_login_ = (Button*)m_PaintManager.FindControl(L"btn_cancel_login");
-	//chk_arrow_down_ = (CheckBtn*)m_PaintManager.FindControl(L"chk_arrow_down");
+	//btn_login_ = (Button*)m_manager.FindControl(L"btn_login");
+	//btn_cancel_login_ = (Button*)m_manager.FindControl(L"btn_cancel_login");
+	//chk_arrow_down_ = (CheckBtn*)m_manager.FindControl(L"chk_arrow_down");
 
 	//this->RegLoginManagerCallback();
 
@@ -78,7 +78,7 @@ void LoginForm::Notify(dui::Event& msg)
 	if (pControl && msg.Type == UIEVENT_ITEMCLICK)
 	{
 		bHandle = true;
-		Label *lb = static_cast<Label*>(m_PaintManager.FindControl(_T("label1")));
+		Label *lb = static_cast<Label*>(m_manager.FindControl(_T("label1")));
 		if (lb)
 		{
 			lb->SetText(pControl->GetText().c_str());
@@ -130,6 +130,6 @@ LRESULT LoginForm::OnClose(UINT u, WPARAM w, LPARAM l, BOOL& bHandled)
 void LoginForm::ShowMenu(bool show, POINT pt)
 {
 	CMenuWnd *menu_wnd = new CMenuWnd;
-	menu_wnd->Init(NULL, _T("menu.xml"), _T("menu"), pt, &m_PaintManager);
+	menu_wnd->Init(NULL, _T("menu.xml"), _T("menu"), pt, &m_manager);
 	
 }

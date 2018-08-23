@@ -18,7 +18,7 @@ namespace dui {
 		bool operator() (Event* param);
 
 	protected:
-		PtrArray m_aDelegates;
+		PtrArray m_delegates;
 	};
 
 	typedef std::map<EVENTTYPE_UI, EventSource> EventMap;

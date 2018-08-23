@@ -115,10 +115,10 @@ void MsgBox::InitWindow()
 #if 0
 	m_pRoot->AttachBubbledEvent(dui::kEventClick, nbase::Bind(&MsgBox::OnClicked, this, std::placeholders::_1));
 #endif
-	title_ = (Label*)m_PaintManager.FindControl(L"title");
-	content_ = (RichEdit*)m_PaintManager.FindControl(L"content");
-	btn_yes_ = (Button*)m_PaintManager.FindControl(L"btn_yes");
-	btn_no_ = (Button*)m_PaintManager.FindControl(L"btn_no");
+	title_ = (Label*)m_manager.FindControl(L"title");
+	content_ = (RichEdit*)m_manager.FindControl(L"content");
+	btn_yes_ = (Button*)m_manager.FindControl(L"btn_yes");
+	btn_no_ = (Button*)m_manager.FindControl(L"btn_no");
 }
 
 void MsgBox::OnClick(dui::Event& msg)

@@ -42,7 +42,7 @@ Control* CDialogBuilder::Create(STRINGorID xml, LPCTSTR type, IDialogBuilderCall
 Control* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, UIManager* pManager, Control* pParent, Box *pFilledContainer)
 {
 	m_pCallback = pCallback;
-	CMarkupNode root = m_xml.GetRoot();
+	MarkupNode root = m_xml.GetRoot();
     if( !root.IsValid() ) return NULL;
 
     if( pManager ) {
@@ -51,7 +51,7 @@ Control* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, UIManager* pM
         LPCTSTR pstrName = NULL;
         LPCTSTR pstrValue = NULL;
         LPTSTR pstr = NULL;
-        for( CMarkupNode node = root.GetChild() ; node.IsValid(); node = node.GetSibling() ) {
+        for( MarkupNode node = root.GetChild() ; node.IsValid(); node = node.GetSibling() ) {
             pstrClass = node.GetName();
             if( _tcsicmp(pstrClass, _T("Image")) == 0 ) {
                 nAttributes = node.GetAttributeCount();
@@ -176,7 +176,7 @@ Control* CDialogBuilder::Create(IDialogBuilderCallback* pCallback, UIManager* pM
 	return _Parse(&root, pParent, pManager, pFilledContainer);
 }
 
-CMarkup* CDialogBuilder::GetMarkup()
+Markup* CDialogBuilder::GetMarkup()
 {
     return &m_xml;
 }
@@ -191,11 +191,11 @@ void CDialogBuilder::GetLastErrorLocation(LPTSTR pstrSource, SIZE_T cchMax) cons
     return m_xml.GetLastErrorLocation(pstrSource, cchMax);
 }
 
-Control* CDialogBuilder::_Parse(CMarkupNode* pRoot, Control* pParent, UIManager* pManager, Box* pFilledContainer)
+Control* CDialogBuilder::_Parse(MarkupNode* pRoot, Control* pParent, UIManager* pManager, Box* pFilledContainer)
 {
 	Box* pContainer = NULL;
     Control* pReturn = NULL;
-    for( CMarkupNode node = pRoot->GetChild() ; node.IsValid(); node = node.GetSibling() ) {
+    for( MarkupNode node = pRoot->GetChild() ; node.IsValid(); node = node.GetSibling() ) {
         LPCTSTR pstrClass = node.GetName();
         if( _tcsicmp(pstrClass, _T("Image")) == 0 || _tcsicmp(pstrClass, _T("Font")) == 0 \
             || _tcsicmp(pstrClass, _T("Default")) == 0 

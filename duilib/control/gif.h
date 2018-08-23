@@ -17,7 +17,7 @@ namespace dui
 
 		LPCTSTR	GetClass() const;
 		LPVOID	GetInterface(LPCTSTR pstrName);
-		void	DoInit() override;
+		virtual void Init() override;
 		bool	DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl);
 		void	DoEvent(Event& event);
 		void	SetVisible(bool bVisible = true );

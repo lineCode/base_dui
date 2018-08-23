@@ -54,11 +54,11 @@ namespace nim_comp
 		styleValue &= ~WS_CAPTION;
 		::SetWindowLong(GetHWND(), GWL_STYLE, styleValue | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
 
-		Button *button_close = static_cast<Button *>(m_PaintManager.FindControl(L"close_btn"));
+		Button *button_close = static_cast<Button *>(m_manager.FindControl(L"close_btn"));
 		button_close->AttachClick([this](Event*){
 			Close(); return false; });
 
-		ui_image_view_ = static_cast<UiImageView*>(m_PaintManager.FindControl(L"image_view"));
+		ui_image_view_ = static_cast<UiImageView*>(m_manager.FindControl(L"image_view"));
 		ui_image_view_->SetPicPath(_T("c:\\2.png"));
 
 		/*m_pRoot->AttachBubbledEvent(ui::kEventAll, nbase::Bind(&ImageViewForm::Notify, this, std::placeholders::_1));
@@ -238,14 +238,14 @@ namespace nim_comp
 
 					std::wstring  file_type = ui::MutiLanSupport::GetInstance()->GetStringViaID(L"STRID_IMAGEVIEWFORM_PIC_FILE");
 					std::wstring info = nbase::StringPrintf(L"%s(*%s)", file_type.c_str(), extension.c_str());
-					CFileDialogEx* fileDlg = new CFileDialogEx();
+					FileDialogEx* fileDlg = new FileDialogEx();
 					std::wstring filter = L"*" + extension;
 					std::map<LPCTSTR, LPCTSTR> filters;
 					filters[info.c_str()] = filter.c_str();
 					fileDlg->SetFilter(filters);
 					fileDlg->SetFileName(file_name.c_str());
 					fileDlg->SetParentWnd(m_hWnd);
-					CFileDialogEx::FileDialogCallback2 callback2 = nbase::Bind(&ImageViewForm::SaveImageDlgCallback, this, std::placeholders::_1, std::placeholders::_2);
+					FileDialogEx::FileDialogCallback2 callback2 = nbase::Bind(&ImageViewForm::SaveImageDlgCallback, this, std::placeholders::_1, std::placeholders::_2);
 					fileDlg->AyncShowSaveFileDlg(callback2);
 				}
 			}

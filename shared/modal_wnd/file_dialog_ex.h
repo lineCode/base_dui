@@ -8,7 +8,7 @@
 struct __POSITION {};
 typedef __POSITION* POSITION;
 
-class CFileDialogEx : public ModalWndBase
+class FileDialogEx : public ModalWndBase
 {
 public:
 	typedef std::function<void(BOOL, std::wstring)> FileDialogCallback2;
@@ -20,8 +20,8 @@ public:
 		FDT_SaveFile
 	};
 
-	CFileDialogEx(void);
-	~CFileDialogEx(void);
+	FileDialogEx(void);
+	~FileDialogEx(void);
 
 public:
 	void SetDefExt(LPCTSTR lpszDefExt);

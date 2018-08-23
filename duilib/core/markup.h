@@ -12,16 +12,16 @@ enum
     XMLFILE_ENCODING_ASNI = 2,
 };
 
-class CMarkup;
-class CMarkupNode;
+class Markup;
+class MarkupNode;
 class UIManager;
 
-class DUILIB_API CMarkup
+class DUILIB_API Markup
 {
-    friend class CMarkupNode;
+    friend class MarkupNode;
 public:
-    CMarkup(LPCTSTR pstrXML = NULL);
-    ~CMarkup();
+    Markup(LPCTSTR pstrXML = NULL);
+    ~Markup();
 
     bool Load(LPCTSTR pstrXML);
     bool LoadFromMem(BYTE* pByte, DWORD dwSize, int encoding = XMLFILE_ENCODING_UTF8);
@@ -33,7 +33,7 @@ public:
     void GetLastErrorMessage(LPTSTR pstrMessage, SIZE_T cchMax) const;
     void GetLastErrorLocation(LPTSTR pstrSource, SIZE_T cchMax) const;
 
-    CMarkupNode GetRoot();
+    MarkupNode GetRoot();
 
 private:
     typedef struct tagXMLELEMENT
@@ -68,20 +68,20 @@ private:
 };
 
 
-class DUILIB_API CMarkupNode
+class DUILIB_API MarkupNode
 {
-    friend class CMarkup;
+    friend class Markup;
 private:
-    CMarkupNode();
-    CMarkupNode(CMarkup* pOwner, int iPos);
+    MarkupNode();
+    MarkupNode(Markup* pOwner, int iPos);
 
 public:
     bool IsValid() const;
 
-    CMarkupNode GetParent();
-    CMarkupNode GetSibling();
-    CMarkupNode GetChild();
-    CMarkupNode GetChild(LPCTSTR pstrName);
+    MarkupNode GetParent();
+    MarkupNode GetSibling();
+    MarkupNode GetChild();
+    MarkupNode GetChild(LPCTSTR pstrName);
 
     bool HasSiblings() const;
     bool HasChildren() const;
@@ -111,7 +111,7 @@ private:
     int m_iPos;
     int m_nAttributes;
     XMLATTRIBUTE m_aAttributes[MAX_XML_ATTRIBUTES];
-    CMarkup* m_pOwner;
+    Markup* m_pOwner;
 };
 
 } // namespace dui

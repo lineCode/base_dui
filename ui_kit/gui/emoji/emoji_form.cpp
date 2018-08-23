@@ -50,23 +50,23 @@ void EmojiForm::InitWindow()
 {
 	auto OnOptContainerClicked = [this](Event *event, int index){
 		printf("EmojiForm OnOptContainerClicked, name:%s\n", event->pSender->GetName().c_str());
-		TabBox *list_tabbox = static_cast<TabBox *>(m_PaintManager.FindControl(_T("list_tabbox")));
+		TabBox *list_tabbox = static_cast<TabBox *>(m_manager.FindControl(_T("list_tabbox")));
 		list_tabbox->SelectItem(index);
 		return true; };
-	OptionBox *sticker_op_emoji = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("sticker_op_emoji")));
-	OptionBox *sticker_op_ajmd = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("sticker_op_ajmd")));
-	OptionBox *sticker_op_lt = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("sticker_op_lt")));
-	OptionBox *sticker_op_xxy = dynamic_cast<OptionBox *>(m_PaintManager.FindControl(_T("sticker_op_xxy")));
+	OptionBox *sticker_op_emoji = dynamic_cast<OptionBox *>(m_manager.FindControl(_T("sticker_op_emoji")));
+	OptionBox *sticker_op_ajmd = dynamic_cast<OptionBox *>(m_manager.FindControl(_T("sticker_op_ajmd")));
+	OptionBox *sticker_op_lt = dynamic_cast<OptionBox *>(m_manager.FindControl(_T("sticker_op_lt")));
+	OptionBox *sticker_op_xxy = dynamic_cast<OptionBox *>(m_manager.FindControl(_T("sticker_op_xxy")));
 	sticker_op_emoji->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 0));
 	sticker_op_ajmd->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 1));
 	sticker_op_lt->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 2));
 	sticker_op_xxy->AttachClick(std::bind(OnOptContainerClicked, std::placeholders::_1, 3));
 	
-	emoj_ = (TileBox*)m_PaintManager.FindControl(L"tile_emoj");
+	emoj_ = (TileBox*)m_manager.FindControl(L"tile_emoj");
 	
 	if (only_emoj_)
 	{
-		m_PaintManager.FindControl(L"sticker_vector_container")->SetVisible(false);
+		m_manager.FindControl(L"sticker_vector_container")->SetVisible(false);
 	}
 
 	std::vector<Emoticon> vec;
@@ -77,7 +77,7 @@ void EmojiForm::InitWindow()
 	for(std::vector<Emoticon>::const_iterator it = vec.begin(); it != vec.end(); it++)
 	{
 		ButtonBox* box = new ButtonBox;
-		m_PaintManager.FillBox(box, L"emoji_item.xml", nullptr, &m_PaintManager);
+		m_manager.FillBox(box, L"emoji_item.xml", nullptr, &m_manager);
 		emoj_->Add(box);
 
 		box->SetKeyboardEnabled(false);
@@ -136,7 +136,7 @@ void EmojiForm::ShowEmoj(POINT pt, OnSelectEmotion sel, OnSelectSticker sel_stic
 void EmojiForm::AddSticker(std::wstring name, int num)
 {
 	/*std::wstring sticker_id = nbase::StringPrintf(L"sticker_%s", name.c_str());
-	TileBox* sticker = (TileBox*)m_PaintManager.FindControl(sticker_id.c_str());
+	TileBox* sticker = (TileBox*)m_manager.FindControl(sticker_id.c_str());
 	for (int i = 1; i <= num; i++)
 	{
 		ButtonBox* box = new ButtonBox;

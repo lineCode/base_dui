@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "shared/threads.h"
+#include "thread/main_thread.h"
 #include "shared/util.h"
 #include "gui/login/login_form.h"
 #include "gui/main/main_form.h"
@@ -47,7 +47,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		return;
 	};
 
-	shared::MainThread main_thread;
+	MainThread main_thread;
 	main_thread.RegMainThreadEvent(init_event_cb, nullptr, nullptr);
 	main_thread.RunOnCurrentThreadWithLoop(nbase::MessageLoop::kUIMessageLoop);
 

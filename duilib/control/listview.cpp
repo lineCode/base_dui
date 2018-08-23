@@ -1405,7 +1405,7 @@ bool ListBody::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 
 SIZE ListHeader::EstimateSize(SIZE szAvailable)
 {
-    SIZE cXY = {0, m_cxyFixed.cy};
+    SIZE cXY = {0, m_FixedSize.cy};
 	if( cXY.cy == 0 && m_pManager != NULL ) {
 		for( int it = 0; it < m_items.GetSize(); it++ ) {
 			cXY.cy = MAX(cXY.cy,static_cast<Control*>(m_items[it])->EstimateSize(szAvailable).cy);
@@ -1507,7 +1507,7 @@ bool ListBody::SingleLine::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopC
 
 SIZE ListBody::SingleLine::EstimateSize(SIZE szAvailable)
 {
-	SIZE cXY = { 0, m_cxyFixed.cy };
+	SIZE cXY = { 0, m_FixedSize.cy };
 	if (cXY.cy == 0 && m_pManager != NULL) {
 		for (int it = 0; it < m_items.GetSize(); it++) {
 			cXY.cy = MAX(cXY.cy, static_cast<Control*>(m_items[it])->EstimateSize(szAvailable).cy);

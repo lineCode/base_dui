@@ -3,19 +3,23 @@
 
 #include "stdafx.h"
 #include "gui/main/player_main_form.h"
-
+#include "thread/main_thread.h"
+#include "shared/util.h"
+#include "module/window/windows_manager.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	dui::UIManager::SetInstance(GetModuleHandle(NULL));
 	dui::UIManager::SetGlobalResDir((dui::UIManager::GetInstancePath() + L"res/").c_str());
 
-	PlayerMainForm *form = new PlayerMainForm;
-	form->Create(NULL, PlayerMainForm::kClassName, WS_OVERLAPPEDWINDOW & ~WS_MAXIMIZEBOX, 0);
-	form->CenterWindow();
-	form->ShowWindow();
+	shared::MainThreadEventCallBack init_event_cb = [](){
+		nim_comp::WindowsManager::GetInstance()->SingletonShow<PlayerMainForm>(PlayerMainForm::kClassName);
+		return;
+	};
 
-	dui::UIManager::MessageLoop();
+	MainThread main_thread;
+	main_thread.RegMainThreadEvent(init_event_cb, nullptr, nullptr);
+	main_thread.RunOnCurrentThreadWithLoop(nbase::MessageLoop::kUIMessageLoop);
 
 	return 0;
 }

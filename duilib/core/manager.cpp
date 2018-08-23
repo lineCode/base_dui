@@ -77,11 +77,11 @@ PFUNCUPDATELAYEREDWINDOW g_fUpdateLayeredWindow = NULL;
 HPEN m_hUpdateRectPen = NULL;
 
 HINSTANCE UIManager::m_hResourceInstance = NULL;
-String UIManager::m_pStrGlobalResDir;
-String UIManager::m_pStrResourceZip;
+String UIManager::m_sGlobalResDir;
+String UIManager::m_sResourceZip;
 HANDLE UIManager::m_hResourceZip = NULL;
 bool UIManager::m_bCachedResourceZip = true;
-TResInfo UIManager::m_SharedResInfo;
+ResInfo UIManager::m_SharedResInfo;
 HINSTANCE UIManager::m_hInstance = NULL;
 bool UIManager::m_bUseHSL = false;
 short UIManager::m_H = 180;
@@ -101,7 +101,7 @@ m_hbmpBackground(NULL),
 m_pBackgroundBits(NULL),
 m_iTooltipWidth(-1),
 m_iLastTooltipWidth(-1),
-m_hwndTooltip(NULL),
+m_hWndTooltip(NULL),
 m_iHoverTime(1000),
 m_bNoActivate(false),
 m_bShowUpdateRect(false),
@@ -192,10 +192,10 @@ UIManager::~UIManager()
     RemoveAllTimers();
 
     // Reset other parts...
-    if( m_hwndTooltip != NULL )
+    if( m_hWndTooltip != NULL )
 	{
-		::DestroyWindow(m_hwndTooltip);
-		m_hwndTooltip = NULL;
+		::DestroyWindow(m_hWndTooltip);
+		m_hWndTooltip = NULL;
 	}
     m_pLastToolTip = NULL;
     if( m_hDcOffscreen != NULL ) ::DeleteDC(m_hDcOffscreen);
@@ -269,12 +269,12 @@ HINSTANCE UIManager::GetResourceDll()
 
 const String& UIManager::GetGlobalResDir()
 {
-    return m_pStrGlobalResDir;
+    return m_sGlobalResDir;
 }
 
 const String& UIManager::GetResourceZip()
 {
-    return m_pStrResourceZip;
+    return m_sResourceZip;
 }
 
 bool UIManager::IsCachedResourceZip()
@@ -305,34 +305,34 @@ void UIManager::SetResourceDll(HINSTANCE hInst)
 
 void UIManager::SetGlobalResDir(LPCTSTR pStrPath)
 {
-    m_pStrGlobalResDir = pStrPath;
-    if( m_pStrGlobalResDir.empty() ) return;
-    TCHAR cEnd = m_pStrGlobalResDir.at(m_pStrGlobalResDir.length() - 1);
-    if( cEnd != _T('\\') && cEnd != _T('/') ) m_pStrGlobalResDir += _T('\\');
+    m_sGlobalResDir = pStrPath;
+    if( m_sGlobalResDir.empty() ) return;
+    TCHAR cEnd = m_sGlobalResDir.at(m_sGlobalResDir.length() - 1);
+    if( cEnd != _T('\\') && cEnd != _T('/') ) m_sGlobalResDir += _T('\\');
 
 	LoadGlobalResource();
 }
 
 void UIManager::SetResourceZip(LPVOID pVoid, unsigned int len)
 {
-    if( m_pStrResourceZip == _T("membuffer") ) return;
+    if( m_sResourceZip == _T("membuffer") ) return;
     if( m_bCachedResourceZip && m_hResourceZip != NULL ) {
         CloseZip((HZIP)m_hResourceZip);
         m_hResourceZip = NULL;
     }
-    m_pStrResourceZip = _T("membuffer");
+    m_sResourceZip = _T("membuffer");
     if( m_bCachedResourceZip ) 
         m_hResourceZip = (HANDLE)OpenZip(pVoid, len, 3);
 }
 
 void UIManager::SetResourceZip(LPCTSTR pStrPath, bool bCachedResourceZip)
 {
-    if( m_pStrResourceZip == pStrPath && m_bCachedResourceZip == bCachedResourceZip ) return;
+    if( m_sResourceZip == pStrPath && m_bCachedResourceZip == bCachedResourceZip ) return;
     if( m_bCachedResourceZip && m_hResourceZip != NULL ) {
         CloseZip((HZIP)m_hResourceZip);
         m_hResourceZip = NULL;
     }
-    m_pStrResourceZip = pStrPath;
+    m_sResourceZip = pStrPath;
     m_bCachedResourceZip = bCachedResourceZip;
     if( m_bCachedResourceZip ) {
 		String sFile = UIManager::GetGlobalResDir();
@@ -345,7 +345,7 @@ bool UIManager::LoadGlobalResource()
 {
 	String file = _T("global.xml");
 
-	CMarkup xml;
+	Markup xml;
 	if (HIWORD(file.c_str()) != NULL) {
 		if (*(file.c_str()) == _T('<')) {
 			if (!xml.Load(file.c_str())) return false;
@@ -355,14 +355,14 @@ bool UIManager::LoadGlobalResource()
 		}
 	}
 	//-----------------------------------------
-	CMarkupNode root = xml.GetRoot();
+	MarkupNode root = xml.GetRoot();
 	if (!root.IsValid()) return false;
 	LPCTSTR pstrClass = NULL;
 	int nAttributes = 0;
 	LPCTSTR pstrName = NULL;
 	LPCTSTR pstrValue = NULL;
 	LPTSTR pstr = NULL;
-	for (CMarkupNode node = root.GetChild(); node.IsValid(); node = node.GetSibling()) {
+	for (MarkupNode node = root.GetChild(); node.IsValid(); node = node.GetSibling()) {
 		pstrClass = node.GetName();
 		if (_tcsicmp(pstrClass, _T("Font")) == 0) {
 			nAttributes = node.GetAttributeCount();
@@ -542,7 +542,7 @@ HWND UIManager::GetPaintWindow() const
 
 HWND UIManager::GetTooltipWindow() const
 {
-	return m_hwndTooltip;
+	return m_hWndTooltip;
 }
 
 int UIManager::GetTooltipWindowWidth() const
@@ -554,8 +554,8 @@ void UIManager::SetTooltipWindowWidth(int iWidth)
 {
 	if( m_iTooltipWidth != iWidth ) {
 		m_iTooltipWidth = iWidth;
-		if( m_hwndTooltip != NULL && m_iTooltipWidth >= 0  ) {
-			m_iTooltipWidth = (int)::SendMessage(m_hwndTooltip, TTM_SETMAXTIPWIDTH, 0, m_iTooltipWidth);
+		if( m_hWndTooltip != NULL && m_iTooltipWidth >= 0  ) {
+			m_iTooltipWidth = (int)::SendMessage(m_hWndTooltip, TTM_SETMAXTIPWIDTH, 0, m_iTooltipWidth);
 		}
 	}
 }
@@ -572,12 +572,12 @@ void UIManager::SetHoverTime(int iTime)
 
 LPCTSTR UIManager::GetThisResPath() const
 {
-	return m_pThisResPath.c_str();
+	return m_sThisResPath.c_str();
 }
 
 void UIManager::SetThisResPath(const LPCTSTR path)
 {
-	m_pThisResPath = path;
+	m_sThisResPath = path;
 }
 
 LPCTSTR UIManager::GetName() const
@@ -935,7 +935,7 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
 			while( pMsg = static_cast<Event*>(m_aAsyncNotify.GetAt(0)) ) {
 				m_aAsyncNotify.Remove(0);
 				if( pMsg->pSender != NULL ) {
-					if( pMsg->pSender->OnNotify ) pMsg->pSender->OnNotify(pMsg);
+					if (pMsg->pSender->m_cbNotify) pMsg->pSender->m_cbNotify(pMsg);
 				}
 				for( int j = 0; j < m_aNotifiers.GetSize(); j++ ) {
 					static_cast<INotify*>(m_aNotifiers[j])->Notify(*pMsg);
@@ -973,9 +973,9 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
                 if ((GetWindowStyle(m_hWndPaint) & WS_CHILD) !=0 ) hwndParent = GetParent(m_hWndPaint);
 				if( hwndParent != NULL ) ::SetFocus(hwndParent);
 			}
-			if (m_hwndTooltip != NULL) {
-				::DestroyWindow(m_hwndTooltip);
-				m_hwndTooltip = NULL;
+			if (m_hWndTooltip != NULL) {
+				::DestroyWindow(m_hWndTooltip);
+				m_hWndTooltip = NULL;
 			}
         }
         break;
@@ -1340,20 +1340,20 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
             String sToolTip = pHover->GetToolTip();
             if (sToolTip.empty()) return true;
             ProcessMultiLanguageTokens(sToolTip);
-            ::ZeroMemory(&m_ToolTip, sizeof(TOOLINFO));
-            m_ToolTip.cbSize = sizeof(TOOLINFO);
-            m_ToolTip.uFlags = TTF_IDISHWND;
-            m_ToolTip.hwnd = m_hWndPaint;
-            m_ToolTip.uId = (UINT_PTR)m_hWndPaint;
-            m_ToolTip.hinst = m_hInstance;
-			m_ToolTip.lpszText = const_cast<LPTSTR>((LPCTSTR)sToolTip.c_str());
-            m_ToolTip.rect = pHover->GetPos();
-            if (m_hwndTooltip == NULL) {
-                m_hwndTooltip = ::CreateWindowEx(0, TOOLTIPS_CLASS, NULL, WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, m_hWndPaint, NULL, m_hInstance, NULL);
-                ::SendMessage(m_hwndTooltip, TTM_ADDTOOL, 0, (LPARAM)&m_ToolTip);
-                ::SendMessage(m_hwndTooltip, TTM_SETMAXTIPWIDTH, 0, pHover->GetToolTipWidth());
-                ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolTip);
-                ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, TRUE, (LPARAM)&m_ToolTip);
+            ::ZeroMemory(&m_ToolTipInfo, sizeof(TOOLINFO));
+            m_ToolTipInfo.cbSize = sizeof(TOOLINFO);
+            m_ToolTipInfo.uFlags = TTF_IDISHWND;
+            m_ToolTipInfo.hwnd = m_hWndPaint;
+            m_ToolTipInfo.uId = (UINT_PTR)m_hWndPaint;
+            m_ToolTipInfo.hinst = m_hInstance;
+			m_ToolTipInfo.lpszText = const_cast<LPTSTR>((LPCTSTR)sToolTip.c_str());
+            m_ToolTipInfo.rect = pHover->GetPos();
+            if (m_hWndTooltip == NULL) {
+                m_hWndTooltip = ::CreateWindowEx(0, TOOLTIPS_CLASS, NULL, WS_POPUP | TTS_NOPREFIX | TTS_ALWAYSTIP, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, m_hWndPaint, NULL, m_hInstance, NULL);
+                ::SendMessage(m_hWndTooltip, TTM_ADDTOOL, 0, (LPARAM)&m_ToolTipInfo);
+                ::SendMessage(m_hWndTooltip, TTM_SETMAXTIPWIDTH, 0, pHover->GetToolTipWidth());
+                ::SendMessage(m_hWndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolTipInfo);
+                ::SendMessage(m_hWndTooltip, TTM_TRACKACTIVATE, TRUE, (LPARAM)&m_ToolTipInfo);
 
             }
             // by jiangdong 2016-8-6 修改tooltip 悬停时候 闪烁bug
@@ -1363,27 +1363,27 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
             else{
                 if (m_pLastToolTip == pHover){
                     if (m_iLastTooltipWidth != pHover->GetToolTipWidth()){
-                        ::SendMessage(m_hwndTooltip, TTM_SETMAXTIPWIDTH, 0, pHover->GetToolTipWidth());
+                        ::SendMessage(m_hWndTooltip, TTM_SETMAXTIPWIDTH, 0, pHover->GetToolTipWidth());
                         m_iLastTooltipWidth = pHover->GetToolTipWidth();
 
                     }
-                    ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolTip);
-                    ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, TRUE, (LPARAM)&m_ToolTip);
+                    ::SendMessage(m_hWndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolTipInfo);
+                    ::SendMessage(m_hWndTooltip, TTM_TRACKACTIVATE, TRUE, (LPARAM)&m_ToolTipInfo);
                 }
                 else{
-                    ::SendMessage(m_hwndTooltip, TTM_SETMAXTIPWIDTH, 0, pHover->GetToolTipWidth());
-                    ::SendMessage(m_hwndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolTip);
-                    ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, TRUE, (LPARAM)&m_ToolTip);
+                    ::SendMessage(m_hWndTooltip, TTM_SETMAXTIPWIDTH, 0, pHover->GetToolTipWidth());
+                    ::SendMessage(m_hWndTooltip, TTM_SETTOOLINFO, 0, (LPARAM)&m_ToolTipInfo);
+                    ::SendMessage(m_hWndTooltip, TTM_TRACKACTIVATE, TRUE, (LPARAM)&m_ToolTipInfo);
                 }
             }
             //修改在ListElement 有提示 子项无提示下无法跟随移动！（按理说不应该移动的）
-            ::SendMessage(m_hwndTooltip, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD)MAKELONG(pt.x, pt.y));
+            ::SendMessage(m_hWndTooltip, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD)MAKELONG(pt.x, pt.y));
     }
         return true;
     case WM_MOUSELEAVE:
         {
             if( m_pRoot == NULL ) break;
-            if( m_hwndTooltip != NULL ) ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip);
+            if( m_hWndTooltip != NULL ) ::SendMessage(m_hWndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTipInfo);
             if( m_bMouseTracking ) {
                 POINT pt = { 0 };
                 RECT rcWnd = { 0 };
@@ -1412,7 +1412,7 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
                 tme.cbSize = sizeof(TRACKMOUSEEVENT);
                 tme.dwFlags = TME_HOVER | TME_LEAVE;
                 tme.hwndTrack = m_hWndPaint;
-                tme.dwHoverTime = m_hwndTooltip == NULL ? m_iHoverTime : (DWORD) ::SendMessage(m_hwndTooltip, TTM_GETDELAYTIME, TTDT_INITIAL, 0L);
+                tme.dwHoverTime = m_hWndTooltip == NULL ? m_iHoverTime : (DWORD) ::SendMessage(m_hWndTooltip, TTM_GETDELAYTIME, TTDT_INITIAL, 0L);
                 _TrackMouseEvent(&tme);
                 m_bMouseTracking = true;
             }
@@ -1443,7 +1443,7 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
 
 					m_pEventHover->HandleEvent(event);
                     m_pEventHover = NULL;
-                    if( m_hwndTooltip != NULL ) ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip);
+                    if( m_hWndTooltip != NULL ) ::SendMessage(m_hWndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTipInfo);
                 }
                 if( pNewHover != m_pEventHover && pNewHover != NULL ) {
                     event.Type = UIEVENT_MOUSEENTER;
@@ -2295,7 +2295,7 @@ void UIManager::SendNotify(Event& Msg, bool bAsync /*= false*/, bool bEnableRepe
     if( !bAsync ) {
         // Send to all listeners
         if( Msg.pSender != NULL ) {
-            if( Msg.pSender->OnNotify ) Msg.pSender->OnNotify(&Msg);
+			if (Msg.pSender->m_cbNotify) Msg.pSender->m_cbNotify(&Msg);
         }
         for( int i = 0; i < m_aNotifiers.GetSize(); i++ ) {
             static_cast<INotify*>(m_aNotifiers[i])->Notify(Msg);
@@ -2433,7 +2433,7 @@ void UIManager::SetDefaultSelectedBkColor(DWORD dwColor, bool bShared)
 	}
 }
 
-TFontInfo* UIManager::GetDefaultFontInfo()
+FontInfo* UIManager::GetDefaultFontInfo()
 {
 	if (m_ResInfo.m_DefaultFontInfo.sFontName.empty())
 	{
@@ -2525,9 +2525,9 @@ HFONT UIManager::AddFont(int id, LPCTSTR pStrFontName, int nSize, bool bBold, bo
     HFONT hFont = ::CreateFontIndirect(&lf);
     if( hFont == NULL ) return NULL;
 
-    TFontInfo* pFontInfo = new TFontInfo;
+    FontInfo* pFontInfo = new FontInfo;
     if( !pFontInfo ) return false;
-    ::ZeroMemory(pFontInfo, sizeof(TFontInfo));
+    ::ZeroMemory(pFontInfo, sizeof(FontInfo));
     pFontInfo->hFont = hFont;
     pFontInfo->sFontName = pStrFontName;
     pFontInfo->iSize = nSize;
@@ -2544,7 +2544,7 @@ HFONT UIManager::AddFont(int id, LPCTSTR pStrFontName, int nSize, bool bBold, bo
 	_itot(id, idBuffer, 10);
 	if (bShared || m_bForceUseSharedRes)
 	{
-		TFontInfo* pOldFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(idBuffer));
+		FontInfo* pOldFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(idBuffer));
 		if (pOldFontInfo)
 		{
 			::DeleteObject(pOldFontInfo->hFont);
@@ -2561,7 +2561,7 @@ HFONT UIManager::AddFont(int id, LPCTSTR pStrFontName, int nSize, bool bBold, bo
 	}
 	else
 	{
-		TFontInfo* pOldFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(idBuffer));
+		FontInfo* pOldFontInfo = static_cast<FontInfo*>(m_ResInfo.m_CustomFonts.Find(idBuffer));
 		if (pOldFontInfo)
 		{
 			::DeleteObject(pOldFontInfo->hFont);
@@ -2593,9 +2593,9 @@ HFONT UIManager::AddSharedFont(int id, LPCTSTR pStrFontName, int nSize, bool bBo
 	HFONT hFont = ::CreateFontIndirect(&lf);
 	if (hFont == NULL) return NULL;
 
-	TFontInfo* pFontInfo = new TFontInfo;
+	FontInfo* pFontInfo = new FontInfo;
 	if (!pFontInfo) return false;
-	::ZeroMemory(pFontInfo, sizeof(TFontInfo));
+	::ZeroMemory(pFontInfo, sizeof(FontInfo));
 	pFontInfo->hFont = hFont;
 	pFontInfo->sFontName = pStrFontName;
 	pFontInfo->iSize = nSize;
@@ -2613,7 +2613,7 @@ HFONT UIManager::AddSharedFont(int id, LPCTSTR pStrFontName, int nSize, bool bBo
 	_itot(id, idBuffer, 10);
 	//if (bShared || m_bForceUseSharedRes)
 	{
-		TFontInfo* pOldFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(idBuffer));
+		FontInfo* pOldFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(idBuffer));
 		if (pOldFontInfo)
 		{
 			::DeleteObject(pOldFontInfo->hFont);
@@ -2639,18 +2639,18 @@ HFONT UIManager::GetFont(int id)
 	TCHAR idBuffer[16];
 	::ZeroMemory(idBuffer, sizeof(idBuffer));
 	_itot(id, idBuffer, 10);
-	TFontInfo* pFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(idBuffer));
-	if( !pFontInfo ) pFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(idBuffer));
+	FontInfo* pFontInfo = static_cast<FontInfo*>(m_ResInfo.m_CustomFonts.Find(idBuffer));
+	if( !pFontInfo ) pFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(idBuffer));
 	if (!pFontInfo) return GetDefaultFontInfo()->hFont;
 	return pFontInfo->hFont;
 }
 
 HFONT UIManager::GetFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic)
 {
-    TFontInfo* pFontInfo = NULL;
+    FontInfo* pFontInfo = NULL;
 	for( int i = 0; i< m_ResInfo.m_CustomFonts.GetSize(); i++ ) {
 		if(LPCTSTR key = m_ResInfo.m_CustomFonts.GetAt(i)) {
-			pFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(key));
+			pFontInfo = static_cast<FontInfo*>(m_ResInfo.m_CustomFonts.Find(key));
 			if (pFontInfo && pFontInfo->sFontName == pStrFontName && pFontInfo->iSize == nSize && 
 				pFontInfo->bBold == bBold && pFontInfo->bUnderline == bUnderline && pFontInfo->bItalic == bItalic) 
 				return pFontInfo->hFont;
@@ -2658,7 +2658,7 @@ HFONT UIManager::GetFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnde
 	}
 	for( int i = 0; i< m_SharedResInfo.m_CustomFonts.GetSize(); i++ ) {
 		if(LPCTSTR key = m_SharedResInfo.m_CustomFonts.GetAt(i)) {
-			pFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key));
+			pFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key));
 			if (pFontInfo && pFontInfo->sFontName == pStrFontName && pFontInfo->iSize == nSize && 
 				pFontInfo->bBold == bBold && pFontInfo->bUnderline == bUnderline && pFontInfo->bItalic == bItalic) 
 				return pFontInfo->hFont;
@@ -2670,12 +2670,12 @@ HFONT UIManager::GetFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnde
 
 int UIManager::GetFontIndex(HFONT hFont, bool bShared)
 {
-	TFontInfo* pFontInfo = NULL;
+	FontInfo* pFontInfo = NULL;
 	if (bShared)
 	{
 		for( int i = 0; i< m_SharedResInfo.m_CustomFonts.GetSize(); i++ ) {
 			if(LPCTSTR key = m_SharedResInfo.m_CustomFonts.GetAt(i)) {
-				pFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key));
+				pFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key));
 				if (pFontInfo && pFontInfo->hFont == hFont) return _ttoi(key);
 			}
 		}
@@ -2684,7 +2684,7 @@ int UIManager::GetFontIndex(HFONT hFont, bool bShared)
 	{
 		for( int i = 0; i< m_ResInfo.m_CustomFonts.GetSize(); i++ ) {
 			if(LPCTSTR key = m_ResInfo.m_CustomFonts.GetAt(i)) {
-				pFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(key));
+				pFontInfo = static_cast<FontInfo*>(m_ResInfo.m_CustomFonts.Find(key));
 				if (pFontInfo && pFontInfo->hFont == hFont) return _ttoi(key);
 			}
 		}
@@ -2695,12 +2695,12 @@ int UIManager::GetFontIndex(HFONT hFont, bool bShared)
 
 int UIManager::GetFontIndex(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic, bool bShared)
 {
-	TFontInfo* pFontInfo = NULL;
+	FontInfo* pFontInfo = NULL;
 	if (bShared)
 	{
 		for( int i = 0; i< m_SharedResInfo.m_CustomFonts.GetSize(); i++ ) {
 			if(LPCTSTR key = m_SharedResInfo.m_CustomFonts.GetAt(i)) {
-				pFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key));
+				pFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key));
 				if (pFontInfo && pFontInfo->sFontName == pStrFontName && pFontInfo->iSize == nSize && 
 					pFontInfo->bBold == bBold && pFontInfo->bUnderline == bUnderline && pFontInfo->bItalic == bItalic) 
 					return _ttoi(key);
@@ -2711,7 +2711,7 @@ int UIManager::GetFontIndex(LPCTSTR pStrFontName, int nSize, bool bBold, bool bU
 	{
 		for( int i = 0; i< m_ResInfo.m_CustomFonts.GetSize(); i++ ) {
 			if(LPCTSTR key = m_ResInfo.m_CustomFonts.GetAt(i)) {
-				pFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(key));
+				pFontInfo = static_cast<FontInfo*>(m_ResInfo.m_CustomFonts.Find(key));
 				if (pFontInfo && pFontInfo->sFontName == pStrFontName && pFontInfo->iSize == nSize && 
 					pFontInfo->bBold == bBold && pFontInfo->bUnderline == bUnderline && pFontInfo->bItalic == bItalic) 
 					return _ttoi(key);
@@ -2724,14 +2724,14 @@ int UIManager::GetFontIndex(LPCTSTR pStrFontName, int nSize, bool bBold, bool bU
 
 void UIManager::RemoveFont(HFONT hFont, bool bShared)
 {
-    TFontInfo* pFontInfo = NULL;
+    FontInfo* pFontInfo = NULL;
 	if (bShared)
 	{
 		for( int i = 0; i < m_SharedResInfo.m_CustomFonts.GetSize(); i++ ) 
 		{
 			if(LPCTSTR key = m_SharedResInfo.m_CustomFonts.GetAt(i)) 
 			{
-				pFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key));
+				pFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key));
 				if (pFontInfo && pFontInfo->hFont == hFont) 
 				{
 					::DeleteObject(pFontInfo->hFont);
@@ -2748,7 +2748,7 @@ void UIManager::RemoveFont(HFONT hFont, bool bShared)
 		{
 			if(LPCTSTR key = m_ResInfo.m_CustomFonts.GetAt(i)) 
 			{
-				pFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(key));
+				pFontInfo = static_cast<FontInfo*>(m_ResInfo.m_CustomFonts.Find(key));
 				if (pFontInfo && pFontInfo->hFont == hFont) 
 				{
 					::DeleteObject(pFontInfo->hFont);
@@ -2767,10 +2767,10 @@ void UIManager::RemoveFont(int id, bool bShared)
 	::ZeroMemory(idBuffer, sizeof(idBuffer));
 	_itot(id, idBuffer, 10);
 
-	TFontInfo* pFontInfo = NULL;
+	FontInfo* pFontInfo = NULL;
 	if (bShared)
 	{
-		pFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(idBuffer));
+		pFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(idBuffer));
 		if (pFontInfo)
 		{
 			::DeleteObject(pFontInfo->hFont);
@@ -2780,7 +2780,7 @@ void UIManager::RemoveFont(int id, bool bShared)
 	}
 	else
 	{
-		pFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(idBuffer));
+		pFontInfo = static_cast<FontInfo*>(m_ResInfo.m_CustomFonts.Find(idBuffer));
 		if (pFontInfo)
 		{
 			::DeleteObject(pFontInfo->hFont);
@@ -2792,12 +2792,12 @@ void UIManager::RemoveFont(int id, bool bShared)
 
 void UIManager::RemoveAllFonts(bool bShared)
 {
-	TFontInfo* pFontInfo;
+	FontInfo* pFontInfo;
 	if (bShared)
 	{
 		for( int i = 0; i< m_SharedResInfo.m_CustomFonts.GetSize(); i++ ) {
 			if(LPCTSTR key = m_SharedResInfo.m_CustomFonts.GetAt(i)) {
-				pFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key, false));
+				pFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key, false));
 				if (pFontInfo) {
 					::DeleteObject(pFontInfo->hFont);
 					delete pFontInfo;
@@ -2810,7 +2810,7 @@ void UIManager::RemoveAllFonts(bool bShared)
 	{
 		for( int i = 0; i< m_ResInfo.m_CustomFonts.GetSize(); i++ ) {
 			if(LPCTSTR key = m_ResInfo.m_CustomFonts.GetAt(i)) {
-				pFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(key, false));
+				pFontInfo = static_cast<FontInfo*>(m_ResInfo.m_CustomFonts.Find(key, false));
 				if (pFontInfo) {
 					::DeleteObject(pFontInfo->hFont);
 					delete pFontInfo;
@@ -2821,13 +2821,13 @@ void UIManager::RemoveAllFonts(bool bShared)
 	}
 }
 
-TFontInfo* UIManager::GetFontInfo(int id)
+FontInfo* UIManager::GetFontInfo(int id)
 {
 	TCHAR idBuffer[16];
 	::ZeroMemory(idBuffer, sizeof(idBuffer));
 	_itot(id, idBuffer, 10);
-	TFontInfo* pFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(idBuffer));
-	if (!pFontInfo) pFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(idBuffer));
+	FontInfo* pFontInfo = static_cast<FontInfo*>(m_ResInfo.m_CustomFonts.Find(idBuffer));
+	if (!pFontInfo) pFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(idBuffer));
 	if (!pFontInfo) pFontInfo = GetDefaultFontInfo();
     if (pFontInfo->tm.tmHeight == 0) 
 	{
@@ -2838,14 +2838,14 @@ TFontInfo* UIManager::GetFontInfo(int id)
     return pFontInfo;
 }
 
-TFontInfo* UIManager::GetFontInfo(HFONT hFont)
+FontInfo* UIManager::GetFontInfo(HFONT hFont)
 {
-	TFontInfo* pFontInfo = NULL;
+	FontInfo* pFontInfo = NULL;
 	for( int i = 0; i< m_ResInfo.m_CustomFonts.GetSize(); i++ ) 
 	{
 		if(LPCTSTR key = m_ResInfo.m_CustomFonts.GetAt(i)) 
 		{
-			pFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(key));
+			pFontInfo = static_cast<FontInfo*>(m_ResInfo.m_CustomFonts.Find(key));
 			if (pFontInfo && pFontInfo->hFont == hFont) break;
 		}
 	}
@@ -2855,7 +2855,7 @@ TFontInfo* UIManager::GetFontInfo(HFONT hFont)
 		{
 			if(LPCTSTR key = m_SharedResInfo.m_CustomFonts.GetAt(i)) 
 			{
-				pFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key));
+				pFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(key));
 				if (pFontInfo && pFontInfo->hFont == hFont) break;
 			}
 		}
@@ -2892,7 +2892,10 @@ DWORD UIManager::GetColor(LPCTSTR pStrFontName)
 	if (!pData) pData = static_cast<LPVOID>(m_SharedResInfo.m_ColorHash.Find(pStrFontName));
 	if (!pData)
 	{
-		_tprintf(_T("UIManager::GetColor(%s) empty"), pStrFontName);
+#ifdef _DEBUG
+		if (pStrFontName[0] != '#')
+			_tprintf(_T("UIManager::GetColor(%s) empty\n"), pStrFontName);
+#endif	
 		return 0;
 	}
 	return (DWORD)pData;
@@ -2921,31 +2924,31 @@ void UIManager::AddSharedColor(LPCTSTR pStrFontName, DWORD dwValue)
 	}
 }
 //--------------------------Image---------------------------
-const TImageInfo* UIManager::GetImage(LPCTSTR bitmap)
+const ImageInfo* UIManager::GetImage(LPCTSTR bitmap)
 {
-    TImageInfo* data = static_cast<TImageInfo*>(m_ResInfo.m_ImageHash.Find(bitmap));
-    if( !data ) data = static_cast<TImageInfo*>(m_SharedResInfo.m_ImageHash.Find(bitmap));
+    ImageInfo* data = static_cast<ImageInfo*>(m_ResInfo.m_ImageHash.Find(bitmap));
+    if( !data ) data = static_cast<ImageInfo*>(m_SharedResInfo.m_ImageHash.Find(bitmap));
     return data;
 }
 
-const TImageInfo* UIManager::GetImageEx(LPCTSTR bitmap, LPCTSTR type, DWORD mask, bool bUseHSL)
+const ImageInfo* UIManager::GetImageEx(LPCTSTR bitmap, LPCTSTR type, DWORD mask, bool bUseHSL)
 {
-    const TImageInfo* data = GetImage(bitmap);
+    const ImageInfo* data = GetImage(bitmap);
     if( !data ) {
         if( AddImage(bitmap, type, mask, bUseHSL, false) ) {
-			if (m_bForceUseSharedRes) data = static_cast<TImageInfo*>(m_SharedResInfo.m_ImageHash.Find(bitmap));
-			else data = static_cast<TImageInfo*>(m_ResInfo.m_ImageHash.Find(bitmap)); 
+			if (m_bForceUseSharedRes) data = static_cast<ImageInfo*>(m_SharedResInfo.m_ImageHash.Find(bitmap));
+			else data = static_cast<ImageInfo*>(m_ResInfo.m_ImageHash.Find(bitmap)); 
         }
     }
 
     return data;
 }
 
-const TImageInfo* UIManager::AddImage(LPCTSTR bitmap, LPCTSTR type, DWORD mask, bool bUseHSL, bool bShared)
+const ImageInfo* UIManager::AddImage(LPCTSTR bitmap, LPCTSTR type, DWORD mask, bool bUseHSL, bool bShared)
 {
 	if( bitmap == NULL || bitmap[0] == _T('\0') ) return NULL;
 
-    TImageInfo* data = NULL;
+    ImageInfo* data = NULL;
     if( type != NULL ) {
         if( isdigit(*bitmap) ) {
             LPTSTR pstr = NULL;
@@ -2974,7 +2977,7 @@ const TImageInfo* UIManager::AddImage(LPCTSTR bitmap, LPCTSTR type, DWORD mask, 
 	{
 		if (bShared || m_bForceUseSharedRes)
 		{
-            TImageInfo* pOldImageInfo = static_cast<TImageInfo*>(m_SharedResInfo.m_ImageHash.Find(bitmap));
+            ImageInfo* pOldImageInfo = static_cast<ImageInfo*>(m_SharedResInfo.m_ImageHash.Find(bitmap));
             if (pOldImageInfo)
             {
                 Render::FreeImage(pOldImageInfo);
@@ -2988,7 +2991,7 @@ const TImageInfo* UIManager::AddImage(LPCTSTR bitmap, LPCTSTR type, DWORD mask, 
 		}
 		else
 		{
-            TImageInfo* pOldImageInfo = static_cast<TImageInfo*>(m_ResInfo.m_ImageHash.Find(bitmap));
+            ImageInfo* pOldImageInfo = static_cast<ImageInfo*>(m_ResInfo.m_ImageHash.Find(bitmap));
             if (pOldImageInfo)
             {
                 Render::FreeImage(pOldImageInfo);
@@ -3005,13 +3008,13 @@ const TImageInfo* UIManager::AddImage(LPCTSTR bitmap, LPCTSTR type, DWORD mask, 
     return data;
 }
 
-const TImageInfo* UIManager::AddImage(LPCTSTR bitmap, HBITMAP hBitmap, int iWidth, int iHeight, bool bAlpha, bool bShared)
+const ImageInfo* UIManager::AddImage(LPCTSTR bitmap, HBITMAP hBitmap, int iWidth, int iHeight, bool bAlpha, bool bShared)
 {
 	// 因无法确定外部HBITMAP格式，不能使用hsl调整
 	if( bitmap == NULL || bitmap[0] == _T('\0') ) return NULL;
     if( hBitmap == NULL || iWidth <= 0 || iHeight <= 0 ) return NULL;
 
-	TImageInfo* data = new TImageInfo;
+	ImageInfo* data = new ImageInfo;
 	data->hBitmap = hBitmap;
 	data->pBits = NULL;
 	data->nX = iWidth;
@@ -3042,10 +3045,10 @@ const TImageInfo* UIManager::AddImage(LPCTSTR bitmap, HBITMAP hBitmap, int iWidt
 
 void UIManager::RemoveImage(LPCTSTR bitmap, bool bShared)
 {
-	TImageInfo* data = NULL;
+	ImageInfo* data = NULL;
 	if (bShared) 
 	{
-		data = static_cast<TImageInfo*>(m_SharedResInfo.m_ImageHash.Find(bitmap));
+		data = static_cast<ImageInfo*>(m_SharedResInfo.m_ImageHash.Find(bitmap));
 		if (data)
 		{
 			Render::FreeImage(data) ;
@@ -3054,7 +3057,7 @@ void UIManager::RemoveImage(LPCTSTR bitmap, bool bShared)
 	}
 	else
 	{
-		data = static_cast<TImageInfo*>(m_ResInfo.m_ImageHash.Find(bitmap));
+		data = static_cast<ImageInfo*>(m_ResInfo.m_ImageHash.Find(bitmap));
 		if (data)
 		{
 			Render::FreeImage(data) ;
@@ -3067,10 +3070,10 @@ void UIManager::RemoveAllImages(bool bShared)
 {
 	if (bShared)
 	{
-		TImageInfo* data;
+		ImageInfo* data;
 		for( int i = 0; i< m_SharedResInfo.m_ImageHash.GetSize(); i++ ) {
 			if(LPCTSTR key = m_SharedResInfo.m_ImageHash.GetAt(i)) {
-				data = static_cast<TImageInfo*>(m_SharedResInfo.m_ImageHash.Find(key, false));
+				data = static_cast<ImageInfo*>(m_SharedResInfo.m_ImageHash.Find(key, false));
 				if (data) {
 					Render::FreeImage(data);
 				}
@@ -3080,10 +3083,10 @@ void UIManager::RemoveAllImages(bool bShared)
 	}
 	else
 	{
-		TImageInfo* data;
+		ImageInfo* data;
 		for( int i = 0; i< m_ResInfo.m_ImageHash.GetSize(); i++ ) {
 			if(LPCTSTR key = m_ResInfo.m_ImageHash.GetAt(i)) {
-				data = static_cast<TImageInfo*>(m_ResInfo.m_ImageHash.Find(key, false));
+				data = static_cast<ImageInfo*>(m_ResInfo.m_ImageHash.Find(key, false));
 				if (data) {
 					Render::FreeImage(data);
 				}
@@ -3095,10 +3098,10 @@ void UIManager::RemoveAllImages(bool bShared)
 
 void UIManager::AdjustSharedImagesHSL()
 {
-	TImageInfo* data;
+	ImageInfo* data;
 	for( int i = 0; i< m_SharedResInfo.m_ImageHash.GetSize(); i++ ) {
 		if(LPCTSTR key = m_SharedResInfo.m_ImageHash.GetAt(i)) {
-			data = static_cast<TImageInfo*>(m_SharedResInfo.m_ImageHash.Find(key));
+			data = static_cast<ImageInfo*>(m_SharedResInfo.m_ImageHash.Find(key));
 			if( data && data->bUseHSL ) {
 				Render::AdjustImage(m_bUseHSL, data, m_H, m_S, m_L);
 			}
@@ -3108,10 +3111,10 @@ void UIManager::AdjustSharedImagesHSL()
 
 void UIManager::AdjustImagesHSL()
 {
-	TImageInfo* data;
+	ImageInfo* data;
 	for( int i = 0; i< m_ResInfo.m_ImageHash.GetSize(); i++ ) {
 		if(LPCTSTR key = m_ResInfo.m_ImageHash.GetAt(i)) {
-			data = static_cast<TImageInfo*>(m_ResInfo.m_ImageHash.Find(key));
+			data = static_cast<ImageInfo*>(m_ResInfo.m_ImageHash.Find(key));
 			if( data && data->bUseHSL ) {
 				Render::AdjustImage(m_bUseHSL, data, m_H, m_S, m_L);
 			}
@@ -3130,11 +3133,11 @@ void UIManager::PostAsyncNotify()
 
 void UIManager::ReloadSharedImages()
 {
-	TImageInfo* data;
-	TImageInfo* pNewData;
+	ImageInfo* data;
+	ImageInfo* pNewData;
 	for( int i = 0; i< m_SharedResInfo.m_ImageHash.GetSize(); i++ ) {
 		if(LPCTSTR bitmap = m_SharedResInfo.m_ImageHash.GetAt(i)) {
-			data = static_cast<TImageInfo*>(m_SharedResInfo.m_ImageHash.Find(bitmap));
+			data = static_cast<ImageInfo*>(m_SharedResInfo.m_ImageHash.Find(bitmap));
 			if( data != NULL ) {
 				if( !data->sResType.empty() ) {
 					if( isdigit(*bitmap) ) {
@@ -3173,11 +3176,11 @@ void UIManager::ReloadSharedImages()
 
 void UIManager::ReloadImages()
 {
-	TImageInfo* data;
-	TImageInfo* pNewData;
+	ImageInfo* data;
+	ImageInfo* pNewData;
 	for( int i = 0; i< m_ResInfo.m_ImageHash.GetSize(); i++ ) {
 		if(LPCTSTR bitmap = m_ResInfo.m_ImageHash.GetAt(i)) {
-			data = static_cast<TImageInfo*>(m_ResInfo.m_ImageHash.Find(bitmap));
+			data = static_cast<ImageInfo*>(m_ResInfo.m_ImageHash.Find(bitmap));
 			if( data != NULL ) {
 				if( !data->sResType.empty() ) {
 					if( isdigit(*bitmap) ) {
@@ -3887,13 +3890,13 @@ void UIManager::ResetDPIAssets()
 	RemoveAllImages();
 
 	for (int it = 0; it < m_ResInfo.m_CustomFonts.GetSize(); it++) {
-		TFontInfo* pFontInfo = static_cast<TFontInfo*>(m_ResInfo.m_CustomFonts.Find(m_ResInfo.m_CustomFonts[it]));
+		FontInfo* pFontInfo = static_cast<FontInfo*>(m_ResInfo.m_CustomFonts.Find(m_ResInfo.m_CustomFonts[it]));
 		RebuildFont(pFontInfo);
 	}
 	RebuildFont(&m_ResInfo.m_DefaultFontInfo);
 
 	for (int it = 0; it < m_SharedResInfo.m_CustomFonts.GetSize(); it++) {
-		TFontInfo* pFontInfo = static_cast<TFontInfo*>(m_SharedResInfo.m_CustomFonts.Find(m_SharedResInfo.m_CustomFonts[it]));
+		FontInfo* pFontInfo = static_cast<FontInfo*>(m_SharedResInfo.m_CustomFonts.Find(m_SharedResInfo.m_CustomFonts[it]));
 		RebuildFont(pFontInfo);
 	}
 	RebuildFont(&m_SharedResInfo.m_DefaultFontInfo);
@@ -3907,7 +3910,7 @@ void UIManager::ResetDPIAssets()
 	}
 }
 
-void UIManager::RebuildFont(TFontInfo * pFontInfo)
+void UIManager::RebuildFont(FontInfo * pFontInfo)
 {
 	::DeleteObject(pFontInfo->hFont);
 	LOGFONT lf = { 0 };

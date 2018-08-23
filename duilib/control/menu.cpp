@@ -49,10 +49,10 @@ void CMenuWnd::Init(MenuElement* pOwner, String xml, String folder, POINT point,
 
 	if (m_bLayeredWindow)
 	{
-		m_PaintManager.GetShadow()->ShowShadow(true);
-		m_PaintManager.GetShadow()->SetImage(_T("../public/bk/bk_shadow.png"));
-		m_PaintManager.GetShadow()->SetSize(14);
-		m_PaintManager.GetShadow()->SetShadowCorner({ 14, 14, 14, 14 });
+		m_manager.GetShadow()->ShowShadow(true);
+		m_manager.GetShadow()->SetImage(_T("../public/bk/bk_shadow.png"));
+		m_manager.GetShadow()->SetSize(14);
+		m_manager.GetShadow()->SetShadowCorner({ 14, 14, 14, 14 });
 	}
 #if 1	//mod by djj 20171121
 	//when destroy parent wnd using clicking this menu item, the parent wnd destroys its child wnds, which include this menu wnd,and then throw exception;
@@ -108,7 +108,7 @@ void CMenuWnd::OnFinalMessage(HWND hWnd)
 
 Menu* CMenuWnd::GetMenuUI()
 {
-	return static_cast<Menu*>(m_PaintManager.GetRoot());
+	return static_cast<Menu*>(m_manager.GetRoot());
 }
 
 void CMenuWnd::Show()
@@ -120,12 +120,12 @@ void CMenuWnd::Show()
 	DuiRect rcWork = oMonitor.rcWork;
 	DuiRect monitor_rect = oMonitor.rcMonitor;
 	DuiSize szInit = { rcWork.right - rcWork.left, rcWork.bottom - rcWork.top };
-	szInit = m_PaintManager.GetRoot()->EstimateSize(szInit);
+	szInit = m_manager.GetRoot()->EstimateSize(szInit);
 #if 0
 	if (m_bLayeredWindow)
 	{
-		assert(m_PaintManager.GetShadow());
-		ShadowUI *shadow = m_PaintManager.GetShadow();
+		assert(m_manager.GetShadow());
+		ShadowUI *shadow = m_manager.GetShadow();
 		szInit.cx += shadow->GetShadowCorner().left /*+ shadow->GetShadowCorner().right*/;
 		szInit.cy += shadow->GetShadowCorner().top /*+ shadow->GetShadowCorner().bottom*/;
 	}
@@ -274,7 +274,7 @@ LRESULT CMenuWnd::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 }
 //LRESULT CMenuWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 //{
-//	SIZE szRoundCorner = m_PaintManager.GetRoundCorner();
+//	SIZE szRoundCorner = m_manager.GetRoundCorner();
 //	if( !::IsIconic(*this) ) {
 //		DuiRect rcWnd;
 //		::GetWindowRect(*this, &rcWnd);
@@ -329,7 +329,7 @@ LRESULT CMenuWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	if (bHandled) return lRes;
 
-    if( m_PaintManager.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
+    if( m_manager.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
     return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }
 
@@ -343,8 +343,8 @@ m_dwLineColor(DEFAULT_LINE_COLOR),
 m_bCheckItem(false),
 m_bShowExplandIcon(false)
 {
-	m_cxyFixed.cy = ITEM_DEFAULT_HEIGHT;
-	m_cxyFixed.cx = ITEM_DEFAULT_WIDTH;
+	m_FixedSize.cy = ITEM_DEFAULT_HEIGHT;
+	m_FixedSize.cx = ITEM_DEFAULT_WIDTH;
 	m_szIconSize.cy = ITEM_DEFAULT_ICON_SIZE;
 	m_szIconSize.cx = ITEM_DEFAULT_ICON_SIZE;
 
@@ -376,9 +376,9 @@ void MenuElement::DrawItemIcon(HDC hDC, const RECT& rcItem)
 			TCHAR cImage[526] = {};
 			wsprintf(cImage, _T("file='%s' dest='%d,%d,%d,%d'"), m_strIcon.c_str(), 
 				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx)/2,
-				(m_cxyFixed.cy - m_szIconSize.cy)/2,
+				(m_FixedSize.cy - m_szIconSize.cy)/2,
 				(ITEM_DEFAULT_ICON_WIDTH - m_szIconSize.cx)/2 + m_szIconSize.cx,
-				(m_cxyFixed.cy - m_szIconSize.cy)/2 + m_szIconSize.cy);
+				(m_FixedSize.cy - m_szIconSize.cy)/2 + m_szIconSize.cy);
 			DrawInfo drawinfo;
 			drawinfo.sDrawString = cImage;
 			drawinfo.rcDestOffset = rcItem;
@@ -397,10 +397,10 @@ void MenuElement::DrawItemExpland(HDC hDC, const RECT& rcItem)
 
 		TCHAR cImage[526] = {};
 		wsprintf(cImage, _T("file='%s' dest='%d,%d,%d,%d'"), strExplandIcon.c_str(),
-			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2,
-			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2,
-			m_cxyFixed.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE,
-			(m_cxyFixed.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE);
+			m_FixedSize.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2,
+			(m_FixedSize.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2,
+			m_FixedSize.cx - ITEM_DEFAULT_EXPLAND_ICON_WIDTH + (ITEM_DEFAULT_EXPLAND_ICON_WIDTH - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE,
+			(m_FixedSize.cy - ITEM_DEFAULT_EXPLAND_ICON_SIZE) / 2 + ITEM_DEFAULT_EXPLAND_ICON_SIZE);
 		DrawInfo drawinfo;
 		drawinfo.sDrawString = cImage;
 		drawinfo.rcDestOffset = rcItem;
@@ -436,7 +436,7 @@ SIZE MenuElement::EstimateSize(SIZE szAvailable)
 			iTextColor = pInfo->dwDisabledTextColor;
 		}
 
-		RECT rcText = { 0, 0, MAX(szAvailable.cx, m_cxyFixed.cx), 9999 };
+		RECT rcText = { 0, 0, MAX(szAvailable.cx, m_FixedSize.cx), 9999 };
 		rcText.left += pInfo->rcTextPadding.left;
 		rcText.right -= pInfo->rcTextPadding.right;
 		if( pInfo->bShowHtml ) {   
@@ -450,12 +450,12 @@ SIZE MenuElement::EstimateSize(SIZE szAvailable)
 		cXY.cy = rcText.bottom - rcText.top + pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
 	}
 #endif
-	if( m_cxyFixed.cy != 0 ) cXY.cy = m_cxyFixed.cy;
-	if ( cXY.cx < m_cxyFixed.cx )
-		cXY.cx =  m_cxyFixed.cx;
+	if( m_FixedSize.cy != 0 ) cXY.cy = m_FixedSize.cy;
+	if ( cXY.cx < m_FixedSize.cx )
+		cXY.cx =  m_FixedSize.cx;
 
-	m_cxyFixed.cy = cXY.cy;
-	m_cxyFixed.cx = cXY.cx;
+	m_FixedSize.cy = cXY.cy;
+	m_FixedSize.cx = cXY.cx;
 	
 	if (m_pManager) return m_pManager->GetDPIObj()->Scale(cXY);
 	return cXY;
