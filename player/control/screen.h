@@ -1,4 +1,5 @@
 #pragma once
+//#include <atomic>
 
 using namespace dui;
 
@@ -19,14 +20,15 @@ public:
 	virtual bool Paint(HDC hDC, const RECT& rcPaint, Control* pStopControl = NULL) override; // 返回要不要继续绘制
 
 	//播放业务逻辑
-	void StartPlay(String file);
-	void PausePlay();
-	void StopPlay();
+	void StartVideo(String file);
+	void PauseOrStartVideo();
+	void StopVideo(bool exit = false);		//exit:是否是推出程序时的关闭
 
 	void StartPlayCallback(std::string file);
 	void BitbltCallback(HBITMAP hbmp, int width, int height);
 private:
-	PlayStatus	m_play_status;
+	volatile PlayStatus m_play_status;
+	bool m_bStoped = true;			//指定是否已推出video线程函数
 	std::string	m_curr_file;
 
 	DrawInfo	m_diCurrFrame;

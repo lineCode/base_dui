@@ -79,9 +79,9 @@ void ListElement::Invalidate()
 			rc.right -= rcPadding.right;
 			rc.bottom -= rcPadding.bottom;
 			ScrollBar* pVerticalScrollBar = pParentContainer->GetVerticalScrollBar();
-			if (pVerticalScrollBar && pVerticalScrollBar->IsVisible()) rc.right -= pVerticalScrollBar->GetFixedWidth();
+			if (pVerticalScrollBar && pVerticalScrollBar->IsVisible() && !pParentContainer->GetScrollBarFloat()) rc.right -= pVerticalScrollBar->GetFixedWidth();
 			ScrollBar* pHorizontalScrollBar = pParentContainer->GetHorizontalScrollBar();
-			if (pHorizontalScrollBar && pHorizontalScrollBar->IsVisible()) rc.bottom -= pHorizontalScrollBar->GetFixedHeight();
+			if (pHorizontalScrollBar && pHorizontalScrollBar->IsVisible() && !pParentContainer->GetScrollBarFloat()) rc.bottom -= pHorizontalScrollBar->GetFixedHeight();
 
 			RECT invalidateRc = m_rcItem;
 			if (!::IntersectRect(&invalidateRc, &m_rcItem, &rc))
@@ -342,9 +342,9 @@ void ListContainerElement::Invalidate()
 			rc.right -= rcPadding.right;
 			rc.bottom -= rcPadding.bottom;
 			ScrollBar* pVerticalScrollBar = pParentContainer->GetVerticalScrollBar();
-			if (pVerticalScrollBar && pVerticalScrollBar->IsVisible()) rc.right -= pVerticalScrollBar->GetFixedWidth();
+			if (pVerticalScrollBar && pVerticalScrollBar->IsVisible() && !pParentContainer->GetScrollBarFloat()) rc.right -= pVerticalScrollBar->GetFixedWidth();
 			ScrollBar* pHorizontalScrollBar = pParentContainer->GetHorizontalScrollBar();
-			if (pHorizontalScrollBar && pHorizontalScrollBar->IsVisible()) rc.bottom -= pHorizontalScrollBar->GetFixedHeight();
+			if (pHorizontalScrollBar && pHorizontalScrollBar->IsVisible() && !pParentContainer->GetScrollBarFloat()) rc.bottom -= pHorizontalScrollBar->GetFixedHeight();
 
 			RECT invalidateRc = m_rcItem;
 			if (!::IntersectRect(&invalidateRc, &m_rcItem, &rc))

@@ -45,9 +45,9 @@ public:
 
 
 	//播放业务逻辑
-	void StartPlay(String file);
-	void PausePlay();
-	void StopPlay();
+	void StartVideo(String file);
+	void PauseOrStartVideo();
+	void StopVideo();	//exit:是否是推出程序时的关闭
 
 public:
 	static const LPCTSTR kClassName;

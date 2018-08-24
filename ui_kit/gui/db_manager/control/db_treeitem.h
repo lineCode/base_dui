@@ -13,10 +13,10 @@ namespace nim_comp
 		void Init(DBNode node);
 
 	protected:
-		//virtual void HandleMessage(ui::EventArgs& msg) override;
+		//virtual void HandleMessage(ui::Event& msg) override;
 
 	private:
-		//bool OnClick(dui::EventArgs* msg);
+		bool OnClick(dui::Event* msg);
 		void OnDragBegin();
 	private:
 		DBNode db_node_;

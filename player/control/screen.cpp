@@ -5,6 +5,12 @@
 //run in ui theard 
 void Screen::BitbltCallback(HBITMAP hbmp, int width, int height)
 {
+	if (m_bStoped)		//关闭程序时 有可能这个任务还在ui线程最后，Screen先析构了，引起崩溃
+	{
+		printf("Screen::BitbltCallback m_bStoped = true\n");
+		return;
+	}
+		
 	if (m_pManager)
 	{
 		HDC hdc = m_pManager->GetPaintDC();
@@ -33,6 +39,8 @@ void Screen::BitbltCallback(HBITMAP hbmp, int width, int height)
 //run in video play theard 
 void Screen::StartPlayCallback(std::string file)
 {
+	assert(m_play_status == PS_STOP);
+	m_bStoped = false;
 	AVCodec *codec = NULL;
 	AVCodecContext *ctx = NULL;
 	AVCodecParameters *origin_par = NULL;
@@ -54,7 +62,7 @@ void Screen::StartPlayCallback(std::string file)
 	uint8_t *temp_buffer = NULL;
 
 
-	result = avformat_open_input(&fmt_ctx, "../bin/other/video.mp4", NULL, NULL);
+	result = avformat_open_input(&fmt_ctx, file.c_str(), NULL, NULL);
 	if (result < 0) {
 		av_log(NULL, AV_LOG_ERROR, "Can't open file\n");
 		assert(0);
@@ -254,5 +262,6 @@ err:
 
 	if (m_play_status == PS_PLAY)
 		m_play_status == PS_STOP;
+	m_bStoped = true;
 	return;
 }

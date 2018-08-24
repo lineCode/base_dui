@@ -26,7 +26,7 @@ bool Screen::Paint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 	return true;
 }
 
-void Screen::StartPlay(String file)
+void Screen::StartVideo(String file)
 {
 #ifdef _UNICODE
 	std::string file_;
@@ -57,14 +57,16 @@ void Screen::StartPlay(String file)
 	}
 }
 
-void Screen::PausePlay()
+void Screen::PauseOrStartVideo()
 {
 	if (m_play_status == PS_PLAY)
 		m_play_status = PS_PAUSE;
+	else if (m_play_status == PS_PAUSE)
+		m_play_status = PS_PLAY;
 }
 
-void Screen::StopPlay()
-{
+void Screen::StopVideo(bool exit)
+{	
 	m_play_status = PS_STOP;
 	m_curr_file.clear();
 
@@ -79,5 +81,16 @@ void Screen::StopPlay()
 		m_diCurrFrame.pImageInfo = nullptr;
 		m_diCurrFrame.bLoaded = false;
 	}
-	Invalidate();
+	while (!m_bStoped)
+	{
+		printf("Screen::StopVideo() m_bStoped = false\n");
+		Sleep(20);
+	}
+	//可能有BitbltCallback任务放在ui队列最后，所以不能直接Invalidate()，但是程序关闭会引起崩溃
+	if (!exit)
+	{
+		shared::Post2UI(std::bind([this]{
+			Invalidate();
+		}));
+	}
 }

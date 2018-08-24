@@ -26,6 +26,7 @@ namespace dui
 
 		void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 		void SetScrollBarFloat(bool bFloat);
+		bool GetScrollBarFloat();
 
 		void SetManager(UIManager* pManager, Control* pParent, bool bInit = true);
 		Control* FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags);

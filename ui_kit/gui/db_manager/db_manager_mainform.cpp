@@ -228,7 +228,7 @@ namespace nim_comp
 		{
 			return false;
 		}
-#if 1
+#if 0
 		if (curr_combo_sel_ == -1)
 		{
 			combo_ip_->SetBkImage(L"file='combo2_220_26.png'");
@@ -317,13 +317,18 @@ namespace nim_comp
 			m_manager.FillBox(item, _T("db_treeitem.xml"), nullptr, &m_manager, NULL);
 			item->Init(root->date_);
 
-			dui::TreeNode * ui_root = nullptr/*db_tree_->GetRootNode()*/;
+#if 1
+			db_tree_->AddChildNode(item);
+			dui::TreeNode * ui_root = item;		
+			dui::TreeNode * ui_father_node = ui_root;
+#else
+			dui::TreeNode * ui_root = /*nullptr*/db_tree_->GetRootNode();
 			dui::TreeNode * ui_father_node = ui_root;
 			if (ui_father_node)
 			{
 				ui_father_node->AddChildNode(item);
 			}
-
+#endif
 			db_node = root->child1_;
 			while (db_node)
 			{

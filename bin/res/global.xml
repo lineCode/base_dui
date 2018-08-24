@@ -240,7 +240,7 @@
   <!--list-->
   <Class name="list" value="bkcolor=&quot;bk_wnd_lightcolor&quot; vscrollbar=&quot;true&quot; "/>
   <Class name="listitem" value="hotbkcolor=&quot;bk_listitem_hovered&quot; selectedbkcolor=&quot;bk_listitem_selected&quot; "/>
-  <Class name="list_topitem" value="normalcolor=&quot;bk_topitem_normal&quot; "/>
+  <Class name="list_topitem" value="bkcolor=&quot;bk_topitem_normal&quot; "/>
 
   <!--menu-->
   <Class name="menu" value="width=&quot;auto&quot; height=&quot;auto&quot; bkcolor=&quot;bk_wnd_lightcolor&quot;"/>

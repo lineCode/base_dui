@@ -43,6 +43,11 @@ namespace dui
 		m_bScrollBarFloat = bFloat;
 	}
 
+	bool ScrollBox::GetScrollBarFloat()
+	{
+		return m_bScrollBarFloat;
+	}
+
 	void ScrollBox::DoEvent(Event& event)
 	{
 		if (!IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND) {

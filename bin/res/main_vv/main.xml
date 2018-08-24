@@ -23,10 +23,10 @@
       </HBox>
       <Control class="splitline_hor_level1"/>
       <TabBox name="tab_session_friend" fadeswitch="true">
-        <List class="list" name="list_session" bkcolor="white" scrollbarfloat="true"/>
-        <List class="list" name="list_friend" scrollbarfloat="true"/>
-        <Tree class="list" name="tv_friend" bkcolor="white" scrollbarfloat=""/>
-        <List class="list" name="list_menu" scrollbarfloat="true">
+        <List class="list" name="list_session" bkcolor="white" />
+        <List class="list" name="list_friend" />
+        <Tree class="list" name="tv_friend" bkcolor="white" />
+        <List class="list" name="list_menu" >
           <ListContainerElement class="listitem" name="menu_dpi" width="240" height="40" bkimage="file='icon_menu_dpi.png' dest='12,12,28,28'">
             <Label width="80" height="40" margin="40" font="2" text="DPI设置" />
           </ListContainerElement>

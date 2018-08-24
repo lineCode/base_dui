@@ -3,23 +3,15 @@
 #pragma warning( disable: 4251 )
 namespace dui
 {
-	TreeNode::TreeNode( TreeNode* parent_node /*= NULL*/ )
+	TreeNode::TreeNode()
 	{
 		//m_bIsVisable = true;
-		m_bNodeExpanded = true;
-		m_pTreeView		= NULL;
-		m_pParentTreeNode = NULL;
+		m_bExpanded = true;
+		m_pOwnerTree = NULL;
+		m_pParentNode = NULL;
 
 		this->SetFixedHeight(18);
 		this->SetFixedWidth(250);
-
-		if (parent_node)
-		{
-			if (_tcsicmp(parent_node->GetClass(), DUI_CTR_TREENODE) != 0)
-				return;
-			this->SetParentNode(parent_node);
-		}
-
 	}
 	
 	TreeNode::~TreeNode( void )
@@ -73,9 +65,9 @@ namespace dui
 				rc.right -= rcPadding.right;
 				rc.bottom -= rcPadding.bottom;
 				ScrollBar* pVerticalScrollBar = pParentContainer->GetVerticalScrollBar();
-				if( pVerticalScrollBar && pVerticalScrollBar->IsVisible() ) rc.right -= pVerticalScrollBar->GetFixedWidth();
+				if (pVerticalScrollBar && pVerticalScrollBar->IsVisible() && !pParentContainer->GetScrollBarFloat()) rc.right -= pVerticalScrollBar->GetFixedWidth();
 				ScrollBar* pHorizontalScrollBar = pParentContainer->GetHorizontalScrollBar();
-				if( pHorizontalScrollBar && pHorizontalScrollBar->IsVisible() ) rc.bottom -= pHorizontalScrollBar->GetFixedHeight();
+				if (pHorizontalScrollBar && pHorizontalScrollBar->IsVisible() && !pParentContainer->GetScrollBarFloat()) rc.bottom -= pHorizontalScrollBar->GetFixedHeight();
 
 				RECT invalidateRc = m_rcItem;
 				if( !::IntersectRect(&invalidateRc, &m_rcItem, &rc) ) 
@@ -111,7 +103,7 @@ namespace dui
 
 	void TreeNode::SetNodeExpand(bool bExpanded)
 	{
-		m_bNodeExpanded = bExpanded;
+		m_bExpanded = bExpanded;
 
 		int nCount = GetChildCount();
 		for (int iIndex = 0; iIndex < nCount; iIndex++)
@@ -124,7 +116,7 @@ namespace dui
 
 	bool TreeNode::GetNodeExpand()
 	{
-		return m_bNodeExpanded;
+		return m_bExpanded;
 	}
 
 	bool TreeNode::Add(Control* pControl)
@@ -140,23 +132,23 @@ namespace dui
 		if(NULL == static_cast<TreeNode*>(pControl->GetInterface(DUI_CTR_TREENODE)))
 			return false;
 
-		TreeNode* pIndexNode = static_cast<TreeNode*>(m_aTreeNodes.GetAt(iIndex));
+		TreeNode* pIndexNode = static_cast<TreeNode*>(m_ChildNodes.GetAt(iIndex));
 		if(!pIndexNode){
-			if(!m_aTreeNodes.Add(pControl))
+			if(!m_ChildNodes.Add(pControl))
 				return false;
 		}
-		else if(pIndexNode && !m_aTreeNodes.InsertAt(iIndex,pControl))
+		else if(pIndexNode && !m_ChildNodes.InsertAt(iIndex,pControl))
 			return false;
 
-		if(!pIndexNode && m_pTreeView && m_pTreeView->GetItemAt(GetIndexFromTree()+1))
-			pIndexNode = static_cast<TreeNode*>(m_pTreeView->GetItemAt(GetIndexFromTree()+1)->GetInterface(DUI_CTR_TREENODE));
+		if(!pIndexNode && m_pOwnerTree && m_pOwnerTree->GetItemAt(GetIndexFromTree()+1))
+			pIndexNode = static_cast<TreeNode*>(m_pOwnerTree->GetItemAt(GetIndexFromTree()+1)->GetInterface(DUI_CTR_TREENODE));
 
 		pControl = CalLocation((TreeNode*)pControl);
 
-		if(m_pTreeView && pIndexNode)
-			return m_pTreeView->AddChildNodeAt((TreeNode*)pControl,pIndexNode);
+		if(m_pOwnerTree && pIndexNode)
+			return m_pOwnerTree->AddChildNodeAt((TreeNode*)pControl,pIndexNode);
 		else 
-			return m_pTreeView->AddChildNode((TreeNode*)pControl);
+			return m_pOwnerTree->AddChildNode((TreeNode*)pControl);
 
 		return true;
 	}
@@ -173,7 +165,7 @@ namespace dui
 
 	bool TreeNode::HasChild() const
 	{
-		return !m_aTreeNodes.IsEmpty();
+		return !m_ChildNodes.IsEmpty();
 	}
 	
 	bool TreeNode::AddChildNode(TreeNode* node)
@@ -188,32 +180,32 @@ namespace dui
 
 		bool nRet = true;
 
-		if(m_pTreeView){
-			TreeNode* pNode = static_cast<TreeNode*>(m_aTreeNodes.GetAt(m_aTreeNodes.GetSize()-1));
+		if(m_pOwnerTree){
+			TreeNode* pNode = static_cast<TreeNode*>(m_ChildNodes.GetAt(m_ChildNodes.GetSize()-1));
 			if(!pNode || !pNode->GetLastNode())
-				nRet = (m_pTreeView->AddChildNodeAt(node, GetIndexFromTree() + 1) >= 0);
-			else nRet = (m_pTreeView->AddChildNodeAt(node, pNode->GetLastNode()->GetIndexFromTree() + 1) >= 0);
+				nRet = (m_pOwnerTree->AddChildNodeAt(node, GetIndexFromTree() + 1) >= 0);
+			else nRet = (m_pOwnerTree->AddChildNodeAt(node, pNode->GetLastNode()->GetIndexFromTree() + 1) >= 0);
 		}
 
 		if(nRet)
-			m_aTreeNodes.Add(node);
+			m_ChildNodes.Add(node);
 
 		return nRet;
 	}
 
 	bool TreeNode::RemoveChildNode(TreeNode* node)
 	{
-		int iIndex = m_aTreeNodes.Find(node);
-		TreeNode* pNode = static_cast<TreeNode*>(m_aTreeNodes.GetAt(iIndex));
+		int iIndex = m_ChildNodes.Find(node);
+		TreeNode* pNode = static_cast<TreeNode*>(m_ChildNodes.GetAt(iIndex));
 		if (pNode && pNode == node)
 		{
 			while(pNode->HasChild())
-				pNode->RemoveChildNode(static_cast<TreeNode*>(pNode->m_aTreeNodes.GetAt(0)));
+				pNode->RemoveChildNode(static_cast<TreeNode*>(pNode->m_ChildNodes.GetAt(0)));
 
-			m_aTreeNodes.Remove(iIndex);
+			m_ChildNodes.Remove(iIndex);
 
-			if(m_pTreeView)
-				m_pTreeView->RemoveChildNode(node);
+			if(m_pOwnerTree)
+				m_pOwnerTree->RemoveChildNode(node);
 
 			return true;
 		}
@@ -222,27 +214,27 @@ namespace dui
 
 	void TreeNode::SetParentNode( TreeNode* parent_node )
 	{
-		m_pParentTreeNode = parent_node;
+		m_pParentNode = parent_node;
 	}
 
 	TreeNode* TreeNode::GetParentNode()
 	{
-		return m_pParentTreeNode;
+		return m_pParentNode;
 	}
 
 	long TreeNode::GetChildCount()
 	{
-		return m_aTreeNodes.GetSize();
+		return m_ChildNodes.GetSize();
 	}
 
 	void TreeNode::SetTreeView( Tree* tree )
 	{
-		m_pTreeView = tree;
+		m_pOwnerTree = tree;
 	}
 
 	Tree* TreeNode::GetTreeView()
 	{
-		return m_pTreeView;
+		return m_pOwnerTree;
 	}
 
 	void TreeNode::SetAttribute( LPCTSTR pstrName, LPCTSTR pstrValue )
@@ -252,21 +244,21 @@ namespace dui
 
 	PtrArray TreeNode::GetTreeNodes()
 	{
-		return m_aTreeNodes;
+		return m_ChildNodes;
 	}
 
 	TreeNode* TreeNode::GetChildNode( int iIndex )
 	{
-		return static_cast<TreeNode*>(m_aTreeNodes.GetAt(iIndex));
+		return static_cast<TreeNode*>(m_ChildNodes.GetAt(iIndex));
 	}
 
 	int TreeNode::GetIndexFromTree()
 	{
-		if(!m_pTreeView)
+		if(!m_pOwnerTree)
 			return -1;
 
-		for(int iIndex = 0;iIndex < m_pTreeView->GetCount();iIndex++){
-			if(this == m_pTreeView->GetItemAt(iIndex))
+		for(int iIndex = 0;iIndex < m_pOwnerTree->GetCount();iIndex++){
+			if(this == m_pOwnerTree->GetItemAt(iIndex))
 				return iIndex;
 		}
 
@@ -280,10 +272,10 @@ namespace dui
 	//************************************
 	int TreeNode::GetIndexFromNode()
 	{
-		if(!GetParentNode() && !m_pTreeView)
+		if(!GetParentNode() && !m_pOwnerTree)
 			return -1;
 
-		if(!GetParentNode() && m_pTreeView)
+		if(!GetParentNode() && m_pOwnerTree)
 			return GetIndexFromTree();
 
 		return GetParentNode()->GetTreeNodes().Find(this);
@@ -313,27 +305,29 @@ namespace dui
 	TreeNode* TreeNode::CalLocation(TreeNode* node)
 	{
 		node->SetParentNode(this);
-		node->SetTreeView(m_pTreeView);
-
+		node->SetTreeView(m_pOwnerTree);
+		node->SetDepth(m_iDepth + 1);
+#if 1	//缩进是这么处理还是重载SetPos中处理？asked by djj
+		if (m_pOwnerTree->GetIndent() > 0)
+		{
+			node->SetFixedWidth(node->GetFixedWidth() + node->GetDepth() * m_pOwnerTree->GetIndent());
+			RECT rcPadding = node->GetPadding();
+			rcPadding.left += (node->GetDepth() * m_pOwnerTree->GetIndent());
+			node->SetPadding(rcPadding);
+		}
+#endif
 		return node;
 	}
 
 	/*****************************************************************************/
 	/***********************************Tree**********************************/
 	/*****************************************************************************/
-	Tree::Tree(void) :m_pVirtualRoot(NULL)
+	Tree::Tree(void) 
 	{
-		m_pVirtualRoot = new TreeNode;
-		m_pVirtualRoot->SetTreeView(this);
 	}
 	
 	Tree::~Tree( void )
 	{
-		if (m_pVirtualRoot)
-		{
-			delete m_pVirtualRoot;
-			m_pVirtualRoot = NULL;
-		}
 	}
 
 	LPCTSTR Tree::GetClass() const
@@ -488,7 +482,10 @@ namespace dui
 
 	void Tree::SetAttribute( LPCTSTR pstrName, LPCTSTR pstrValue )
 	{
-		__super::SetAttribute(pstrName, pstrValue);
+		if (_tcscmp(pstrName, _T("indent")) == 0) 
+			SetIndent(_ttoi(pstrValue));
+		else
+			__super::SetAttribute(pstrName, pstrValue);
 	}
 
 }

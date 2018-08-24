@@ -4,11 +4,34 @@
 #include "module/login/login_manager.h"
 #include "base/network/network_util.h"
 
-#if 0	//冯
-#define INTERFACE_IP		"192.168.1.164"			
+#define MODE_QCLOUD 1		//腾讯云上的pgsql
+
+#if MODE_QCLOUD
+#if 11
+#define INTERFACE_ADDR		"www.yiyuntong.com"	
+#define INTERFACE_PORT		80
+
+#define ERP_INTERFACE_ADDR	"www.yiyuntong.com"	
+#define ERP_INTERFACE_PORT	80
+
+#define WORK_CENTER_INTERFACE_ADDR	"www.yiyuntong.com"
+#define WORK_CENTER_INTERFACE_PORT	80
+#else
+#define INTERFACE_ADDR		"www.yiyuntong.net"	
+#define INTERFACE_PORT		80
+
+#define ERP_INTERFACE_ADDR	"www.yiyuntong.net"	
+#define ERP_INTERFACE_PORT	80
+
+#define WORK_CENTER_INTERFACE_ADDR	"www.yiyuntong.net"
+#define WORK_CENTER_INTERFACE_PORT	80
+#endif
+#elif 1	//冯
+
+#define INTERFACE_ADDR		"192.168.5.25"			
 #define INTERFACE_PORT		8080
 
-#define ERP_INTERFACE_IP	"192.168.1.164"		
+#define ERP_INTERFACE_ADDR	"192.168.5.25"		
 #define ERP_INTERFACE_PORT	8080		
 
 #define WORK_CENTER_INTERFACE_ADDR	"www.weigongzi.net"
@@ -26,7 +49,9 @@
 #define WORK_CENTER_INTERFACE_ADDR	"www.weigongzi.net"
 #define WORK_CENTER_INTERFACE_IP	"114.55.55.62"		//微工资ip
 #define WORK_CENTER_INTERFACE_PORT	80
+
 #endif
+
 //测试库
 //"122.227.209.181"
 //7000
@@ -39,48 +64,43 @@ std::string http_Send(std::string reque, std::string param)
 	std::string Personal_info = "WeiweiInterfaceController/changeDetail";
 	std::string Password_set = "WeiweiInterfaceController/changePwd";
 	std::string SearchVVOdbc = "WeiweiInterfaceController/searchVvOdbc";			//查询我的客户公司的数据库列表
-	std::string getCust =		"sap/getCust";					//我的客户(供应链管理)
-	std::string getSupplier =	"sap/getSupplier";				//我的供应商(供应链管理)
+	//std::string getCust =		"sap/getCust";					//我的客户(供应链管理)
+	//std::string getSupplier =	"sap/getSupplier";				//我的供应商(供应链管理)
 	std::string getFriendTreeListBydbcid = "sap/getFriendTreeListBydbcid";	//客户/供应商的联系人列表(供应链管理)
-	std::string getWorkCenterInfo = "www.weigongzi.net/sys/tool/waitdonum";
+	std::string getWorkCenterInfo = "sys/tool/waitdonum";
 	std::string InsertSqlOperation = "WeiweiInterfaceController/saveSqlLog";	//插入数据库操作记录
-
-	std::string server_ip = INTERFACE_IP;
+	std::string server_addr = INTERFACE_ADDR;
 	unsigned short server_port = INTERFACE_PORT;
-	if (!strcmp(reque.c_str(), getCust.c_str()) || !strcmp(reque.c_str(), getSupplier.c_str()) || !strcmp(reque.c_str(), getFriendTreeListBydbcid.c_str()))
+	if (/*!strcmp(reque.c_str(), getCust.c_str()) || !strcmp(reque.c_str(), getSupplier.c_str()) || */!strcmp(reque.c_str(), getFriendTreeListBydbcid.c_str()))
 	{
-		server_ip = ERP_INTERFACE_IP;
+		server_addr = ERP_INTERFACE_ADDR;
 		server_port = ERP_INTERFACE_PORT;
 	}
-
 	char cUrl[256] = { 0 };
 	char cData[1024] = { 0 };
 	if (!strcmp(reque.c_str(), getWorkCenterInfo.c_str()))
 	{
-		server_ip = WORK_CENTER_INTERFACE_IP;
+		server_addr = WORK_CENTER_INTERFACE_ADDR;
 		server_port = WORK_CENTER_INTERFACE_PORT;
-		sprintf(cUrl, "http://%s", reque.c_str());
+		sprintf(cUrl, "http://%s/wd3/%s", server_addr.c_str(), reque.c_str());
 	}
-	else
+	else 
 	{
-		sprintf(cUrl, "http://%s:%d/%s", server_ip.c_str(), server_port, reque.c_str());
+		sprintf(cUrl, "http://%s/weiwei/%s", server_addr.c_str(), reque.c_str());
 	}
-	
 	sprintf(cData, "%s", param.c_str());
 
 	WSADATA WsaData;
 	WSAStartup(0x0101, &WsaData);
 
-	//初始化socket
-	struct hostent* host_addr = gethostbyname(server_ip.c_str());
+	struct hostent* host_addr = gethostbyname(server_addr.c_str());
 	if (host_addr == NULL)
 	{
-		//cout << "Unable to locate host" << endl;
 		WSACleanup();
 		return "";
 	}
 
-	sockaddr_in sin;
+	sockaddr_in sin = {};
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(server_port);
 	sin.sin_addr.s_addr = *((int*)*host_addr->h_addr_list);
@@ -92,39 +112,34 @@ std::string http_Send(std::string reque, std::string param)
 		return "";
 	}
 
-	//建立连接
 	if (connect(sock, (const struct sockaddr *)&sin, sizeof(sockaddr_in)) == -1)
 	{
-		//cout << "connect failed" << endl;
 		closesocket(sock);
 		WSACleanup();
 		return "";
 	}
 
-	char *pHttpPost = "POST %s HTTP/1.1\r\n"
+	char *pHttpPost = "POST %s HTTP/1.0\r\n"
 		"Host: %s:%d\r\n"
 		"Content-Type: application/x-www-form-urlencoded\r\n"
 		"Content-Length: %d\r\n\r\n"
 		"%s";
 
 	char strHttpPost[1024] = { 0 };
-	sprintf(strHttpPost, pHttpPost, cUrl, server_ip.c_str(), server_port, strlen(cData), cData);
-	
-	//这里忽略掉了socket连接代码
+	sprintf(strHttpPost, pHttpPost, cUrl, server_addr.c_str(), server_port, strlen(cData), cData);
+
 	if (send(sock, strHttpPost, strlen(strHttpPost), 0) == -1)
 	{
-		//cout << "send failed" << endl;
 		closesocket(sock);
 		WSACleanup();
 		return "";
 	}
-	
+
 	std::string buf, tmp_buf;
-	if (!strcmp(reque.c_str(), Login.c_str()) || !strcmp(reque.c_str(), getFriendList.c_str()) || !strcmp(reque.c_str(), getCustomerList.c_str()) || !strcmp(reque.c_str(), SearchVVOdbc.c_str()) 
-		|| !strcmp(reque.c_str(), getFriendTreeListBydbcid.c_str()) || !strcmp(reque.c_str(), getCust.c_str()) || !strcmp(reque.c_str(), getSupplier.c_str()) || !strcmp(reque.c_str(), getWorkCenterInfo.c_str()))
+	if (!strcmp(reque.c_str(), Login.c_str()) || !strcmp(reque.c_str(), getFriendList.c_str()) || !strcmp(reque.c_str(), getCustomerList.c_str()) || !strcmp(reque.c_str(), SearchVVOdbc.c_str())
+		|| !strcmp(reque.c_str(), getFriendTreeListBydbcid.c_str()) /*|| !strcmp(reque.c_str(), getCust.c_str()) || !strcmp(reque.c_str(), getSupplier.c_str())*/ || !strcmp(reque.c_str(), getWorkCenterInfo.c_str()))
 	{
 		char recv_str[4096] = { 0 };
-		//char *pBody = NULL;
 		struct fd_set fdreads;
 		struct timeval timeout;
 		bool body = false, finish = false;
@@ -158,10 +173,10 @@ std::string http_Send(std::string reque, std::string param)
 					recv_len = recv(sock, recv_str, sizeof(recv_str)-1, 0);
 					if (recv_len <= 0 || recv_len > sizeof(recv_str)-1)
 					{
-						finish = true; 
+						finish = true;
 						break;
 					}
-					
+
 					recv_str[recv_len] = 0;
 					if (!body)
 					{
@@ -181,7 +196,7 @@ std::string http_Send(std::string reque, std::string param)
 								body_len = atoi(strbody_len.c_str());
 							}
 
-							if (recv_len > begin_pos+4)
+							if (recv_len > begin_pos + 4)
 							{
 								buf = recv_str + (begin_pos + 4);
 
@@ -207,11 +222,11 @@ std::string http_Send(std::string reque, std::string param)
 					{
 						tmp_buf = recv_str;
 
-						int nBegin=0, nEnd=0;
+						int nBegin = 0, nEnd = 0;
 						/*nBegin  = tmp_buf.find(url);
 						int nEnd = tmp_buf.find(data);
 						if (nBegin != -1){
-							tmp_buf.erase(nBegin - 5, nEnd - nBegin + 8 + strlen(data_));
+						tmp_buf.erase(nBegin - 5, nEnd - nBegin + 8 + strlen(data_));
 						}*/
 
 						nBegin = tmp_buf.find("\r\n");
@@ -241,21 +256,6 @@ std::string http_Send(std::string reque, std::string param)
 		}
 		FD_CLR(sock, &fdreads);
 	}
-	//else if (!strcmp(reque.c_str(), getWorkCenterInfo.c_str()))		//异步线程中
-	//{
-	//	char recv_str[1024] = { 0 };
-	//	while (recv(sock, recv_str, sizeof(recv_str)-1, 0) > 0)
-	//	{
-	//		tmp_buf = recv_str;
-	//		buf += tmp_buf;
-
-	//		tmp_buf.clear();
-	//		memset(recv_str, 0, sizeof(recv_str));
-	//		/*if (buf.find_first_of('}') > 0 && buf.find_last_of('}') > buf.find_first_of('}'))
-	//			break;*/
-	//	}
-
-	//}
 	else if (!strcmp(reque.c_str(), Personal_info.c_str()) || !strcmp(reque.c_str(), Password_set.c_str()) || !strcmp(reque.c_str(), InsertSqlOperation.c_str()))
 	{
 		char recv_str[4096] = { 0 };
@@ -271,44 +271,42 @@ std::string http_Send(std::string reque, std::string param)
 //end:
 	closesocket(sock);
 	WSACleanup();
-	
+
 	return buf;
 }
 
 std::string http_Send2(std::string reque, std::string param)
 {
-	std::string getPLMToken = "v1/tickets";
-#if 1
-	std::string server_ip = "122.227.209.181";
-	unsigned short server_port = 4000;
-#else
-	std::string server_ip = "192.168.1.126";
-	unsigned short server_port = 8082;
-#endif
-	char cUrl[256] = { 0 };
+	std::string getPLMToken = "cert/v1/tickets";
+	std::string getQDFWInfo = "home/qidian/agreement";
+	std::string inviteFriend = "home/sys/weisendsms";
+
+	std::string server_addr = INTERFACE_ADDR;
+	unsigned short server_port = INTERFACE_PORT;
+
+	char cUrl[1024] = { 0 };
 	char cData[1024] = { 0 };
-
-#if 1
-	param = "username=admintest&password=E10ADC3949BA59ABBE56E057F20F883E";
+#if 0
+	if (reque == getPLMToken)
+	{
+		param = "username=VGLUTANN&password=2766EBB70B4B33604808D6493BC8C239";
+	}
 #endif
-
 	sprintf(cData, "%s", param.c_str());
 
-	sprintf(cUrl, "http://%s:%d/%s?%s", server_ip.c_str(), server_port, reque.c_str(), param.c_str());
+	sprintf(cUrl, "http://%s/%s?%s", server_addr.c_str(), reque.c_str(), param.c_str());
 
 	WSADATA WsaData;
 	WSAStartup(0x0101, &WsaData);
 
-	//初始化socket
-	struct hostent* host_addr = gethostbyname(server_ip.c_str());
+	struct hostent* host_addr = gethostbyname(server_addr.c_str());
 	if (host_addr == NULL)
 	{
-		//cout << "Unable to locate host" << endl;
 		WSACleanup();
 		return "";
 	}
 
-	sockaddr_in sin;
+	sockaddr_in sin = {};
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(server_port);
 	sin.sin_addr.s_addr = *((int*)*host_addr->h_addr_list);
@@ -320,43 +318,52 @@ std::string http_Send2(std::string reque, std::string param)
 		return "";
 	}
 
-	//建立连接
 	if (connect(sock, (const struct sockaddr *)&sin, sizeof(sockaddr_in)) == -1)
 	{
-		//cout << "connect failed" << endl;
 		closesocket(sock);
 		WSACleanup();
 		return "";
 	}
 
-	//text / html; charset = UTF - 8
-#if 1
-	char *pHttpPost = "POST %s HTTP/1.1\r\n"
-		"Host: %s:%d\r\n"
-		"Content-Type: text/html;charset=UTF-8\r\n"
-		"Content-Length: %d\r\n\r\n"
-		"%s";
-#else
-	char *pHttpPost = "POST %s HTTP/1.1\r\n"
-		"Host: %s:%d\r\n"
-		"Content-Type: application/x-www-form-urlencoded\r\n"
-		"Content-Length: %d\r\n\r\n"
-		"%s";
-#endif
+	char *pHttpPost = "";
+	if (getPLMToken == reque)
+	{
+		pHttpPost = "POST %s HTTP/1.0\r\n"
+			"Host: %s:%d\r\n"
+			"Content-Type: text/html;charset=UTF-8\r\n"	//"Content-Type: application/x-www-form-urlencoded\r\n"
+			"Content-Length: %d\r\n\r\n"
+			"%s";
+	}
+	else if (getQDFWInfo == reque)
+	{
+		pHttpPost = "GET %s HTTP/1.0\r\n"
+			"Host: %s:%d\r\n"
+			"Content-Type: text/html;charset=UTF-8\r\n"
+			"Content-Length: %d\r\n\r\n"
+			"%s";
+	}
+	else if (inviteFriend == reque)
+	{
+		pHttpPost = "GET %s HTTP/1.0\r\n"
+			"Host: %s:%d\r\n"
+			"Content-Type: application/x-www-form-urlencoded\r\n"
+			"Content-Length: %d\r\n\r\n"
+			"%s";
+		cData[0] = 0;
+	}
+	
 	char strHttpPost[1024] = { 0 };
-	sprintf(strHttpPost, pHttpPost, cUrl, server_ip.c_str(), server_port, strlen(cData), cData);
+	sprintf(strHttpPost, pHttpPost, cUrl, server_addr.c_str(), server_port, strlen(cData), cData);
 
-	//这里忽略掉了socket连接代码
 	if (send(sock, strHttpPost, strlen(strHttpPost), 0) == -1)
 	{
-		//cout << "send failed" << endl;
 		closesocket(sock);
 		WSACleanup();
 		return "";
 	}
 
 	std::string buf, tmp_buf;
-	if (!strcmp(reque.c_str(), getPLMToken.c_str()))
+	if (!strcmp(reque.c_str(), getPLMToken.c_str()) || !strcmp(reque.c_str(), getQDFWInfo.c_str()) || !strcmp(reque.c_str(), inviteFriend.c_str()))
 	{
 		char recv_str[4096] = { 0 };
 		//char *pBody = NULL;
@@ -485,7 +492,7 @@ std::string http_Send2(std::string reque, std::string param)
 
 std::string http_Send3(std::string reque, std::string param)
 {
-	std::string getPLMToken = "Web_sc/loginyytnew.gn";
+	std::string ParamSeed = "GNFunction=GetAuthSeed";
 
 	std::string server_ip = "122.227.241.40";
 	unsigned short server_port = 8019;
@@ -493,24 +500,28 @@ std::string http_Send3(std::string reque, std::string param)
 	char cUrl[256] = { 0 };
 	char cData[1024] = { 0 };
 
-	sprintf(cData, "%s", param.c_str());
-
-	//sprintf(cUrl, "http://%s:%d/%s?%s", server_ip.c_str(), server_port, reque.c_str(), param.c_str());
-	sprintf(cUrl, "http://%s:%d/%s", server_ip.c_str(), server_port, reque.c_str());
-
+	//sprintf(cData, "%s", param.c_str());
+	if (param == ParamSeed)
+	{
+		sprintf(cUrl, "%s?%s", reque.c_str(), param.c_str());
+	}
+	else
+	{
+		sprintf(cUrl, "%s", reque.c_str());
+		sprintf(cData, "%s", param.c_str());
+	}
+		
 	WSADATA WsaData;
 	WSAStartup(0x0101, &WsaData);
 
-	//初始化socket
 	struct hostent* host_addr = gethostbyname(server_ip.c_str());
 	if (host_addr == NULL)
 	{
-		//cout << "Unable to locate host" << endl;
 		WSACleanup();
 		return "";
 	}
 
-	sockaddr_in sin;
+	sockaddr_in sin = {};
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(server_port);
 	sin.sin_addr.s_addr = *((int*)*host_addr->h_addr_list);
@@ -522,37 +533,32 @@ std::string http_Send3(std::string reque, std::string param)
 		return "";
 	}
 
-	//建立连接
 	if (connect(sock, (const struct sockaddr *)&sin, sizeof(sockaddr_in)) == -1)
 	{
-		//cout << "connect failed" << endl;
 		closesocket(sock);
 		WSACleanup();
 		return "";
 	}
 
-
-	char *pHttpPost = "POST %s HTTP/1.0\r\n"
+	char *pHttpPost = "GET %s HTTP/1.1\r\n"
 		"Host: %s:%d\r\n"
-		"Content-Type: application/x-www-form-urlencoded\r\n"
-		"Content-Length: %d\r\n\r\n"
+		"Connection: keep-alive\r\n"
+		"Accept: */*"
+		"Content-Type: application/x-www-form-urlencoded\r\n\r\n"
 		"%s";
 
 	char strHttpPost[1024] = { 0 };
-	//cData[0] = 0;
-	sprintf(strHttpPost, pHttpPost, cUrl, server_ip.c_str(), server_port, strlen(cData), cData);
+	sprintf(strHttpPost, pHttpPost, cUrl, server_ip.c_str(), server_port, cData);
 
-	//这里忽略掉了socket连接代码
 	if (send(sock, strHttpPost, strlen(strHttpPost), 0) == -1)
 	{
-		//cout << "send failed" << endl;
 		closesocket(sock);
 		WSACleanup();
 		return "";
 	}
 
 	std::string buf, tmp_buf;
-	if (!strcmp(reque.c_str(), getPLMToken.c_str()))
+	//if (!strcmp(reque.c_str(), getPLMToken.c_str()))
 	{
 		char recv_str[4096] = { 0 };
 		//char *pBody = NULL;
@@ -631,6 +637,24 @@ std::string http_Send3(std::string reque, std::string param)
 							{
 								finish = true;
 								break;
+							}
+						}
+						else	//没有httpheader
+						{
+							if (param == ParamSeed)
+							{
+								if (recv_len > 1 && buf.empty())
+								{
+									buf = recv_str;
+								}
+								else
+								{
+									buf.clear();
+								}
+							}
+							else
+							{
+								buf += recv_str;
 							}
 						}
 					}

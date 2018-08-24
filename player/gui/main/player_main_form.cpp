@@ -5,19 +5,19 @@ using namespace dui;
 
 const LPCTSTR PlayerMainForm::kClassName = L"PlayerMainForm";
 
-void PlayerMainForm::StartPlay(String file)
+void PlayerMainForm::StartVideo(String file)
 {
-	m_video_screen->StartPlay(file);
+	m_video_screen->StartVideo(file);
 }
 
-void PlayerMainForm::PausePlay()
+void PlayerMainForm::PauseOrStartVideo()
 {
-	m_video_screen->PausePlay();
+	m_video_screen->PauseOrStartVideo();
 }
 
-void PlayerMainForm::StopPlay()
+void PlayerMainForm::StopVideo()
 {
-	m_video_screen->StopPlay();
+	m_video_screen->StopVideo();
 }
 
 void PlayerMainForm::BtnOpenFileClickedCallback(BOOL ret, std::wstring path)
@@ -33,6 +33,6 @@ void PlayerMainForm::BtnOpenFileClickedCallback(BOOL ret, std::wstring path)
 		if (file_ext != L".jpg" && file_ext != L".jpeg" && file_ext != L".png" && file_ext != L".bmp")
 			return;*/
 
-		StartPlay(path);
+		StartVideo(path);
 	}
 }

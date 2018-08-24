@@ -35,7 +35,8 @@ void PlayerMainForm::Notify(dui::Event& msg)
 
 void PlayerMainForm::OnFinalMessage(HWND hWnd)
 {
-	m_video_screen->StopPlay();
+	m_video_screen->StopVideo(true);
+	nim_comp::TrayManager::GetInstance()->Destroy();
 	return __super::OnFinalMessage(hWnd);
 }
 
@@ -99,11 +100,11 @@ bool PlayerMainForm::MenuLogoutClick(dui::Event* param)
 void PlayerMainForm::OnClick(dui::Event& msg)
 {
 	if (msg.pSender->GetName() == _T("btnRecord"))
-		StartPlay(_T("../bin/other/video.mp4"));
+		/*StartVideo(_T("../bin/other/video.mp4"))*/;
 	else if (msg.pSender->GetName() == _T("btnPausePlay"))
-		PausePlay();
+		PauseOrStartVideo();
 	else if (msg.pSender->GetName() == _T("btnStopPlay"))
-		StopPlay();
+		StopVideo();
 	else if (msg.pSender->GetName() == _T("btnOpenFile"))
 		OnBtnOpenFileClicked();
 	

@@ -30,7 +30,7 @@ namespace nim_comp
 		int fixw = 9 + 2 + 5 + 5 + 16 + 16 + strlen(node.text.c_str()) * 8;
 		SetFixedWidth(fixw > 240 ? fixw : 240);
 
-		//this->AttachClick(nbase::Bind(&DBTreeItem::OnClick, this, std::placeholders::_1));
+		this->AttachItemClick(std::bind(&DBTreeItem::OnClick, this, std::placeholders::_1));
 
 		if (db_node_.type == DBNODETYPE_DB)
 		{
@@ -88,22 +88,22 @@ namespace nim_comp
 	//	return __super::HandleMessage(msg);
 	//}
 
-	//bool DBTreeItem::OnClick(ui::EventArgs* msg)
-	//{
-	//	if (GetChildNodeCount() > 0 )
-	//	{
-	//		SetExpand(!IsExpand());
-	//		if (IsExpand())
-	//		{
-	//			btn_expand_->SetBkImage(L"file='btn_expended.png'");
-	//		}
-	//		else
-	//		{
-	//			btn_expand_->SetBkImage(L"file='btn_unexpended.png'");
-	//		}
-	//	}
-	//	return false;
-	//}
+	bool DBTreeItem::OnClick(dui::Event* msg)
+	{
+		if (GetChildCount() > 0)
+		{
+			SetNodeExpand(!GetNodeExpand());
+			if (GetNodeExpand())
+			{
+				btn_expand_->SetBkImage(L"file='btn_expended.png'");
+			}
+			else
+			{
+				btn_expand_->SetBkImage(L"file='btn_unexpended.png'");
+			}
+		}
+		return false;
+	}
 
 	/*void DBTreeItem::OnDragBegin()
 	{
