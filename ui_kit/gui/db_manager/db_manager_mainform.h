@@ -53,7 +53,7 @@ namespace nim_comp
 		dui::Button		*btn_max_restore_;
 
 		dui::Tree		*db_tree_;
-		dui::ListView		*result_list_;
+		dui::ListView	*result_list_;
 		dui::Label		*result_label_;
 		dui::Combo		*combo_ip_;
 		dui::Label		*info_label_;

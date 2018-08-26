@@ -1319,6 +1319,7 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
         break;
     case WM_MOUSEHOVER:
         {
+			printf("UIManager::MessageHandler() WM_MOUSEHOVER m_bMouseTracking = false;\n");
             if (m_pRoot == NULL) break;
             m_bMouseTracking = false;
             POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
@@ -1382,6 +1383,7 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
         return true;
     case WM_MOUSELEAVE:
         {
+			printf("UIManager::MessageHandler() WM_MOUSELEAVE\n");
             if( m_pRoot == NULL ) break;
             if( m_hWndTooltip != NULL ) ::SendMessage(m_hWndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTipInfo);
             if( m_bMouseTracking ) {
@@ -1401,6 +1403,7 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
                     ::SendMessage(m_hWndPaint, WM_MOUSEMOVE, 0, (LPARAM)-1);
             }
             m_bMouseTracking = false;
+			printf("UIManager::MessageHandler() WM_MOUSELEAVE m_bMouseTracking = false\n");
         }
         break;
     case WM_MOUSEMOVE:
@@ -1415,20 +1418,21 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
                 tme.dwHoverTime = m_hWndTooltip == NULL ? m_iHoverTime : (DWORD) ::SendMessage(m_hWndTooltip, TTM_GETDELAYTIME, TTDT_INITIAL, 0L);
                 _TrackMouseEvent(&tme);
                 m_bMouseTracking = true;
+				printf("WM_MOUSEMOVE _TrackMouseEvent(&tme)\n");
             }
             // Generate the appropriate mouse messages
             POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
             m_ptLastMousePos = pt;
             Control* pNewHover = FindControl(pt);
             if( pNewHover != NULL && pNewHover->GetManager() != this ) break;
-            Event event/* = { UIEVENT__FIRST }*/;
+            Event event = { /*UIEVENT__FIRST*/ };
             event.ptMouse = pt;
             event.wParam = wParam;
             event.lParam = lParam;
             event.dwTimestamp = ::GetTickCount();
             event.wKeyState = MapKeyState();
             if( !IsCaptured() ) {
-                pNewHover = FindControl(pt);
+                //pNewHover = FindControl(pt);
                 if( pNewHover != NULL && pNewHover->GetManager() != this ) break;
                 if( pNewHover != m_pEventHover && m_pEventHover != NULL ) {
                     event.Type = UIEVENT_MOUSELEAVE;

@@ -20,7 +20,6 @@ public:
     LPCTSTR GetClass() const;
     LPVOID GetInterface(LPCTSTR pstrName);
 
-    void DoInit();
     UINT GetControlFlags() const;
 
   /*  String GetText() const;*/

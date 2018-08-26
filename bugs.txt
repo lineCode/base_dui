@@ -4,18 +4,22 @@
 
 
 
-6.项目Demo中 	查询数据库  并显示成ListView
-7.dpi更改时	图片全部丢失;
-8.项目Demo中 	ScrollBar不自动隐藏
+
+
+7.项目Demo中 	ScrollBar不自动隐藏
+8.项目Duilib中	需要好好看一看WM_MOUSEMOVE等鼠标系列的操作细节
+9.项目Duilib中 	tooltip需要好好看看
+
+9999.项目Demo中 	dpi更改时，图片全部丢失;
 
 ////////////////已完成//////////////////////
 //////////////////////////////////////////////////
 1.项目player中 	关闭的崩溃问题；
 2.项目player中 	的托盘；
-3.MainThread提出shared库，个个应用自己处理
+3.项目player中	MainThread提出shared库，个个应用自己处理
 4.项目Demo中	List中界面bug
 5.项目Demo中 	读取数据库列表 并显示成Tree
-
+6.项目Demo中 	查询数据库  并显示成ListView
 
 
 

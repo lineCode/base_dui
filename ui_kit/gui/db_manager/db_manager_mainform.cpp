@@ -68,9 +68,10 @@ namespace nim_comp
 		btn_max_restore_ = static_cast<dui::Button*>(m_manager.FindControl(L"btn_max_restore"));
 
 		btn_run_ = (dui::Button *)m_manager.FindControl(L"btnrun");
-		//btn_run_->AttachClick(nbase::Bind(&DBManagerMainForm::OnBtnRunClieked, this, std::placeholders::_1));
+		btn_run_->AttachClick(std::bind(&DBManagerMainForm::OnBtnRunClieked, this, std::placeholders::_1));
 
 		re_input_ = (dui::RichEdit*)m_manager.FindControl(L"input_edit");
+		re_input_->SetText(_T("select * from djj_test"));
 
 		db_tree_ = (dui::Tree*)m_manager.FindControl(L"dbtree");
 		combo_ip_ = (dui::Combo*)m_manager.FindControl(L"combo_ip");
@@ -432,7 +433,39 @@ namespace nim_comp
 			else if (db_result->type == DB_CONN_TYPE_MYSQL)
 			{
 				char **results = (char **)db_result->date;
+#if 1
+				//dui::ListHeaderItem *head_item = nullptr;
+				dui::Control *item = nullptr;
+				std::string text;
+				std::wstring text_w;
 
+				int index = 0, i = 0;;
+				for (; i < row; i++)
+				{
+					for (int j = 0; j < col; j++)
+					{
+						text = results[index++];
+						nbase::win32::MBCSToUnicode(text, text_w);
+						if (i == 0)
+						{
+							item = new dui::ListHeaderItem;
+							item->SetFixedWidth(DB_LIST_COL_WIDTH);
+							item->SetBkColor(m_manager.GetColor(L"bk_blacklist_tip"));
+							item->SetText(text_w.c_str());
+							result_list_->Add(item);
+						}
+						else
+						{
+							item = new dui::ListElement;
+							item->SetAttribute(_T("texthalign"), _T("center"));
+							item->SetText(text_w.c_str());
+							result_list_->Add(item);
+						}
+					}
+				}
+				result_list_->NeedUpdate();
+			}
+#else
 				DBResultListItem *result_list_item;
 				std::string text;
 				std::wstring text_w;
@@ -465,7 +498,7 @@ namespace nim_comp
 
 				}
 			}
-			
+#endif
 		}
 		else if (DBM_EVENT::DBM_EVENT_CONN_FAILE == event || DBM_EVENT::DBM_EVENT_QUERY_FAILE == event || DBM_EVENT::DBM_EVENT_EXEC_FAILE == event || DBM_EVENT::DBM_EVENT_EXEC_SUCC == event)
 		{

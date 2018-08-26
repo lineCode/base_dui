@@ -308,10 +308,6 @@ UINT Combo::GetControlFlags() const
     return UIFLAG_TABSTOP;
 }
 
-void Combo::DoInit()
-{
-}
-
 int Combo::GetCurSel() const
 {
     return m_iCurSel;

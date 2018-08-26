@@ -256,7 +256,11 @@ bool ListView::RemoveAt(int iIndex, bool bDoNotDestroy)
 void ListView::RemoveAll()
 {
     m_iCurSel = -1;
+	m_bScrollSelect = false;
+	m_pHeader->RemoveAll();
     m_pList->RemoveAll();
+	m_ListInfo.nColumns = 0;
+	ZeroMemory(m_ListInfo.rcColumn, sizeof(m_ListInfo.rcColumn));
 }
 
 void ListView::SetPos(RECT rc, bool bNeedInvalidate)

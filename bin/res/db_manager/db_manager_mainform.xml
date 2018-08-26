@@ -13,7 +13,6 @@
       <VBox width="250" bkcolor="bk_gray1">
         <Combo name="combo_ip" width="220" height="26" margin="15,11,15,0" bkimage="combo220_26.png" dropboxsize="0,46" dropboxfile="combo_ip.xml" dropboxfolder="db_manager"/>
         <Control bkcolor="splitline_level1" height="1" margin="15,0,15"/>
-        <!--<Tree name="dbtree"  vscrollbar="true" vscrollunit="100" hscrollbar="true" width="250" height="stretch"  indent="20"/>-->
         <Tree name="dbtree"  vscrollbar="true" hscrollbar="true" width="250" height="stretch" indent="12"/>
       </VBox>
       <VBox margin="=0,0,0,0" bkcolor="white">
@@ -37,7 +36,7 @@
           </VBox>
         </HBox>
         <Box bkcolor="white" margin="10,5,10,5">
-          <ListView name="result_list" width="stretch" height="stretch" bkcolor="white" vscrollbar="true" hscrollbar="true"/>
+          <ListView name="result_list" width="stretch" height="stretch" bkcolor="white" vscrollbar="true" hscrollbar="true" header="true"/>
           <Label name="result_label" width="stretch" height="stretch" bkcolor="white" font="2" textpadding="10,10" visible="false"/>
         </Box>
       </VBox>

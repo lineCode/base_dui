@@ -443,14 +443,14 @@ private:
     PtrArray m_aNotifiers;				//save WindowImplBase::INotify* and CMenuWnd::INotify*, add in WindowImplBase::OnCreate, remove in WindowImplBase::OnFinalMessage
     PtrArray m_aTimers;					//TIMERINFO
 	PtrArray m_aPreMessageFilters;		//save WindowImplBase::IMessageFilter*, add in WindowImplBase::OnCreate, remove in WindowImplBase::OnFinalMessage
-    PtrArray m_aMessageFilters;			//save ActiveX::IMessageFilter* and RichEdit::IMessageFilter*, add in WindowImplBase::OnCreate->UIManager::InitControls(pControl)->ScrollBox::SetManager()->Control::Init()->RichEdit::DoInit(), remove in ~RichEdit()
+    PtrArray m_aMessageFilters;			//save ActiveX::IMessageFilter* and RichEdit::IMessageFilter*, add in WindowImplBase::OnCreate->UIManager::InitControls(pControl)->ScrollBox::SetManager()->Control::Init()->RichEdit::Init(), remove in ~RichEdit()
     PtrArray m_aPostPaintControls;
 	PtrArray m_aNativeWindow;
 	PtrArray m_aNativeWindowControl;
     PtrArray m_aDelayedCleanup;
     PtrArray m_aAsyncNotify;
     PtrArray m_aFoundControls;
-    PtrArray m_aNeedMouseLeaveNeeded;
+    PtrArray m_aNeedMouseLeaveNeeded;	//control like Button call DoEvent func which the event.tpye==UIEVENT_MOUSELEAVE, may call AddMouseLeaveNeeded() or RemoveMouseLeaveNeeded,and this will be used when UIManager deal WM_MOUSEMOVE in MessageHandle() func
 	PtrArray m_aTranslateAccelerator;
     StringPtrMap m_mNameHash;			//(key:name, value:pControl) UIManager::__FindControlFromNameHash whick called in UIManager::InitControls which called in UIManager::AttachDialog
 	StringPtrMap m_mWindowAttrHash;		//

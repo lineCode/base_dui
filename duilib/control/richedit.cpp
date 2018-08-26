@@ -1598,7 +1598,7 @@ DWORD RichEdit::GetPromptColor() const
 	return m_dwPromptColor;
 }
 
-void RichEdit::DoInit()
+void RichEdit::Init()
 {
 	if(m_bInited)
 		return ;

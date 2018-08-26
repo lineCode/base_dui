@@ -813,11 +813,6 @@ void Control::Init()
 {
 }
 
-//void Control::DoInit()
-//{
-//
-//}
-
 void Control::HandleEvent(Event& event)
 {
 	auto it = m_event_map.find(event.Type);

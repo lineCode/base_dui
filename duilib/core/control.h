@@ -154,7 +154,6 @@ public:
     DWORD GetAdjustColor(DWORD dwColor);
 
     virtual void Init();
-    //virtual void DoInit();
 
     virtual void HandleEvent(Event& event);
     virtual void DoEvent(Event& event);
