@@ -115,8 +115,8 @@ namespace dui
 		ScrollBox* m_pOwner;
 		POINT ptLastMouse;
 		int m_nLastScrollPos;
-		int m_nLastScrollOffset;
-		int m_nScrollRepeatDelay;
+		int m_nLastScrollOffset;	//保存scrollbar的移动偏差
+		int m_nScrollRepeatDelay;	//mousedown位置不在Thumb时，延迟timer处理的次数
 
 		DrawInfo m_diBkNormal;
 		DrawInfo m_diBkHot;

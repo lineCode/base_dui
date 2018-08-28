@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="qr.c" />
+    <ClCompile Include="qrcnv.c" />
+    <ClCompile Include="qrcnv_bmp.c" />
+    <ClCompile Include="qrcnv_png.c" />
+    <ClCompile Include="qrcnv_svg.c" />
+    <ClCompile Include="qrcnv_tiff.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="crc.h" />
+    <ClInclude Include="qr.h" />
+    <ClInclude Include="qr_dwtable.h" />
+    <ClInclude Include="qr_private.h" />
+    <ClInclude Include="qrcmd.h" />
+    <ClInclude Include="qrcnv.h" />
+  </ItemGroup>
+</Project>

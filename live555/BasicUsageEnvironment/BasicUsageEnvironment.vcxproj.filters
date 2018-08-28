@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{d70a6122-b68c-493f-9384-173572cf0f62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{6f22fb07-bf20-4df1-aa72-bb6de48dc8ce}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\BasicHashTable.hh">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BasicUsageEnvironment.hh">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BasicUsageEnvironment_version.hh">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BasicUsageEnvironment0.hh">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DelayQueue.hh">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\HandlerSet.hh">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BasicHashTable.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicTaskScheduler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicTaskScheduler0.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicUsageEnvironment.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicUsageEnvironment0.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DelayQueue.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

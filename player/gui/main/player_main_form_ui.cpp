@@ -5,6 +5,12 @@
 #include "module/tray/tray_manager.h"
 #include "shared/modal_wnd/file_dialog_ex.h"
 
+#include "../live555/testProgs/playCommon.hh"
+#include "BasicUsageEnvironment.hh"
+#include "GroupsockHelper.hh"
+
+#include "rtsp/rtsp.h"
+
 PlayerMainForm::PlayerMainForm()
 {
 
@@ -107,6 +113,8 @@ void PlayerMainForm::OnClick(dui::Event& msg)
 		StopVideo();
 	else if (msg.pSender->GetName() == _T("btnOpenFile"))
 		OnBtnOpenFileClicked();
+	else if (msg.pSender->GetName() == _T("btnSelectedHF"))
+		OnBtnOpenRTSPClicked();
 	
 	return __super::OnClick(msg);
 }
@@ -125,4 +133,9 @@ void PlayerMainForm::OnBtnOpenFileClicked()
 	file_dlg->SetFilter(filters);
 	file_dlg->SetParentWnd(GetHWND());
 	file_dlg->AyncShowOpenFileDlg(cb);
+}
+
+void PlayerMainForm::OnBtnOpenRTSPClicked()
+{
+	start_rtsp_client();
 }

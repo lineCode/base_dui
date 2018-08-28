@@ -649,12 +649,10 @@ void ScrollBar::DoEvent(Event& event)
 
 	if( event.Type == UIEVENT_SETFOCUS ) 
 	{
-		printf("ScrollBar::DoEvent UIEVENT_SETFOCUS\n");
 		return;
 	}
 	if( event.Type == UIEVENT_KILLFOCUS ) 
 	{
-		printf("ScrollBar::DoEvent UIEVENT_KILLFOCUS\n");
 		return;
 	}
 	if( event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_DBLCLICK )
@@ -740,25 +738,20 @@ void ScrollBar::DoEvent(Event& event)
 	{
 		if( (m_uThumbState & UISTATE_CAPTURED) != 0 ) {
 			if( !m_bHorizontal ) {
-
 				int vRange = m_rcItem.bottom - m_rcItem.top - m_rcThumb.bottom + m_rcThumb.top;
 				if( m_bShowButton1 )
 					vRange -= m_FixedSize.cx;
 				if( m_bShowButton2 )
 					vRange -= m_FixedSize.cx;
-
 				if (vRange != 0)
 					m_nLastScrollOffset = (event.ptMouse.y - ptLastMouse.y) * m_nRange / vRange;
-					
 			}
 			else {
-
 				int hRange = m_rcItem.right - m_rcItem.left - m_rcThumb.right + m_rcThumb.left;
 				if( m_bShowButton1 )
 					hRange -= m_FixedSize.cy;
 				if( m_bShowButton2 )
 					hRange -= m_FixedSize.cy;
-
 				if (hRange != 0)
 					m_nLastScrollOffset = (event.ptMouse.x - ptLastMouse.x) * m_nRange / hRange;
 			}
@@ -788,6 +781,10 @@ void ScrollBar::DoEvent(Event& event)
 	{
 		++m_nScrollRepeatDelay;
 		if( (m_uThumbState & UISTATE_CAPTURED) != 0 ) {
+			//-------------add by djj 不拖动时避免刷新----------
+			if (m_nLastScrollOffset == 0)
+				return;
+			//-------end--------
 			if( !m_bHorizontal ) {
 				if( m_pOwner != NULL ) m_pOwner->SetScrollPos(DuiSize(m_pOwner->GetScrollPos().cx, \
 					m_nLastScrollPos + m_nLastScrollOffset)); 
@@ -798,6 +795,7 @@ void ScrollBar::DoEvent(Event& event)
 					m_pOwner->GetScrollPos().cy)); 
 				else SetScrollPos(m_nLastScrollPos + m_nLastScrollOffset);
 			}
+			m_nLastScrollOffset = 0;
 			Invalidate();
 		}
 		else if( (m_uButton1State & UISTATE_PUSHED) != 0 ) {
@@ -854,21 +852,22 @@ void ScrollBar::DoEvent(Event& event)
 	{
         if( ::PtInRect(&m_rcItem, event.ptMouse ) ) {
             if( IsEnabled() ) {
-				printf("ScrollBar::DoEvent UIEVENT_MOUSEENTER2\n");
                 m_uButton1State |= UISTATE_HOT;
                 m_uButton2State |= UISTATE_HOT;
+#if 1
 				if ((m_pOwner && m_pOwner->GetScrollBarFloat()) || ::PtInRect(&m_rcThumb, event.ptMouse))
 					m_uThumbState |= UISTATE_HOT;
-                //if( ::PtInRect(&m_rcThumb, event.ptMouse)) m_uThumbState |= UISTATE_HOT;
+#else
+                if( ::PtInRect(&m_rcThumb, event.ptMouse)) m_uThumbState |= UISTATE_HOT;
+#endif
                 Invalidate();
             }
         }
 	}
 	if( event.Type == UIEVENT_MOUSELEAVE )
 	{
-        if( ::PtInRect(&m_rcItem, event.ptMouse ) ) {
+        if( !::PtInRect(&m_rcItem, event.ptMouse ) ) {
             if( IsEnabled() ) {
-				printf("ScrollBar::DoEvent UIEVENT_MOUSELEAVE2\n");
                 m_uButton1State &= ~UISTATE_HOT;
                 m_uButton2State &= ~UISTATE_HOT;
                 m_uThumbState &= ~UISTATE_HOT;
@@ -877,8 +876,7 @@ void ScrollBar::DoEvent(Event& event)
             if (m_pManager) m_pManager->RemoveMouseLeaveNeeded(this);
         }
         else {
-            if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
-			printf("ScrollBar::DoEvent UIEVENT_MOUSELEAVE3, pt not in m_rcItem\n");
+			if (m_pManager) m_pManager->AddMouseLeaveNeeded(this);
             return;
         }
 	}
@@ -888,47 +886,14 @@ void ScrollBar::DoEvent(Event& event)
 
 void ScrollBar::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-	/*if( _tcscmp(pstrName, _T("button1color")) == 0 ) {
-		while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-		SetButton1Color(clrColor);
-	}
-	else */if( _tcscmp(pstrName, _T("button1normalimage")) == 0 ) SetButton1NormalImage(pstrValue);
+	if( _tcscmp(pstrName, _T("button1normalimage")) == 0 ) SetButton1NormalImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button1hotimage")) == 0 ) SetButton1HotImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button1pushedimage")) == 0 ) SetButton1PushedImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button1disabledimage")) == 0 ) SetButton1DisabledImage(pstrValue);
-	/*else if( _tcscmp(pstrName, _T("button2color")) == 0 ) {
-		while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-		SetButton2Color(clrColor);
-	}*/
 	else if( _tcscmp(pstrName, _T("button2normalimage")) == 0 ) SetButton2NormalImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button2hotimage")) == 0 ) SetButton2HotImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button2pushedimage")) == 0 ) SetButton2PushedImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("button2disabledimage")) == 0 ) SetButton2DisabledImage(pstrValue);
-	/*else if( _tcscmp(pstrName, _T("thumbcolor")) == 0 ) {
-		while( *pstrValue > _T('\0') && *pstrValue <= _T(' ') ) pstrValue = ::CharNext(pstrValue);
-		DWORD clrColor = m_pManager->GetColor(pstrValue);
-		if (clrColor == 0)
-		{
-			if (*pstrValue == _T('#')) pstrValue = ::CharNext(pstrValue);
-			LPTSTR pstr = NULL;
-			clrColor = _tcstoul(pstrValue, &pstr, 16);
-		}
-		SetThumbColor(clrColor);
-	}*/
 	else if( _tcscmp(pstrName, _T("thumbnormalimage")) == 0 ) SetThumbNormalImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("thumbhotimage")) == 0 ) SetThumbHotImage(pstrValue);
 	else if( _tcscmp(pstrName, _T("thumbpushedimage")) == 0 ) SetThumbPushedImage(pstrValue);
@@ -953,7 +918,6 @@ void ScrollBar::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
 bool ScrollBar::DoPaint(HDC hDC, const RECT& rcPaint, Control* pStopControl)
 {
-	printf("ScrollBar::DoPaint\n");
 	PaintBkColor(hDC);
 	PaintBkImage(hDC);
 	PaintBk(hDC);
@@ -969,7 +933,6 @@ void ScrollBar::PaintBk(HDC hDC)
 {
 	if( !IsEnabled() ) m_uThumbState |= UISTATE_DISABLED;
 	else m_uThumbState &= ~ UISTATE_DISABLED;
-	printf("ScrollBar::PaintBk m_uThumbState = %d\n", m_uThumbState);
 	if( (m_uThumbState & UISTATE_DISABLED) != 0 ) {
 		if( DrawImage(hDC, m_diBkDisabled) ) return;
 	}
@@ -1060,7 +1023,6 @@ void ScrollBar::PaintThumb(HDC hDC)
 	if( m_rcThumb.left == 0 && m_rcThumb.top == 0 && m_rcThumb.right == 0 && m_rcThumb.bottom == 0 ) return;
 	if( !IsEnabled() ) m_uThumbState |= UISTATE_DISABLED;
 	else m_uThumbState &= ~ UISTATE_DISABLED;
-	printf("ScrollBar::PaintThumb m_uThumbState = %d\n", m_uThumbState);
 	RECT rc = { 0 };
 	RECT rcThumb = m_pManager->GetDPIObj()->Scale(m_rcThumb);
 	rc.left = rcThumb.left - m_rcItem.left;

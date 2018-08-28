@@ -1,14 +1,14 @@
 ////////////////接下去的工作//////////////////////
 //////////////////////////////////////////////////
 
+项目debug_dui_demo中	实现导入excel到ListView
+项目player中	集成Live555的客户端
+项目player中	播放MP3
 
+-------------------------------------
 
-
-
-
-7.项目Demo中 	ScrollBar不自动隐藏
-8.项目Duilib中	需要好好看一看WM_MOUSEMOVE等鼠标系列的操作细节
-9.项目Duilib中 	tooltip需要好好看看
+9997.项目Duilib中	需要好好看一看WM_MOUSEMOVE等鼠标系列的操作细节
+9998.项目Duilib中 	tooltip需要好好看看
 
 9999.项目Demo中 	dpi更改时，图片全部丢失;
 
@@ -20,8 +20,9 @@
 4.项目Demo中	List中界面bug
 5.项目Demo中 	读取数据库列表 并显示成Tree
 6.项目Demo中 	查询数据库  并显示成ListView
-
-
+7.项目Demo中 	ScrollBar不自动隐藏
+8.项目player中	实现项目Live555的客户端和服务器通信(但是还未解析出数据)
+9.添加了项目zlib和libqr，并再项目player中实现二维码图片生成(暂只支持bmp)
 
 
 

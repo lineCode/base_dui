@@ -17,6 +17,9 @@
     <Filter Include="thread">
       <UniqueIdentifier>{d722ae68-f022-4af2-bf10-50249e1b6add}</UniqueIdentifier>
     </Filter>
+    <Filter Include="rtsp">
+      <UniqueIdentifier>{3336d929-b6ef-4e93-a91d-15fe467987c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="player.cpp" />
@@ -36,6 +39,12 @@
     <ClCompile Include="thread\main_thread.cpp">
       <Filter>thread</Filter>
     </ClCompile>
+    <ClCompile Include="..\live555\testProgs\openRTSP.cpp">
+      <Filter>rtsp</Filter>
+    </ClCompile>
+    <ClCompile Include="rtsp\rtsp.cpp">
+      <Filter>rtsp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -48,6 +57,12 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="thread\main_thread.h">
       <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\live555\testProgs\playCommon.hh">
+      <Filter>rtsp</Filter>
+    </ClInclude>
+    <ClInclude Include="rtsp\rtsp.h">
+      <Filter>rtsp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

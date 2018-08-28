@@ -59,6 +59,8 @@ private:
 	void OnBtnOpenFileClicked();
 	void BtnOpenFileClickedCallback(BOOL, std::wstring);
 
+	void OnBtnOpenRTSPClicked();
+
 private:
 	Screen *m_video_screen;
 };

@@ -7,9 +7,11 @@
 
 #include <SDKDDKVer.h>
 
+#include <winsock2.h>
 #include <Windows.h>
 #include <stdio.h>
 #include <tchar.h>
+
 
 #include "duilib/UIlib.h"
 

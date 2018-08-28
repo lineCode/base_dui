@@ -32,6 +32,9 @@
     <ClCompile Include="login_form_ui.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="login_form.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\bin\res\simple_demo\login_debug.xml">

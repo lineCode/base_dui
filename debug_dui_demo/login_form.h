@@ -40,11 +40,11 @@ public:
 	void OnCancelLogin();
 
 protected:
-	void StartLogin();
-	void CancelLogin();
+	
 	void ShowMenu(bool show, POINT pt);
 
-	bool ImportDataToDB();
+
+	bool GenerateQRCode();
 public:
 	static const LPCTSTR kClassName;
 

@@ -95,13 +95,12 @@ void LoginForm::OnClick(Event& msg)
 	wprintf(L"LoginForm::OnClick %s clicked\n", msg.pSender->GetName().c_str());
 	bool bHandle = false;
 	
-	//std::wstring name = msg.pSender->GetName();
-	/*if (msg.pSender == btn_login_)
+	std::wstring name = msg.pSender->GetName();
+	if (name == _T("btn2"))
 	{
-		bHandle = true;
-		StartLogin();
+		GenerateQRCode();
 	}
-	else if (msg.pSender == btn_cancel_login_)
+	/*else if (msg.pSender == btn_cancel_login_)
 	{
 		bHandle = true;
 		CancelLogin();
@@ -131,5 +130,6 @@ void LoginForm::ShowMenu(bool show, POINT pt)
 {
 	CMenuWnd *menu_wnd = new CMenuWnd;
 	menu_wnd->Init(NULL, _T("menu.xml"), _T("menu"), pt, &m_manager);
-	
 }
+
+
