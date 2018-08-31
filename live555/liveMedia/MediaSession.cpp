@@ -136,30 +136,30 @@ Boolean MediaSession::initializeWithSDP(char const* sdpDescription) {
     char const* protocolName = NULL;
     unsigned payloadFormat;
     if ((sscanf(sdpLine, "m=%s %hu RTP/AVP %u",
-		mediumName, &subsession->fClientPortNum, &payloadFormat) == 3 ||
-	 sscanf(sdpLine, "m=%s %hu/%*u RTP/AVP %u",
-		mediumName, &subsession->fClientPortNum, &payloadFormat) == 3)
-	&& payloadFormat <= 127) {
+      mediumName, &subsession->fClientPortNum, &payloadFormat) == 3 ||
+      sscanf(sdpLine, "m=%s %hu/%*u RTP/AVP %u",
+      mediumName, &subsession->fClientPortNum, &payloadFormat) == 3)
+      && payloadFormat <= 127) {
       protocolName = "RTP";
     } else if ((sscanf(sdpLine, "m=%s %hu UDP %u",
-		       mediumName, &subsession->fClientPortNum, &payloadFormat) == 3 ||
-		sscanf(sdpLine, "m=%s %hu udp %u",
-		       mediumName, &subsession->fClientPortNum, &payloadFormat) == 3 ||
-		sscanf(sdpLine, "m=%s %hu RAW/RAW/UDP %u",
-		       mediumName, &subsession->fClientPortNum, &payloadFormat) == 3)
-	       && payloadFormat <= 127) {
+      mediumName, &subsession->fClientPortNum, &payloadFormat) == 3 ||
+      sscanf(sdpLine, "m=%s %hu udp %u",
+      mediumName, &subsession->fClientPortNum, &payloadFormat) == 3 ||
+      sscanf(sdpLine, "m=%s %hu RAW/RAW/UDP %u",
+      mediumName, &subsession->fClientPortNum, &payloadFormat) == 3)
+      && payloadFormat <= 127) {
       // This is a RAW UDP source
       protocolName = "UDP";
     } else {
       // This "m=" line is bad; output an error message saying so:
       char* sdpLineStr;
       if (nextSDPLine == NULL) {
-	sdpLineStr = (char*)sdpLine;
+        sdpLineStr = (char*)sdpLine;
       } else {
-	sdpLineStr = strDup(sdpLine);
-	sdpLineStr[nextSDPLine-sdpLine] = '\0';
+        sdpLineStr = strDup(sdpLine);
+        sdpLineStr[nextSDPLine - sdpLine] = '\0';
       }
-      envir() << "Bad SDP \"m=\" line: " <<  sdpLineStr << "\n";
+      envir() << "Bad SDP \"m=\" line: " << sdpLineStr << "\n";
       if (sdpLineStr != (char*)sdpLine) delete[] sdpLineStr;
 
       delete[] mediumName;
@@ -167,11 +167,11 @@ Boolean MediaSession::initializeWithSDP(char const* sdpDescription) {
 
       // Skip the following SDP lines, up until the next "m=":
       while (1) {
-	sdpLine = nextSDPLine;
-	if (sdpLine == NULL) break; // we've reached the end
-	if (!parseSDPLine(sdpLine, nextSDPLine)) return False;
+        sdpLine = nextSDPLine;
+        if (sdpLine == NULL) break; // we've reached the end
+        if (!parseSDPLine(sdpLine, nextSDPLine)) return False;
 
-	if (sdpLine[0] == 'm') break; // we've reached the next subsession
+        if (sdpLine[0] == 'm') break; // we've reached the next subsession
       }
       continue;
     }
@@ -216,21 +216,21 @@ Boolean MediaSession::initializeWithSDP(char const* sdpDescription) {
 
       // (Later, check for malformed lines, and other valid SDP lines#####)
     }
-    if (sdpLine != NULL) subsession->fSavedSDPLines[sdpLine-mStart] = '\0';
+    if (sdpLine != NULL) subsession->fSavedSDPLines[sdpLine - mStart] = '\0';
 
     // If we don't yet know the codec name, try looking it up from the
     // list of static payload types:
     if (subsession->fCodecName == NULL) {
       subsession->fCodecName
-	= lookupPayloadFormat(subsession->fRTPPayloadFormat,
-			      subsession->fRTPTimestampFrequency,
-			      subsession->fNumChannels);
+        = lookupPayloadFormat(subsession->fRTPPayloadFormat,
+        subsession->fRTPTimestampFrequency,
+        subsession->fNumChannels);
       if (subsession->fCodecName == NULL) {
-	char typeStr[20];
-	sprintf(typeStr, "%d", subsession->fRTPPayloadFormat);
-	envir().setResultMsg("Unknown codec name for RTP payload type ",
-			     typeStr);
-	return False;
+        char typeStr[20];
+        sprintf(typeStr, "%d", subsession->fRTPPayloadFormat);
+        envir().setResultMsg("Unknown codec name for RTP payload type ",
+          typeStr);
+        return False;
       }
     }
 
@@ -240,8 +240,8 @@ Boolean MediaSession::initializeWithSDP(char const* sdpDescription) {
     // then guess it now:
     if (subsession->fRTPTimestampFrequency == 0) {
       subsession->fRTPTimestampFrequency
-	= guessRTPTimestampFrequency(subsession->fMediumName,
-				     subsession->fCodecName);
+        = guessRTPTimestampFrequency(subsession->fMediumName,
+        subsession->fCodecName);
     }
   }
 

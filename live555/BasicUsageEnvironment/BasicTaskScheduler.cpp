@@ -165,10 +165,10 @@ void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) {
       if (FD_ISSET(sock, &writeSet) && FD_ISSET(sock, &fWriteSet)/*sanity check*/) resultConditionSet |= SOCKET_WRITABLE;
       if (FD_ISSET(sock, &exceptionSet) && FD_ISSET(sock, &fExceptionSet)/*sanity check*/) resultConditionSet |= SOCKET_EXCEPTION;
       if ((resultConditionSet&handler->conditionSet) != 0 && handler->handlerProc != NULL) {
-	fLastHandledSocketNum = sock;
+	    fLastHandledSocketNum = sock;
 	    // Note: we set "fLastHandledSocketNum" before calling the handler,
             // in case the handler calls "doEventLoop()" reentrantly.
-	(*handler->handlerProc)(handler->clientData, resultConditionSet);
+	    (*handler->handlerProc)(handler->clientData, resultConditionSet);
 	break;
       }
     }
@@ -182,7 +182,7 @@ void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) {
       // Common-case optimization for a single event trigger:
       fTriggersAwaitingHandling &=~ fLastUsedTriggerMask;
       if (fTriggeredEventHandlers[fLastUsedTriggerNum] != NULL) {
-	(*fTriggeredEventHandlers[fLastUsedTriggerNum])(fTriggeredEventClientDatas[fLastUsedTriggerNum]);
+	    (*fTriggeredEventHandlers[fLastUsedTriggerNum])(fTriggeredEventClientDatas[fLastUsedTriggerNum]);
       }
     } else {
       // Look for an event trigger that needs handling (making sure that we make forward progress through all possible triggers):
@@ -190,20 +190,20 @@ void BasicTaskScheduler::SingleStep(unsigned maxDelayTime) {
       EventTriggerId mask = fLastUsedTriggerMask;
 
       do {
-	i = (i+1)%MAX_NUM_EVENT_TRIGGERS;
-	mask >>= 1;
-	if (mask == 0) mask = 0x80000000;
+	    i = (i+1)%MAX_NUM_EVENT_TRIGGERS;
+	    mask >>= 1;
+	    if (mask == 0) mask = 0x80000000;
 
-	if ((fTriggersAwaitingHandling&mask) != 0) {
-	  fTriggersAwaitingHandling &=~ mask;
-	  if (fTriggeredEventHandlers[i] != NULL) {
-	    (*fTriggeredEventHandlers[i])(fTriggeredEventClientDatas[i]);
-	  }
+	    if ((fTriggersAwaitingHandling&mask) != 0) {
+	      fTriggersAwaitingHandling &=~ mask;
+	      if (fTriggeredEventHandlers[i] != NULL) {
+	        (*fTriggeredEventHandlers[i])(fTriggeredEventClientDatas[i]);
+	      }
 
-	  fLastUsedTriggerMask = mask;
-	  fLastUsedTriggerNum = i;
-	  break;
-	}
+	      fLastUsedTriggerMask = mask;
+	      fLastUsedTriggerNum = i;
+	      break;
+	    }
       } while (i != fLastUsedTriggerNum);
     }
   }
