@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+  <MediaPlayer name="media_player" width="stretch" height="stretch">
+    <Screen name="screen" />
+    <VBox name="vbox_slider" height="30" bkcolor="#ff666666" valign="bottom">
+      <HBox margin="15,5,10">
+        <!--<Slider name="slider" height="20" bkimage="slider\SliderBack.png" foreimage="slider\SliderFore.png" min="0" max="1000" value="0" hor="true"  thumbhotimage="file=&apos;slider\SliderBar.png&apos; source=&apos;21,0,41,20&apos;" thumbpushedimage="file=&apos;slider\SliderBar.png&apos; source=&apos;42,0,62,20&apos;" thumbsize="20,20"/>-->
+        <Control name="slider" height="20" bkimage="slider\SliderBack.png" foreimage="slider\SliderFore.png" min="0" max="1000" value="0" hor="true"  thumbhotimage="file=&apos;slider\SliderBar.png&apos; source=&apos;21,0,41,20&apos;" thumbpushedimage="file=&apos;slider\SliderBar.png&apos; source=&apos;42,0,62,20&apos;" thumbsize="20,20"/>
+        <Label name="lb_video_time" width="50" height="14" margin="5,3" text="00:00:00"/>
+      </HBox>
+      <HBox width="stretch" height="50" visible="false">
+        <Button name="btn_play" width="24" height="24" margin="5,1" cursortype="hand"/>
+        <Button name="btn_pause" width="24" height="24" margin="5,1" cursortype="hand"/>
+        <Button name="btn_stop" width="24" height="24" margin="5,1" cursortype="hand"/>
+      </HBox>
+    </VBox>
+  </MediaPlayer>
+</Window>

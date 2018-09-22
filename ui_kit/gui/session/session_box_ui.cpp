@@ -47,6 +47,7 @@ void SessionBox::Init()
 	btn_send->AttachClick(std::bind(&SessionBox::OnClicked, this, std::placeholders::_1));
 
 	input_edit_ = (RichEdit*)FindSubControl(L"input_edit");
+    input_edit_->SetEventMask(ENM_CHANGE | ENM_LINK | ENM_SELCHANGE);
 
 	InitRichEdit();
 }

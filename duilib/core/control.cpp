@@ -963,8 +963,18 @@ void Control::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetBorderRound(cxyRound);
     }
     else if( _tcscmp(pstrName, _T("bkimage")) == 0 ) SetBkImage(pstrValue);
-    else if( _tcscmp(pstrName, _T("width")) == 0 ) SetFixedWidth(_ttoi(pstrValue));
-    else if( _tcscmp(pstrName, _T("height")) == 0 ) SetFixedHeight(_ttoi(pstrValue));
+    else if (_tcscmp(pstrName, _T("width")) == 0) {
+       /* if (_tcscmp(pstrValue, _T("stretch")) == 0)
+            SetFixedWidth(-1);
+        else*/
+            SetFixedWidth(_ttoi(pstrValue));
+    }
+    else if (_tcscmp(pstrName, _T("height")) == 0) {
+       /* if (_tcscmp(pstrValue, _T("stretch")) == 0)
+            SetFixedHeight(-1);
+        else*/
+            SetFixedHeight(_ttoi(pstrValue));
+    }
     else if( _tcscmp(pstrName, _T("minwidth")) == 0 ) SetMinWidth(_ttoi(pstrValue));
     else if( _tcscmp(pstrName, _T("minheight")) == 0 ) SetMinHeight(_ttoi(pstrValue));
     else if( _tcscmp(pstrName, _T("maxwidth")) == 0 ) SetMaxWidth(_ttoi(pstrValue));

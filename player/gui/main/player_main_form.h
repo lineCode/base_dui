@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gui/window/window_ex.h"
-#include "control/screen.h"
+#include "control/media_player.h"
 
 class PlayerMainForm : public nim_comp::WindowEx
 {
@@ -15,23 +15,18 @@ public:
 	virtual LPCTSTR GetWindowId() const override{ return kClassName; };
 	virtual UINT GetClassStyle() const override{ return (UI_CLASSSTYLE_FRAME | CS_DBLCLKS); };
 	virtual Control* CreateControl(LPCTSTR pstrClass) override{
-		if (_tcscmp(pstrClass, _T("Screen")) == 0)
-		{
-			return new Screen;
-		}
+		if (_tcscmp(pstrClass, _T("MediaPlayer")) == 0) return new MediaPlayer;
+        else if (_tcscmp(pstrClass, _T("Screen")) == 0) return new MediaPlayer::Screen;
+        else return nullptr;
 	};
 
 	virtual void Notify(dui::Event& msg) override;
 
-	/**
-	* 处理窗口销毁消息
-	* @return void	无返回值
-	*/
-	virtual void OnFinalMessage(HWND hWnd);
+    virtual void OnFinalMessage(HWND hWnd) override;
 
-	LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+    virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) override;
 
-	virtual void OnEsc(BOOL &bHandled);
+    virtual void OnEsc(BOOL &bHandled) override;
 
 	virtual void InitWindow() override;
 
@@ -62,5 +57,5 @@ private:
 	void OnBtnOpenRTSPClicked();
 
 private:
-	Screen *m_video_screen;
+	MediaPlayer *m_media_player;
 };

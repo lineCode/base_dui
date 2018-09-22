@@ -43,9 +43,9 @@ typedef struct tagFINDSHORTCUT
 typedef struct tagTIMERINFO
 {
     Control* pSender;
-    UINT nLocalID;
+    UINT nLocalID;  //uimanager自己处理的逻辑id, 由UIManager::SetTimer(Control* pControl, UINT nTimerID, UINT uElapse)第二个参数指定
     HWND hWnd;
-    UINT uWinTimer;
+    UINT uWinTimer; //id of UIManager::m_uTimerID, also is id of win api
     bool bKilled;
 } TIMERINFO;
 
@@ -102,9 +102,7 @@ m_pBackgroundBits(NULL),
 m_iTooltipWidth(-1),
 m_iLastTooltipWidth(-1),
 m_hWndTooltip(NULL),
-m_iHoverTime(1000),
 m_bNoActivate(false),
-m_bShowUpdateRect(false),
 m_uTimerID(0x1000),
 m_pRoot(NULL),
 m_pFocus(NULL),
@@ -676,15 +674,14 @@ void UIManager::SetMaxInfo(int cx, int cy)
     m_szMaxWindow.cy = cy;
 }
 
-bool UIManager::IsShowUpdateRect() const
-{
+#ifdef _DEBUG
+bool UIManager::IsShowUpdateRect() const{
 	return m_bShowUpdateRect;
 }
-
-void UIManager::SetShowUpdateRect(bool show)
-{
+void UIManager::SetShowUpdateRect(bool show){
     m_bShowUpdateRect = show;
 }
+#endif
 
 bool UIManager::IsNoActivate()
 {
@@ -1014,6 +1011,9 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
 			}
 			else {
 				if( !::GetUpdateRect(m_hWndPaint, &rcPaint, FALSE) ) return true;
+#ifdef _DEBUG
+                printf("WM_PAINT ::GetUpdateRect {%d,%d,%d,%d}\n", rcPaint.left, rcPaint.top, rcPaint.right, rcPaint.bottom);
+#endif
 			}
 			
             // Set focus to first control?
@@ -1206,13 +1206,14 @@ bool UIManager::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT&
                     ::BitBlt(m_hDcPaint, rcPaint.left, rcPaint.top, rcPaint.right - rcPaint.left,
                         rcPaint.bottom - rcPaint.top, m_hDcOffscreen, rcPaint.left, rcPaint.top, SRCCOPY);
                 ::SelectObject(m_hDcOffscreen, hOldBitmap);
-
+#ifdef _DEBUG
                 if( m_bShowUpdateRect && !m_bLayered ) {
                     HPEN hOldPen = (HPEN)::SelectObject(m_hDcPaint, m_hUpdateRectPen);
                     ::SelectObject(m_hDcPaint, ::GetStockObject(HOLLOW_BRUSH));
                     ::Rectangle(m_hDcPaint, rcPaint.left, rcPaint.top, rcPaint.right, rcPaint.bottom);
                     ::SelectObject(m_hDcPaint, hOldPen);
                 }
+#endif
             }
             else
             {
@@ -2022,7 +2023,7 @@ bool UIManager::KillTimer(Control* pControl, UINT nTimerID)
         {
             if( pTimer->bKilled == false ) {
                 if( ::IsWindow(m_hWndPaint) ) ::KillTimer(pTimer->hWnd, pTimer->uWinTimer);
-                pTimer->bKilled = true;
+                pTimer->bKilled = true;        //为什么不删除?
                 return true;
             }
         }
@@ -3402,9 +3403,11 @@ void UIManager::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr); 
         SetMaxInfo(cx, cy);
     }
+#ifdef _DEBUG
     else if( _tcsicmp(pstrName, _T("showdirty")) == 0 ) {
         SetShowUpdateRect(_tcsicmp(pstrValue, _T("true")) == 0);
     } 
+#endif
     else if( _tcscmp(pstrName, _T("noactivate")) == 0 ) {
         SetNoActivate(_tcsicmp(pstrValue, _T("true")) == 0);
     }

@@ -4,6 +4,7 @@
 
 #define snprintf _snprintf
 
+#if _TEST_RTSP_MODE_ == _TEST_RTSP_CLIENT
 // Forward function definitions:
 void continueAfterClientCreation0(RTSPClient* client, Boolean requestStreamingOverTCP);
 void continueAfterClientCreation1();

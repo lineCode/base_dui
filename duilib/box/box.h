@@ -66,8 +66,8 @@ protected:
 	int m_iChildMargin;
 	UINT m_iChildAlign;
 	UINT m_iChildVAlign;
-	bool m_bAutoDestroy;
-	bool m_bDelayedDestroy;
+	bool m_bAutoDestroy;        //判断在m_bDelayedDestroy之上,指示remove操作是否box处理删除子Control
+	bool m_bDelayedDestroy;     //判断在m_bAutoDestroy之下,指示remove操作是否立即Delete()子Control
 	bool m_bMouseChildEnabled;
 };
 

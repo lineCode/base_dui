@@ -219,6 +219,11 @@ public:
 	{
 		m_event_map[UIEVENT_RESIZE] += callback;
 	}
+
+    void AttachTimer(const EventCallback& callback)
+    {
+        m_event_map[UIEVENT_TIMER] += callback;
+    }
 public:
 	EventSource m_cbInit;
 	EventSource m_cbDestroy;

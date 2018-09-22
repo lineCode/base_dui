@@ -7,17 +7,17 @@ const LPCTSTR PlayerMainForm::kClassName = L"PlayerMainForm";
 
 void PlayerMainForm::StartVideo(String file)
 {
-	m_video_screen->StartVideo(file);
+	m_media_player->StartVideo(file);
 }
 
 void PlayerMainForm::PauseOrStartVideo()
 {
-	m_video_screen->PauseOrStartVideo();
+	m_media_player->PauseOrStartVideo();
 }
 
 void PlayerMainForm::StopVideo()
 {
-	m_video_screen->StopVideo();
+	m_media_player->StopVideo();
 }
 
 void PlayerMainForm::BtnOpenFileClickedCallback(BOOL ret, std::wstring path)
@@ -32,6 +32,7 @@ void PlayerMainForm::BtnOpenFileClickedCallback(BOOL ret, std::wstring path)
 		nbase::LowerString(file_ext);
 		if (file_ext != L".jpg" && file_ext != L".jpeg" && file_ext != L".png" && file_ext != L".bmp")
 			return;*/
+
 
 		StartVideo(path);
 	}

@@ -84,7 +84,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\live555\testProgs\playCommon.hh" />
-    <ClInclude Include="control\screen.h" />
+    <ClInclude Include="control\media_player.h" />
+    <ClInclude Include="extra\buf.h" />
     <ClInclude Include="gui\main\player_main_form.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="rtsp\rtsp.h" />
@@ -94,14 +95,24 @@
   <ItemGroup>
     <ClCompile Include="..\live555\testProgs\openRTSP.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="control\media_player.cpp" />
+    <ClCompile Include="control\media_player_ui.cpp" />
     <ClCompile Include="control\screen.cpp" />
-    <ClCompile Include="control\screen_ui.cpp" />
+    <ClCompile Include="extra\buf.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="gui\main\player_main_form.cpp" />
     <ClCompile Include="gui\main\player_main_form_ui.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="rtsp\rtsp.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="rtsp\rtsp_client.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -110,8 +121,13 @@
     <ClCompile Include="thread\main_thread.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\bin\res\player\player_main_form.xml" />
+    <Xml Include="..\bin\res\player\player_main_form.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\bin\res\player\XMP.xml" />
+    <Xml Include="..\bin\res\public\media_player\media_player.xml">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="player.rc" />

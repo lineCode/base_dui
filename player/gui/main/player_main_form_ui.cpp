@@ -41,7 +41,7 @@ void PlayerMainForm::Notify(dui::Event& msg)
 
 void PlayerMainForm::OnFinalMessage(HWND hWnd)
 {
-	m_video_screen->StopVideo(true);
+	m_media_player->StopVideo(true);
 	nim_comp::TrayManager::GetInstance()->Destroy();
 	return __super::OnFinalMessage(hWnd);
 }
@@ -65,7 +65,8 @@ void PlayerMainForm::InitWindow()
 	nim_comp::TrayManager::GetInstance()->RegEventCallback(std::bind(&PlayerMainForm::TrayLeftClick, this), nim_comp::TrayEventType_LeftClick);
 	nim_comp::TrayManager::GetInstance()->RegEventCallback(std::bind(&PlayerMainForm::TrayRightClick, this), nim_comp::TrayEventType_RightClick);
 
-	m_video_screen = static_cast<Screen*>(m_manager.FindControl(_T("video_screen")));
+	m_media_player = static_cast<MediaPlayer*>(m_manager.FindControl(_T("media_player")));
+    //m_manager.FillBox(m_media_player, _T("../public/media_player/media_player.xml"), NULL, &m_manager, m_manager.GetRoot());
 }
 
 void PlayerMainForm::TrayLeftClick()
@@ -122,7 +123,7 @@ void PlayerMainForm::OnClick(dui::Event& msg)
 void PlayerMainForm::OnBtnOpenFileClicked()
 {
 	std::wstring file_type = _T("Í¼ÏñÎÄ¼þ");
-	LPCTSTR filter = L"*.avi;*.mp4;*.mkv;*.remb";
+    LPCTSTR filter = L"*.avi;*.mp4;*.mkv;*.remb;*.vob";
 	std::wstring text = nbase::StringPrintf(L"%s(%s)", file_type.c_str(), filter);
 	std::map<LPCTSTR, LPCTSTR> filters;
 	filters[text.c_str()] = filter;
@@ -137,5 +138,9 @@ void PlayerMainForm::OnBtnOpenFileClicked()
 
 void PlayerMainForm::OnBtnOpenRTSPClicked()
 {
+#if 1
 	start_rtsp_client();
+#else
+    StartVideo(_T("rtsp://192.168.5.19/1.vob"));
+#endif
 }

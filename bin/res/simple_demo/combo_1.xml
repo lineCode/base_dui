@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window roundcorner="4,4" size="80,100">
   <List bkcolor="white" width="80" height="100" vscrollbar="true">
+    <ListContainerElement height="48" width="500" >
+      <Control width="40" height="40" margin="4,4" bkimage="icon_number.png"/>
+      <Label width="300" height="24" margin="48, 10" font="2" text="This is ListContainerElement"/>
+    </ListContainerElement>
     <ListElement text="微软雅黑" height="23" width="500" bkimage="file='icon_number.png' dest='2,2,20,20'" textpadding="24" hotbkcolor="bk_wnd_darkcolor"/>
     <ListElement text="宋体" height="23" width="500" hotbkcolor="bk_wnd_darkcolor" selectedbkcolor="bk_wnd_darkcolor2"/>
     <ListElement text="黑体" height="23" width="500" hotbkcolor="bk_wnd_darkcolor" selectedbkcolor="bk_wnd_darkcolor2"/>

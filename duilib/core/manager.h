@@ -289,7 +289,7 @@ public:
     bool AttachDialog(Control* pControl);
     bool InitControls(Control* pControl, Control* pParent = NULL);
 	bool RenameControl(Control* pControl, LPCTSTR pstrName);
-    void ReapObjects(Control* pControl);
+    void ReapObjects(Control* pControl);                        //Control的析构函数中调用,调整 与析构Control相关联的一些成员 例如m_pHover
 
     bool AddOptionGroup(LPCTSTR pStrGroupName, Control* pControl);
     PtrArray* GetOptionGroup(LPCTSTR pStrGroupName);
@@ -400,18 +400,20 @@ private:
     int m_iLastTooltipWidth;
 	HWND m_hWndTooltip;
 	TOOLINFO m_ToolTipInfo;
-	int m_iHoverTime;
-    bool m_bNoActivate;
-    bool m_bShowUpdateRect;
+	int m_iHoverTime = 1000;        //1000毫秒后,触发WM_MOUSEHOVER, m_pEventHover处理UIEVENT_MOUSEHOVER,并且处理tooltip
+    bool m_bNoActivate;             //if(!m_bNoActivate) ::SetFocus(m_hWndPaint);设置该窗口是否执行::SetFocus(m_hWndPaint)
+#ifdef _DEBUG
+    bool m_bShowUpdateRect = false; //show update rect, used in WM_PAINT, if(m_bShowUpdateRect&&!m_bLayered){::Rectangle(m_hDcPaint, rcPaint.left, rcPaint.top, rcPaint.right, rcPaint.bottom);}
+#endif
 	ShadowUI m_shadow;
 
 	DPI* m_pDPI;
     //
     Control* m_pRoot;
     Control* m_pFocus;
-    Control* m_pEventHover;
-    Control* m_pEventClick;
-    Control* m_pEventKey;
+    Control* m_pEventHover;         //MOUSE_MOVE事件中赋值,当前鼠标位置下的Control
+    Control* m_pEventClick;         //WM_LBUTTONUP,WM_CONTEXTMENU时m_pEventClick=NULL;WM_LBUTTONDOWN,WM_LBUTTONDBLCLK,WM_RBUTTONDOWN时赋值
+    Control* m_pEventKey;           //WM_KEYDOWN时复制, WM_KEYUP时置空
     Control* m_pLastToolTip;
     //
     POINT m_ptLastMousePos;
@@ -421,14 +423,18 @@ private:
     RECT m_rcSizeBox;
     SIZE m_szRoundCorner;
     RECT m_rcCaption;
-    UINT m_uTimerID;
-    bool m_bFirstLayout;
-    bool m_bUpdateNeeded;
-    bool m_bFocusNeeded;
-    bool m_bOffscreenPaint;
+    UINT m_uTimerID;        //id of timer api, m_uTimerID = (++m_uTimerID)%0xFF;
+    bool m_bFirstLayout;    //发送SendNotify(m_pRoot, UIEVENT_WINDOWINIT, 0, 0, false),第一次处理WM_PAINT时
+    /***********************************
+    几种m_pRoot->NeedUpdate()的情况
+    1.WM_SIZE   2.SetLayered    3.SetFocusNeeded    4.SetDPI
+    ***********************************/
+    bool m_bUpdateNeeded;   //WM_PAINT中,对IsNeedUpdate的Control进行SetPos()操作,特别的,m_pRoot->IsNeedUpdate时,重置m_hbmpOffscreen
+    bool m_bFocusNeeded;    //tab键相关,细节暂不知
+    bool m_bOffscreenPaint; //是否启用双缓冲
 
-	BYTE m_nOpacity;
-	bool m_bLayered;
+	BYTE m_nOpacity;        //Layered Window相关
+	bool m_bLayered;        
 	RECT m_rcLayeredPadding;
 	bool m_bLayeredChanged;
 	RECT m_rcLayeredUpdate;
@@ -436,7 +442,7 @@ private:
 
     bool m_bMouseTracking;
     bool m_bMouseCapture;
-	bool m_bIsPainting;
+	bool m_bIsPainting;                 //进入WM_PAINT响应时为true, 结束时为false;另外,函数IsPainting()在EditWnd::HandleMessage()中被用到
 	bool m_bAsyncNotifyPosted;
 
     //
@@ -444,12 +450,17 @@ private:
     PtrArray m_aTimers;					//TIMERINFO
 	PtrArray m_aPreMessageFilters;		//save WindowImplBase::IMessageFilter*, add in WindowImplBase::OnCreate, remove in WindowImplBase::OnFinalMessage
     PtrArray m_aMessageFilters;			//save ActiveX::IMessageFilter* and RichEdit::IMessageFilter*, add in WindowImplBase::OnCreate->UIManager::InitControls(pControl)->ScrollBox::SetManager()->Control::Init()->RichEdit::Init(), remove in ~RichEdit()
-    PtrArray m_aPostPaintControls;
+    PtrArray m_aPostPaintControls;      //
 	PtrArray m_aNativeWindow;
 	PtrArray m_aNativeWindowControl;
-    PtrArray m_aDelayedCleanup;
-    PtrArray m_aAsyncNotify;
-    PtrArray m_aFoundControls;
+    /****************************
+    成员m_aDelayedCleanup和m_aAsyncNotify的说明:
+    m_aDelayedCleanup和m_aAsyncNotify增加成员时,都会调用PostAsyncNotify,里面PostMessage(WM_APP+1),
+    在case (WM_APP+1)的处理
+    ****************************/
+    PtrArray m_aDelayedCleanup;         //box移除Control时,如果box的m_bDelayedDestroy=true,讲要Delete的Control添加,在某些时刻(UIManeger析构时)再将这些Control Delete掉
+    PtrArray m_aAsyncNotify;            //异步Notify
+    PtrArray m_aFoundControls;          //存储__FindControlFrom...函数簇查找到的Control
     PtrArray m_aNeedMouseLeaveNeeded;	//control like Button call DoEvent func which the event.tpye==UIEVENT_MOUSELEAVE, may call AddMouseLeaveNeeded() or RemoveMouseLeaveNeeded,and this will be used when UIManager deal WM_MOUSEMOVE in MessageHandle() func
 	PtrArray m_aTranslateAccelerator;
     StringPtrMap m_mNameHash;			//(key:name, value:pControl) UIManager::__FindControlFromNameHash whick called in UIManager::InitControls which called in UIManager::AttachDialog
@@ -457,19 +468,19 @@ private:
     StringPtrMap m_mOptionGroup;		//
 
     //
-	bool m_bForceUseSharedRes;
-	ResInfo m_ResInfo;		//StringPtrMap fonts, images, attrs, MultiLanguages,
+	bool m_bForceUseSharedRes;          //所有资源均使用static ResInfo m_SharedResInfo
+	ResInfo m_ResInfo;		            //StringPtrMap fonts, images, attrs, MultiLanguages,
 
     //
 	static HINSTANCE m_hResourceInstance;
-	static String m_sGlobalResDir;
+	static String m_sGlobalResDir;      //资源文件位置拼接时的公共路径
 	static String m_sResourceZip;
 	static HANDLE m_hResourceZip;
 
 	static bool m_bCachedResourceZip;
 	static ResInfo m_SharedResInfo;
     static HINSTANCE m_hInstance;
-	static bool m_bUseHSL;
+	static bool m_bUseHSL;              //另外一种色彩模式,貌似是工业用途
     static short m_H;
     static short m_S;
     static short m_L;

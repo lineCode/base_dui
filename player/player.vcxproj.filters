@@ -20,6 +20,9 @@
     <Filter Include="rtsp">
       <UniqueIdentifier>{3336d929-b6ef-4e93-a91d-15fe467987c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="extra">
+      <UniqueIdentifier>{a19a4335-10af-4835-a2e8-c4d78f3ba79f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="player.cpp" />
@@ -30,12 +33,6 @@
     <ClCompile Include="gui\main\player_main_form_ui.cpp">
       <Filter>gui\main</Filter>
     </ClCompile>
-    <ClCompile Include="control\screen.cpp">
-      <Filter>control</Filter>
-    </ClCompile>
-    <ClCompile Include="control\screen_ui.cpp">
-      <Filter>control</Filter>
-    </ClCompile>
     <ClCompile Include="thread\main_thread.cpp">
       <Filter>thread</Filter>
     </ClCompile>
@@ -45,14 +42,26 @@
     <ClCompile Include="rtsp\rtsp.cpp">
       <Filter>rtsp</Filter>
     </ClCompile>
+    <ClCompile Include="rtsp\rtsp_client.cpp">
+      <Filter>rtsp</Filter>
+    </ClCompile>
+    <ClCompile Include="extra\buf.cpp">
+      <Filter>extra</Filter>
+    </ClCompile>
+    <ClCompile Include="control\media_player.cpp">
+      <Filter>control</Filter>
+    </ClCompile>
+    <ClCompile Include="control\media_player_ui.cpp">
+      <Filter>control</Filter>
+    </ClCompile>
+    <ClCompile Include="control\screen.cpp">
+      <Filter>control</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="gui\main\player_main_form.h">
       <Filter>gui\main</Filter>
-    </ClInclude>
-    <ClInclude Include="control\screen.h">
-      <Filter>control</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
     <ClInclude Include="thread\main_thread.h">
@@ -64,6 +73,12 @@
     <ClInclude Include="rtsp\rtsp.h">
       <Filter>rtsp</Filter>
     </ClInclude>
+    <ClInclude Include="extra\buf.h">
+      <Filter>extra</Filter>
+    </ClInclude>
+    <ClInclude Include="control\media_player.h">
+      <Filter>control</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\bin\res\player\XMP.xml">
@@ -71,6 +86,9 @@
     </Xml>
     <Xml Include="..\bin\res\player\player_main_form.xml">
       <Filter>gui\main</Filter>
+    </Xml>
+    <Xml Include="..\bin\res\public\media_player\media_player.xml">
+      <Filter>control</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>
